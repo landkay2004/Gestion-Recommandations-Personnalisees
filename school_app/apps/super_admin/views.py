@@ -210,12 +210,11 @@ def ecole_creer(request):
 def _create_admin_in_schema(ecole, email, nom, temp_pwd, schema_name):
     """Cree un CustomUser role=admin_ecole dans le schema de l'ecole."""
     from django.db import connection
-    if 'sqlite' in connection.settings_dict.get('ENGINE', ''):
-        return
     try:
-        from django_tenants.utils import get_tenant_model
-        tenant = get_tenant_model().objects.get(schema_name=schema_name)
-        connection.set_tenant(tenant)
+        if 'sqlite' not in connection.settings_dict.get('ENGINE', ''):
+            from django_tenants.utils import get_tenant_model
+            tenant = get_tenant_model().objects.get(schema_name=schema_name)
+            connection.set_tenant(tenant)
         from accounts.models import CustomUser
         username = email.split('@')[0][:30]
         # Garantir unicite username
@@ -330,6 +329,11 @@ def regenerer_mdp_admin(request, pk):
 def _update_password_in_schema(schema_name, email, new_pwd):
     from django.db import connection
     if 'sqlite' in connection.settings_dict.get('ENGINE', ''):
+        from accounts.models import CustomUser
+        user = CustomUser.objects.get(email__iexact=email)
+        user.set_password(new_pwd)
+        user.must_change_password = True
+        user.save(update_fields=['password', 'must_change_password'])
         return
     try:
         from django_tenants.utils import get_tenant_model

@@ -5,8 +5,10 @@ Application web Django de gestion des notes et de publication des bulletins scol
 ## Run & Operate
 
 - **Démarrer le serveur** : workflow `SGN Django` — `cd school_app && python3 manage.py runserver 0.0.0.0:8000`
+- **Démarrage complet** : `bash scripts/start.sh` — vérifie la base, applique les migrations, collecte les fichiers statiques et démarre le serveur.
 - **Migrations** : `cd school_app && python3 manage.py makemigrations && python3 manage.py migrate`
 - **Données initiales** : déjà chargées (préfet, enseignant, classes, matières officielles)
+- **Compte super-admin de test** : `cd school_app && python3 manage.py seed_super_admin` crée ou met à jour `superadmin@test.local` avec le mot de passe `SuperAdmin@2025!`.
 
 ## Stack
 

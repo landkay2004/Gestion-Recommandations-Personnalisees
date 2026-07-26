@@ -24,13 +24,13 @@ args = "SGN Django"
 name = "SGN Django"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd /home/runner/workspace/school_app && python3 manage.py runserver 0.0.0.0:8000 --noreload"
-waitForPort = 8000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash /home/runner/workspace/scripts/start.sh"
+waitForPort = 8000
 
 [agent]
 stack = "PNPM_WORKSPACE"

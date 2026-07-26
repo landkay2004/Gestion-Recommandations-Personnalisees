@@ -77,11 +77,15 @@ def etape1_password(request):
     form = ChangePasswordOnboardingForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         new_pwd = form.cleaned_data['nouveau_mdp']
-        admin.set_password(new_pwd)
-        admin.must_change_password    = False
-        admin.is_temp_password_used   = True
-        admin.onboarding_step         = 1
-        admin.save(update_fields=['password', 'must_change_password', 'is_temp_password_used', 'onboarding_step'])
+        _switch_tenant_schema(admin.ecole.schema_name)
+        from accounts.models import CustomUser
+        user = CustomUser.objects.get(email__iexact=admin.email, role='admin_ecole')
+        user.set_password(new_pwd)
+        user.must_change_password = False
+        user.save(update_fields=['password', 'must_change_password'])
+        _switch_public_schema()
+        admin.onboarding_step = 1
+        admin.save(update_fields=['onboarding_step'])
         logger.info('ONBOARDING_STEP1_DONE admin=%s', admin.email)
         return redirect(_etape_url(2))
 
@@ -139,6 +143,7 @@ def etape2_config(request):
         except Exception as e:
             logger.warning('ONBOARDING_STEP2_SAVE_ERROR: %s', e)
 
+        _switch_public_schema()
         admin.onboarding_step = 2
         admin.save(update_fields=['onboarding_step'])
         return redirect(_etape_url(3))
@@ -168,6 +173,7 @@ def etape3_recapitulatif(request):
         pass
 
     if request.method == 'POST':
+        _switch_public_schema()
         admin.onboarding_step = 3
         admin.save(update_fields=['onboarding_step'])
         return redirect(_etape_url(4))
@@ -194,6 +200,7 @@ def etape4_conditions(request):
 
     form = ConditionsForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
+        _switch_public_schema()
         admin.onboarding_step = 5      # Marquer complet
         admin.ecole.onboarding_complete = True
         admin.ecole.save(update_fields=['onboarding_complete'])
@@ -224,5 +231,16 @@ def _switch_tenant_schema(schema_name):
         from django_tenants.utils import get_tenant_model
         tenant = get_tenant_model().objects.get(schema_name=schema_name)
         connection.set_tenant(tenant)
+    except Exception:
+        pass
+
+
+def _switch_public_schema():
+    """Retourne au schéma public après une opération dans un tenant."""
+    from django.db import connection
+    if 'sqlite' in connection.settings_dict.get('ENGINE', ''):
+        return
+    try:
+        connection.set_schema_to_public()
     except Exception:
         pass

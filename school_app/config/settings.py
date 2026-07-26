@@ -4,6 +4,7 @@ Configuration Django — Plateforme SGN RDC (Multi-Tenant)
 import sys
 from pathlib import Path
 import os
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -42,6 +43,12 @@ if _site_url:
 # ─────────────────────────────────────────────────────────────────────────────
 _USE_TENANTS = os.environ.get('DB_HOST', '') or os.environ.get('DATABASE_URL', '')
 
+# Ces paramètres sont nécessaires dès l'import de TenantMixin/DomainMixin,
+# y compris quand SQLite est utilisé pour le développement local.
+TENANT_MODEL       = 'tenants.Ecole'
+TENANT_DOMAIN_MODEL = 'tenants.EcoleDomain'
+PUBLIC_SCHEMA_NAME = 'public'
+
 if _USE_TENANTS:
     SHARED_APPS = [
         'django_tenants',
@@ -70,9 +77,6 @@ if _USE_TENANTS:
         'notifications',
     ]
     INSTALLED_APPS = list(SHARED_APPS) + TENANT_APPS
-    TENANT_MODEL        = 'tenants.Ecole'
-    TENANT_DOMAIN_MODEL = 'tenants.EcoleDomain'
-    PUBLIC_SCHEMA_NAME  = 'public'
     DATABASE_ROUTERS    = ['django_tenants.routers.TenantSyncRouter']
 else:
     # Mode SQLite (développement sans PostgreSQL)
@@ -149,26 +153,36 @@ _pg_host = os.environ.get('DB_HOST', '')
 _db_url  = os.environ.get('DATABASE_URL', '')
 
 if _db_url:
-    # DATABASE_URL format: postgres://user:pwd@host:port/dbname
-    import re
-    m = re.match(r'postgres(?:ql)?://([^:]+):([^@]+)@([^:]+):(\d+)/(.+)', _db_url)
-    if m:
-        _user, _pwd, _host, _port, _name = m.groups()
+    # DATABASE_URL format: postgres://user:password@host[:port]/dbname
+    # The managed Replit database may omit the port and may include query
+    # options (for example ?sslmode=disable), so do not parse it with a
+    # restrictive regular expression.
+    _parsed_db_url = urlparse(_db_url)
+    if _parsed_db_url.scheme in ('postgres', 'postgresql') and _parsed_db_url.hostname:
         _engine = 'django_tenants.postgresql_backend' if _USE_TENANTS else 'django.db.backends.postgresql'
+        _db_options = {}
+        if _parsed_db_url.query:
+            from urllib.parse import parse_qs
+            _db_options.update({
+                key: values[-1]
+                for key, values in parse_qs(_parsed_db_url.query).items()
+                if values
+            })
+        _db_options.setdefault('sslmode', os.environ.get('DB_SSLMODE', 'prefer'))
         DATABASES = {
             'default': {
                 'ENGINE':   _engine,
-                'NAME':     _name,
-                'USER':     _user,
-                'PASSWORD': _pwd,
-                'HOST':     _host,
-                'PORT':     _port,
+                'NAME':     (_parsed_db_url.path or '').lstrip('/'),
+                'USER':     _parsed_db_url.username or '',
+                'PASSWORD': _parsed_db_url.password or '',
+                'HOST':     _parsed_db_url.hostname,
+                'PORT':     str(_parsed_db_url.port or os.environ.get('DB_PORT', '5432')),
                 'CONN_MAX_AGE': 600,
-                'OPTIONS':  {'sslmode': os.environ.get('DB_SSLMODE', 'prefer')},
+                'OPTIONS':  _db_options,
             }
         }
     else:
-        _pg_host = 'localhost'  # fallback
+        raise ValueError('DATABASE_URL doit être une URL PostgreSQL valide.')
 
 if _pg_host and not _db_url:
     _engine = 'django_tenants.postgresql_backend' if _USE_TENANTS else 'django.db.backends.postgresql'
