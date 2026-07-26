@@ -1,6 +1,6 @@
 """
 Script de données de test pour SGN RDC
-Lance avec: python3 manage.py shell < seed_data.py
+Lance avec: python manage.py shell -c "exec(open('seed_data.py', encoding='utf-8').read())"
 """
 import os, sys, django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'school_app.settings')
@@ -63,15 +63,47 @@ enseignants_data = [
 ]
 teachers = {}
 for username, pwd, last, first, tel in enseignants_data:
+    email = f'{username}@ecole.cd'
     u, created = CustomUser.objects.get_or_create(username=username, defaults={
-        'first_name': first, 'last_name': last, 'role': 'enseignant'
+        'first_name': first, 'last_name': last, 'role': 'enseignant', 'email': email
     })
     if created:
         u.set_password(pwd)
         u.save()
+    elif not u.email:
+        u.email = email
+        u.save()
     t, _ = Teacher.objects.get_or_create(user=u, defaults={'telephone': tel})
     teachers[username] = t
 print(f"  {len(teachers)} enseignants créés (mot de passe: ens123)")
+
+# ─── 5bis. PRÉFET & ENSEIGNANT TEST ────────────────────────────────────────────
+prefet, created = CustomUser.objects.get_or_create(username='prefet', defaults={
+    'first_name': 'Le', 'last_name': 'Préfet',
+    'role': 'prefet', 'email': 'prefet@ecole.cd',
+    'is_staff': True, 'is_superuser': True,
+})
+if created:
+    prefet.set_password('prefet2024')
+    prefet.save()
+elif not prefet.email:
+    prefet.email = 'prefet@ecole.cd'
+    prefet.is_staff = True
+    prefet.is_superuser = True
+    prefet.save()
+
+ens_test, created = CustomUser.objects.get_or_create(username='enseignant1', defaults={
+    'first_name': 'Enseignant', 'last_name': 'Test',
+    'role': 'enseignant', 'email': 'enseignant1@ecole.cd',
+})
+if created:
+    ens_test.set_password('ens2024')
+    ens_test.save()
+elif not ens_test.email:
+    ens_test.email = 'enseignant1@ecole.cd'
+    ens_test.save()
+
+print(f"  Comptes préfet et enseignant test créés/vérifiés")
 
 # ─── 6. MATIÈRES ───────────────────────────────────────────────────────────────
 matieres_data = [
@@ -260,10 +292,10 @@ for mat_code, eleve in eleves.items():
 print(f"  {notes_created} notes créées")
 print("\n=== Seeding terminé avec succès ! ===")
 print("\nComptes de connexion :")
-print("  prefet      / prefet2024  (Préfet - accès complet)")
-print("  enseignant1 / ens2024     (Enseignant test)")
-print("  prof_math   / ens123      (Prof Mathématiques/Physique)")
-print("  prof_fr     / ens123      (Prof Français/Anglais)")
-print("  prof_bio    / ens123      (Prof Biologie)")
-print("  prof_chimie / ens123      (Prof Chimie)")
-print("  prof_hist   / ens123      (Prof Histoire-Géo/Éd. Civique)")
+print("  prefet@ecole.cd      / prefet2024  (Préfet - accès complet)")
+print("  enseignant1@ecole.cd / ens2024     (Enseignant test)")
+print("  prof_math@ecole.cd   / ens123      (Prof Mathématiques/Physique)")
+print("  prof_fr@ecole.cd     / ens123      (Prof Français/Anglais)")
+print("  prof_bio@ecole.cd    / ens123      (Prof Biologie)")
+print("  prof_chimie@ecole.cd / ens123      (Prof Chimie)")
+print("  prof_hist@ecole.cd   / ens123      (Prof Histoire-Géo/Éd. Civique)")
