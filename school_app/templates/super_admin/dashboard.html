@@ -1,0 +1,111 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Tableau de bord{% endblock %}
+{% block page_title %}<i class="bi bi-grid-fill me-2 text-primary"></i>Tableau de bord{% endblock %}
+{% block content %}
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="kpi-card d-flex justify-content-between align-items-start">
+      <div>
+        <div class="kpi-val">{{ stats.total_ecoles }}</div>
+        <div class="kpi-label">Ecoles totales</div>
+      </div>
+      <i class="bi bi-building-fill kpi-icon"></i>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="kpi-card d-flex justify-content-between align-items-start">
+      <div>
+        <div class="kpi-val text-success">{{ stats.ecoles_actives }}</div>
+        <div class="kpi-label">Actives</div>
+      </div>
+      <i class="bi bi-check-circle-fill kpi-icon" style="color:#16a34a"></i>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="kpi-card d-flex justify-content-between align-items-start">
+      <div>
+        <div class="kpi-val text-warning">{{ stats.ecoles_suspendues }}</div>
+        <div class="kpi-label">Suspendues</div>
+      </div>
+      <i class="bi bi-pause-circle-fill kpi-icon" style="color:#d97706"></i>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="kpi-card d-flex justify-content-between align-items-start">
+      <div>
+        <div class="kpi-val text-danger">{{ stats.maintenance_active }}</div>
+        <div class="kpi-label">Maintenances actives</div>
+      </div>
+      <i class="bi bi-tools kpi-icon" style="color:#dc2626"></i>
+    </div>
+  </div>
+</div>
+
+{% if not request.super_admin.totp_enabled %}
+<div class="alert alert-warning d-flex align-items-center gap-3 mb-4">
+  <i class="bi bi-shield-exclamation fs-4"></i>
+  <div>
+    <strong>Securite : 2FA non active</strong> — Votre compte super-admin doit etre protege par la double authentification.
+    <a href="{% url 'super_admin:setup_2fa' %}" class="alert-link ms-2">Activer maintenant &rarr;</a>
+  </div>
+</div>
+{% endif %}
+
+{% if maintenances %}
+<div class="alert alert-info d-flex align-items-center gap-2 mb-4">
+  <i class="bi bi-tools"></i>
+  <strong>{{ stats.maintenance_active }} maintenance(s) active(s)</strong>
+  <a href="{% url 'super_admin:maintenance_list' %}" class="ms-2 alert-link">Voir &rarr;</a>
+</div>
+{% endif %}
+
+<div class="row g-3">
+  <div class="col-12 col-lg-8">
+    <div class="kpi-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0"><i class="bi bi-building me-1 text-primary"></i>Ecoles recentes</h6>
+        <a href="{% url 'super_admin:ecole_list' %}" class="btn btn-sm btn-outline-primary">Toutes les ecoles</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead><tr>
+            <th>Ecole</th><th>Plan</th><th>Statut</th><th>Cree le</th><th></th>
+          </tr></thead>
+          <tbody>
+            {% for e in ecoles_recentes %}
+            <tr>
+              <td>
+                <div class="fw-semibold">{{ e.nom }}</div>
+                <small class="text-muted">{{ e.contact_email }}</small>
+              </td>
+              <td>{% if e.plan %}<span class="badge bg-secondary">{{ e.plan.nom }}</span>{% else %}<span class="text-muted">—</span>{% endif %}</td>
+              <td><span class="badge badge-statut-{{ e.statut }}">{{ e.get_statut_display }}</span></td>
+              <td><small class="text-muted">{{ e.created_at|date:"d/m/Y" }}</small></td>
+              <td><a href="{% url 'super_admin:ecole_detail' e.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted py-4">Aucune ecole cree pour l'instant.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-4">
+    <div class="kpi-card mb-3">
+      <h6 class="fw-bold mb-3"><i class="bi bi-lightning-charge me-1 text-primary"></i>Actions rapides</h6>
+      <div class="d-grid gap-2">
+        <a href="{% url 'super_admin:ecole_creer' %}" class="btn btn-sa-primary btn-sm"><i class="bi bi-plus-circle me-1"></i>Nouvelle ecole</a>
+        <a href="{% url 'super_admin:plan_creer' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-plus-circle me-1"></i>Nouveau plan</a>
+        <a href="{% url 'super_admin:maintenance_creer' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-tools me-1"></i>Planifier maintenance</a>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <h6 class="fw-bold mb-3"><i class="bi bi-award me-1 text-primary"></i>Plans actifs</h6>
+      <div class="kpi-val">{{ stats.total_plans }}</div>
+      <div class="kpi-label">plans d'abonnement configures</div>
+      <a href="{% url 'super_admin:plan_list' %}" class="btn btn-sm btn-outline-primary mt-3 w-100">Gerer les plans</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Configurer le 2FA{% endblock %}
+{% block page_title %}<i class="bi bi-shield-plus me-2 text-primary"></i>Activer la double authentification{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-6">
+    <div class="kpi-card">
+      <div class="alert alert-warning d-flex gap-2 mb-4">
+        <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+        <div>La 2FA est <strong>obligatoire</strong> pour les comptes super-admin. Elle protege l'acces a la gestion de toutes les ecoles.</div>
+      </div>
+
+      <h6 class="fw-bold mb-3">Etape 1 — Scannez ce QR code</h6>
+      <div class="text-center mb-3">
+        <img src="data:image/png;base64,{{ qr_b64 }}" alt="QR Code 2FA" style="width:200px;height:200px;border-radius:8px;border:4px solid #E2E8F0">
+      </div>
+      <p class="text-muted small text-center mb-4">
+        Ou entrez manuellement : <code>{{ secret }}</code>
+      </p>
+
+      <h6 class="fw-bold mb-3">Etape 2 — Confirmez avec un code</h6>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Code genere par votre application</label>
+          {{ form.code }}
+          {% if form.code.errors %}<div class="text-danger small mt-1">{{ form.code.errors.0 }}</div>{% endif %}
+        </div>
+        <button type="submit" class="btn btn-sa-primary w-100"><i class="bi bi-shield-check me-1"></i>Activer le 2FA</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

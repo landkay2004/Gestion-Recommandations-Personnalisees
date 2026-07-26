@@ -1,0 +1,324 @@
+"""
+Configuration Django — Plateforme SGN RDC (Multi-Tenant)
+"""
+import sys
+from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# ── Python path : toutes les apps dans apps/ ─────────────────────────────────
+sys.path.insert(0, str(BASE_DIR / 'apps'))
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SÉCURITÉ
+# ─────────────────────────────────────────────────────────────────────────────
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-rdcschool-2024-secret-key-change-in-production'
+)
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = ['*']
+
+_site_url = os.environ.get('DJANGO_SITE_URL', '').strip()
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.replit.dev',
+    'https://*.spock.replit.dev',
+    'https://*.replit.app',
+    'https://*.pythonanywhere.com',
+    'http://localhost:8000',
+    'http://localhost:8008',
+]
+if _site_url:
+    if not _site_url.startswith(('http://', 'https://')):
+        _site_url = 'https://' + _site_url
+    CSRF_TRUSTED_ORIGINS.append(_site_url)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# APPLICATIONS
+# ─────────────────────────────────────────────────────────────────────────────
+_USE_TENANTS = os.environ.get('DB_HOST', '') or os.environ.get('DATABASE_URL', '')
+
+if _USE_TENANTS:
+    SHARED_APPS = [
+        'django_tenants',
+        'tenants',
+        'super_admin',
+        'onboarding',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+    ]
+    TENANT_APPS = [
+        'accounts',
+        'dashboard',
+        'students',
+        'teachers',
+        'subjects',
+        'classes',
+        'bulletin',
+        'grades',
+        'reports',
+        'school_settings',
+        'portail',
+        'carte_eleve',
+        'notifications',
+    ]
+    INSTALLED_APPS = list(SHARED_APPS) + TENANT_APPS
+    TENANT_MODEL        = 'tenants.Ecole'
+    TENANT_DOMAIN_MODEL = 'tenants.EcoleDomain'
+    PUBLIC_SCHEMA_NAME  = 'public'
+    DATABASE_ROUTERS    = ['django_tenants.routers.TenantSyncRouter']
+else:
+    # Mode SQLite (développement sans PostgreSQL)
+    INSTALLED_APPS = [
+        'tenants',
+        'super_admin',
+        'onboarding',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'accounts',
+        'dashboard',
+        'students',
+        'teachers',
+        'subjects',
+        'classes',
+        'bulletin',
+        'grades',
+        'reports',
+        'school_settings',
+        'portail',
+        'carte_eleve',
+        'notifications',
+    ]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MIDDLEWARE
+# ─────────────────────────────────────────────────────────────────────────────
+MIDDLEWARE = [
+    'config.middleware.SessionTenantMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'config.middleware.SuperAdminAuthMiddleware',
+    'accounts.middleware.ForcePasswordChangeMiddleware',
+    'config.middleware.OnboardingMiddleware',
+    'config.middleware.AbonnementMiddleware',
+    'config.middleware.MaintenanceMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'config.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'config.context_processors.school_info_safe',
+                'config.context_processors.tenant_context',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'config.wsgi.application'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BASE DE DONNÉES
+# ─────────────────────────────────────────────────────────────────────────────
+_pg_host = os.environ.get('DB_HOST', '')
+_db_url  = os.environ.get('DATABASE_URL', '')
+
+if _db_url:
+    # DATABASE_URL format: postgres://user:pwd@host:port/dbname
+    import re
+    m = re.match(r'postgres(?:ql)?://([^:]+):([^@]+)@([^:]+):(\d+)/(.+)', _db_url)
+    if m:
+        _user, _pwd, _host, _port, _name = m.groups()
+        _engine = 'django_tenants.postgresql_backend' if _USE_TENANTS else 'django.db.backends.postgresql'
+        DATABASES = {
+            'default': {
+                'ENGINE':   _engine,
+                'NAME':     _name,
+                'USER':     _user,
+                'PASSWORD': _pwd,
+                'HOST':     _host,
+                'PORT':     _port,
+                'CONN_MAX_AGE': 600,
+                'OPTIONS':  {'sslmode': os.environ.get('DB_SSLMODE', 'prefer')},
+            }
+        }
+    else:
+        _pg_host = 'localhost'  # fallback
+
+if _pg_host and not _db_url:
+    _engine = 'django_tenants.postgresql_backend' if _USE_TENANTS else 'django.db.backends.postgresql'
+    DATABASES = {
+        'default': {
+            'ENGINE':   _engine,
+            'NAME':     os.environ.get('DB_NAME',     'sgn_db'),
+            'USER':     os.environ.get('DB_USER',     'postgres'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST':     _pg_host,
+            'PORT':     os.environ.get('DB_PORT',     '5432'),
+            'CONN_MAX_AGE': 600,
+            'OPTIONS':  {'sslmode': os.environ.get('DB_SSLMODE', 'prefer')},
+        }
+    }
+
+if not _pg_host and not _db_url:
+    # SQLite pour développement local sans PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+            'CONN_MAX_AGE': 60,
+            'OPTIONS': {'timeout': 20},
+        }
+    }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AUTHENTIFICATION
+# ─────────────────────────────────────────────────────────────────────────────
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+AUTHENTICATION_BACKENDS = [
+    'config.backends.MultiTenantAuthBackend',
+    'accounts.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 8}},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
+
+LOGIN_URL               = '/login/'
+LOGIN_REDIRECT_URL      = '/dashboard/'
+LOGOUT_REDIRECT_URL     = '/login/'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# I18N
+# ─────────────────────────────────────────────────────────────────────────────
+LANGUAGE_CODE = 'fr-fr'
+TIME_ZONE     = 'Africa/Kinshasa'
+USE_I18N      = True
+USE_TZ        = True
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FICHIERS STATIQUES & MEDIA
+# ─────────────────────────────────────────────────────────────────────────────
+STATIC_URL  = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL  = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SESSIONS
+# ─────────────────────────────────────────────────────────────────────────────
+SESSION_COOKIE_HTTPONLY         = True
+SESSION_COOKIE_SAMESITE         = 'Lax'
+SESSION_COOKIE_AGE              = 28800
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EMAIL
+# ─────────────────────────────────────────────────────────────────────────────
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND',
+    'django.core.mail.backends.console.EmailBackend'
+)
+EMAIL_HOST          = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_PORT          = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS       = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER     = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL  = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@sgn-rdc.local')
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SÉCURITÉ HTTP
+# ─────────────────────────────────────────────────────────────────────────────
+SECURE_BROWSER_XSS_FILTER   = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS             = 'SAMEORIGIN'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CACHE
+# ─────────────────────────────────────────────────────────────────────────────
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'sgn-cache',
+        'TIMEOUT': 300,
+        'OPTIONS': {'MAX_ENTRIES': 1000},
+    }
+}
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LOGGING
+# ─────────────────────────────────────────────────────────────────────────────
+import os as _os
+_os.makedirs(BASE_DIR / 'logs', exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {'format': '{asctime} [{levelname}] {name}: {message}', 'style': '{'},
+        'simple':  {'format': '[{levelname}] {message}', 'style': '{'},
+    },
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler', 'formatter': 'simple', 'level': 'WARNING'},
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': str(BASE_DIR / 'logs' / 'sgn.log'),
+            'maxBytes': 5 * 1024 * 1024,
+            'backupCount': 3,
+            'formatter': 'verbose',
+            'level': 'INFO',
+            'encoding': 'utf-8',
+        },
+        'security_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': str(BASE_DIR / 'logs' / 'sgn_security.log'),
+            'maxBytes': 2 * 1024 * 1024,
+            'backupCount': 5,
+            'formatter': 'verbose',
+            'level': 'INFO',
+            'encoding': 'utf-8',
+        },
+    },
+    'loggers': {
+        'django.request':  {'handlers': ['console', 'file'],          'level': 'WARNING', 'propagate': False},
+        'django.security': {'handlers': ['file', 'security_file'],    'level': 'WARNING', 'propagate': False},
+        'sgn':             {'handlers': ['console', 'file'],          'level': 'INFO',    'propagate': False},
+        'sgn.security':    {'handlers': ['console', 'security_file'], 'level': 'INFO',    'propagate': False},
+    },
+}

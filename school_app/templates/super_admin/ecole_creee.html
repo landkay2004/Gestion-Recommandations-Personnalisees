@@ -1,0 +1,77 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Ecole creee{% endblock %}
+{% block page_title %}<i class="bi bi-check-circle-fill text-success me-2"></i>{% if regeneration %}Mot de passe regenere{% else %}Ecole creee{% endif %}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-lg-7">
+    <div class="kpi-card text-center mb-4">
+      <div style="font-size:3rem" class="mb-3">&#127963;</div>
+      <h4 class="fw-bold">{{ ecole.nom }}</h4>
+      <p class="text-muted">Schema : <code>{{ ecole.schema_name }}</code></p>
+      {% if email_sent %}
+      <div class="alert alert-success d-inline-flex align-items-center gap-2 mt-2">
+        <i class="bi bi-envelope-check-fill"></i>
+        Email envoye a <strong>{{ admin.email }}</strong>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="kpi-card mb-4">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <i class="bi bi-key-fill text-warning fs-5"></i>
+        <h6 class="fw-bold mb-0">Identifiants temporaires generés</h6>
+      </div>
+      <div class="alert alert-warning d-flex align-items-start gap-2">
+        <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+        <div>
+          <strong>A transmettre a l'administrateur de l'ecole.</strong>
+          Ces identifiants ne sont affiches qu'une seule fois.
+          {% if not email_sent %}L'envoi automatique a echoue — copiez-les manuellement.{% endif %}
+        </div>
+      </div>
+      <table class="table table-borderless mb-0">
+        <tr>
+          <th class="text-muted fw-normal" style="width:200px">Email de connexion</th>
+          <td><code class="fs-6">{{ admin.email }}</code></td>
+        </tr>
+        <tr>
+          <th class="text-muted fw-normal">Mot de passe temporaire</th>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <code class="fs-5 fw-bold bg-warning-subtle px-2 py-1 rounded" id="temp-pwd">{{ temp_pwd }}</code>
+              <button class="btn btn-sm btn-outline-secondary" onclick="navigator.clipboard.writeText('{{ temp_pwd }}');this.textContent='Copie!'">
+                <i class="bi bi-clipboard"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th class="text-muted fw-normal">Expiration</th>
+          <td class="text-muted">7 jours</td>
+        </tr>
+      </table>
+    </div>
+
+    {% if not regeneration %}
+    <div class="kpi-card mb-4">
+      <h6 class="fw-bold mb-2"><i class="bi bi-list-ol me-1 text-primary"></i>Prochaines etapes pour l'admin</h6>
+      <ol class="mb-0">
+        <li>Se connecter avec les identifiants ci-dessus</li>
+        <li>Changer le mot de passe temporaire</li>
+        <li>Configurer les informations de l'ecole</li>
+        <li>Accepter les conditions d'utilisation</li>
+        <li>Commencer a utiliser le systeme</li>
+      </ol>
+    </div>
+    {% endif %}
+
+    <div class="d-flex gap-2 justify-content-center">
+      <a href="{% url 'super_admin:ecole_detail' ecole.pk %}" class="btn btn-sa-primary"><i class="bi bi-eye me-1"></i>Voir l'ecole</a>
+      <a href="{% url 'super_admin:ecole_list' %}" class="btn btn-outline-secondary">Toutes les ecoles</a>
+      {% if not regeneration %}
+      <a href="{% url 'super_admin:ecole_creer' %}" class="btn btn-outline-primary"><i class="bi bi-plus-circle me-1"></i>Nouvelle ecole</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

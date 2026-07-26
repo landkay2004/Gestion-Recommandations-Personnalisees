@@ -1,0 +1,23 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Desactiver 2FA{% endblock %}
+{% block page_title %}<i class="bi bi-shield-x text-danger me-2"></i>Desactiver la double authentification{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-5">
+    <div class="kpi-card">
+      <div class="alert alert-danger mb-4"><i class="bi bi-shield-exclamation me-1"></i><strong>Attention</strong> — Desactiver le 2FA reduit la securite de votre compte.</div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Confirmez avec votre code actuel</label>
+          {{ form.code }}
+        </div>
+        <div class="d-flex gap-2 justify-content-end">
+          <a href="{% url 'super_admin:profil' %}" class="btn btn-outline-secondary">Annuler</a>
+          <button type="submit" class="btn btn-danger"><i class="bi bi-shield-x me-1"></i>Desactiver</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

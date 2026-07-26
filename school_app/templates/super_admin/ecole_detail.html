@@ -1,0 +1,84 @@
+{% extends "super_admin/base.html" %}
+{% block title %}{{ ecole.nom }}{% endblock %}
+{% block page_title %}<i class="bi bi-building me-2 text-primary"></i>{{ ecole.nom }}{% endblock %}
+{% block content %}
+<div class="d-flex gap-2 mb-4 flex-wrap">
+  <a href="{% url 'super_admin:ecole_modifier' ecole.pk %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil me-1"></i>Modifier</a>
+  {% if ecole.statut == 'active' %}
+    <a href="{% url 'super_admin:ecole_suspendre' ecole.pk %}" class="btn btn-outline-warning btn-sm"><i class="bi bi-pause-circle me-1"></i>Suspendre</a>
+  {% elif ecole.statut == 'suspendue' %}
+    <a href="{% url 'super_admin:ecole_reactiver' ecole.pk %}" class="btn btn-outline-success btn-sm"><i class="bi bi-play-circle me-1"></i>Reactiver</a>
+  {% endif %}
+  {% if admin %}
+    <a href="{% url 'super_admin:regenerer_mdp_admin' ecole.pk %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-key me-1"></i>Nouveau MDP admin</a>
+  {% endif %}
+  <a href="{% url 'super_admin:ecole_supprimer' ecole.pk %}" class="btn btn-outline-danger btn-sm ms-auto"><i class="bi bi-trash me-1"></i>Supprimer</a>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-md-6">
+    <div class="kpi-card h-100">
+      <h6 class="fw-bold mb-3"><i class="bi bi-info-circle me-1 text-primary"></i>Informations de l'ecole</h6>
+      <table class="table table-borderless table-sm mb-0">
+        <tr><th class="text-muted fw-normal" style="width:40%">Schema</th><td><code>{{ ecole.schema_name }}</code></td></tr>
+        <tr><th class="text-muted fw-normal">Ville</th><td>{{ ecole.ville|default:"—" }}, {{ ecole.pays }}</td></tr>
+        <tr><th class="text-muted fw-normal">Adresse</th><td>{{ ecole.adresse|default:"—" }}</td></tr>
+        <tr><th class="text-muted fw-normal">Statut</th><td><span class="badge badge-statut-{{ ecole.statut }}">{{ ecole.get_statut_display }}</span></td></tr>
+        <tr><th class="text-muted fw-normal">Onboarding</th>
+          <td>{% if ecole.onboarding_complete %}<span class="badge bg-success">Termine</span>{% else %}<span class="badge bg-warning text-dark">En cours</span>{% endif %}</td>
+        </tr>
+        <tr><th class="text-muted fw-normal">Cree le</th><td>{{ ecole.created_at|date:"d/m/Y H:i" }}</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="col-12 col-md-6">
+    <div class="kpi-card h-100">
+      <h6 class="fw-bold mb-3"><i class="bi bi-person me-1 text-primary"></i>Responsable (contact uniquement)</h6>
+      <table class="table table-borderless table-sm mb-0">
+        <tr><th class="text-muted fw-normal" style="width:40%">Nom</th><td>{{ ecole.contact_nom|default:"—" }}</td></tr>
+        <tr><th class="text-muted fw-normal">Email</th><td>{{ ecole.contact_email }}</td></tr>
+        <tr><th class="text-muted fw-normal">Telephone</th><td>{{ ecole.contact_telephone|default:"—" }}</td></tr>
+      </table>
+      {% if admin %}
+      <hr>
+      <h6 class="fw-bold mb-2 small text-muted">Compte administrateur</h6>
+      <table class="table table-borderless table-sm mb-0">
+        <tr><th class="text-muted fw-normal" style="width:40%">Email connexion</th><td>{{ admin.email }}</td></tr>
+        <tr><th class="text-muted fw-normal">Onboarding</th><td>Etape {{ admin.onboarding_step }}/5</td></tr>
+        <tr><th class="text-muted fw-normal">Derniere connexion</th><td>{{ admin.last_login|date:"d/m/Y H:i"|default:"Jamais" }}</td></tr>
+      </table>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-12 col-md-6">
+    <div class="kpi-card h-100">
+      <h6 class="fw-bold mb-3"><i class="bi bi-award me-1 text-primary"></i>Abonnement</h6>
+      <table class="table table-borderless table-sm mb-0">
+        <tr><th class="text-muted fw-normal" style="width:40%">Plan</th><td>{% if ecole.plan %}{{ ecole.plan.nom }}{% else %}<span class="text-muted">—</span>{% endif %}</td></tr>
+        <tr><th class="text-muted fw-normal">Debut</th><td>{{ ecole.date_debut_abonnement|date:"d/m/Y"|default:"—" }}</td></tr>
+        <tr><th class="text-muted fw-normal">Fin</th>
+          <td>
+            {% if ecole.date_fin_abonnement %}
+              <span {% if ecole.acces_lecture_seule %}class="text-danger fw-semibold"{% elif ecole.en_grace %}class="text-warning fw-semibold"{% endif %}>
+                {{ ecole.date_fin_abonnement|date:"d/m/Y" }}
+              </span>
+              {% if ecole.acces_lecture_seule %}<span class="badge bg-danger ms-1">Expire</span>
+              {% elif ecole.en_grace %}<span class="badge bg-warning text-dark ms-1">Grace</span>{% endif %}
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+        <tr><th class="text-muted fw-normal">Grace</th><td>{{ ecole.jours_grace }} jours</td></tr>
+      </table>
+      {% if ecole.plan %}
+      <div class="mt-3 p-2 bg-light rounded small">
+        <div class="row text-center">
+          <div class="col"><strong>{{ ecole.plan.max_eleves }}</strong><br><span class="text-muted">eleves max</span></div>
+          <div class="col"><strong>{{ ecole.plan.max_enseignants }}</strong><br><span class="text-muted">enseignants</span></div>
+          <div class="col"><strong>{{ ecole.plan.max_classes }}</strong><br><span class="text-muted">classes</span></div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
