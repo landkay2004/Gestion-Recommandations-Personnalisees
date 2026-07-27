@@ -1198,3 +1198,494 @@ a:hover { color: var(--color-primary-hover); }
 .bg-primary-soft  { background: rgba(77,68,181,.12) !important; }
 .bg-danger-soft   { background: rgba(220,53,69,.12) !important; }
 .bg-secondary-soft{ background: rgba(108,117,125,.12) !important; }
+
+/* =====================================================================
+   SUPER ADMIN COMPONENTS
+   ===================================================================== */
+
+/* KPI Cards */
+.kpi-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  padding: 22px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s, transform .2s, background .25s;
+  height: 100%;
+}
+.kpi-card:hover { box-shadow: 0 8px 24px rgba(77,68,181,.12); transform: translateY(-2px); }
+.kpi-label {
+  font-size: .72rem; font-weight: 700; color: var(--color-muted);
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px;
+}
+.kpi-val {
+  font-size: 2.1rem; font-weight: 800; color: var(--color-dark);
+  line-height: 1.1; font-variant-numeric: tabular-nums;
+}
+.kpi-meta { font-size: .72rem; color: var(--color-muted); margin-top: 8px; }
+.kpi-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  background: var(--color-primary-soft); color: var(--color-primary);
+  flex-shrink: 0;
+}
+[data-theme="dark"] .kpi-icon { background: rgba(77,68,181,.18); }
+
+/* Super admin primary button */
+.btn-sa-primary {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: .5rem 1.25rem;
+  font-size: .875rem;
+  font-weight: 600;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all .18s;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-sa-primary:hover {
+  background: var(--color-primary-hover); color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(77,68,181,.28);
+}
+
+/* SA Panel */
+.sa-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  height: 100%;
+  transition: background .25s, border-color .25s;
+}
+.sa-panel-title {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.sa-panel-title h2 {
+  font-size: .9rem; font-weight: 700; color: var(--color-text);
+  margin: 0; display: flex; align-items: center; gap: 6px;
+}
+.sa-panel-title p {
+  font-size: .72rem; color: var(--color-muted); margin: 4px 0 0;
+}
+.sa-panel > .table-responsive { padding: 0; }
+.sa-panel > *:not(.sa-panel-title):not(.table-responsive) { padding-left: 20px; padding-right: 20px; }
+
+/* SA Table */
+.sa-table { margin: 0; }
+.sa-table thead th {
+  background: var(--bg-table-head);
+  font-size: .72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--color-muted);
+  padding: 12px 16px; border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+}
+.sa-table tbody td {
+  padding: 12px 16px; vertical-align: middle;
+  color: var(--color-text); border-color: var(--color-border);
+}
+.sa-table tbody tr { transition: background .12s; }
+.sa-table tbody tr:hover { background: var(--bg-table-hover); }
+[data-theme="dark"] .sa-table { --bs-table-bg: transparent; }
+
+/* School name/meta in table */
+.sa-school-name { font-weight: 600; font-size: .865rem; color: var(--color-text); }
+.sa-school-meta { font-size: .72rem; color: var(--color-muted); margin-top: 2px; }
+
+/* Status badges */
+.sa-status {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 50px;
+  font-size: .72rem; font-weight: 600;
+}
+.badge-statut-active, .badge-statut-actif { background: #DCFCE7; color: #16A34A; }
+.badge-statut-suspended, .badge-statut-suspendu, .badge-statut-suspendue { background: #FEF3C7; color: #D97706; }
+.badge-statut-onboarding { background: var(--color-primary-soft); color: var(--color-primary); }
+.badge-statut-inactive, .badge-statut-inactif { background: #FEE2E2; color: #DC2626; }
+[data-theme="dark"] .badge-statut-active, [data-theme="dark"] .badge-statut-actif { background: rgba(22,163,74,.18); color: #4ADE80; }
+[data-theme="dark"] .badge-statut-suspended, [data-theme="dark"] .badge-statut-suspendu,
+[data-theme="dark"] .badge-statut-suspendue { background: rgba(217,119,6,.18); color: #FCD34D; }
+[data-theme="dark"] .badge-statut-onboarding { background: rgba(77,68,181,.2); color: #818CF8; }
+[data-theme="dark"] .badge-statut-inactive, [data-theme="dark"] .badge-statut-inactif { background: rgba(220,38,38,.18); color: #FCA5A5; }
+
+/* Progress bar (réseau santé) */
+.sa-progress { height: 8px; background: var(--color-border); border-radius: 99px; overflow: hidden; }
+.sa-progress div { height: 100%; border-radius: 99px; background: var(--color-primary); transition: width .6s ease; }
+
+/* SA Action links */
+.sa-action {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background .12s;
+  font-size: .875rem; font-weight: 500;
+}
+.sa-action:last-child { border-bottom: none; }
+.sa-action:hover { background: var(--bg-table-hover); color: var(--color-primary); }
+.sa-action-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--color-primary-soft); color: var(--color-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0; transition: background .15s, color .15s;
+}
+.sa-action:hover .sa-action-icon { background: var(--color-primary); color: #fff; }
+
+/* SA Announcements */
+.sa-announcement { padding: 14px 20px; border-bottom: 1px solid var(--color-border); }
+.sa-announcement:last-child { border-bottom: none; }
+.sa-announcement h3 { font-size: .845rem; font-weight: 600; color: var(--color-text); margin: 0 0 4px; }
+.sa-announcement p { font-size: .78rem; color: var(--color-muted); margin: 0 0 4px; line-height: 1.45; }
+.sa-announcement small { font-size: .68rem; color: var(--color-muted); display: flex; align-items: center; gap: 4px; }
+
+/* SA platform badge in sidebar */
+.sa-platform-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 999px;
+  background: rgba(255,255,255,.14); color: rgba(255,255,255,.9);
+  font-size: .58rem; font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* =====================================================================
+   LOGIN PAGE v2 — split panel unifié
+   ===================================================================== */
+.login-split {
+  display: flex; min-height: 100vh; width: 100%;
+}
+
+/* Panneau gauche branding */
+.login-brand {
+  flex: 0 0 44%;
+  background: linear-gradient(145deg, #2E2870 0%, #4D44B5 55%, #6860CC 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 52px 44px;
+  position: relative; overflow: hidden;
+}
+/* Cercles décoratifs */
+.login-brand::before {
+  content: '';
+  position: absolute;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.08);
+  top: -120px; right: -120px;
+  box-shadow: 0 0 0 60px rgba(255,255,255,.04), 0 0 0 120px rgba(255,255,255,.025);
+}
+.login-brand::after {
+  content: '';
+  position: absolute;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.04);
+  bottom: -60px; left: -60px;
+}
+.login-brand-inner {
+  position: relative; z-index: 1; color: #fff; max-width: 360px; width: 100%;
+}
+.login-brand-logo {
+  width: 68px; height: 68px; border-radius: 20px;
+  background: rgba(255,255,255,.18); backdrop-filter: blur(8px);
+  display: grid; place-items: center; font-size: 1.9rem; color: #fff;
+  margin-bottom: 28px;
+  border: 1px solid rgba(255,255,255,.25);
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+.login-brand-logo img { width: 56px; height: 56px; object-fit: contain; border-radius: 14px; }
+.login-brand-kicker {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 999px;
+  background: rgba(255,255,255,.12); color: rgba(255,255,255,.9);
+  font-size: .62rem; font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.login-brand-title {
+  font-size: 1.8rem; font-weight: 800; color: #fff; line-height: 1.2;
+  margin-bottom: 8px; letter-spacing: -.04em;
+}
+.login-brand-sub {
+  font-size: .85rem; color: rgba(255,255,255,.6); margin-bottom: 36px; line-height: 1.55;
+}
+.login-brand-feats {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 13px;
+}
+.login-brand-feats li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: .83rem; color: rgba(255,255,255,.82);
+}
+.login-brand-feats li i { color: #86efac; font-size: .95rem; flex-shrink: 0; }
+.login-brand-footer {
+  margin-top: 36px; font-size: .7rem; color: rgba(255,255,255,.38);
+}
+.login-brand-footer strong { color: rgba(255,255,255,.6); }
+
+/* Panneau droit formulaire */
+.login-form-side {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px;
+  background: var(--bg-page);
+}
+.login-form-card {
+  width: 100%; max-width: 420px;
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 40px 36px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.08);
+}
+.login-form-icon {
+  width: 60px; height: 60px; border-radius: 18px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  display: grid; place-items: center;
+  font-size: 1.6rem; margin: 0 auto 22px;
+  overflow: hidden;
+}
+.login-form-icon img { width: 52px; height: 52px; object-fit: contain; border-radius: 12px; }
+.login-form-card .form-control {
+  background: var(--bg-table-head);
+  min-height: 46px;
+}
+.login-form-card .form-control:focus {
+  background: var(--bg-input);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(77,68,181,.12);
+}
+
+@media (max-width: 768px) {
+  .login-split { flex-direction: column; }
+  .login-brand { flex: 0 0 auto; padding: 28px 24px; }
+  .login-brand-feats { display: none; }
+  .login-brand::before, .login-brand::after { display: none; }
+  .login-form-side { padding: 24px 16px; }
+  .login-form-card { padding: 28px 22px; }
+}
+
+/* =====================================================================
+   ONBOARDING WIZARD v2 — design unifié
+   ===================================================================== */
+.ob-shell {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  min-height: 100vh;
+}
+.ob-aside {
+  position: relative; overflow: hidden;
+  padding: 36px 28px;
+  background: linear-gradient(155deg, #2E2870 0%, #4D44B5 60%, #6860CC 100%);
+  color: #fff;
+}
+.ob-aside::before {
+  content: '';
+  position: absolute;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.08);
+  bottom: -80px; right: -100px;
+  box-shadow: 0 0 0 50px rgba(255,255,255,.03);
+}
+.ob-brand {
+  display: flex; align-items: center; gap: 11px;
+  position: relative; z-index: 1;
+}
+.ob-mark {
+  width: 42px; height: 42px; display: grid; place-items: center;
+  border-radius: 13px;
+  background: rgba(255,255,255,.2);
+  border: 1px solid rgba(255,255,255,.25);
+  font-size: 1.3rem; color: #fff;
+}
+.ob-brand-name { font-weight: 800; letter-spacing: -.03em; font-size: .95rem; }
+.ob-brand-sub { color: rgba(255,255,255,.55); font-size: .68rem; }
+.ob-aside-copy {
+  position: relative; z-index: 1; margin-top: 72px;
+}
+.ob-aside-copy h1 {
+  font-size: 1.85rem; line-height: 1.15; font-weight: 800;
+  letter-spacing: -.05em; margin-bottom: 14px;
+}
+.ob-aside-copy p {
+  color: rgba(255,255,255,.65); font-size: .82rem; line-height: 1.7; margin: 0;
+}
+.ob-benefit {
+  position: relative; z-index: 1;
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-top: 24px; color: rgba(255,255,255,.75); font-size: .75rem;
+}
+.ob-benefit i { color: #86efac; font-size: .95rem; flex-shrink: 0; margin-top: 1px; }
+
+/* Onboarding main area */
+.ob-main { padding: 32px 6vw 60px; background: var(--bg-page); }
+.ob-top {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 20px; margin-bottom: 28px;
+}
+.ob-help { color: var(--color-muted); font-size: .72rem; display: flex; align-items: center; gap: 5px; }
+.ob-help i { color: var(--color-primary); }
+
+.ob-progress-label {
+  display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;
+}
+.ob-progress-label strong { font-size: .82rem; color: var(--color-text); }
+.ob-progress-label span { color: var(--color-muted); font-size: .7rem; }
+.ob-progress {
+  height: 6px; background: var(--color-border); border-radius: 99px; overflow: hidden; margin-bottom: 24px;
+}
+.ob-progress div {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--color-primary), var(--ak-purple-light));
+  transition: width .5s ease;
+}
+
+/* Steps indicator */
+.ob-steps { display: flex; gap: 0; margin-bottom: 28px; }
+.ob-step {
+  position: relative; display: flex; align-items: center; gap: 9px;
+  flex: 1; color: var(--color-muted); font-size: .68rem; font-weight: 700;
+}
+.ob-step:not(:last-child)::after {
+  content: ""; height: 1px; flex: 1; margin: 0 10px;
+  background: var(--color-border);
+}
+.ob-step.done { color: var(--color-success); }
+.ob-step.active { color: var(--color-primary); }
+.ob-step-dot {
+  width: 28px; height: 28px; display: grid; place-items: center;
+  flex: 0 0 auto; border: 2px solid var(--color-border);
+  border-radius: 9px; background: var(--bg-card);
+  font-size: .68rem; color: var(--color-muted);
+  transition: all .2s;
+}
+.ob-step.done .ob-step-dot { border-color: var(--color-success); background: #dcfce7; color: var(--color-success); }
+.ob-step.active .ob-step-dot { border-color: var(--color-primary); background: var(--color-primary-soft); color: var(--color-primary); }
+
+.ob-content { max-width: 800px; margin: 0 auto; }
+
+/* Onboarding Card */
+.ob-card {
+  padding: 30px;
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 20px;
+  transition: background .25s, border-color .25s;
+}
+.ob-card-head {
+  display: flex; gap: 16px; align-items: flex-start; margin-bottom: 26px;
+}
+.ob-card-icon {
+  width: 50px; height: 50px; display: grid; place-items: center;
+  border-radius: 14px; background: var(--color-primary-soft);
+  color: var(--color-primary); font-size: 1.3rem; flex-shrink: 0;
+}
+.ob-card h2 {
+  margin: 0; font-size: 1.15rem; font-weight: 800; letter-spacing: -.03em;
+  color: var(--color-dark);
+}
+.ob-card-head p { margin: 5px 0 0; color: var(--color-muted); font-size: .76rem; }
+
+.ob-section {
+  padding: 18px; border: 1px solid var(--color-border);
+  border-radius: 12px; background: var(--bg-table-head);
+  margin-bottom: 16px; transition: background .25s, border-color .25s;
+}
+.ob-section-title {
+  margin-bottom: 14px; color: var(--color-muted);
+  font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+}
+.ob-form label { margin-bottom: 6px; color: var(--color-text); font-size: .8rem; font-weight: 600; }
+.ob-form .form-control, .ob-form .form-select {
+  min-height: 44px; background: var(--bg-input);
+  border-color: var(--color-border); border-radius: 9px;
+}
+.ob-form .form-control:focus, .ob-form .form-select:focus {
+  border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(77,68,181,.1);
+  background: var(--bg-input);
+}
+.ob-form .form-text { color: var(--color-muted); font-size: .7rem; }
+
+.ob-actions {
+  display: flex; justify-content: space-between; gap: 12px;
+  margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--color-border);
+}
+.btn-ob {
+  padding: .65rem 1.4rem; border: 0; border-radius: 10px;
+  background: var(--color-primary); color: #fff;
+  font-size: .875rem; font-weight: 700;
+  box-shadow: 0 6px 16px rgba(77,68,181,.2);
+  cursor: pointer; transition: all .18s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-ob:hover { background: var(--color-primary-hover); color: #fff; transform: translateY(-1px); }
+
+.ob-alert { border: 0; border-radius: 12px; font-size: .82rem; }
+
+.ob-terms {
+  max-height: 320px; overflow: auto; padding: 20px;
+  border: 1px solid var(--color-border); border-radius: 12px;
+  background: var(--bg-table-head); color: var(--color-text);
+  font-size: .8rem; line-height: 1.75;
+}
+.ob-terms h3 { color: var(--color-dark); font-size: .9rem; font-weight: 700; }
+.ob-terms p { margin-bottom: 12px; }
+
+.ob-check {
+  padding: 14px 16px; border: 1px solid var(--color-border);
+  border-radius: 11px; background: var(--bg-card); font-size: .82rem;
+  transition: border-color .15s;
+}
+.ob-check:hover { border-color: var(--color-primary); }
+
+.ob-summary { overflow: hidden; border: 1px solid var(--color-border); border-radius: 12px; }
+.ob-summary-row {
+  display: flex; justify-content: space-between; gap: 20px;
+  padding: 13px 18px; border-bottom: 1px solid var(--color-border);
+  font-size: .8rem;
+}
+.ob-summary-row:last-child { border: 0; }
+.ob-summary-row span { color: var(--color-muted); }
+.ob-summary-row strong { text-align: right; color: var(--color-text); }
+
+.ob-save-note {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 18px; color: var(--color-muted); font-size: .68rem;
+}
+.ob-save-note i { color: var(--color-success); }
+
+.ob-identity {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 22px; padding: 12px 14px;
+  border-radius: 12px; background: var(--color-primary-soft);
+  border: 1px solid rgba(77,68,181,.12);
+}
+.ob-identity-icon {
+  width: 34px; height: 34px; display: grid; place-items: center;
+  border-radius: 10px; background: var(--color-primary); color: #fff; font-size: .95rem;
+}
+.ob-identity div { font-size: .8rem; font-weight: 700; color: var(--color-text); }
+.ob-identity small { display: block; color: var(--color-muted); font-weight: 400; font-size: .7rem; }
+
+@media (max-width: 850px) {
+  .ob-shell { display: block; }
+  .ob-aside { padding: 24px 20px; }
+  .ob-aside-copy { margin-top: 28px; }
+  .ob-aside-copy h1 { font-size: 1.45rem; }
+  .ob-benefit { display: none; }
+  .ob-main { padding: 22px 16px 48px; }
+  .ob-steps { overflow-x: auto; }
+  .ob-step { min-width: 110px; }
+  .ob-step span { display: none; }
+  .ob-card { padding: 22px 18px; }
+}

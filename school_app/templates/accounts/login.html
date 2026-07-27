@@ -1,133 +1,97 @@
 {% extends 'base.html' %}
 {% block auth_content %}
-<div class="login-page login-page-split">
+<div class="login-split">
 
-  <!-- ── Panneau gauche : branding & illustration ── -->
-  <div class="login-brand-panel">
-    <div class="lbp-inner">
-      <div class="lbp-logo">
+  <!-- ── Panneau gauche : branding & fonctionnalités ── -->
+  <div class="login-brand">
+    <div class="login-brand-inner">
+      <div class="login-brand-logo">
         {% if school_info.logo %}
           <img src="{{ school_info.logo.url }}" alt="{{ school_info.nom }}">
         {% else %}
           <i class="bi bi-mortarboard-fill"></i>
         {% endif %}
       </div>
-      <h2 class="lbp-title">{{ school_info.pwa_nom|default:"Système de Gestion Scolaire" }}</h2>
+      <div class="login-brand-kicker">
+        <i class="bi bi-building-fill"></i>Espace établissement
+      </div>
+      <h1 class="login-brand-title">{{ school_info.pwa_nom|default:"Système de Gestion Scolaire" }}</h1>
       {% if school_info.nom %}
-        <p class="lbp-subtitle">{{ school_info.nom }}</p>
+        <p class="login-brand-sub">{{ school_info.nom }}</p>
+      {% else %}
+        <p class="login-brand-sub">Gérez votre école en toute simplicité.</p>
       {% endif %}
 
-      <ul class="lbp-features">
+      <ul class="login-brand-feats">
         <li><i class="bi bi-check-circle-fill"></i>Gestion des élèves &amp; enseignants</li>
         <li><i class="bi bi-check-circle-fill"></i>Saisie et consultation des notes</li>
         <li><i class="bi bi-check-circle-fill"></i>Bulletins officiels RDC en un clic</li>
         <li><i class="bi bi-check-circle-fill"></i>Portail parents &amp; résultats en ligne</li>
       </ul>
 
-      <div class="lbp-footer">
-        <span>Powered by <strong>{{ platform_settings.site_name|default:"SGN RDC" }}</strong></span>
-      </div>
+      <div class="login-brand-footer">Powered by <strong>{{ platform_settings.site_name|default:"SGN RDC" }}</strong></div>
     </div>
   </div>
 
   <!-- ── Panneau droit : formulaire de connexion ── -->
-  <div class="login-form-panel">
-    <div class="login-card">
-      {% if school_info.logo %}
-      <div class="login-logo p-0 mb-3">
-        <img src="{{ school_info.logo.url }}" alt="{{ school_info.nom }}" style="height:56px;object-fit:contain;">
-      </div>
-      {% else %}
-      <div class="login-logo">
-        <i class="bi bi-mortarboard-fill"></i>
-      </div>
-      {% endif %}
+  <div class="login-form-side">
+    <div class="login-form-card">
 
-      <h4 class="text-center fw-bold mb-1" style="color:var(--color-dark);">Connexion</h4>
-      <p class="text-center text-muted small mb-4">Réservé au personnel autorisé</p>
+      <div class="login-form-icon">
+        {% if school_info.logo %}
+          <img src="{{ school_info.logo.url }}" alt="{{ school_info.nom }}">
+        {% else %}
+          <i class="bi bi-mortarboard-fill"></i>
+        {% endif %}
+      </div>
+
+      <div class="text-center mb-4">
+        <h2 class="fw-bold mb-1" style="font-size:1.45rem;letter-spacing:-.03em;color:var(--color-dark);">Connexion</h2>
+        <p class="text-muted small mb-0">Réservé au personnel autorisé</p>
+      </div>
 
       {% if form.errors %}
-      <div class="alert alert-danger py-2 small d-flex align-items-center gap-2">
-        <i class="bi bi-exclamation-circle-fill"></i>Identifiants incorrects. Veuillez réessayer.
+      <div class="alert alert-danger d-flex align-items-center gap-2 py-2 mb-3" style="border-radius:10px;">
+        <i class="bi bi-exclamation-circle-fill flex-shrink-0"></i>Identifiants incorrects. Veuillez réessayer.
       </div>
       {% endif %}
 
       <form method="post">
         {% csrf_token %}
         <div class="mb-3">
-          <label class="form-label">Adresse e-mail</label>
+          <label class="form-label fw-semibold" style="font-size:.875rem;">Adresse e-mail</label>
           {{ form.username }}
         </div>
         <div class="mb-4">
-          <label class="form-label">Mot de passe</label>
-          {{ form.password }}
+          <label class="form-label fw-semibold" style="font-size:.875rem;">Mot de passe</label>
+          <div class="position-relative">
+            {{ form.password }}
+            <button type="button" class="btn border-0 bg-transparent position-absolute end-0 top-50 translate-middle-y pe-3"
+                    style="color:var(--color-muted);z-index:5;" onclick="togglePwd(this)">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100">
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
           <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
         </button>
       </form>
 
-      <p class="text-center text-muted mt-4 small">
-        <i class="bi bi-shield-lock me-1"></i>Accès réservé au personnel autorisé
+      <p class="text-center text-muted mt-4 small d-flex align-items-center justify-content-center gap-1">
+        <i class="bi bi-shield-lock"></i>Accès réservé au personnel autorisé
       </p>
     </div>
   </div>
 </div>
 
-<style>
-.login-page-split {
-  display: flex; min-height: 100vh; width: 100%;
+<script>
+function togglePwd(btn) {
+  const wrap = btn.closest('.position-relative');
+  const inp  = wrap ? wrap.querySelector('input[type="password"], input[type="text"]') : null;
+  const eye  = btn.querySelector('i');
+  if (!inp) return;
+  if (inp.type === 'password') { inp.type = 'text'; eye.className = 'bi bi-eye-slash'; }
+  else { inp.type = 'password'; eye.className = 'bi bi-eye'; }
 }
-.login-brand-panel {
-  flex: 0 0 45%;
-  background: linear-gradient(145deg, #18233d 0%, #2d3f6b 60%, var(--color-primary) 100%);
-  display: flex; align-items: center; justify-content: center;
-  padding: 48px 40px;
-  position: relative; overflow: hidden;
-}
-.login-brand-panel::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-.lbp-inner {
-  position: relative; z-index: 1; color: #fff; max-width: 340px; width: 100%;
-}
-.lbp-logo {
-  width: 64px; height: 64px; border-radius: 18px;
-  background: rgba(255,255,255,.15); display: grid; place-items: center;
-  font-size: 1.8rem; color: #fff; margin-bottom: 24px;
-  border: 1px solid rgba(255,255,255,.2); overflow: hidden;
-}
-.lbp-logo img { width: 56px; height: 56px; object-fit: contain; border-radius: 12px; }
-.lbp-title { font-size: 1.5rem; font-weight: 800; line-height: 1.25; margin-bottom: 6px; color: #fff; }
-.lbp-subtitle { font-size: .85rem; color: rgba(255,255,255,.65); margin-bottom: 32px; }
-.lbp-features { list-style: none; padding: 0; margin: 0 0 32px; display: flex; flex-direction: column; gap: 12px; }
-.lbp-features li { display: flex; align-items: center; gap: 10px; font-size: .85rem; color: rgba(255,255,255,.85); }
-.lbp-features li i { color: #7ee8a2; font-size: 1rem; flex-shrink: 0; }
-.lbp-footer { font-size: .72rem; color: rgba(255,255,255,.45); }
-.lbp-footer strong { color: rgba(255,255,255,.7); }
-
-.login-form-panel {
-  flex: 1;
-  display: flex; align-items: center; justify-content: center;
-  padding: 40px 24px;
-  background: var(--bg-page);
-}
-.login-form-panel .login-card {
-  width: 100%; max-width: 400px;
-  background: var(--bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  padding: 36px 32px;
-  box-shadow: var(--shadow-lg);
-}
-
-@media (max-width: 768px) {
-  .login-page-split { flex-direction: column; }
-  .login-brand-panel { flex: 0 0 auto; padding: 28px 24px; }
-  .lbp-features { display: none; }
-  .login-form-panel { padding: 24px 16px; }
-}
-</style>
+</script>
 {% endblock %}
