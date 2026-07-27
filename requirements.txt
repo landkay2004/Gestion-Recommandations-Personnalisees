@@ -8,3 +8,13 @@ psycopg2-binary>=2.9
 python-dotenv>=1.0
 django-tenants>=3.9
 pyotp>=2.9
+django
+django-tenants
+openpyxl
+pillow
+psycopg2-binary
+pyotp
+python-dotenv
+qrcode
+reportlab
+whitenoise

@@ -1,0 +1,146 @@
+{% extends 'super_admin/base.html' %}
+{% block title %}Paramètres de la plateforme{% endblock %}
+{% block page_title %}Paramètres de la plateforme{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+  <!-- ── Colonne principale ── -->
+  <div class="col-lg-8">
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+
+      <!-- Identité -->
+      <div class="card mb-4">
+        <div class="card-header d-flex align-items-center gap-2">
+          <i class="bi bi-globe2 text-primary"></i>
+          <span class="fw-semibold">Identité de la plateforme</span>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">{{ form.site_name.label }} <span class="text-danger">*</span></label>
+              {{ form.site_name }}
+              {% if form.site_name.errors %}<div class="text-danger small mt-1">{{ form.site_name.errors.0 }}</div>{% endif %}
+              <div class="form-text">Ce nom sera affiché partout sur la plateforme.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ form.site_slogan.label }}</label>
+              {{ form.site_slogan }}
+            </div>
+            <div class="col-md-8">
+              <label class="form-label">{{ form.site_devise.label }}</label>
+              {{ form.site_devise }}
+              <div class="form-text">Phrase ou citation affichée dans les pages d'accueil.</div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{ form.couleur_principale.label }}</label>
+              {{ form.couleur_principale }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logo -->
+      <div class="card mb-4">
+        <div class="card-header d-flex align-items-center gap-2">
+          <i class="bi bi-image text-primary"></i>
+          <span class="fw-semibold">Logo de la plateforme</span>
+        </div>
+        <div class="card-body">
+          <div class="d-flex align-items-start gap-4 flex-wrap">
+            {% if obj.site_logo %}
+            <div class="text-center">
+              <img src="{{ obj.site_logo.url }}" alt="Logo actuel" style="height:72px;object-fit:contain;border-radius:10px;border:1px solid var(--color-border);padding:6px;background:#f8f9fa;">
+              <div class="text-muted small mt-1">Logo actuel</div>
+            </div>
+            {% endif %}
+            <div class="flex-grow-1">
+              {{ form.site_logo }}
+              <div class="form-text mt-1">PNG ou SVG recommandé. Affiché dans la sidebar et les en-têtes.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coordonnées -->
+      <div class="card mb-4">
+        <div class="card-header d-flex align-items-center gap-2">
+          <i class="bi bi-telephone text-primary"></i>
+          <span class="fw-semibold">Coordonnées de contact</span>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">{{ form.adresse.label }}</label>
+              {{ form.adresse }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{ form.email_contact.label }}</label>
+              {{ form.email_contact }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{ form.telephone.label }}</label>
+              {{ form.telephone }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{ form.site_web.label }}</label>
+              {{ form.site_web }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-circle-fill me-1"></i>Enregistrer les paramètres
+        </button>
+        <a href="{% url 'super_admin:dashboard' %}" class="btn btn-outline-secondary">Annuler</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- ── Colonne droite : aperçu ── -->
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i class="bi bi-eye text-primary"></i>
+        <span class="fw-semibold">Aperçu actuel</span>
+      </div>
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:var(--color-primary);color:#fff;">
+          {% if obj.site_logo %}
+            <img src="{{ obj.site_logo.url }}" alt="Logo" style="height:36px;object-fit:contain;border-radius:7px;">
+          {% else %}
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:1.1rem;"><i class="bi bi-mortarboard-fill"></i></div>
+          {% endif %}
+          <div>
+            <div style="font-weight:800;font-size:.95rem;line-height:1.2;">{{ obj.site_name }}</div>
+            {% if obj.site_slogan %}<div style="font-size:.68rem;opacity:.75;">{{ obj.site_slogan }}</div>{% endif %}
+          </div>
+        </div>
+        {% if obj.site_devise %}
+        <blockquote class="blockquote small text-muted border-start border-primary ps-3 mb-3">
+          <em>« {{ obj.site_devise }} »</em>
+        </blockquote>
+        {% endif %}
+        <ul class="list-unstyled small text-muted mb-0">
+          {% if obj.adresse %}<li class="d-flex gap-2 mb-1"><i class="bi bi-geo-alt-fill text-primary mt-1"></i>{{ obj.adresse|linebreaksbr }}</li>{% endif %}
+          {% if obj.email_contact %}<li class="d-flex gap-2 mb-1"><i class="bi bi-envelope-fill text-primary"></i>{{ obj.email_contact }}</li>{% endif %}
+          {% if obj.telephone %}<li class="d-flex gap-2 mb-1"><i class="bi bi-telephone-fill text-primary"></i>{{ obj.telephone }}</li>{% endif %}
+          {% if obj.site_web %}<li class="d-flex gap-2"><i class="bi bi-globe2 text-primary"></i><a href="{{ obj.site_web }}" target="_blank">{{ obj.site_web }}</a></li>{% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header"><i class="bi bi-info-circle text-primary me-2"></i>À savoir</div>
+      <div class="card-body small text-muted">
+        <p class="mb-2">Le <strong>nom du site</strong> remplace automatiquement « SGN RDC » dans les titres de pages et les e-mails envoyés aux écoles.</p>
+        <p class="mb-0">Le <strong>logo</strong> apparaît dans la sidebar et les en-têtes de toutes les pages admin.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

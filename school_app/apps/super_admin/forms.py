@@ -151,6 +151,39 @@ class MaintenanceForm(forms.Form):
     duree_estimee_minutes = forms.IntegerField(initial=60, widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
 
+class PlatformSettingsForm(forms.ModelForm):
+
+    class Meta:
+        from super_admin.models import PlatformSettings
+        model = PlatformSettings
+        fields = [
+            'site_name', 'site_slogan', 'site_devise', 'site_logo',
+            'adresse', 'email_contact', 'telephone', 'site_web', 'couleur_principale',
+        ]
+        widgets = {
+            'site_name':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'SGN RDC'}),
+            'site_slogan': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'School Governance Network'}),
+            'site_devise': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Votre devise ou citation…'}),
+            'site_logo':   forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'adresse':     forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Adresse postale…'}),
+            'email_contact': forms.EmailInput(attrs={'class': 'form-control'}),
+            'telephone':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}),
+            'site_web':    forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://…'}),
+            'couleur_principale': forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
+        }
+        labels = {
+            'site_name':   'Nom du site / plateforme',
+            'site_slogan': 'Slogan',
+            'site_devise': 'Devise',
+            'site_logo':   'Logo de la plateforme',
+            'adresse':     'Adresse postale',
+            'email_contact': 'E-mail de contact',
+            'telephone':   'Téléphone',
+            'site_web':    'Site web',
+            'couleur_principale': 'Couleur principale',
+        }
+
+
 class AnnoncePlateformeForm(forms.ModelForm):
     class Meta:
         model = AnnoncePlateforme

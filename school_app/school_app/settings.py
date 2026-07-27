@@ -80,6 +80,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'school_settings.context_processors.school_info',
+                'super_admin.context_processors.platform_settings',
             ],
         },
     },

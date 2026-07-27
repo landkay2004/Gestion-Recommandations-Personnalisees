@@ -8,8 +8,23 @@ from .forms import SchoolInfoForm
 from accounts.views import prefet_required
 
 
+def _prefet_or_admin_required(view_func):
+    """Autorise préfet ET administrateur d'école."""
+    from functools import wraps
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        if not (request.user.is_prefet() or request.user.is_admin_ecole()):
+            from django.contrib import messages as _msgs
+            _msgs.error(request, "Accès réservé au préfet ou à l'administrateur.")
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
 @login_required
-@prefet_required
+@_prefet_or_admin_required
 def settings_view(request):
     info = SchoolInfo.get_info()
     form = SchoolInfoForm(request.POST or None, request.FILES or None, instance=info)

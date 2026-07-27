@@ -219,6 +219,18 @@ def termine(request):
     admin = _get_admin(request)
     if not admin or not admin.onboarding_complete:
         return redirect('onboarding:etape_courante')
+    # Connecter l'admin via Django auth pour qu'il puisse accéder aux vues
+    # protégées (paramètres, dashboard…) directement depuis cette page.
+    if not request.user.is_authenticated:
+        _switch_tenant_schema(admin.ecole.schema_name)
+        try:
+            from accounts.models import CustomUser
+            from django.contrib.auth import login as django_login
+            user_obj = CustomUser.objects.get(email__iexact=admin.email, role='admin_ecole')
+            django_login(request, user_obj, backend='accounts.backends.EmailBackend')
+        except Exception:
+            pass
+        _switch_public_schema()
     return render(request, 'onboarding/termine.html', {'admin': admin, 'ecole': admin.ecole})
 
 

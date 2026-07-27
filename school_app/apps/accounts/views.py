@@ -203,20 +203,43 @@ def reset_user_password(request, pk):
 
 @login_required
 def profile_view(request):
-    form = ProfileForm(request.POST or None, request.FILES or None, instance=request.user)
-    pwd_form = ChangePasswordForm(user=request.user, data=request.POST or None)
+    active_tab = request.GET.get('tab', 'info')
+    profile_form = ProfileForm(instance=request.user)
+    password_form = ChangePasswordForm(user=request.user)
+
     if request.method == 'POST':
-        if 'update_profile' in request.POST and form.is_valid():
-            form.save()
-            messages.success(request, 'Profil mis à jour.')
-            return redirect('profile_view')
-        elif 'change_password' in request.POST and pwd_form.is_valid():
-            request.user.set_password(pwd_form.cleaned_data['new_password'])
-            request.user.save(update_fields=['password'])
-            update_session_auth_hash(request, request.user)
-            messages.success(request, 'Mot de passe changé.')
-            return redirect('profile_view')
-    return render(request, 'accounts/profile.html', {'form': form, 'pwd_form': pwd_form})
+        action    = request.POST.get('_action', 'profile')
+        active_tab = request.POST.get('_tab', 'info')
+
+        if action == 'profile':
+            profile_form = ProfileForm(request.POST, request.FILES, instance=request.user)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Profil mis à jour.')
+                return redirect('profile_view')
+        elif action == 'password':
+            password_form = ChangePasswordForm(user=request.user, data=request.POST)
+            if password_form.is_valid():
+                request.user.set_password(password_form.cleaned_data['new_password'])
+                request.user.save(update_fields=['password'])
+                update_session_auth_hash(request, request.user)
+                messages.success(request, 'Mot de passe changé.')
+                return redirect(f'{request.path}?tab=password')
+
+    # Profil enseignant (classes enseignées)
+    teacher_profile = None
+    if request.user.is_enseignant():
+        try:
+            teacher_profile = Teacher.objects.get(user=request.user)
+        except Teacher.DoesNotExist:
+            pass
+
+    return render(request, 'accounts/profile.html', {
+        'profile_form': profile_form,
+        'password_form': password_form,
+        'active_tab': active_tab,
+        'teacher_profile': teacher_profile,
+    })
 
 
 # ── Utilitaire ────────────────────────────────────────────────────────────────

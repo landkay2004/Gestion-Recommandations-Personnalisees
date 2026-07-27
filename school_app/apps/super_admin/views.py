@@ -20,7 +20,7 @@ from super_admin.forms import (
     Verify2FAForm, Setup2FAConfirmForm,
     PlanAbonnementForm, CreerEcoleForm, ModifierEcoleForm,
     SupprimerEcoleForm, MaintenanceForm,
-    AnnoncePlateformeForm,
+    AnnoncePlateformeForm, PlatformSettingsForm,
 )
 
 logger     = logging.getLogger('sgn')
@@ -72,7 +72,12 @@ def login_view(request):
         except SuperAdmin.DoesNotExist:
             error = "Email ou mot de passe incorrect."
 
-    return render(request, 'super_admin/login.html', {'form': form, 'error': error})
+    from super_admin.models import PlatformSettings
+    return render(request, 'super_admin/login.html', {
+        'form': form,
+        'error': error,
+        'platform_settings': PlatformSettings.get_settings(),
+    })
 
 
 def logout_view(request):
@@ -523,6 +528,18 @@ def setup_2fa(request):
     return render(request, 'super_admin/setup_2fa.html', {
         'sa': sa, 'qr_b64': qr_b64, 'form': form, 'secret': sa.totp_secret,
     })
+
+
+@super_admin_required
+def platform_settings(request):
+    from super_admin.models import PlatformSettings
+    settings_obj = PlatformSettings.get_settings()
+    form = PlatformSettingsForm(request.POST or None, request.FILES or None, instance=settings_obj)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, "Paramètres de la plateforme enregistrés.")
+        return redirect('super_admin:platform_settings')
+    return render(request, 'super_admin/parametres.html', {'form': form, 'obj': settings_obj})
 
 
 @super_admin_required

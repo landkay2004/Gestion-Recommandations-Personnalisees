@@ -88,3 +88,28 @@ class SuperAdmin(models.Model):
     @property
     def is_super_admin(self):
         return True
+
+
+class PlatformSettings(models.Model):
+    """Paramètres globaux de la plateforme SGN RDC (singleton pk=1)."""
+    site_name    = models.CharField("Nom du site",    max_length=200, default="SGN RDC")
+    site_slogan  = models.CharField("Slogan",         max_length=300, blank=True, default="School Governance Network")
+    site_devise  = models.CharField("Devise",         max_length=300, blank=True)
+    site_logo    = models.ImageField("Logo plateforme", upload_to='platform/', null=True, blank=True)
+    adresse      = models.TextField("Adresse",        blank=True)
+    email_contact = models.EmailField("E-mail contact", blank=True)
+    telephone    = models.CharField("Téléphone",      max_length=50, blank=True)
+    site_web     = models.URLField("Site web",        blank=True)
+    couleur_principale = models.CharField("Couleur principale", max_length=7, default="#4D44B5")
+
+    class Meta:
+        app_label = 'super_admin'
+        verbose_name = "Paramètres de la plateforme"
+
+    def __str__(self):
+        return self.site_name
+
+    @classmethod
+    def get_settings(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj

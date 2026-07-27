@@ -40,4 +40,7 @@ urlpatterns = [
     path('profil/',        views.profil,     name='profil'),
     path('profil/2fa/',    views.setup_2fa,  name='setup_2fa'),
     path('profil/2fa/off/', views.disable_2fa, name='disable_2fa'),
+
+    # Paramètres de la plateforme
+    path('parametres/', views.platform_settings, name='platform_settings'),
 ]
