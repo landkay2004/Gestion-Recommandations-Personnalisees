@@ -18,6 +18,10 @@ class EmailBackend(ModelBackend):
                 user = User.objects.get(username__iexact=username)
             except User.DoesNotExist:
                 return None
+        except Exception:
+            # En mode PostgreSQL multi-tenant, accounts_customuser n'existe pas
+            # dans le schéma public. On retourne None sans planter.
+            return None
         if user.check_password(password) and self.user_can_authenticate(user):
             return user
         return None

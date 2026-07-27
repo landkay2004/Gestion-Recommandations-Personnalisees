@@ -43,6 +43,17 @@ class LoginForm(AuthenticationForm):
     )
 
     def clean(self):
+        from django.db import connection
+        if 'sqlite' not in connection.settings_dict.get('ENGINE', ''):
+            # Mode PostgreSQL multi-tenant : l'authentification est entièrement
+            # gérée par MultiTenantAuthBackend dans la vue. Le formulaire ne
+            # sert qu'à l'affichage — on ne touche pas accounts_customuser
+            # (qui n'existe pas dans le schéma public) et on n'appelle pas
+            # super().clean() qui déclencherait authenticate() → ModelBackend
+            # → même erreur.
+            return self.cleaned_data
+
+        # Mode SQLite : résolution email → username puis auth standard Django.
         email_or_username = self.data.get('username', '').strip().lower()
         try:
             user = CustomUser.objects.get(email__iexact=email_or_username)

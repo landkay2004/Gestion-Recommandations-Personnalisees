@@ -101,6 +101,9 @@ class MultiTenantAuthBackend:
             return UserModel.objects.get(pk=user_id)
         except UserModel.DoesNotExist:
             return None
+        except Exception:
+            # Schéma courant ne contient pas accounts_customuser (ex: schéma public)
+            return None
 
 
 def _switch_schema(schema_name: str):
