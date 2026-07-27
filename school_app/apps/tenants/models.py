@@ -232,3 +232,39 @@ class ModeMaintenance(models.Model):
         scope = self.ecole.nom if self.ecole else 'Global'
         mod = ' [%s]' % self.module if self.module else ''
         return "Maintenance %s%s - %s" % (scope, mod, 'Actif' if self.is_active else 'Inactif')
+
+
+class AnnoncePlateforme(models.Model):
+    """Communication publiée depuis le schéma public vers les écoles."""
+
+    TYPE_CHOICES = [
+        ('info', 'Information'),
+        ('success', 'Bonne nouvelle'),
+        ('warning', 'Important'),
+        ('urgent', 'Urgent'),
+    ]
+
+    titre = models.CharField("Titre", max_length=180)
+    message = models.TextField("Message")
+    type_annonce = models.CharField(
+        "Type", max_length=20, choices=TYPE_CHOICES, default='info'
+    )
+    ecole = models.ForeignKey(
+        Ecole, on_delete=models.CASCADE, null=True, blank=True,
+        related_name='annonces_plateforme',
+        help_text="Vide = toutes les écoles"
+    )
+    publiee = models.BooleanField("Publiée", default=True)
+    date_publication = models.DateTimeField("Date de publication", auto_now_add=True)
+    date_expiration = models.DateTimeField("Date d'expiration", null=True, blank=True)
+    auteur_nom = models.CharField("Auteur", max_length=150, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = 'tenants'
+        ordering = ['-date_publication', '-created_at']
+        verbose_name = "Annonce plateforme"
+        verbose_name_plural = "Annonces plateforme"
+
+    def __str__(self):
+        return self.titre

@@ -9,7 +9,10 @@ from django.utils.text import slugify
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
 
-from tenants.models import Ecole, PlanAbonnement, AdminEcole, AnnuaireUtilisateur, ModeMaintenance
+from tenants.models import (
+    Ecole, PlanAbonnement, AdminEcole, AnnuaireUtilisateur, ModeMaintenance,
+    AnnoncePlateforme,
+)
 from tenants.models import _gen_temp_password
 from super_admin.models import SuperAdmin
 from super_admin.forms import (
@@ -17,6 +20,7 @@ from super_admin.forms import (
     Verify2FAForm, Setup2FAConfirmForm,
     PlanAbonnementForm, CreerEcoleForm, ModifierEcoleForm,
     SupprimerEcoleForm, MaintenanceForm,
+    AnnoncePlateformeForm,
 )
 
 logger     = logging.getLogger('sgn')
@@ -110,6 +114,7 @@ def dashboard(request):
     if _needs_2fa_verification(request):
         return redirect('super_admin:verify_2fa')
 
+    today = timezone.now().date()
     stats = {
         'total_ecoles':      Ecole.objects.filter(is_deleted=False).count(),
         'ecoles_actives':    Ecole.objects.filter(statut='active', is_deleted=False).count(),
@@ -117,15 +122,60 @@ def dashboard(request):
         'ecoles_corbeille':  Ecole.objects.filter(statut='corbeille').count(),
         'total_plans':       PlanAbonnement.objects.filter(is_actif=True).count(),
         'maintenance_active': ModeMaintenance.objects.filter(is_active=True).count(),
+        'onboarding_en_cours': Ecole.objects.filter(
+            is_deleted=False, onboarding_complete=False
+        ).count(),
+        'abonnements_a_renouveler': Ecole.objects.filter(
+            is_deleted=False,
+            date_fin_abonnement__isnull=False,
+            date_fin_abonnement__gte=today,
+            date_fin_abonnement__lte=today + timedelta(days=30),
+        ).count(),
     }
     ecoles_recentes  = Ecole.objects.filter(is_deleted=False).order_by('-created_at')[:8]
     maintenances     = ModeMaintenance.objects.filter(is_active=True).select_related('ecole')[:5]
+    annonces_recentes = AnnoncePlateforme.objects.select_related('ecole')[:5]
+    ecoles_onboarding = Ecole.objects.filter(
+        is_deleted=False, onboarding_complete=False
+    ).order_by('-created_at')[:5]
 
     return render(request, 'super_admin/dashboard.html', {
         'stats': stats,
         'ecoles_recentes': ecoles_recentes,
         'maintenances': maintenances,
+        'annonces_recentes': annonces_recentes,
+        'ecoles_onboarding': ecoles_onboarding,
     })
+
+
+# ── Communications ───────────────────────────────────────────────────────────
+@super_admin_required
+def communication_list(request):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+    annonces = AnnoncePlateforme.objects.select_related('ecole')
+    return render(request, 'super_admin/communication_list.html', {
+        'annonces': annonces,
+    })
+
+
+@super_admin_required
+def communication_creer(request):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+    form = AnnoncePlateformeForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        annonce = form.save(commit=False)
+        annonce.auteur_nom = request.super_admin.get_full_name()
+        annonce.save()
+        messages.success(
+            request,
+            "L'annonce a été publiée pour %s." % (
+                annonce.ecole.nom if annonce.ecole else "toutes les écoles"
+            ),
+        )
+        return redirect('super_admin:communication_list')
+    return render(request, 'super_admin/communication_form.html', {'form': form})
 
 
 # ── Ecoles ────────────────────────────────────────────────────────────────────

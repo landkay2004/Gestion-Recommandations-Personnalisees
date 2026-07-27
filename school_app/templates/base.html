@@ -118,6 +118,9 @@
     </a>
 
     <div class="nav-section-label">Messagerie</div>
+    <a href="{% url 'communications' %}" class="nav-link {% if request.resolver_match.url_name == 'communications' %}active{% endif %}">
+      <i class="bi bi-megaphone-fill"></i><span>Communications</span>
+    </a>
     <a href="{% url 'notification_list' %}" class="nav-link {% if 'notification' in request.resolver_match.url_name %}active{% endif %}">
       <i class="bi bi-bell-fill"></i><span>Notifications</span>
       <span class="sidebar-notif-count d-none ms-auto badge bg-danger rounded-pill" id="sidebar-notif-badge"></span>
@@ -183,6 +186,9 @@
     </a>
 
     <div class="nav-section-label">Messagerie</div>
+    <a href="{% url 'communications' %}" class="nav-link {% if request.resolver_match.url_name == 'communications' %}active{% endif %}">
+      <i class="bi bi-megaphone-fill"></i><span>Communications</span>
+    </a>
     <a href="{% url 'notification_list' %}" class="nav-link {% if 'notification' in request.resolver_match.url_name %}active{% endif %}">
       <i class="bi bi-bell-fill"></i><span>Notifications</span>
       <span class="sidebar-notif-count d-none ms-auto badge bg-danger rounded-pill" id="sidebar-notif-badge-ens"></span>

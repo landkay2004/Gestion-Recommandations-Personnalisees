@@ -2,15 +2,61 @@ import logging
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Q
+from django.db import connection
+from django.utils import timezone
 from students.models import Student
 from teachers.models import Teacher
 from classes.models import Classe, AnneeScolaire
 from subjects.models import Matiere, MatiereClasse
 from bulletin.models import ModeleBulletin
 from grades.models import Note
+from tenants.models import AnnoncePlateforme, AdminEcole
 
 logger = logging.getLogger('sgn')
+
+
+@login_required
+def communications(request):
+    """Communications de la plateforme visibles par l'école connectée."""
+    # Les annonces et leur ciblage sont des données de plateforme. Elles
+    # doivent donc toujours être lues dans public, même si la requête
+    # courante est déjà positionnée sur le schéma d'une école.
+    admin_ecole = None
+    annonces = []
+    public_context = (
+        connection.schema_context('public')
+        if hasattr(connection, 'schema_context')
+        else _null_context()
+    )
+    with public_context:
+        admin_id = request.session.get('admin_ecole_id')
+        if admin_id:
+            admin_ecole = AdminEcole.objects.select_related('ecole').filter(
+                pk=admin_id, is_active=True
+            ).first()
+        ecole_id = admin_ecole.ecole_id if admin_ecole else None
+        now = timezone.now()
+        annonces = list(AnnoncePlateforme.objects.filter(
+            publiee=True,
+        ).filter(
+            Q(ecole__isnull=True) | Q(ecole_id=ecole_id)
+        ).filter(
+            Q(date_expiration__isnull=True) | Q(date_expiration__gte=now)
+        ).select_related('ecole'))
+
+    return render(request, 'dashboard/communications.html', {
+        'annonces': annonces,
+        'admin_ecole': admin_ecole,
+    })
+
+
+class _null_context:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        return False
 
 
 @login_required

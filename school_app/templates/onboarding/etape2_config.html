@@ -1,14 +1,12 @@
 {% extends "onboarding/base_wizard.html" %}
 {% block title %}Etape 2 — Configuration{% endblock %}
 {% block wizard_content %}
-<div class="card-wizard">
-  <div class="d-flex align-items-center gap-3 mb-4">
-    <div style="width:48px;height:48px;background:#EFF6FF;border-radius:12px;display:flex;align-items:center;justify-content:center">
-      <i class="bi bi-building-fill text-primary fs-4"></i>
-    </div>
+<div class="ob-card">
+  <div class="ob-card-head">
+    <div class="ob-card-icon"><i class="bi bi-building-fill"></i></div>
     <div>
-      <h5 class="fw-bold mb-0">Informations de votre etablissement</h5>
-      <p class="text-muted mb-0 small">Ces informations seront visibles sur les bulletins et documents officiels.</p>
+      <h2>Configurez votre école</h2>
+      <p>Ces informations seront visibles sur les bulletins et documents officiels.</p>
     </div>
   </div>
 
@@ -16,7 +14,7 @@
     <div class="alert alert-danger">{{ form.non_field_errors }}</div>
   {% endif %}
 
-  <form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data" class="ob-form">
     {% csrf_token %}
     <div class="mb-3">
       <label class="form-label fw-semibold">{{ form.nom_ecole.label }} <span class="text-danger">*</span></label>
@@ -47,11 +45,11 @@
       {{ form.logo }}
       <div class="form-text">PNG ou JPG, max 2 Mo. Apparait sur les bulletins.</div>
     </div>
-    <div class="d-flex justify-content-between">
+    <div class="ob-actions">
       <a href="{% url 'onboarding:etape1_password' %}" class="btn btn-outline-secondary">
         <i class="bi bi-arrow-left me-1"></i> Precedent
       </a>
-      <button type="submit" class="btn btn-wizard">
+      <button type="submit" class="btn-ob">
         Continuer <i class="bi bi-arrow-right ms-1"></i>
       </button>
     </div>

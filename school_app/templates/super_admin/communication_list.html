@@ -1,0 +1,9 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Communications{% endblock %}
+{% block page_title %}<i class="bi bi-megaphone-fill me-2"></i>Communications{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-4"><div><h1 class="h4 fw-bold mb-1">Centre de communication</h1><p class="text-muted small mb-0">Informez les administrateurs d’école depuis un espace unique.</p></div><a href="{% url 'super_admin:communication_creer' %}" class="btn btn-sa-primary"><i class="bi bi-plus-lg me-2"></i>Nouvelle annonce</a></div>
+<div class="row g-3">
+{% for annonce in annonces %}<div class="col-12 col-lg-6"><article class="sa-panel h-100"><div class="d-flex justify-content-between gap-2 mb-3"><span class="badge rounded-pill bg-primary-subtle text-primary">{{ annonce.get_type_annonce_display }}</span><small class="text-muted">{{ annonce.date_publication|date:"d/m/Y H:i" }}</small></div><h2 class="h5 fw-bold">{{ annonce.titre }}</h2><p class="text-muted small" style="line-height:1.7">{{ annonce.message|linebreaksbr }}</p><div class="d-flex align-items-center gap-2 mt-3 pt-3 border-top small text-muted"><i class="bi bi-send-fill text-primary"></i>{% if annonce.ecole %}{{ annonce.ecole.nom }}{% else %}Toutes les écoles{% endif %}<span class="ms-auto">{% if annonce.publiee %}<span class="text-success fw-bold">Publiée</span>{% else %}<span class="text-secondary">Brouillon</span>{% endif %}</span></div></article></div>{% empty %}<div class="col-12"><div class="sa-panel text-center py-5"><i class="bi bi-megaphone fs-1 text-primary opacity-50"></i><h2 class="h5 fw-bold mt-3">Votre centre de communication est prêt</h2><p class="text-muted small">Publiez une première annonce pour informer les écoles.</p><a href="{% url 'super_admin:communication_creer' %}" class="btn btn-sa-primary btn-sm">Créer une annonce</a></div></div>{% endfor %}
+</div>
+{% endblock %}

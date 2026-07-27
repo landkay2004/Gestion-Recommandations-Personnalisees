@@ -1,32 +1,47 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Configuration terminee — SGN RDC</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration terminée — SGN RDC</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <style>
-    body { background: #F8FAFC; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Segoe UI', system-ui, sans-serif; }
-    .box { background: #fff; border-radius: 20px; padding: 3rem 2rem; max-width: 480px; width: 100%; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,.08); }
-    .check-circle { width: 80px; height: 80px; background: #DCFCE7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+    :root { --ink:#17203a; --navy:#18233d; --primary:#4d44b5; --soft:#efedff; --bg:#f7f8fc; --border:#e7e9f1; --muted:#7a8498; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; background:radial-gradient(circle at 10% 10%,#efedff 0,#f7f8fc 34%,#f7f8fc 100%); color:var(--ink); font-family:Inter,"Segoe UI",system-ui,sans-serif; }
+    .success-box { position:relative; overflow:hidden; width:min(100%,560px); padding:42px 42px 34px; text-align:center; background:#fff; border:1px solid var(--border); border-radius:26px; box-shadow:0 18px 50px rgba(27,35,67,.08); }
+    .success-box:before { content:""; position:absolute; left:-55px; top:-70px; width:180px; height:180px; border-radius:50%; background:var(--soft); }
+    .success-mark { position:relative; width:82px; height:82px; display:grid; place-items:center; margin:0 auto 22px; border-radius:25px; background:#e4f8f0; color:#159570; font-size:2.25rem; box-shadow:0 9px 20px rgba(21,149,112,.12); }
+    .success-kicker { color:var(--primary); font-size:.68rem; font-weight:850; letter-spacing:.13em; text-transform:uppercase; }
+    h1 { margin:8px 0 12px; font-size:1.8rem; font-weight:850; letter-spacing:-.05em; }
+    .lead-copy { color:var(--muted); font-size:.82rem; line-height:1.75; }
+    .next-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:28px 0; text-align:left; }
+    .next-step { padding:12px; border:1px solid var(--border); border-radius:14px; background:#fbfbfd; }
+    .next-step i { color:var(--primary); font-size:1rem; }
+    .next-step strong { display:block; margin-top:7px; font-size:.7rem; }
+    .next-step span { display:block; margin-top:3px; color:var(--muted); font-size:.62rem; line-height:1.45; }
+    .btn-success-main { display:block; padding:.78rem 1rem; border-radius:11px; background:var(--primary); color:#fff; font-size:.78rem; font-weight:800; text-decoration:none; box-shadow:0 9px 18px rgba(77,68,181,.18); }
+    .btn-success-main:hover { background:#3f379b; color:#fff; }
+    .btn-success-secondary { display:block; margin-top:10px; padding:.72rem 1rem; border:1px solid var(--border); border-radius:11px; color:#586278; font-size:.75rem; font-weight:750; text-decoration:none; }
+    .btn-success-secondary:hover { background:#fbfbfd; color:var(--primary); }
+    @media(max-width:520px) { .success-box{padding:32px 20px 25px}.next-steps{grid-template-columns:1fr}.next-step{display:grid;grid-template-columns:24px 1fr;column-gap:7px}.next-step i{grid-row:span 2}.next-step strong{margin-top:0} }
   </style>
 </head>
 <body>
-<div class="box">
-  <div class="check-circle">
-    <i class="bi bi-check-lg text-success" style="font-size:2.5rem"></i>
-  </div>
-  <h2 class="fw-bold mb-2">Configuration terminee !</h2>
-  <p class="text-muted mb-4">
-    Bienvenue sur la plateforme SGN RDC.<br>
-    Votre espace <strong>{{ ecole.nom }}</strong> est pret. Commencez par configurer vos classes, eleves et enseignants.
-  </p>
-  <a href="/dashboard/" class="btn btn-primary btn-lg w-100 mb-3">
-    <i class="bi bi-grid-fill me-2"></i>Acceder au tableau de bord
-  </a>
-  <a href="/parametres/" class="btn btn-outline-secondary w-100">
-    <i class="bi bi-gear me-2"></i>Parametres de l'ecole
-  </a>
-</div>
+  <main class="success-box">
+    <div class="success-mark"><i class="bi bi-check2"></i></div>
+    <div class="success-kicker">Configuration terminée</div>
+    <h1>Votre espace est prêt.</h1>
+    <p class="lead-copy">Bienvenue sur SGN RDC. L’espace de <strong>{{ ecole.nom }}</strong> est maintenant sécurisé et configuré.</p>
+    <div class="next-steps">
+      <div class="next-step"><i class="bi bi-building-check"></i><div><strong>Votre école</strong><span>Les informations officielles sont enregistrées.</span></div></div>
+      <div class="next-step"><i class="bi bi-people-fill"></i><div><strong>Vos équipes</strong><span>Ajoutez enseignants, classes et élèves.</span></div></div>
+      <div class="next-step"><i class="bi bi-graph-up-arrow"></i><div><strong>Votre suivi</strong><span>Pilotez l’activité depuis le dashboard.</span></div></div>
+    </div>
+    <a href="/dashboard/" class="btn-success-main"><i class="bi bi-grid-1x2-fill me-2"></i>Accéder au tableau de bord</a>
+    <a href="/parametres/" class="btn-success-secondary"><i class="bi bi-gear me-2"></i>Ouvrir les paramètres de l’école</a>
+  </main>
 </body>
 </html>

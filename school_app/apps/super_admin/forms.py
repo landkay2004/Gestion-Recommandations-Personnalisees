@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.text import slugify
-from tenants.models import Ecole, PlanAbonnement, AdminEcole
+from tenants.models import Ecole, PlanAbonnement, AdminEcole, AnnoncePlateforme
 
 
 class LoginSuperAdminForm(forms.Form):
@@ -149,3 +149,31 @@ class MaintenanceForm(forms.Form):
     debut_prevu = forms.DateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}))
     fin_prevue  = forms.DateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}))
     duree_estimee_minutes = forms.IntegerField(initial=60, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+
+
+class AnnoncePlateformeForm(forms.ModelForm):
+    class Meta:
+        model = AnnoncePlateforme
+        fields = ['titre', 'message', 'type_annonce', 'ecole', 'publiee', 'date_expiration']
+        widgets = {
+            'titre': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ex. Mise à jour importante de la plateforme',
+            }),
+            'message': forms.Textarea(attrs={
+                'class': 'form-control', 'rows': 6,
+                'placeholder': 'Rédigez votre message pour les administrateurs...',
+            }),
+            'type_annonce': forms.Select(attrs={'class': 'form-select'}),
+            'ecole': forms.Select(attrs={'class': 'form-select'}),
+            'publiee': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'date_expiration': forms.DateTimeInput(attrs={
+                'class': 'form-control', 'type': 'datetime-local',
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['ecole'].required = False
+        self.fields['ecole'].empty_label = "Toutes les écoles"
+        self.fields['date_expiration'].required = False

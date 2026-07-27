@@ -1,47 +1,36 @@
 {% extends "onboarding/base_wizard.html" %}
 {% block title %}Etape 3 — Recapitulatif{% endblock %}
 {% block wizard_content %}
-<div class="card-wizard">
-  <div class="d-flex align-items-center gap-3 mb-4">
-    <div style="width:48px;height:48px;background:#F0FDF4;border-radius:12px;display:flex;align-items:center;justify-content:center">
-      <i class="bi bi-clipboard-check-fill text-success fs-4"></i>
-    </div>
+<div class="ob-card">
+  <div class="ob-card-head">
+    <div class="ob-card-icon" style="background:#e5f8f0;color:#159570"><i class="bi bi-clipboard-check-fill"></i></div>
     <div>
-      <h5 class="fw-bold mb-0">Recapitulatif</h5>
-      <p class="text-muted mb-0 small">Verifiez les informations avant de continuer.</p>
+      <h2>Vérifiez vos informations</h2>
+      <p>Un dernier regard avant de valider la configuration de votre établissement.</p>
     </div>
   </div>
 
-  <div class="bg-light rounded p-3 mb-4">
-    <table class="table table-borderless table-sm mb-0">
-      <tr>
-        <th class="text-muted fw-normal" style="width:40%">Etablissement</th>
-        <td class="fw-semibold">{{ ecole.nom }}</td>
-      </tr>
+  <div class="ob-summary mb-4">
+      <div class="ob-summary-row"><span>Établissement</span><strong>{{ ecole.nom }}</strong></div>
       {% if school_settings %}
-      <tr><th class="text-muted fw-normal">Province</th><td>{{ school_settings.province|default:"—" }}</td></tr>
-      <tr><th class="text-muted fw-normal">Ville</th><td>{{ school_settings.ville|default:"—" }}</td></tr>
-      <tr><th class="text-muted fw-normal">Code ecole</th><td>{{ school_settings.code_ecole|default:"—" }}</td></tr>
+      <div class="ob-summary-row"><span>Province</span><strong>{{ school_settings.province|default:"—" }}</strong></div>
+      <div class="ob-summary-row"><span>Ville</span><strong>{{ school_settings.ville|default:"—" }}</strong></div>
+      <div class="ob-summary-row"><span>Code école</span><strong>{{ school_settings.code_ecole|default:"—" }}</strong></div>
       {% endif %}
-      <tr><th class="text-muted fw-normal">Administrateur</th><td>{{ admin.email }}</td></tr>
-      <tr><th class="text-muted fw-normal">Plan</th><td>{% if ecole.plan %}{{ ecole.plan.nom }}{% else %}—{% endif %}</td></tr>
-      <tr>
-        <th class="text-muted fw-normal">Abonnement</th>
-        <td>
+      <div class="ob-summary-row"><span>Administrateur</span><strong>{{ admin.email }}</strong></div>
+      <div class="ob-summary-row"><span>Plan</span><strong>{% if ecole.plan %}{{ ecole.plan.nom }}{% else %}—{% endif %}</strong></div>
+      <div class="ob-summary-row"><span>Abonnement</span><strong>
           {% if ecole.date_fin_abonnement %}jusqu'au {{ ecole.date_fin_abonnement|date:"d/m/Y" }}
-          {% else %}Non defini{% endif %}
-        </td>
-      </tr>
-    </table>
+          {% else %}Non défini{% endif %}</strong></div>
   </div>
 
-  <div class="d-flex justify-content-between">
+  <div class="ob-actions">
     <a href="{% url 'onboarding:etape2_config' %}" class="btn btn-outline-secondary">
       <i class="bi bi-arrow-left me-1"></i> Modifier
     </a>
     <form method="post">
       {% csrf_token %}
-      <button type="submit" class="btn btn-wizard">
+      <button type="submit" class="btn-ob">
         C'est correct, continuer <i class="bi bi-arrow-right ms-1"></i>
       </button>
     </form>

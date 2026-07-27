@@ -1,19 +1,17 @@
 {% extends "onboarding/base_wizard.html" %}
 {% block title %}Etape 4 — Conditions{% endblock %}
 {% block wizard_content %}
-<div class="card-wizard">
-  <div class="d-flex align-items-center gap-3 mb-4">
-    <div style="width:48px;height:48px;background:#FEF9C3;border-radius:12px;display:flex;align-items:center;justify-content:center">
-      <i class="bi bi-file-text-fill text-warning fs-4"></i>
-    </div>
+<div class="ob-card">
+  <div class="ob-card-head">
+    <div class="ob-card-icon" style="background:#fff4dc;color:#d8831f"><i class="bi bi-file-earmark-text-fill"></i></div>
     <div>
-      <h5 class="fw-bold mb-0">Conditions generales d'utilisation</h5>
-      <p class="text-muted mb-0 small">Lisez et acceptez avant de commencer a utiliser la plateforme.</p>
+      <h2>Conditions d’utilisation</h2>
+      <p>Lisez les engagements essentiels avant d’activer votre espace école.</p>
     </div>
   </div>
 
-  <div class="border rounded p-3 mb-4 bg-light" style="max-height:300px;overflow-y:auto;font-size:.875rem">
-    <h6 class="fw-bold">Conditions generales d'utilisation — Plateforme SGN RDC</h6>
+  <div class="ob-terms mb-4">
+    <h3>Conditions générales d’utilisation — Plateforme SGN RDC</h3>
     <p><strong>1. Objet</strong> — La presente plateforme est mise a disposition des etablissements scolaires pour la gestion administrative et pedagogique.</p>
     <p><strong>2. Acces</strong> — L'acces est strictement reserve aux utilisateurs autorises de l'etablissement. Toute communication des identifiants a des tiers est interdite.</p>
     <p><strong>3. Donnees personnelles</strong> — Les donnees des eleves et du personnel sont confidentielles. L'etablissement s'engage a les traiter conformement a la legislation en vigueur en RDC.</p>
@@ -28,17 +26,17 @@
     {% if form.accepter.errors %}
       <div class="alert alert-danger">{{ form.accepter.errors.0 }}</div>
     {% endif %}
-    <div class="form-check mb-4">
+    <div class="form-check ob-check mb-4">
       {{ form.accepter }}
       <label class="form-check-label fw-semibold" for="{{ form.accepter.id_for_label }}">
         {{ form.accepter.label }}
       </label>
     </div>
-    <div class="d-flex justify-content-between">
+    <div class="ob-actions">
       <a href="{% url 'onboarding:etape3_recapitulatif' %}" class="btn btn-outline-secondary">
         <i class="bi bi-arrow-left me-1"></i> Precedent
       </a>
-      <button type="submit" class="btn btn-wizard">
+      <button type="submit" class="btn-ob">
         Accepter et terminer <i class="bi bi-check-circle ms-1"></i>
       </button>
     </div>
