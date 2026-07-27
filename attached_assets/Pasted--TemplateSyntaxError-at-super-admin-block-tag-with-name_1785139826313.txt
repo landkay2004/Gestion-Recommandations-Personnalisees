@@ -1,0 +1,54 @@
+
+TemplateSyntaxError at /super-admin/
+
+'block' tag with name 'content' appears more than once
+
+Request Method: 	GET
+Request URL: 	http://localhost:8000/super-admin/
+Django Version: 	5.2.3
+Exception Type: 	TemplateSyntaxError
+Exception Value: 	
+
+'block' tag with name 'content' appears more than once
+
+Exception Location: 	C:\Users\LAND\Desktop\APPS\School-MGT\.venv\Lib\site-packages\django\template\loader_tags.py, line 228, in do_block
+Raised during: 	super_admin.views.dashboard
+Python Executable: 	C:\Users\LAND\Desktop\APPS\School-MGT\.venv\Scripts\python.exe
+Python Version: 	3.13.14
+Python Path: 	
+
+['C:\\Users\\LAND\\Desktop\\APPS\\School-MGT\\school_app\\apps',
+ 'C:\\Users\\LAND\\Desktop\\APPS\\School-MGT\\school_app',
+ 'C:\\Users\\LAND\\AppData\\Local\\Programs\\Python\\Python313\\python313.zip',
+ 'C:\\Users\\LAND\\AppData\\Local\\Programs\\Python\\Python313\\DLLs',
+ 'C:\\Users\\LAND\\AppData\\Local\\Programs\\Python\\Python313\\Lib',
+ 'C:\\Users\\LAND\\AppData\\Local\\Programs\\Python\\Python313',
+ 'C:\\Users\\LAND\\Desktop\\APPS\\School-MGT\\.venv',
+ 'C:\\Users\\LAND\\Desktop\\APPS\\School-MGT\\.venv\\Lib\\site-packages']
+
+Server time: 	Mon, 27 Jul 2026 09:10:08 +0100
+Error during template rendering
+
+In template C:\Users\LAND\Desktop\APPS\School-MGT\school_app\templates\super_admin\base.html, error at line 223
+'block' tag with name 'content' appears more than once
+213 	        <a href="{% url 'super_admin:communication_creer' %}" class="btn btn-sm btn-primary mt-3">
+214 	          <i class="bi bi-plus-circle me-1"></i>Publier une annonce
+215 	        </a>
+216 	      </div>
+217 	    {% endif %}
+218 	  </div>
+219 	</div>
+220 	
+221 	{% else %}
+222 	<main class="container-fluid py-4">
+223 	  {% block content %}{% endblock %}
+224 	</main>
+225 	{% endif %}
+226 	
+227 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+228 	<script>
+229 	(function () {
+230 	  const sidebar = document.getElementById('sidebar');
+231 	  const main    = document.getElementById('main-content');
+232 	  const toggle  = document.getElementById('topbar-toggle');
+233 	  if (!toggle || !sidebar) return;
