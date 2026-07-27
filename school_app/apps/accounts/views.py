@@ -74,12 +74,19 @@ def login_view(request):
             return redirect('dashboard')
 
         # 5. Fallback Django auth standard (SQLite sans multi-tenant)
-        if form.is_valid():
-            std_user = form.get_user()
-            login(request, std_user)
-            if std_user.must_change_password:
-                return redirect('force_change_password')
-            return redirect('dashboard')
+        # En mode PostgreSQL/multi-tenant, les tables accounts_* n'existent pas
+        # dans le schéma public — on évite la requête pour ne pas lever
+        # ProgrammingError "la relation accounts_customuser n'existe pas".
+        from django.db import connection as _db_conn
+        if 'sqlite' in _db_conn.settings_dict.get('ENGINE', ''):
+            if form.is_valid():
+                std_user = form.get_user()
+                login(request, std_user)
+                if std_user.must_change_password:
+                    return redirect('force_change_password')
+                return redirect('dashboard')
+        else:
+            messages.error(request, "Identifiant ou mot de passe incorrect.")
 
         ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '?'))
         logger_sec.warning('ECHEC_CONNEXION identifier=%s ip=%s', identifier, ip)
