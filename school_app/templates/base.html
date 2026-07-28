@@ -355,6 +355,12 @@
 {% endif %}
 
 {% else %}
+<!-- Django messages pour les pages non authentifiées (login, etc.) -->
+{% for msg in messages %}
+<div data-django-message="{{ msg|escape }}"
+     data-django-type="{% if 'success' in msg.tags %}success{% elif 'error' in msg.tags or 'danger' in msg.tags %}error{% elif 'warning' in msg.tags %}warning{% else %}info{% endif %}"
+     hidden></div>
+{% endfor %}
 {% block auth_content %}{% endblock %}
 {% endif %}
 

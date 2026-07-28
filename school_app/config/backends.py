@@ -87,10 +87,16 @@ class MultiTenantAuthBackend:
                     'CONNEXION user email=%s schema=%s role=%s',
                     email, schema_name, getattr(user, 'role', '?')
                 )
+                # Remettre la connexion en schéma public avant de retourner
+                # pour ne pas laisser la connexion dans un état inattendu.
+                _switch_public_schema()
                 return user
 
         except Exception as e:
             logger_sec.debug('MultiTenantAuthBackend lookup error: %s', e)
+        finally:
+            # Garantir le retour au schéma public dans tous les cas de l'étape 3
+            _switch_public_schema()
 
         return None
 

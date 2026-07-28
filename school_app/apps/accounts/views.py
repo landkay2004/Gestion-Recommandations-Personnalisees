@@ -85,8 +85,11 @@ def login_view(request):
                 if std_user.must_change_password:
                     return redirect('force_change_password')
                 return redirect('dashboard')
-        else:
-            messages.error(request, "Identifiant ou mot de passe incorrect.")
+
+        # Aucun backend n'a authentifié l'utilisateur — on ajoute l'erreur
+        # directement sur le formulaire pour que {% if form.errors %} soit vrai
+        # et que le bloc d'alerte rouge s'affiche dans le template.
+        form.add_error(None, "Identifiant ou mot de passe incorrect.")
 
         ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '?'))
         logger_sec.warning('ECHEC_CONNEXION identifier=%s ip=%s', identifier, ip)
@@ -148,13 +151,12 @@ def user_list(request):
 def user_create(request):
     form = UserCreateForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        user = form.save(commit=False)
-        temp_pwd = generate_temp_password()
-        user.set_password(temp_pwd)
-        user.must_change_password = True
-        user.save()
+        # UserCreateForm.save() gère le username, le mot de passe temporaire et
+        # la sauvegarde — il retourne le tuple (user, temp_pwd).
+        user, temp_pwd = form.save()
         if user.role == 'enseignant':
             Teacher.objects.get_or_create(user=user)
+        # Enregistrer l'utilisateur dans l'annuaire public pour le login multi-tenant
         try:
             from tenants.models import AnnuaireUtilisateur
             AnnuaireUtilisateur.objects.get_or_create(
@@ -175,9 +177,29 @@ def user_create(request):
 @prefet_required
 def user_update(request, pk):
     user = get_object_or_404(CustomUser, pk=pk)
+    old_email = user.email.lower()
     form = UserUpdateForm(request.POST or None, instance=user)
     if request.method == 'POST' and form.is_valid():
-        form.save()
+        updated_user = form.save()
+        # Synchroniser l'AnnuaireUtilisateur si l'email ou le rôle a changé
+        try:
+            from tenants.models import AnnuaireUtilisateur
+            new_email = updated_user.email.lower()
+            schema   = request.session.get('tenant_schema', 'public')
+            if old_email != new_email:
+                # Supprimer l'ancienne entrée et créer la nouvelle
+                AnnuaireUtilisateur.objects.filter(email=old_email).delete()
+                AnnuaireUtilisateur.objects.get_or_create(
+                    email=new_email,
+                    defaults={'schema_name': schema, 'type_compte': updated_user.role},
+                )
+            else:
+                # Mettre à jour le type_compte si le rôle a changé
+                AnnuaireUtilisateur.objects.filter(email=new_email).update(
+                    type_compte=updated_user.role
+                )
+        except Exception:
+            pass
         messages.success(request, 'Utilisateur mis à jour.')
         return redirect('user_list')
     return render(request, 'accounts/user_form.html', {'form': form, 'mode': 'update', 'obj': user})
