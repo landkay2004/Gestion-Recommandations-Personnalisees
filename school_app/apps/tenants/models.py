@@ -186,9 +186,10 @@ class AnnuaireUtilisateur(models.Model):
     Permet au login de trouver le bon schema.
     """
     TYPE_CHOICES = [
-        ('admin_ecole', 'Admin Ecole'),
-        ('prefet',      'Prefet'),
-        ('enseignant',  'Enseignant'),
+        ('admin_ecole',  'Admin Ecole'),
+        ('prefet',       'Prefet'),
+        ('enseignant',   'Enseignant'),
+        ('secretariat',  'Secrétariat'),
     ]
     email = models.EmailField(unique=True, db_index=True)
     schema_name = models.CharField(max_length=63)
