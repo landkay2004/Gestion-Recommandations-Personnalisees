@@ -126,6 +126,8 @@ if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
     "$PYTHON_BIN" manage.py migrate_schemas --noinput
     echo "[3b/5] Initialisation du tenant public (PostgreSQL)"
     "$PYTHON_BIN" manage.py init_public_tenant
+    echo "[3c/5] Données de test (école + utilisateurs)"
+    "$PYTHON_BIN" manage.py seed_test_school
 else
     "$PYTHON_BIN" manage.py migrate --noinput
 fi
