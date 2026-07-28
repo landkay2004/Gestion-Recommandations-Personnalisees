@@ -1,6 +1,20 @@
 from django import forms
-from .models import Student
+from .models import Student, Tuteur
 from classes.models import Classe
+
+
+class TuteurForm(forms.ModelForm):
+    class Meta:
+        model = Tuteur
+        fields = ['nom', 'postnom', 'prenom', 'telephone', 'adresse', 'notes']
+        widgets = {
+            'nom': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de famille'}),
+            'postnom': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Postnom'}),
+            'prenom': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Prénom'}),
+            'telephone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}),
+            'adresse': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Adresse complète'}),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Notes internes…'}),
+        }
 
 
 class StudentForm(forms.ModelForm):
@@ -9,7 +23,7 @@ class StudentForm(forms.ModelForm):
         fields = [
             'matricule', 'nom', 'postnom', 'prenom', 'sexe',
             'date_naissance', 'lieu_naissance', 'adresse',
-            'telephone', 'nom_parent', 'classe', 'photo'
+            'telephone', 'tuteur', 'classe', 'photo'
         ]
         widgets = {
             'matricule': forms.TextInput(attrs={'class': 'form-control'}),
@@ -21,7 +35,7 @@ class StudentForm(forms.ModelForm):
             'lieu_naissance': forms.TextInput(attrs={'class': 'form-control'}),
             'adresse': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
             'telephone': forms.TextInput(attrs={'class': 'form-control'}),
-            'nom_parent': forms.TextInput(attrs={'class': 'form-control'}),
+            'tuteur': forms.HiddenInput(),
             'classe': forms.Select(attrs={'class': 'form-select'}),
             'photo': forms.FileInput(attrs={'class': 'form-control'}),
         }
@@ -34,3 +48,4 @@ class StudentForm(forms.ModelForm):
             self.fields['classe'].queryset = Classe.objects.filter(
                 annee_scolaire=annee
             ).select_related('section').order_by('nom', 'section__nom')
+        self.fields['tuteur'].required = False

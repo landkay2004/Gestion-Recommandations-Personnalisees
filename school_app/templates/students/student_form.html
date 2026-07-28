@@ -13,7 +13,7 @@
 </div>
 <div class="card" style="max-width:860px">
   <div class="card-body">
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="student-form">
       {% csrf_token %}
       <div class="row g-3">
 
@@ -88,10 +88,53 @@
           <label class="form-label">Adresse</label>
           {{ form.adresse }}
         </div>
-        <div class="col-md-6">
-          <label class="form-label">Nom du parent / tuteur</label>
-          {{ form.nom_parent }}
+
+        <!-- ── Tuteur / Parent ─────────────────────────────────────────────── -->
+        <div class="col-12">
+          <label class="form-label fw-semibold">
+            <i class="bi bi-person-vcard me-1 text-primary"></i>Tuteur / Parent
+          </label>
+          {{ form.tuteur }}  {# champ caché #}
+
+          <!-- Tuteur sélectionné -->
+          <div id="tuteur-selected"
+               class="{% if not preselected_tuteur %}d-none{% endif %} alert alert-primary d-flex justify-content-between align-items-center py-2 px-3 mb-2">
+            <span>
+              <i class="bi bi-person-check-fill me-2"></i>
+              <strong id="tuteur-selected-name">{% if preselected_tuteur %}{{ preselected_tuteur.nom_complet }}{% endif %}</strong>
+              {% if preselected_tuteur and preselected_tuteur.telephone %}
+              <span class="text-muted ms-2 small" id="tuteur-selected-tel">{{ preselected_tuteur.telephone }}</span>
+              {% else %}
+              <span class="text-muted ms-2 small" id="tuteur-selected-tel"></span>
+              {% endif %}
+            </span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="tuteur-clear-btn" title="Changer de tuteur">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <!-- Recherche -->
+          <div id="tuteur-search-block" class="{% if preselected_tuteur %}d-none{% endif %}">
+            <div class="position-relative">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" id="tuteur-search-input" class="form-control"
+                       placeholder="Tapez le nom ou téléphone du tuteur pour rechercher…"
+                       autocomplete="off">
+                <a href="{% url 'tuteur_create' %}?next={{ request.path }}" class="btn btn-outline-primary" id="tuteur-create-btn"
+                   title="Créer un nouveau tuteur">
+                  <i class="bi bi-person-plus me-1"></i>Nouveau
+                </a>
+              </div>
+              <div id="tuteur-suggestions"
+                   class="list-group shadow-sm position-absolute start-0 end-0 mt-1"
+                   style="z-index:1050;display:none;max-height:220px;overflow-y:auto;"></div>
+            </div>
+            <div class="form-text">Recherchez un tuteur existant ou créez-en un nouveau.</div>
+          </div>
         </div>
+        <!-- ── Fin Tuteur ──────────────────────────────────────────────────── -->
+
         <div class="col-md-6">
           <label class="form-label">Classe</label>
           {{ form.classe }}
@@ -122,4 +165,104 @@
     </form>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  'use strict';
+
+  const searchInput   = document.getElementById('tuteur-search-input');
+  const suggestions   = document.getElementById('tuteur-suggestions');
+  const hiddenInput   = document.getElementById('id_tuteur');
+  const selectedBlock = document.getElementById('tuteur-selected');
+  const selectedName  = document.getElementById('tuteur-selected-name');
+  const selectedTel   = document.getElementById('tuteur-selected-tel');
+  const searchBlock   = document.getElementById('tuteur-search-block');
+  const clearBtn      = document.getElementById('tuteur-clear-btn');
+  const createBtn     = document.getElementById('tuteur-create-btn');
+
+  let debounceTimer = null;
+
+  function selectTuteur(id, name, telephone) {
+    hiddenInput.value = id;
+    selectedName.textContent = name;
+    selectedTel.textContent = telephone ? '— ' + telephone : '';
+    selectedBlock.classList.remove('d-none');
+    searchBlock.classList.add('d-none');
+    suggestions.style.display = 'none';
+    searchInput.value = '';
+  }
+
+  function clearTuteur() {
+    hiddenInput.value = '';
+    selectedBlock.classList.add('d-none');
+    searchBlock.classList.remove('d-none');
+    searchInput.focus();
+  }
+
+  if (clearBtn) clearBtn.addEventListener('click', clearTuteur);
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      clearTimeout(debounceTimer);
+      const q = this.value.trim();
+      if (q.length < 2) {
+        suggestions.style.display = 'none';
+        suggestions.innerHTML = '';
+        return;
+      }
+      debounceTimer = setTimeout(async () => {
+        try {
+          const url = '{% url "tuteur_search_json" %}?q=' + encodeURIComponent(q);
+          const res = await fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          });
+          const data = await res.json();
+          suggestions.innerHTML = '';
+
+          if (data.results.length === 0) {
+            const item = document.createElement('div');
+            item.className = 'list-group-item text-muted small py-2';
+            item.innerHTML = '<i class="bi bi-info-circle me-1"></i>Aucun tuteur trouvé pour « ' + q + ' »';
+            suggestions.appendChild(item);
+          } else {
+            data.results.forEach(function (t) {
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2';
+              btn.innerHTML =
+                '<span><i class="bi bi-person-fill me-2 text-primary"></i><strong>' + t.text + '</strong></span>' +
+                '<span class="text-muted small">' + (t.telephone || '') + '</span>';
+              btn.addEventListener('click', function () {
+                selectTuteur(t.id, t.text, t.telephone);
+              });
+              suggestions.appendChild(btn);
+            });
+          }
+          suggestions.style.display = 'block';
+        } catch (e) {
+          console.error('Erreur recherche tuteur', e);
+        }
+      }, 280);
+    });
+
+    // Fermer si on clique ailleurs
+    document.addEventListener('click', function (e) {
+      if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
+        suggestions.style.display = 'none';
+      }
+    });
+
+    // Mettre à jour le lien "Nouveau" avec la recherche en cours
+    searchInput.addEventListener('input', function () {
+      if (createBtn) {
+        const base = createBtn.href.split('?')[0];
+        const next = encodeURIComponent('{{ request.path }}');
+        createBtn.href = base + '?next=' + next;
+      }
+    });
+  }
+})();
+</script>
 {% endblock %}

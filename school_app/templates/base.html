@@ -65,8 +65,11 @@
     </a>
 
     <div class="nav-section-label">Gestion</div>
-    <a href="{% url 'student_list' %}" class="nav-link {% if 'student' in request.resolver_match.url_name %}active{% endif %}">
+    <a href="{% url 'student_list' %}" class="nav-link {% if 'student' in request.resolver_match.url_name and 'tuteur' not in request.resolver_match.url_name %}active{% endif %}">
       <i class="bi bi-people-fill"></i><span>Élèves</span>
+    </a>
+    <a href="{% url 'tuteur_list' %}" class="nav-link {% if 'tuteur' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-person-vcard-fill"></i><span>Tuteurs</span>
     </a>
     <a href="{% url 'teacher_list' %}" class="nav-link {% if 'teacher' in request.resolver_match.url_name %}active{% endif %}">
       <i class="bi bi-person-badge-fill"></i><span>Enseignants</span>
@@ -175,8 +178,11 @@
     </a>
 
     <div class="nav-section-label">Inscriptions</div>
-    <a href="{% url 'student_list' %}" class="nav-link {% if 'student' in request.resolver_match.url_name %}active{% endif %}">
+    <a href="{% url 'student_list' %}" class="nav-link {% if 'student' in request.resolver_match.url_name and 'tuteur' not in request.resolver_match.url_name %}active{% endif %}">
       <i class="bi bi-people-fill"></i><span>Élèves</span>
+    </a>
+    <a href="{% url 'tuteur_list' %}" class="nav-link {% if 'tuteur' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-person-vcard-fill"></i><span>Tuteurs</span>
     </a>
     <a href="{% url 'classe_list' %}" class="nav-link {% if 'classe' in request.resolver_match.url_name or 'section' in request.resolver_match.url_name %}active{% endif %}">
       <i class="bi bi-building-fill"></i><span>Classes</span>

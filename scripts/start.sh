@@ -130,6 +130,8 @@ if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
     "$PYTHON_BIN" manage.py seed_test_school
 else
     "$PYTHON_BIN" manage.py migrate --noinput
+    echo "[3b/5] Comptes utilisateurs SQLite"
+    "$PYTHON_BIN" manage.py seed_sqlite_users
 fi
 
 if [[ "${SKIP_COLLECTSTATIC:-0}" != "1" ]]; then

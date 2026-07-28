@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Tuteurs{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Tuteurs</li>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-people-fill me-2 text-primary"></i>Tuteurs / Parents</h1>
+    <p class="text-muted small mb-0">{{ total }} tuteur{{ total|pluralize }} enregistré{{ total|pluralize }}</p>
+  </div>
+  <a href="{% url 'tuteur_create' %}" class="btn btn-primary">
+    <i class="bi bi-person-plus-fill me-1"></i>Nouveau tuteur
+  </a>
+</div>
+
+<!-- Recherche -->
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-md-8">
+        <label class="form-label small text-muted">Rechercher un tuteur</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-search"></i></span>
+          <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Nom, postnom, téléphone…" autofocus>
+        </div>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+        {% if q %}<a href="{% url 'tuteur_list' %}" class="btn btn-outline-secondary">Effacer</a>{% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Liste -->
+<div class="card">
+  <div class="card-body p-0">
+    {% if tuteurs %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Nom complet</th>
+            <th>Téléphone</th>
+            <th class="text-center">Enfants</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in tuteurs %}
+          <tr>
+            <td>
+              <a href="{% url 'tuteur_detail' t.pk %}" class="fw-semibold text-decoration-none">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white flex-shrink-0"
+                       style="width:36px;height:36px;font-size:.9rem;font-weight:600">
+                    {{ t.nom|first|upper }}
+                  </div>
+                  {{ t.nom_complet }}
+                </div>
+              </a>
+            </td>
+            <td class="text-muted small">{{ t.telephone|default:"—" }}</td>
+            <td class="text-center">
+              <span class="badge {% if t.nb_enfants > 0 %}bg-primary{% else %}bg-light text-dark border{% endif %} rounded-pill">
+                {{ t.nb_enfants }}
+              </span>
+            </td>
+            <td class="text-end">
+              <a href="{% url 'tuteur_detail' t.pk %}" class="btn btn-sm btn-outline-primary me-1" title="Détail">
+                <i class="bi bi-eye"></i>
+              </a>
+              <a href="{% url 'tuteur_update' t.pk %}" class="btn btn-sm btn-outline-secondary me-1" title="Modifier">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <a href="{% url 'tuteur_delete' t.pk %}" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                <i class="bi bi-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="card-footer d-flex justify-content-between align-items-center">
+      <small class="text-muted">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</small>
+      <nav>
+        <ul class="pagination pagination-sm mb-0">
+          {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">‹</a></li>
+          {% endif %}
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+            <li class="page-item"><a class="page-link" href="?q={{ q }}&page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?q={{ q }}&page={{ page_obj.next_page_number }}">›</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-people fs-1 d-block mb-3 opacity-25"></i>
+      {% if q %}
+        <p class="mb-2">Aucun tuteur ne correspond à « {{ q }} ».</p>
+        <a href="{% url 'tuteur_list' %}" class="btn btn-sm btn-outline-secondary me-2">Voir tous les tuteurs</a>
+      {% else %}
+        <p class="mb-2">Aucun tuteur enregistré.</p>
+      {% endif %}
+      <a href="{% url 'tuteur_create' %}" class="btn btn-sm btn-primary">
+        <i class="bi bi-person-plus me-1"></i>Ajouter un tuteur
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

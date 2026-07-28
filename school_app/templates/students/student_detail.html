@@ -8,8 +8,10 @@
 <div class="page-header">
   <h1 class="page-title">Fiche élève</h1>
   <div class="d-flex gap-2 flex-wrap">
-    {% if user.is_prefet %}
+    {% if user.is_prefet or user.is_secretariat %}
     <a href="{% url 'student_update' student.pk %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil me-1"></i>Modifier</a>
+    {% endif %}
+    {% if user.is_prefet %}
     <a href="{% url 'carte_preview' student.pk %}" target="_blank" class="btn btn-outline-info btn-sm"><i class="bi bi-credit-card-2-front me-1"></i>Carte</a>
     {% endif %}
     <a href="{% url 'student_list' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Retour</a>
@@ -28,7 +30,7 @@
     <code class="small text-muted">{{ student.matricule }}</code>
   </div>
   <div class="col-lg-9">
-    <div class="card">
+    <div class="card mb-3">
       <div class="card-header">Informations personnelles</div>
       <div class="card-body">
         <div class="row g-3">
@@ -36,10 +38,75 @@
           <div class="col-md-4"><div class="text-muted small">Date de naissance</div><div class="fw-medium">{{ student.date_naissance|date:"d/m/Y" }}</div></div>
           <div class="col-md-4"><div class="text-muted small">Lieu de naissance</div><div class="fw-medium">{{ student.lieu_naissance }}</div></div>
           <div class="col-md-4"><div class="text-muted small">Téléphone</div><div class="fw-medium">{{ student.telephone|default:"—" }}</div></div>
-          <div class="col-md-4"><div class="text-muted small">Parent / Tuteur</div><div class="fw-medium">{{ student.nom_parent|default:"—" }}</div></div>
           <div class="col-md-4"><div class="text-muted small">Classe</div><div class="fw-medium">{% if student.classe %}{{ student.classe }}{% else %}—{% endif %}</div></div>
+          <div class="col-md-4"><div class="text-muted small">Date d'inscription</div><div class="fw-medium">{{ student.date_inscription|date:"d/m/Y" }}</div></div>
           <div class="col-12"><div class="text-muted small">Adresse</div><div class="fw-medium">{{ student.adresse|default:"—" }}</div></div>
         </div>
+      </div>
+    </div>
+
+    <!-- Tuteur -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-person-vcard-fill me-2 text-primary"></i>Tuteur / Parent</span>
+        {% if user.is_prefet or user.is_secretariat %}
+        <a href="{% url 'student_update' student.pk %}" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-pencil me-1"></i>Modifier
+        </a>
+        {% endif %}
+      </div>
+      <div class="card-body">
+        {% if student.tuteur %}
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white flex-shrink-0"
+               style="width:48px;height:48px;font-size:1.2rem;font-weight:700">
+            {{ student.tuteur.nom|first|upper }}
+          </div>
+          <div class="flex-grow-1">
+            <div class="fw-semibold fs-6">
+              <a href="{% url 'tuteur_detail' student.tuteur.pk %}" class="text-decoration-none">
+                {{ student.tuteur.nom_complet }}
+              </a>
+            </div>
+            {% if student.tuteur.telephone %}
+            <div class="text-muted small"><i class="bi bi-telephone me-1"></i>{{ student.tuteur.telephone }}</div>
+            {% endif %}
+            {% if student.tuteur.adresse %}
+            <div class="text-muted small"><i class="bi bi-geo-alt me-1"></i>{{ student.tuteur.adresse }}</div>
+            {% endif %}
+          </div>
+          <a href="{% url 'tuteur_detail' student.tuteur.pk %}" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-eye me-1"></i>Voir le tuteur
+          </a>
+        </div>
+        {% elif student.nom_parent %}
+        <!-- Ancien champ texte (migration progressive) -->
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white flex-shrink-0"
+               style="width:48px;height:48px;font-size:1.2rem;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <div>
+            <div class="fw-medium">{{ student.nom_parent }}</div>
+            <div class="text-muted small">Information héritée (pas encore lié à un tuteur)</div>
+          </div>
+        </div>
+        {% else %}
+        <div class="text-muted small d-flex align-items-center gap-2">
+          <i class="bi bi-person-x fs-4 opacity-50"></i>
+          <span>Aucun tuteur associé à cet élève.</span>
+        </div>
+        {% if user.is_prefet or user.is_secretariat %}
+        <div class="mt-2">
+          <a href="{% url 'student_update' student.pk %}" class="btn btn-sm btn-outline-primary me-2">
+            <i class="bi bi-link me-1"></i>Associer un tuteur
+          </a>
+          <a href="{% url 'tuteur_create' %}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-person-plus me-1"></i>Créer un tuteur
+          </a>
+        </div>
+        {% endif %}
+        {% endif %}
       </div>
     </div>
   </div>
