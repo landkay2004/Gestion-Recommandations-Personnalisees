@@ -66,7 +66,7 @@ class MultiTenantAuthBackend:
             entry = AnnuaireUtilisateur.objects.get(email__iexact=email)
             schema_name = entry.schema_name
 
-            # Basculer vers le bon schéma
+            # Basculer vers le bon schéma AVANT toute autre opération
             _switch_schema(schema_name)
 
             from django.contrib.auth import get_user_model
@@ -83,20 +83,21 @@ class MultiTenantAuthBackend:
                 if request:
                     request.session['user_type']    = entry.type_compte
                     request.session['tenant_schema'] = schema_name
+                    request.session['tenant_schema_verified'] = True
                 logger_sec.info(
                     'CONNEXION user email=%s schema=%s role=%s',
                     email, schema_name, getattr(user, 'role', '?')
                 )
-                # Remettre la connexion en schéma public avant de retourner
-                # pour ne pas laisser la connexion dans un état inattendu.
-                _switch_public_schema()
+                # Laisser le schéma tenant actif pour la session Django
+                # et ne pas retourner au public avant la fin du login.
                 return user
 
         except Exception as e:
             logger_sec.debug('MultiTenantAuthBackend lookup error: %s', e)
         finally:
-            # Garantir le retour au schéma public dans tous les cas de l'étape 3
-            _switch_public_schema()
+            # Garantir le retour au schéma public seulement si aucun utilisateur n'a été trouvé
+            if 'user' not in locals():
+                _switch_public_schema()
 
         return None
 

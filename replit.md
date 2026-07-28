@@ -20,10 +20,10 @@ Application web Django de gestion des notes et de publication des bulletins scol
 
 ## Comptes par défaut
 
-| Utilisateur | Mot de passe | Rôle |
-|---|---|---|
-| `prefet` | `prefet2024` | Préfet des études |
-| `enseignant1` | `ens2024` | Enseignant |
+Super-admin	superadmin@test.local	SuperAdmin@2025!	/super-admin/
+Admin-école	admin@ecoletest.local	Admin@Ecole2025!	/dashboard/
+Préfet	prefet@ecoletest.local	Prefet@Ecole2025!	/dashboard/
+Enseignant	enseignant@ecoletest.local	Enseignant@2025!	/dashboard/
 
 ## Applications Django
 

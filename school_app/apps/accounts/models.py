@@ -4,6 +4,8 @@ import re
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
 
 
 def generate_temp_password(length=12):
@@ -67,3 +69,9 @@ class CustomUser(AbstractUser):
             self.get_full_name() or self.email or self.username,
             self.get_role_display()
         )
+
+
+@receiver(user_logged_in)
+def disable_last_login_update(sender, user, request, **kwargs):
+    """Évite la mise à jour de last_login dans le schéma public lors d'un login multi-tenant."""
+    return None

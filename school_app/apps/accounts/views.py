@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, update_session_auth_hash, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils import timezone
 
 from .models import CustomUser, generate_temp_password
 from .forms import (
@@ -66,7 +67,29 @@ def login_view(request):
 
         # 4. Utilisateur école normal (préfet / enseignant)
         if user:
-            login(request, user)
+            try:
+                from django.db import connection
+                schema_name = request.session.get('tenant_schema')
+                if schema_name and schema_name != 'public':
+                    from django_tenants.utils import get_tenant_model
+                    tenant = get_tenant_model().objects.get(schema_name=schema_name)
+                    connection.set_tenant(tenant)
+            except Exception:
+                pass
+
+            login(request, user, backend='config.backends.MultiTenantAuthBackend')
+
+            try:
+                user.last_login = timezone.now()
+                user.save(update_fields=['last_login'])
+            except Exception:
+                pass
+
+            try:
+                connection.set_schema_to_public()
+            except Exception:
+                pass
+
             ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '?'))
             logger_sec.info('CONNEXION user=%s role=%s ip=%s', user.username, user.role, ip)
             if user.must_change_password:
@@ -81,7 +104,7 @@ def login_view(request):
         if 'sqlite' in _db_conn.settings_dict.get('ENGINE', ''):
             if form.is_valid():
                 std_user = form.get_user()
-                login(request, std_user)
+                login(request, std_user, backend='django.contrib.auth.backends.ModelBackend')
                 if std_user.must_change_password:
                     return redirect('force_change_password')
                 return redirect('dashboard')
