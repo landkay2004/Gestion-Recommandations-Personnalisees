@@ -29,4 +29,5 @@ urlpatterns = [
     path('portail/',      include('portail.urls')),
     path('cartes/',       include('carte_eleve.urls')),
     path('notifications/', include('notifications.urls')),
+    path('planning/',     include('planning.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

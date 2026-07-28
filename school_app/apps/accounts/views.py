@@ -161,6 +161,31 @@ def prefet_required(view_func):
     return wrapper
 
 
+def secretariat_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        if not request.user.is_secretariat():
+            messages.error(request, "Accès réservé au secrétariat.")
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
+    wrapper.__name__ = view_func.__name__
+    return wrapper
+
+
+def prefet_or_secretariat_required(view_func):
+    """Autorise préfet, admin_ecole ET secrétariat."""
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        if not request.user.is_prefet_or_secretariat():
+            messages.error(request, "Accès non autorisé.")
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
+    wrapper.__name__ = view_func.__name__
+    return wrapper
+
+
 # ── Gestion des utilisateurs ──────────────────────────────────────────────────
 @login_required
 @prefet_required

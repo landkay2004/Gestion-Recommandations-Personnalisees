@@ -5,13 +5,13 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Teacher
 from .forms import TeacherForm
-from accounts.views import prefet_required
+from accounts.views import prefet_required, prefet_or_secretariat_required
 
 PER_PAGE = 15
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def teacher_list(request):
     q = request.GET.get('q', '')
     teachers = Teacher.objects.select_related('user')
@@ -33,7 +33,7 @@ def teacher_list(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def teacher_create(request):
     form = TeacherForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
@@ -46,7 +46,7 @@ def teacher_create(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def teacher_update(request, pk):
     teacher = get_object_or_404(Teacher, pk=pk)
     form = TeacherForm(request.POST or None, request.FILES or None, instance=teacher)
@@ -58,7 +58,7 @@ def teacher_update(request, pk):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def teacher_delete(request, pk):
     teacher = get_object_or_404(Teacher, pk=pk)
     if request.method == 'POST':
@@ -70,5 +70,8 @@ def teacher_delete(request, pk):
 
 @login_required
 def teacher_detail(request, pk):
+    if not request.user.is_prefet_or_secretariat():
+        messages.error(request, "Accès non autorisé.")
+        return redirect('dashboard')
     teacher = get_object_or_404(Teacher, pk=pk)
     return render(request, 'teachers/teacher_detail.html', {'teacher': teacher})

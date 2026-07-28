@@ -29,6 +29,9 @@ PWD_PREFET       = 'Prefet@Ecole2025!'
 EMAIL_ENSEIGNANT = 'enseignant@ecoletest.local'
 PWD_ENSEIGNANT   = 'Enseignant@2025!'
 
+EMAIL_SECRETARIAT = 'secretariat@ecoletest.local'
+PWD_SECRETARIAT   = 'Secretariat@2025!'
+
 
 class Command(BaseCommand):
     help = (
@@ -185,6 +188,7 @@ class Command(BaseCommand):
             dict(email=EMAIL_ADMIN,      role='admin_ecole', pwd=PWD_ADMIN,      prenom='Admin',      nom='Test'),
             dict(email=EMAIL_PREFET,     role='prefet',      pwd=PWD_PREFET,     prenom='Préfet',     nom='Test'),
             dict(email=EMAIL_ENSEIGNANT, role='enseignant',  pwd=PWD_ENSEIGNANT, prenom='Enseignant', nom='Test'),
+            dict(email=EMAIL_SECRETARIAT, role='secretariat', pwd=PWD_SECRETARIAT, prenom='Secrétariat', nom='Test'),
         ]
 
         for u in users_to_create:
@@ -235,6 +239,7 @@ class Command(BaseCommand):
             (EMAIL_ADMIN,      'admin_ecole'),
             (EMAIL_PREFET,     'prefet'),
             (EMAIL_ENSEIGNANT, 'enseignant'),
+            (EMAIL_SECRETARIAT, 'secretariat'),
         ]
         for email, type_compte in entries:
             obj, created = AnnuaireUtilisateur.objects.get_or_create(
@@ -299,6 +304,7 @@ class Command(BaseCommand):
         for email, pwd, role_label in [
             (EMAIL_PREFET,     PWD_PREFET,     'préfet'),
             (EMAIL_ENSEIGNANT, PWD_ENSEIGNANT, 'enseignant'),
+            (EMAIL_SECRETARIAT, PWD_SECRETARIAT, 'secrétariat'),
         ]:
             try:
                 from tenants.models import AnnuaireUtilisateur, Ecole
@@ -345,6 +351,7 @@ class Command(BaseCommand):
             ("Admin-école",  EMAIL_ADMIN,      PWD_ADMIN,        "/dashboard/"),
             ("Préfet",       EMAIL_PREFET,     PWD_PREFET,       "/dashboard/"),
             ("Enseignant",   EMAIL_ENSEIGNANT, PWD_ENSEIGNANT,   "/dashboard/"),
+            ("Secrétariat",  EMAIL_SECRETARIAT, PWD_SECRETARIAT,  "/dashboard/"),
         ]
         for role, email, pwd, url in rows:
             self.stdout.write("  %-14s %s  /  %s  → %s" % (role, email, pwd, url))

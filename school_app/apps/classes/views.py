@@ -10,7 +10,7 @@ from notifications.service import notify, notify_tous_enseignants, notify_prefet
 
 from .models import AnneeScolaire, Section, Classe, Niveau, DecisionPromotion, JournalOperation, Semestre
 from .forms import AnneeScolaireForm, SectionForm, ClasseForm, NiveauForm, DecisionPromotionForm
-from accounts.views import prefet_required
+from accounts.views import prefet_required, prefet_or_secretariat_required
 
 
 # ─── Utilitaires ──────────────────────────────────────────────────────────────
@@ -550,14 +550,14 @@ def reconduire_annee(request, pk):
 # ─── Niveau ───────────────────────────────────────────────────────────────────
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def niveau_list(request):
     niveaux = Niveau.objects.annotate(nb_classes=Count('classes')).all()
     return render(request, 'classes/niveau_list.html', {'niveaux': niveaux})
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def niveau_create(request):
     form = NiveauForm(request.POST or None)
     if form.is_valid():
@@ -568,7 +568,7 @@ def niveau_create(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def niveau_update(request, pk):
     niveau = get_object_or_404(Niveau, pk=pk)
     form = NiveauForm(request.POST or None, instance=niveau)
@@ -580,7 +580,7 @@ def niveau_update(request, pk):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def niveau_delete(request, pk):
     niveau = get_object_or_404(Niveau, pk=pk)
     if request.method == 'POST':
@@ -593,14 +593,14 @@ def niveau_delete(request, pk):
 # ─── Section ──────────────────────────────────────────────────────────────────
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def section_list(request):
     sections = Section.objects.all()
     return render(request, 'classes/section_list.html', {'sections': sections})
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def section_create(request):
     form = SectionForm(request.POST or None)
     if form.is_valid():
@@ -611,7 +611,7 @@ def section_create(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def section_update(request, pk):
     section = get_object_or_404(Section, pk=pk)
     form = SectionForm(request.POST or None, instance=section)
@@ -623,7 +623,7 @@ def section_update(request, pk):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def section_delete(request, pk):
     section = get_object_or_404(Section, pk=pk)
     if request.method == 'POST':
@@ -649,7 +649,7 @@ def classe_list(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def classe_create(request):
     form = ClasseForm(request.POST or None)
     if form.is_valid():
@@ -660,7 +660,7 @@ def classe_create(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def classe_update(request, pk):
     classe = get_object_or_404(Classe, pk=pk)
     if not classe.est_modifiable:
@@ -675,7 +675,7 @@ def classe_update(request, pk):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def classe_delete(request, pk):
     classe = get_object_or_404(Classe, pk=pk)
     if not classe.est_modifiable:

@@ -5,13 +5,13 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Student
 from .forms import StudentForm
-from accounts.views import prefet_required
+from accounts.views import prefet_required, prefet_or_secretariat_required
 
 PER_PAGE = 20
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def student_list(request):
     q = request.GET.get('q', '')
     classe_id = request.GET.get('classe', '')
@@ -39,7 +39,7 @@ def student_list(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def student_create(request):
     form = StudentForm(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -50,7 +50,7 @@ def student_create(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def student_update(request, pk):
     student = get_object_or_404(Student, pk=pk)
     form = StudentForm(request.POST or None, request.FILES or None, instance=student)
@@ -62,7 +62,7 @@ def student_update(request, pk):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def student_delete(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if request.method == 'POST':
@@ -74,5 +74,8 @@ def student_delete(request, pk):
 
 @login_required
 def student_detail(request, pk):
+    if not request.user.is_prefet_or_secretariat():
+        messages.error(request, "Accès non autorisé.")
+        return redirect('dashboard')
     student = get_object_or_404(Student, pk=pk)
     return render(request, 'students/student_detail.html', {'student': student})

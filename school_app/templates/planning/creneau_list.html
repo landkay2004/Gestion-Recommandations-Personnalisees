@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Créneaux horaires{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item"><a href="{% url 'planning_list' %}">Planning</a></li><li class="breadcrumb-item active">Créneaux</li>{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-clock-fill text-primary me-2"></i>Créneaux horaires</h1>
+</div>
+
+<div class="row g-4">
+  <!-- Formulaire d'ajout -->
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header"><h6 class="mb-0">Ajouter un créneau</h6></div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger small py-2">{{ form.non_field_errors|join:' ' }}</div>
+          {% endif %}
+          {% for field in form %}
+          <div class="mb-3">
+            <label class="form-label small fw-medium">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+            {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors|join:', ' }}</div>{% endif %}
+          </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary btn-sm w-100">
+            <i class="bi bi-plus-lg me-1"></i>Ajouter
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Liste -->
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">{{ creneaux|length }} créneau{{ creneaux|length|pluralize:"x" }}</div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr><th>Jour</th><th>Début</th><th>Fin</th><th>Libellé</th><th class="text-end">Actions</th></tr>
+            </thead>
+            <tbody>
+              {% for c in creneaux %}
+              <tr>
+                <td><span class="badge bg-primary">{{ c.get_jour_display }}</span></td>
+                <td>{{ c.heure_debut|time:"H\hi" }}</td>
+                <td>{{ c.heure_fin|time:"H\hi" }}</td>
+                <td class="text-muted small">{{ c.libelle }}</td>
+                <td class="text-end">
+                  <a href="{% url 'creneau_delete' c.pk %}" class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="5" class="text-center text-muted py-4">Aucun créneau défini</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

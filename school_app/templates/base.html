@@ -149,6 +149,89 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════
+     SIDEBAR SECRÉTARIAT
+     ═══════════════════════════════════════════════ -->
+{% elif user.is_secretariat %}
+<div class="sidebar" id="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      {% if school_info.logo %}
+        <img src="{{ school_info.logo.url }}" alt="Logo">
+      {% else %}
+        <i class="bi bi-mortarboard-fill"></i>
+      {% endif %}
+    </div>
+    <div class="sidebar-title">
+      <span class="s-school">{{ school_info.nom|default:'SGN RDC'|truncatechars:26 }}</span>
+      <span class="s-role">Espace Secrétariat</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Principal</div>
+    <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+      <i class="bi bi-grid-fill"></i><span>Tableau de bord</span>
+    </a>
+
+    <div class="nav-section-label">Inscriptions</div>
+    <a href="{% url 'student_list' %}" class="nav-link {% if 'student' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-people-fill"></i><span>Élèves</span>
+    </a>
+    <a href="{% url 'classe_list' %}" class="nav-link {% if 'classe' in request.resolver_match.url_name or 'section' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-building-fill"></i><span>Classes</span>
+    </a>
+
+    <div class="nav-section-label">Personnel</div>
+    <a href="{% url 'teacher_list' %}" class="nav-link {% if 'teacher' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-person-badge-fill"></i><span>Enseignants</span>
+    </a>
+    <a href="{% url 'matiere_list' %}" class="nav-link {% if 'matiere' in request.resolver_match.url_name or 'affectation' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-book-fill"></i><span>Matières</span>
+    </a>
+
+    <div class="nav-section-label">Planning</div>
+    <a href="{% url 'planning_list' %}" class="nav-link {% if 'planning' in request.resolver_match.url_name or 'seance' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-calendar-week-fill"></i><span>Planning horaire</span>
+    </a>
+    <a href="{% url 'salle_list' %}" class="nav-link {% if 'salle' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-door-open-fill"></i><span>Salles</span>
+    </a>
+    <a href="{% url 'creneau_list' %}" class="nav-link {% if 'creneau' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-clock-fill"></i><span>Créneaux horaires</span>
+    </a>
+
+    <div class="nav-section-label">Messagerie</div>
+    <a href="{% url 'communications' %}" class="nav-link {% if request.resolver_match.url_name == 'communications' %}active{% endif %}">
+      <i class="bi bi-megaphone-fill"></i><span>Communications</span>
+    </a>
+    <a href="{% url 'notification_list' %}" class="nav-link {% if 'notification' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-bell-fill"></i><span>Notifications</span>
+      <span class="sidebar-notif-count d-none ms-auto badge bg-danger rounded-pill" id="sidebar-notif-badge-sec"></span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user-card">
+      <div class="suc-avatar">
+        {% if user.photo_profil %}
+          <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
+        {% else %}
+          {{ user.get_initiales }}
+        {% endif %}
+      </div>
+      <div class="overflow-hidden">
+        <div class="suc-name">{{ user.get_full_name|default:user.username|truncatechars:20 }}</div>
+        <div class="suc-role">Secrétariat</div>
+      </div>
+    </div>
+    <a href="{% url 'logout' %}" class="nav-link text-danger-soft">
+      <i class="bi bi-box-arrow-right"></i><span>Déconnexion</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
      SIDEBAR ENSEIGNANT
      ═══════════════════════════════════════════════ -->
 {% else %}
@@ -172,6 +255,11 @@
     <div class="nav-section-label">Mon espace</div>
     <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
       <i class="bi bi-grid-fill"></i><span>Mon tableau de bord</span>
+    </a>
+
+    <div class="nav-section-label">Mon planning</div>
+    <a href="{% url 'mon_planning' %}" class="nav-link {% if request.resolver_match.url_name == 'mon_planning' %}active{% endif %}">
+      <i class="bi bi-calendar-week-fill"></i><span>Mon planning</span>
     </a>
 
     <div class="nav-section-label">Notes</div>

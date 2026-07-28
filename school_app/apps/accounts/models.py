@@ -30,9 +30,10 @@ def generate_temp_password(length=12):
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = [
-        ('admin_ecole', "Administrateur d'ecole"),
-        ('prefet',      'Prefet des etudes'),
-        ('enseignant',  'Enseignant'),
+        ('admin_ecole',  "Administrateur d'ecole"),
+        ('prefet',       'Prefet des etudes'),
+        ('enseignant',   'Enseignant'),
+        ('secretariat',  'Secrétariat'),
     ]
     role = models.CharField(
         max_length=20, choices=ROLE_CHOICES, default='enseignant', db_index=True
@@ -55,6 +56,13 @@ class CustomUser(AbstractUser):
 
     def is_enseignant(self):
         return self.role == 'enseignant'
+
+    def is_secretariat(self):
+        return self.role == 'secretariat'
+
+    def is_prefet_or_secretariat(self):
+        """Vrai pour prefet, admin_ecole et secretariat (gestion administrative)."""
+        return self.role in ('prefet', 'admin_ecole', 'secretariat')
 
     def get_initiales(self):
         parts = self.get_full_name().split()

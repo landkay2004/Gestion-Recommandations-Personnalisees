@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import Matiere, MatiereClasse, Maxima
 from .forms import MatiereForm, MatiereClasseForm, MaximaForm
-from accounts.views import prefet_required
+from accounts.views import prefet_required, prefet_or_secretariat_required
 from classes.models import Classe, AnneeScolaire
 
 # Palette de couleurs pour les groupes maxima (cyclique)
@@ -41,7 +41,7 @@ def _build_maxima_colors_map():
 # ─── Gestion des Maxima ────────────────────────────────────────────────────────
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def maxima_list(request):
     maxima = Maxima.objects.all()
     form = MaximaForm(request.POST or None)
@@ -57,7 +57,7 @@ def maxima_list(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def maxima_delete(request, pk):
     mx = get_object_or_404(Maxima, pk=pk)
     if request.method == 'POST':
@@ -76,7 +76,7 @@ def maxima_delete(request, pk):
 # ─── Matières ─────────────────────────────────────────────────────────────────
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def matiere_list(request):
     """Liste globale des matières groupées par maxima dynamique."""
     annee = AnneeScolaire.objects.filter(active=True).first()
@@ -99,7 +99,7 @@ def matiere_list(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def matiere_create(request):
     form = MatiereForm(request.POST or None)
     if form.is_valid():
@@ -110,7 +110,7 @@ def matiere_create(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def matiere_update(request, pk):
     matiere = get_object_or_404(Matiere, pk=pk)
     form = MatiereForm(request.POST or None, instance=matiere)
@@ -122,7 +122,7 @@ def matiere_update(request, pk):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def matiere_delete(request, pk):
     matiere = get_object_or_404(Matiere, pk=pk)
     if request.method == 'POST':
@@ -135,7 +135,7 @@ def matiere_delete(request, pk):
 # ─── Affectations (vue centrée sur la classe) ──────────────────────────────────
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def affectation_list(request):
     """Vue centrée sur la classe : choisir une classe, voir/gérer ses matières."""
     annee = AnneeScolaire.objects.filter(active=True).first()
@@ -177,7 +177,7 @@ def affectation_list(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def affectation_create(request):
     """Affecter une matière à une classe (+ enseignant optionnel)."""
     classe_id = request.GET.get('classe') or request.POST.get('classe_prefill')
@@ -203,7 +203,7 @@ def affectation_create(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def affectation_rapide(request):
     """Affectation rapide depuis le panneau classe : cocher les matières voulues."""
     if request.method != 'POST':
@@ -228,7 +228,7 @@ def affectation_rapide(request):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def affectation_update(request, pk):
     aff = get_object_or_404(MatiereClasse, pk=pk)
     form = MatiereClasseForm(request.POST or None, instance=aff)
@@ -244,7 +244,7 @@ def affectation_update(request, pk):
 
 
 @login_required
-@prefet_required
+@prefet_or_secretariat_required
 def affectation_delete(request, pk):
     aff = get_object_or_404(MatiereClasse, pk=pk)
     classe_pk = aff.classe.pk

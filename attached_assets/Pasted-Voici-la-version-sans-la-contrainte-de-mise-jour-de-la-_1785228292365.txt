@@ -1,0 +1,68 @@
+Voici la version sans la contrainte de mise à jour de la documentation.
+
+# Implémentation du rôle Secrétariat
+
+## Contexte
+
+Projet Django (Django 5.x, DRF, django-tenants). Implémenter le rôle **Secrétariat** comme un espace indépendant avec son propre dashboard, ses routes, ses vues et ses permissions. Ne pas réutiliser l'espace Admin école avec des fonctionnalités masquées.
+
+## Fonctionnalités
+
+Le rôle **Secrétariat** doit pouvoir gérer :
+
+* les inscriptions et les informations administratives des élèves ;
+* les classes et les affectations des élèves ;
+* les enseignants (création, modification, désactivation, affectations) ;
+* les matières (CRUD complet) ;
+* les communications internes ;
+* le planning horaire ;
+* les rappels et le suivi administratif.
+
+## Module Planning
+
+Compléter le module Planning afin de gérer :
+
+* les créneaux horaires (CRUD complet) ;
+* l'affectation classe / matière / enseignant / salle ;
+* la gestion des salles ;
+* la visualisation du planning (jour/semaine) ;
+* la détection des conflits d'horaire (enseignant, classe et salle).
+
+### Planning Enseignant
+
+Chaque enseignant doit pouvoir consulter **uniquement son propre planning**.
+
+Le système doit permettre :
+
+* la consultation du planning du jour ;
+* la consultation du planning de la semaine ;
+* la visualisation des cours à venir ;
+* la mise à jour automatique des modifications de planning.
+
+Les permissions doivent empêcher un enseignant d'accéder au planning d'un autre enseignant.
+
+## Permissions
+
+Le Secrétariat ne doit **pas** avoir accès :
+
+* à la gestion des rôles et des permissions ;
+* aux paramètres système et du tenant ;
+* à la configuration de l'établissement ;
+* à la facturation et aux fonctionnalités réservées à l'Admin école.
+
+Toutes les restrictions doivent être appliquées côté backend (RBAC/Permissions).
+
+## Contraintes
+
+* Respecter l'architecture existante, le système RBAC et le multi-tenant.
+* Compléter les CRUD manquants sans introduire de régression.
+* Vérifier qu'aucun lien mort ou fonctionnalité incomplète ne subsiste.
+* Vérifier qu'aucune régression n'est introduite sur les rôles déjà fonctionnels (Élève, Bibliothèque, Enseignant, etc.).
+
+## Avertissements
+
+* Implémente le rôle **Secrétariat** en respectant strictement l'architecture, les conventions de code, les composants existants et le style déjà utilisé par le projet. **N'invente pas une nouvelle architecture ni un nouveau design.**
+* Analyse l'existant avant toute modification et réutilise les modèles, services, serializers, permissions et composants déjà présents lorsque cela est pertinent.
+* Le système ne doit jamais exposer ses propres dysfonctionnements à l'utilisateur final. Les erreurs doivent être gérées proprement, sans traces techniques, exceptions non gérées ou messages indiquant qu'une fonctionnalité est incomplète.
+* Si une fonctionnalité existe déjà, complète-la plutôt que d'en créer une nouvelle et évite toute duplication de code.
+* La tâche n'est considérée comme terminée que lorsque toutes les fonctionnalités demandées sont opérationnelles, cohérentes avec le reste du projet et sans régression.

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }}{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item"><a href="{% url 'planning_list' %}">Planning</a></li><li class="breadcrumb-item active">{{ titre }}</li>{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-calendar-plus-fill text-primary me-2"></i>{{ titre }}</h1>
+</div>
+
+<div class="card" style="max-width:580px">
+  <div class="card-body">
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger py-2 small">
+      <i class="bi bi-exclamation-triangle-fill me-1"></i>
+      {{ form.non_field_errors|join:' ' }}
+    </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="mb-3">
+        <label class="form-label fw-medium small">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+        {{ field }}
+        {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+        {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors|join:', ' }}</div>{% endif %}
+      </div>
+      {% endfor %}
+
+      <div class="alert alert-info small py-2 mb-3">
+        <i class="bi bi-info-circle me-1"></i>
+        Le système détecte automatiquement les conflits d'enseignant, de classe et de salle.
+      </div>
+
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{% url 'planning_list' %}" class="btn btn-outline-secondary">Annuler</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

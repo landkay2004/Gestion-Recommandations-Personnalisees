@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load planning_tags %}
+{% block title %}Mon planning{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Mon planning</li>{% endblock %}
+{% block extra_css %}
+<style>
+.seance-card{background:#EFF6FF;border-left:3px solid #2563EB;border-radius:6px;padding:10px 12px;margin-bottom:8px}
+.seance-card .s-mat{font-weight:600;color:#1e40af;font-size:.95rem}
+.seance-card .s-meta{color:#64748b;font-size:.78rem;margin-top:3px}
+.jour-header{font-weight:600;color:#0F172A;border-bottom:2px solid #e2e8f0;padding-bottom:6px;margin-bottom:10px}
+</style>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-calendar-week-fill text-primary me-2"></i>Mon planning</h1>
+    <p class="text-muted small mb-0">{% if teacher %}{{ teacher }} · {% endif %}Cours affectés</p>
+  </div>
+  {% if annee_active %}
+  <span class="badge bg-primary fs-6 px-3 py-2"><i class="bi bi-calendar3 me-1"></i>{{ annee_active }}</span>
+  {% endif %}
+</div>
+
+<!-- Sélecteur d'année -->
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <form method="get" class="d-flex gap-2 align-items-center">
+      <label class="small fw-medium text-nowrap">Année scolaire :</label>
+      <select name="annee" class="form-select form-select-sm" style="max-width:200px" onchange="this.form.submit()">
+        {% for a in annees %}
+        <option value="{{ a.pk }}" {% if annee_id == a.pk|stringformat:"s" %}selected{% endif %}>{{ a }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+</div>
+
+{% if not seances %}
+<div class="card">
+  <div class="card-body text-center py-5 text-muted">
+    <i class="bi bi-calendar-x fs-2 d-block mb-2 opacity-50"></i>
+    Aucun cours planifié pour cette année.
+  </div>
+</div>
+{% else %}
+
+<!-- Vue par jour -->
+<div class="row g-3">
+{% for j in jours %}
+{% with j_data=grille|dict_get:j %}
+{% if j_data %}
+<div class="col-md-6 col-lg-4">
+  <div class="card h-100">
+    <div class="card-body">
+      <div class="jour-header mb-3">{{ JOURS_LABELS|dict_get:j }}</div>
+      {% for creneau_pk, seances_list in j_data.items %}
+      {% for seance in seances_list %}
+      <div class="seance-card">
+        <div class="s-mat">{{ seance.matiere_classe.matiere }}</div>
+        <div class="s-meta">
+          <i class="bi bi-clock me-1"></i>{{ seance.creneau.libelle }}<br>
+          <i class="bi bi-building me-1"></i>{{ seance.matiere_classe.classe }}
+          {% if seance.salle %}· <i class="bi bi-door-open me-1"></i>{{ seance.salle }}{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endwith %}
+{% endfor %}
+</div>
+
+<!-- Tableau récapitulatif -->
+<div class="card mt-3">
+  <div class="card-header"><h6 class="mb-0">Récapitulatif des séances</h6></div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr><th>Jour</th><th>Créneau</th><th>Matière</th><th>Classe</th><th>Salle</th></tr>
+        </thead>
+        <tbody>
+          {% for seance in seances %}
+          <tr>
+            <td><span class="badge bg-primary">{{ seance.creneau.get_jour_display }}</span></td>
+            <td class="small text-muted">{{ seance.creneau.libelle }}</td>
+            <td class="fw-medium">{{ seance.matiere_classe.matiere }}</td>
+            <td><span class="badge bg-light text-dark border">{{ seance.matiere_classe.classe }}</span></td>
+            <td class="text-muted">{{ seance.salle|default:"—" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
