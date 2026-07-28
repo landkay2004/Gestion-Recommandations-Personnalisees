@@ -18,3 +18,13 @@ python-dotenv
 qrcode
 reportlab
 whitenoise
+django
+django-tenants
+openpyxl
+pillow
+psycopg2-binary
+pyotp
+python-dotenv
+qrcode
+reportlab
+whitenoise
