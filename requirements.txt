@@ -28,3 +28,5 @@ python-dotenv
 qrcode
 reportlab
 whitenoise
+Django
+Django>=5.0
