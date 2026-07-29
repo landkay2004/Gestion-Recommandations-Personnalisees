@@ -169,57 +169,107 @@
 {% block modals %}
 <!-- ══════════════════════════════════════════════════════════════════════
      MODAL — Créer un tuteur sans quitter le formulaire élève
-     Placé en dehors du contenu principal pour éviter tout conflit de z-index
 ══════════════════════════════════════════════════════════════════════ -->
 <div class="modal fade" id="modalNouveauTuteur" tabindex="-1"
      aria-labelledby="modalNouveauTuteurLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalNouveauTuteurLabel">
-          <i class="bi bi-person-vcard me-2 text-primary"></i>Créer un nouveau tuteur
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg" style="border-radius:16px;overflow:hidden;">
+
+      <!-- En-tête coloré -->
+      <div class="modal-header border-0 px-4 pt-4 pb-3"
+           style="background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);">
+        <div class="d-flex align-items-center gap-3">
+          <div class="d-flex align-items-center justify-content-center rounded-circle bg-white bg-opacity-20"
+               style="width:42px;height:42px;min-width:42px;">
+            <i class="bi bi-person-vcard-fill text-white fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title text-white fw-bold mb-0" id="modalNouveauTuteurLabel">
+              Nouveau tuteur / parent
+            </h5>
+            <div class="text-white-50 small">Les champs marqués <span class="text-warning">*</span> sont obligatoires</div>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body">
+
+      <!-- Corps -->
+      <div class="modal-body px-4 py-4" style="background:var(--bg-card,#fff);">
         <form id="tuteur-modal-form" novalidate>
           {% csrf_token %}
-          <div class="row g-3">
+
+          <!-- Identité -->
+          <p class="text-uppercase fw-semibold mb-2" style="font-size:.68rem;letter-spacing:.08em;color:var(--color-muted,#64748b);">
+            <i class="bi bi-person me-1"></i>Identité
+          </p>
+          <div class="row g-3 mb-3">
             <div class="col-md-4">
-              <label class="form-label">Nom <span class="text-danger">*</span></label>
-              <input type="text" name="nom" id="tm-nom" class="form-control" placeholder="Nom de famille" required>
+              <label class="form-label small fw-semibold mb-1">
+                Nom <span class="text-danger">*</span>
+              </label>
+              <input type="text" name="nom" id="tm-nom" class="form-control"
+                     placeholder="Nom de famille" autocomplete="off" required>
               <div class="invalid-feedback" id="tm-err-nom"></div>
             </div>
             <div class="col-md-4">
-              <label class="form-label">Postnom</label>
-              <input type="text" name="postnom" id="tm-postnom" class="form-control" placeholder="Postnom">
+              <label class="form-label small fw-semibold mb-1">Postnom</label>
+              <input type="text" name="postnom" id="tm-postnom" class="form-control"
+                     placeholder="Postnom" autocomplete="off">
             </div>
             <div class="col-md-4">
-              <label class="form-label">Prénom</label>
-              <input type="text" name="prenom" id="tm-prenom" class="form-control" placeholder="Prénom">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Téléphone</label>
-              <input type="text" name="telephone" id="tm-tel" class="form-control" placeholder="+243 …">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Adresse</label>
-              <input type="text" name="adresse" id="tm-adresse" class="form-control">
-            </div>
-            <div class="col-12">
-              <label class="form-label">Notes <span class="text-muted small">(usage interne)</span></label>
-              <textarea name="notes" id="tm-notes" class="form-control" rows="2"></textarea>
+              <label class="form-label small fw-semibold mb-1">Prénom</label>
+              <input type="text" name="prenom" id="tm-prenom" class="form-control"
+                     placeholder="Prénom" autocomplete="off">
             </div>
           </div>
-          <div id="tuteur-modal-error" class="alert alert-danger mt-3 d-none small py-2"></div>
+
+          <!-- Contact -->
+          <p class="text-uppercase fw-semibold mb-2" style="font-size:.68rem;letter-spacing:.08em;color:var(--color-muted,#64748b);">
+            <i class="bi bi-telephone me-1"></i>Contact
+          </p>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold mb-1">Téléphone</label>
+              <div class="input-group">
+                <span class="input-group-text px-2"><i class="bi bi-telephone-fill text-primary" style="font-size:.85rem;"></i></span>
+                <input type="text" name="telephone" id="tm-tel" class="form-control"
+                       placeholder="+243 …" autocomplete="off">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold mb-1">Adresse</label>
+              <div class="input-group">
+                <span class="input-group-text px-2"><i class="bi bi-geo-alt-fill text-primary" style="font-size:.85rem;"></i></span>
+                <input type="text" name="adresse" id="tm-adresse" class="form-control"
+                       placeholder="Quartier, avenue…" autocomplete="off">
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <p class="text-uppercase fw-semibold mb-2" style="font-size:.68rem;letter-spacing:.08em;color:var(--color-muted,#64748b);">
+            <i class="bi bi-journal-text me-1"></i>Notes internes
+          </p>
+          <textarea name="notes" id="tm-notes" class="form-control" rows="2"
+                    placeholder="Remarques, informations complémentaires…"></textarea>
+
+          <!-- Erreur globale -->
+          <div id="tuteur-modal-error" class="alert alert-danger mt-3 d-none small py-2 mb-0">
+            <i class="bi bi-exclamation-circle me-1"></i><span id="tuteur-modal-error-text"></span>
+          </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-primary" id="tuteur-modal-save">
-          <i class="bi bi-save me-1"></i>Enregistrer le tuteur
+
+      <!-- Pied -->
+      <div class="modal-footer border-0 px-4 pb-4 pt-2 gap-2" style="background:var(--bg-card,#fff);">
+        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+          <i class="bi bi-x-lg me-1"></i>Annuler
+        </button>
+        <button type="button" class="btn btn-primary px-4" id="tuteur-modal-save">
+          <i class="bi bi-person-check-fill me-1"></i>Enregistrer le tuteur
         </button>
       </div>
+
     </div>
   </div>
 </div>
@@ -318,8 +368,10 @@
   const saveBtn   = document.getElementById('tuteur-modal-save');
   const errDiv    = document.getElementById('tuteur-modal-error');
 
+  const errText = document.getElementById('tuteur-modal-error-text');
   function showModalError(msg) {
-    errDiv.textContent = msg;
+    if (errText) errText.textContent = msg;
+    else errDiv.textContent = msg;
     errDiv.classList.remove('d-none');
   }
   function hideModalError() { errDiv.classList.add('d-none'); }
