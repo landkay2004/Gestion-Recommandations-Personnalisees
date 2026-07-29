@@ -24,7 +24,7 @@
             {% if obj.photo %}
             <img src="{{ obj.photo.url }}" alt="Photo de {{ obj.nom_complet }}"
                  class="rounded-circle border"
-                 style="width:72px;height:72px;object-fit:cover;">
+                 style="width:72px;height:72px;object-fit:cover;image-rendering:auto;">
             <div>
               <div class="fw-semibold">{{ obj.nom_complet }}</div>
               <div class="small text-muted mb-1">Photo actuelle</div>
@@ -102,11 +102,7 @@
             <span>
               <i class="bi bi-person-check-fill me-2"></i>
               <strong id="tuteur-selected-name">{% if preselected_tuteur %}{{ preselected_tuteur.nom_complet }}{% endif %}</strong>
-              {% if preselected_tuteur and preselected_tuteur.telephone %}
-              <span class="text-muted ms-2 small" id="tuteur-selected-tel">{{ preselected_tuteur.telephone }}</span>
-              {% else %}
-              <span class="text-muted ms-2 small" id="tuteur-selected-tel"></span>
-              {% endif %}
+              <span class="text-muted ms-2 small" id="tuteur-selected-tel">{% if preselected_tuteur and preselected_tuteur.telephone %}{{ preselected_tuteur.telephone }}{% endif %}</span>
             </span>
             <button type="button" class="btn btn-sm btn-outline-secondary" id="tuteur-clear-btn" title="Changer de tuteur">
               <i class="bi bi-x-lg"></i>
@@ -121,16 +117,18 @@
                 <input type="text" id="tuteur-search-input" class="form-control"
                        placeholder="Tapez le nom ou téléphone du tuteur pour rechercher…"
                        autocomplete="off">
-                <a href="{% url 'tuteur_create' %}?next={{ request.path }}" class="btn btn-outline-primary" id="tuteur-create-btn"
-                   title="Créer un nouveau tuteur">
+                <!-- Bouton ouvre le modal (aucune navigation) -->
+                <button type="button" class="btn btn-outline-primary" id="tuteur-create-btn"
+                        data-bs-toggle="modal" data-bs-target="#modalNouveauTuteur"
+                        title="Créer un nouveau tuteur">
                   <i class="bi bi-person-plus me-1"></i>Nouveau
-                </a>
+                </button>
               </div>
               <div id="tuteur-suggestions"
                    class="list-group shadow-sm position-absolute start-0 end-0 mt-1"
                    style="z-index:1050;display:none;max-height:220px;overflow-y:auto;"></div>
             </div>
-            <div class="form-text">Recherchez un tuteur existant ou créez-en un nouveau.</div>
+            <div class="form-text">Recherchez un tuteur existant ou créez-en un nouveau sans quitter ce formulaire.</div>
           </div>
         </div>
         <!-- ── Fin Tuteur ──────────────────────────────────────────────────── -->
@@ -146,7 +144,7 @@
         <div class="col-12">
           <label class="form-label">Photo</label>
           {{ form.photo }}
-          <div class="form-text">Format : JPG, PNG. Taille recommandée : carrée.</div>
+          <div class="form-text">Format : JPG, PNG. Taille recommandée : carrée (ex. 300×300 px).</div>
         </div>
         {% endif %}
 
@@ -165,6 +163,63 @@
     </form>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     MODAL — Créer un tuteur sans quitter le formulaire élève
+══════════════════════════════════════════════════════════════════════ -->
+<div class="modal fade" id="modalNouveauTuteur" tabindex="-1"
+     aria-labelledby="modalNouveauTuteurLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalNouveauTuteurLabel">
+          <i class="bi bi-person-vcard me-2 text-primary"></i>Créer un nouveau tuteur
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="tuteur-modal-form" novalidate>
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Nom <span class="text-danger">*</span></label>
+              <input type="text" name="nom" id="tm-nom" class="form-control" placeholder="Nom de famille" required>
+              <div class="invalid-feedback" id="tm-err-nom"></div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Postnom</label>
+              <input type="text" name="postnom" id="tm-postnom" class="form-control" placeholder="Postnom">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Prénom</label>
+              <input type="text" name="prenom" id="tm-prenom" class="form-control" placeholder="Prénom">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Téléphone</label>
+              <input type="text" name="telephone" id="tm-tel" class="form-control" placeholder="+243 …">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Adresse</label>
+              <input type="text" name="adresse" id="tm-adresse" class="form-control">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Notes <span class="text-muted small">(usage interne)</span></label>
+              <textarea name="notes" id="tm-notes" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+          <div id="tuteur-modal-error" class="alert alert-danger mt-3 d-none small py-2"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" id="tuteur-modal-save">
+          <i class="bi bi-save me-1"></i>Enregistrer le tuteur
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}
@@ -172,6 +227,7 @@
 (function () {
   'use strict';
 
+  /* ── Références DOM ── */
   const searchInput   = document.getElementById('tuteur-search-input');
   const suggestions   = document.getElementById('tuteur-suggestions');
   const hiddenInput   = document.getElementById('id_tuteur');
@@ -180,10 +236,8 @@
   const selectedTel   = document.getElementById('tuteur-selected-tel');
   const searchBlock   = document.getElementById('tuteur-search-block');
   const clearBtn      = document.getElementById('tuteur-clear-btn');
-  const createBtn     = document.getElementById('tuteur-create-btn');
 
-  let debounceTimer = null;
-
+  /* ── Sélection / suppression tuteur ── */
   function selectTuteur(id, name, telephone) {
     hiddenInput.value = id;
     selectedName.textContent = name;
@@ -191,18 +245,22 @@
     selectedBlock.classList.remove('d-none');
     searchBlock.classList.add('d-none');
     suggestions.style.display = 'none';
-    searchInput.value = '';
+    if (searchInput) searchInput.value = '';
+    saveFormData();
   }
 
   function clearTuteur() {
     hiddenInput.value = '';
     selectedBlock.classList.add('d-none');
     searchBlock.classList.remove('d-none');
-    searchInput.focus();
+    if (searchInput) searchInput.focus();
+    saveFormData();
   }
 
   if (clearBtn) clearBtn.addEventListener('click', clearTuteur);
 
+  /* ── Recherche tuteur (AJAX) ── */
+  let debounceTimer = null;
   if (searchInput) {
     searchInput.addEventListener('input', function () {
       clearTimeout(debounceTimer);
@@ -215,12 +273,9 @@
       debounceTimer = setTimeout(async () => {
         try {
           const url = '{% url "tuteur_search_json" %}?q=' + encodeURIComponent(q);
-          const res = await fetch(url, {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-          });
+          const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
           const data = await res.json();
           suggestions.innerHTML = '';
-
           if (data.results.length === 0) {
             const item = document.createElement('div');
             item.className = 'list-group-item text-muted small py-2';
@@ -234,9 +289,7 @@
               btn.innerHTML =
                 '<span><i class="bi bi-person-fill me-2 text-primary"></i><strong>' + t.text + '</strong></span>' +
                 '<span class="text-muted small">' + (t.telephone || '') + '</span>';
-              btn.addEventListener('click', function () {
-                selectTuteur(t.id, t.text, t.telephone);
-              });
+              btn.addEventListener('click', function () { selectTuteur(t.id, t.text, t.telephone); });
               suggestions.appendChild(btn);
             });
           }
@@ -247,22 +300,180 @@
       }, 280);
     });
 
-    // Fermer si on clique ailleurs
     document.addEventListener('click', function (e) {
       if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
         suggestions.style.display = 'none';
       }
     });
+  }
 
-    // Mettre à jour le lien "Nouveau" avec la recherche en cours
-    searchInput.addEventListener('input', function () {
-      if (createBtn) {
-        const base = createBtn.href.split('?')[0];
-        const next = encodeURIComponent('{{ request.path }}');
-        createBtn.href = base + '?next=' + next;
+  /* ══════════════════════════════════════════════════════════════
+     MODAL — Créer un tuteur sans quitter le formulaire élève
+  ══════════════════════════════════════════════════════════════ */
+  const modalEl   = document.getElementById('modalNouveauTuteur');
+  const modalForm = document.getElementById('tuteur-modal-form');
+  const saveBtn   = document.getElementById('tuteur-modal-save');
+  const errDiv    = document.getElementById('tuteur-modal-error');
+
+  function showModalError(msg) {
+    errDiv.textContent = msg;
+    errDiv.classList.remove('d-none');
+  }
+  function hideModalError() { errDiv.classList.add('d-none'); }
+
+  function clearFieldErrors() {
+    modalForm.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+    modalForm.querySelectorAll('.invalid-feedback').forEach(el => { el.textContent = ''; });
+  }
+
+  if (saveBtn) {
+    saveBtn.addEventListener('click', async function () {
+      hideModalError();
+      clearFieldErrors();
+
+      const nomField = document.getElementById('tm-nom');
+      if (!nomField.value.trim()) {
+        nomField.classList.add('is-invalid');
+        document.getElementById('tm-err-nom').textContent = 'Le nom est obligatoire.';
+        nomField.focus();
+        return;
+      }
+
+      const data = new FormData(modalForm);
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Enregistrement…';
+
+      try {
+        const res = await fetch('{% url "tuteur_create" %}', {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          body: data,
+        });
+        const json = await res.json();
+
+        if (json.ok) {
+          /* Tuteur créé — l'injecter directement dans le formulaire élève */
+          selectTuteur(json.id, json.nom_complet, json.telephone);
+          bootstrap.Modal.getInstance(modalEl).hide();
+          /* Petit toast de confirmation */
+          showToast('Tuteur « ' + json.nom_complet + ' » créé et sélectionné.', 'success');
+        } else {
+          /* Afficher les erreurs champ par champ */
+          let generic = '';
+          for (const [field, errs] of Object.entries(json.errors || {})) {
+            const inputEl = modalForm.querySelector('[name="' + field + '"]');
+            if (inputEl) {
+              inputEl.classList.add('is-invalid');
+              const fb = modalForm.querySelector('#tm-err-' + field);
+              if (fb) fb.textContent = errs.join(' ');
+            } else {
+              generic += errs.join(' ') + ' ';
+            }
+          }
+          if (generic) showModalError(generic.trim());
+        }
+      } catch (e) {
+        showModalError('Une erreur est survenue. Veuillez réessayer.');
+        console.error(e);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="bi bi-save me-1"></i>Enregistrer le tuteur';
       }
     });
   }
+
+  /* Réinitialiser le modal à la fermeture */
+  if (modalEl) {
+    modalEl.addEventListener('hidden.bs.modal', function () {
+      modalForm.reset();
+      clearFieldErrors();
+      hideModalError();
+    });
+    /* Focus sur le champ Nom à l'ouverture */
+    modalEl.addEventListener('shown.bs.modal', function () {
+      document.getElementById('tm-nom').focus();
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     PRESERVATION DU FORMULAIRE — sessionStorage
+     Sauvegarde tous les champs texte/select à chaque modification
+     et les restaure si la page est rechargée sans soumission.
+  ══════════════════════════════════════════════════════════════ */
+  const studentForm = document.getElementById('student-form');
+  const STORAGE_KEY = 'sgn_student_form_' + window.location.pathname;
+
+  function saveFormData() {
+    if (!studentForm) return;
+    const data = {};
+    studentForm.querySelectorAll('input:not([type=file]):not([type=hidden]), select, textarea').forEach(function (el) {
+      if (el.name) data[el.name] = el.value;
+    });
+    /* Sauvegarder aussi le tuteur sélectionné */
+    if (hiddenInput) data['__tuteur_name'] = selectedName ? selectedName.textContent : '';
+    if (hiddenInput) data['__tuteur_tel']  = selectedTel  ? selectedTel.textContent  : '';
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+  }
+
+  function restoreFormData() {
+    if (!studentForm) return;
+    /* Ne pas restaurer si le formulaire contient déjà des données Django (mode édition ou erreurs) */
+    const hasInstance = {{ 'true' if obj else 'false' }};
+    const hasErrors   = {{ 'true' if form.errors else 'false' }};
+    if (hasInstance || hasErrors) { sessionStorage.removeItem(STORAGE_KEY); return; }
+
+    let saved;
+    try { saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || 'null'); } catch(e) { return; }
+    if (!saved) return;
+
+    studentForm.querySelectorAll('input:not([type=file]):not([type=hidden]), select, textarea').forEach(function (el) {
+      if (el.name && saved[el.name] !== undefined) el.value = saved[el.name];
+    });
+
+    /* Restaurer le tuteur */
+    const tuteurId   = saved['tuteur'];
+    const tuteurName = saved['__tuteur_name'];
+    if (tuteurId && tuteurName) {
+      hiddenInput.value = tuteurId;
+      selectedName.textContent = tuteurName;
+      if (selectedTel) selectedTel.textContent = saved['__tuteur_tel'] || '';
+      if (selectedBlock) selectedBlock.classList.remove('d-none');
+      if (searchBlock)   searchBlock.classList.add('d-none');
+    }
+  }
+
+  /* Effacer la sauvegarde à la soumission */
+  if (studentForm) {
+    studentForm.addEventListener('submit', function () {
+      try { sessionStorage.removeItem(STORAGE_KEY); } catch(e) {}
+    });
+    studentForm.addEventListener('change', saveFormData);
+    studentForm.addEventListener('input',  saveFormData);
+    restoreFormData();
+  }
+
+  /* ── Mini-toast ── */
+  function showToast(message, type) {
+    type = type || 'info';
+    const colors = { success: '#198754', danger: '#dc3545', info: '#0d6efd' };
+    const toast = document.createElement('div');
+    toast.style.cssText = [
+      'position:fixed', 'bottom:1.5rem', 'right:1.5rem', 'z-index:9999',
+      'background:' + (colors[type] || colors.info), 'color:#fff',
+      'padding:.65rem 1.1rem', 'border-radius:8px',
+      'box-shadow:0 4px 18px rgba(0,0,0,.2)', 'font-size:.88rem',
+      'font-weight:600', 'display:flex', 'align-items:center', 'gap:.5rem',
+      'opacity:0', 'transition:opacity .25s',
+    ].join(';');
+    toast.innerHTML = '<i class="bi bi-check-circle-fill"></i> ' + message;
+    document.body.appendChild(toast);
+    requestAnimationFrame(function() { toast.style.opacity = '1'; });
+    setTimeout(function () {
+      toast.style.opacity = '0';
+      setTimeout(function () { toast.remove(); }, 300);
+    }, 3500);
+  }
+
 })();
 </script>
 {% endblock %}

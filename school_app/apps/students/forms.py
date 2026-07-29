@@ -31,7 +31,7 @@ class StudentForm(forms.ModelForm):
             'postnom': forms.TextInput(attrs={'class': 'form-control'}),
             'prenom': forms.TextInput(attrs={'class': 'form-control'}),
             'sexe': forms.Select(attrs={'class': 'form-select'}),
-            'date_naissance': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'date_naissance': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
             'lieu_naissance': forms.TextInput(attrs={'class': 'form-control'}),
             'adresse': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
             'telephone': forms.TextInput(attrs={'class': 'form-control'}),

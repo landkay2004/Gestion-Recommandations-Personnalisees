@@ -118,14 +118,18 @@ body {
   flex-shrink: 0;
 }
 .cr-logo-row { display: flex; align-items: center; gap: .5rem; flex: 1; min-width: 0; }
-.cr-logo-img  { height: 32px; object-fit: contain; flex-shrink: 0; image-rendering: -webkit-optimize-contrast; }
-.cr-logo-placeholder {
-  width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;
-  background: rgba(255,255,255,.15); display: flex; align-items: center;
-  justify-content: center; font-size: 1rem;
+.cr-logo-img  {
+  height: 36px; object-fit: contain; flex-shrink: 0;
+  image-rendering: auto;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.18));
 }
-.cr-school-name { font-size: .68rem; font-weight: 800; line-height: 1.2; }
-.cr-school-sub  { font-size: .57rem; opacity: .75; line-height: 1.2; margin-top: .06rem; }
+.cr-logo-placeholder {
+  width: 36px; height: 36px; border-radius: 5px; flex-shrink: 0;
+  background: rgba(255,255,255,.18); display: flex; align-items: center;
+  justify-content: center; font-size: 1.1rem;
+}
+.cr-school-name { font-size: .72rem; font-weight: 900; line-height: 1.2; letter-spacing: .01em; }
+.cr-school-sub  { font-size: .57rem; opacity: .78; line-height: 1.2; margin-top: .07rem; }
 .cr-badge {
   font-size: .53rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: .06em; padding: .2rem .5rem; border-radius: 3px;
@@ -138,13 +142,21 @@ body {
 }
 
 .cr-photo-wrap {
-  width: 65px; height: 78px; border-radius: 7px; overflow: hidden;
+  width: 68px; height: 82px; border-radius: 7px; overflow: hidden;
   flex-shrink: 0; display: flex; align-items: center; justify-content: center;
   font-size: 1.8rem; opacity: .5;
+  /* Forcer un layer GPU propre — évite le flou dû aux transforms 3D du parent */
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 .cr-photo-wrap img {
   width: 100%; height: 100%; object-fit: cover;
-  image-rendering: -webkit-optimize-contrast;
+  /* Laisser le navigateur utiliser son algo haute qualité (bicubique) */
+  image-rendering: auto;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .cr-info { flex: 1; display: flex; flex-direction: column; gap: .24rem; min-width: 0; }

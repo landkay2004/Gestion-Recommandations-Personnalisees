@@ -123,14 +123,27 @@ def tuteur_list(request):
 @login_required
 @prefet_or_secretariat_required
 def tuteur_create(request):
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
     form = TuteurForm(request.POST or None)
     if form.is_valid():
         tuteur = form.save()
         messages.success(request, f"Tuteur « {tuteur.nom_complet} » enregistré.")
+        if is_ajax:
+            return JsonResponse({
+                'ok': True,
+                'id': tuteur.pk,
+                'nom_complet': tuteur.nom_complet,
+                'telephone': tuteur.telephone or '',
+            })
         next_url = request.GET.get('next') or request.POST.get('next') or ''
         if next_url:
             return redirect(next_url + f'?tuteur={tuteur.pk}')
         return redirect('tuteur_detail', pk=tuteur.pk)
+    if is_ajax:
+        return JsonResponse({
+            'ok': False,
+            'errors': {f: [str(e) for e in errs] for f, errs in form.errors.items()},
+        }, status=422)
     return render(request, 'students/tuteur_form.html', {
         'form': form,
         'titre': 'Ajouter un tuteur',
