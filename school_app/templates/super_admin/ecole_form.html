@@ -35,10 +35,13 @@
             {% if form.plan.errors %}<div class="text-danger small mt-1">{{ form.plan.errors.0 }}</div>{% endif %}
           </div>
           {% endif %}
-          {% if form.date_fin_abonnement %}
+          {% if form.duree_abonnement_jours %}
           <div class="col-12 col-md-6">
-            <label class="form-label fw-semibold">{{ form.date_fin_abonnement.label }}</label>
-            {{ form.date_fin_abonnement }}
+            <label class="form-label fw-semibold">{{ form.duree_abonnement_jours.label }}</label>
+            {{ form.duree_abonnement_jours }}
+            {% if form.duree_abonnement_jours.errors %}
+              <div class="text-danger small mt-1">{{ form.duree_abonnement_jours.errors.0 }}</div>
+            {% endif %}
           </div>
           {% endif %}
           {% if form.jours_grace %}

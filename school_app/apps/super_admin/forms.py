@@ -147,11 +147,21 @@ class CreerEcoleForm(forms.Form):
         empty_label="Selectionner un plan",
         widget=forms.Select(attrs={'class': 'form-select'}),
     )
-    date_fin_abonnement = forms.DateField(
-        label="Date de fin d'abonnement",
-        required=False,
-        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+    duree_abonnement_jours = forms.IntegerField(
+        label="Durée de l'abonnement (jours)",
+        required=True,
+        min_value=1,
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ex: 365'}),
     )
+
+    def clean(self):
+        data = super().clean()
+        duree = data.get('duree_abonnement_jours')
+        if not duree:
+            raise forms.ValidationError(
+                "Vous devez préciser une durée en jours pour l'abonnement."
+            )
+        return data
 
     def clean_contact_email(self):
         email = self.cleaned_data['contact_email'].lower().strip()

@@ -8,6 +8,9 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
+import os
+from email.mime.image import MIMEImage
+from django.core.mail import EmailMultiAlternatives
 
 from tenants.models import (
     Ecole, PlanAbonnement, AdminEcole, AnnuaireUtilisateur, ModeMaintenance,
@@ -183,6 +186,17 @@ def communication_creer(request):
     return render(request, 'super_admin/communication_form.html', {'form': form})
 
 
+@super_admin_required
+def communication_supprimer(request, pk):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+    annonce = get_object_or_404(AnnoncePlateforme, pk=pk)
+    if request.method == 'POST':
+        annonce.delete()
+        messages.success(request, "L'annonce a été supprimée avec succès.")
+    return redirect('super_admin:communication_list')
+
+
 # ── Ecoles ────────────────────────────────────────────────────────────────────
 @super_admin_required
 def ecole_list(request):
@@ -211,6 +225,9 @@ def ecole_creer(request):
         d = form.cleaned_data
         schema_name = getattr(form, '_schema_name', slugify(d['nom'])[:50].replace('-', '_') or 'ecole')
 
+        date_debut = timezone.now().date()
+        date_fin = date_debut + timedelta(days=d['duree_abonnement_jours'])
+
         ecole = Ecole(
             schema_name=schema_name,
             nom=d['nom'],
@@ -221,8 +238,8 @@ def ecole_creer(request):
             ville=d.get('ville', ''),
             pays=d.get('pays', 'RDC'),
             plan=d['plan'],
-            date_debut_abonnement=timezone.now().date(),
-            date_fin_abonnement=d.get('date_fin_abonnement'),
+            date_debut_abonnement=date_debut,
+            date_fin_abonnement=date_fin,
         )
         ecole.save()  # cree le schema PostgreSQL
 
@@ -960,9 +977,14 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
 
     # ── Logo ──────────────────────────────────────────────────────────────
     logo_url = ''
+    logo_inline = False
+    logo_cid = 'platform_logo'
+    logo_path = None
     try:
         if ps and ps.site_logo:
             logo_url = request.build_absolute_uri(ps.site_logo.url)
+            logo_path = ps.site_logo.path
+            logo_inline = bool(logo_path)
     except Exception:
         pass
 
@@ -973,6 +995,8 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
         'site_web':     ps.site_web if ps else '',
         'couleur':      ps.couleur_principale if ps else '#4D44B5',
         'logo_url':     logo_url,
+        'logo_inline':  logo_inline,
+        'logo_cid':     logo_cid,
         'prenom_nom':   admin.get_full_name(),
         'intro':        intro,
         'email':        admin.email,
@@ -1001,14 +1025,24 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
     }
 
     try:
-        msg = DjangoEmailMessage(
+        msg = EmailMultiAlternatives(
             subject=subject,
-            body=html_body,
+            body=txt_body,
             from_email=from_email,
             to=[admin.email],
             connection=conn,
         )
-        msg.content_subtype = 'html'
+        msg.attach_alternative(html_body, 'text/html')
+        if logo_inline and logo_path:
+            try:
+                with open(logo_path, 'rb') as f:
+                    logo_data = f.read()
+                logo_img = MIMEImage(logo_data)
+                logo_img.add_header('Content-ID', '<%s>' % logo_cid)
+                logo_img.add_header('Content-Disposition', 'inline', filename=os.path.basename(logo_path))
+                msg.attach(logo_img)
+            except Exception:
+                pass
         msg.send(fail_silently=False)
         logger.info('CREDENTIALS_EMAIL_SENT to=%s via=%s', admin.email,
                     ('%s:%s' % (ps.smtp_host, ps.smtp_port)) if conn else 'console')
