@@ -128,6 +128,11 @@
       <i class="bi bi-bell-fill"></i><span>Notifications</span>
       <span class="sidebar-notif-count d-none ms-auto badge bg-danger rounded-pill" id="sidebar-notif-badge"></span>
     </a>
+
+    <div class="nav-section-label">Abonnement</div>
+    <a href="{% url 'abonnement:mon_abonnement' %}" class="nav-link {% if 'abonnement' in request.resolver_match.namespace %}active{% endif %}">
+      <i class="bi bi-stars"></i><span>Mon abonnement</span>
+    </a>
   </nav>
 
   <div class="sidebar-footer">

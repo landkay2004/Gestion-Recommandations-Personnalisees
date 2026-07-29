@@ -1,6 +1,9 @@
 from django import forms
 from django.utils.text import slugify
-from tenants.models import Ecole, PlanAbonnement, AdminEcole, AnnoncePlateforme
+from tenants.models import (
+    Ecole, PlanAbonnement, AdminEcole, AnnoncePlateforme,
+    MODULES_SGN, FONCTIONNALITES_SGN,
+)
 
 
 class LoginSuperAdminForm(forms.Form):
@@ -51,18 +54,83 @@ class Setup2FAConfirmForm(forms.Form):
 
 
 class PlanAbonnementForm(forms.ModelForm):
+    modules_inclus = forms.MultipleChoiceField(
+        label="Modules inclus",
+        choices=MODULES_SGN,
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        help_text="Cochez les modules autorisés pour ce plan. Aucun coché = tous les modules autorisés.",
+    )
+    fonctionnalites_incluses = forms.MultipleChoiceField(
+        label="Fonctionnalités avancées",
+        choices=FONCTIONNALITES_SGN,
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+    )
+
     class Meta:
         model = PlanAbonnement
-        fields = ['nom', 'description', 'max_eleves', 'max_enseignants', 'max_classes', 'max_utilisateurs', 'prix_mensuel', 'is_actif']
+        fields = [
+            # Identification
+            'nom', 'description',
+            # Tarification
+            'prix_mensuel', 'prix_annuel', 'essai_gratuit_jours',
+            # Quotas
+            'max_eleves', 'max_enseignants', 'max_classes', 'max_utilisateurs',
+            'max_stockage_go', 'quota_sms_mensuel',
+            # Modules / Fonctionnalités
+            'modules_inclus', 'fonctionnalites_incluses',
+            # Visibilité
+            'is_actif', 'est_public', 'ordre_affichage',
+        ]
         widgets = {
-            'nom':              forms.TextInput(attrs={'class': 'form-control'}),
-            'description':      forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'max_eleves':       forms.NumberInput(attrs={'class': 'form-control'}),
-            'max_enseignants':  forms.NumberInput(attrs={'class': 'form-control'}),
-            'max_classes':      forms.NumberInput(attrs={'class': 'form-control'}),
-            'max_utilisateurs': forms.NumberInput(attrs={'class': 'form-control'}),
-            'prix_mensuel':     forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'nom':              forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Essentiel, Pro, Entreprise…'}),
+            'description':      forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Description courte affichée sur la page de tarification.'}),
+            'prix_mensuel':     forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
+            'prix_annuel':      forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0', 'placeholder': '0 = calculé automatiquement (mensuel × 12)'}),
+            'essai_gratuit_jours': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'max_eleves':       forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'max_enseignants':  forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'max_classes':      forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'max_utilisateurs': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'max_stockage_go':  forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'quota_sms_mensuel': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'is_actif':   forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch'}),
+            'est_public': forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch'}),
+            'ordre_affichage': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
         }
+        labels = {
+            'nom':                   'Nom du plan',
+            'description':           'Description',
+            'prix_mensuel':          'Prix mensuel (USD)',
+            'prix_annuel':           'Prix annuel (USD)',
+            'essai_gratuit_jours':   'Jours d\'essai gratuit',
+            'max_eleves':            'Max élèves',
+            'max_enseignants':       'Max enseignants',
+            'max_classes':           'Max classes',
+            'max_utilisateurs':      'Max utilisateurs',
+            'max_stockage_go':       'Stockage max (Go)',
+            'quota_sms_mensuel':     'Quota SMS / mois',
+            'is_actif':              'Plan actif',
+            'est_public':            'Visible publiquement',
+            'ordre_affichage':       'Ordre d\'affichage',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Pré-sélectionner les valeurs JSON existantes dans les checkboxes
+        if self.instance and self.instance.pk:
+            self.initial['modules_inclus'] = self.instance.modules_inclus or []
+            self.initial['fonctionnalites_incluses'] = self.instance.fonctionnalites_incluses or []
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        # Convertir les choix sélectionnés en liste JSON
+        instance.modules_inclus = list(self.cleaned_data.get('modules_inclus', []))
+        instance.fonctionnalites_incluses = list(self.cleaned_data.get('fonctionnalites_incluses', []))
+        if commit:
+            instance.save()
+        return instance
 
 
 class CreerEcoleForm(forms.Form):

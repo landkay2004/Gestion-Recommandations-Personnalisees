@@ -197,6 +197,18 @@ def user_list(request):
 @login_required
 @prefet_required
 def user_create(request):
+    # Vérification quota avant création
+    if request.method == 'POST':
+        try:
+            from tenants.utils.quotas import get_ecole_from_schema, check_quota
+            ecole = get_ecole_from_schema(request.session.get('tenant_schema'))
+            ok, msg = check_quota(ecole, 'utilisateurs')
+            if not ok:
+                messages.error(request, msg)
+                return redirect('user_list')
+        except Exception:
+            pass
+
     form = UserCreateForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         # UserCreateForm.save() gère le username, le mot de passe temporaire et

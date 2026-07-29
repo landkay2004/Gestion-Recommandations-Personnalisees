@@ -65,6 +65,10 @@
        class="nav-link {% if 'plan' in request.resolver_match.url_name %}active{% endif %}">
       <i class="bi bi-stars"></i><span>Plans d'abonnement</span>
     </a>
+    <a href="{% url 'super_admin:quotas' %}"
+       class="nav-link {% if request.resolver_match.url_name == 'quotas' %}active{% endif %}">
+      <i class="bi bi-speedometer2"></i><span>Quotas des écoles</span>
+    </a>
 
     <div class="nav-section-label">Système</div>
     <a href="{% url 'super_admin:maintenance_list' %}"

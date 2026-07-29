@@ -44,6 +44,18 @@ def student_list(request):
 @login_required
 @prefet_or_secretariat_required
 def student_create(request):
+    # Vérification quota avant création
+    if request.method == 'POST':
+        try:
+            from tenants.utils.quotas import get_ecole_from_schema, check_quota
+            ecole = get_ecole_from_schema(request.session.get('tenant_schema'))
+            ok, msg = check_quota(ecole, 'eleves')
+            if not ok:
+                messages.error(request, msg)
+                return redirect('student_list')
+        except Exception:
+            pass
+
     form = StudentForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()

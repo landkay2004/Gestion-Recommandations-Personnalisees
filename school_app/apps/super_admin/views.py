@@ -11,7 +11,7 @@ from django.conf import settings as django_settings
 
 from tenants.models import (
     Ecole, PlanAbonnement, AdminEcole, AnnuaireUtilisateur, ModeMaintenance,
-    AnnoncePlateforme,
+    AnnoncePlateforme, Abonnement, HistoriqueAbonnement,
 )
 from tenants.models import _gen_temp_password
 from super_admin.models import SuperAdmin
@@ -415,29 +415,205 @@ def _update_password_in_schema(schema_name, email, new_pwd):
 def plan_list(request):
     if _needs_2fa_verification(request):
         return redirect('super_admin:verify_2fa')
-    plans = PlanAbonnement.objects.all().order_by('prix_mensuel')
+    plans = PlanAbonnement.objects.all().order_by('ordre_affichage', 'prix_mensuel')
     return render(request, 'super_admin/plan_list.html', {'plans': plans})
 
 
 @super_admin_required
 def plan_creer(request):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
     form = PlanAbonnementForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         plan = form.save()
-        messages.success(request, "Plan \u00ab %s \u00bb cree." % plan.nom)
+        messages.success(request, "Plan « %s » créé." % plan.nom)
+        logger.info('PLAN_CREE slug=%s sa=%s', plan.slug, request.super_admin.email)
         return redirect('super_admin:plan_list')
-    return render(request, 'super_admin/plan_form.html', {'form': form, 'titre': 'Creer un plan'})
+    return render(request, 'super_admin/plan_form.html', {'form': form, 'titre': 'Créer un plan'})
 
 
 @super_admin_required
 def plan_modifier(request, pk):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
     plan = get_object_or_404(PlanAbonnement, pk=pk)
     form = PlanAbonnementForm(request.POST or None, instance=plan)
     if request.method == 'POST' and form.is_valid():
         form.save()
-        messages.success(request, "Plan \u00ab %s \u00bb mis a jour." % plan.nom)
+        messages.success(request, "Plan « %s » mis à jour." % plan.nom)
+        logger.info('PLAN_MODIFIE slug=%s sa=%s', plan.slug, request.super_admin.email)
         return redirect('super_admin:plan_list')
-    return render(request, 'super_admin/plan_form.html', {'form': form, 'titre': "Modifier \u2014 %s" % plan.nom, 'plan': plan})
+    return render(request, 'super_admin/plan_form.html', {
+        'form': form, 'titre': "Modifier — %s" % plan.nom, 'plan': plan,
+    })
+
+
+@super_admin_required
+def plan_supprimer(request, pk):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+    plan = get_object_or_404(PlanAbonnement, pk=pk)
+    ecoles_count = plan.ecoles.filter(is_deleted=False).count()
+    if request.method == 'POST':
+        if ecoles_count > 0:
+            messages.error(
+                request,
+                "Impossible de supprimer le plan « %s » : %d école(s) l'utilisent encore."
+                % (plan.nom, ecoles_count)
+            )
+            return redirect('super_admin:plan_list')
+        nom = plan.nom
+        plan.delete()
+        messages.success(request, "Plan « %s » supprimé." % nom)
+        logger.info('PLAN_SUPPRIME nom=%s sa=%s', nom, request.super_admin.email)
+        return redirect('super_admin:plan_list')
+    return render(request, 'super_admin/plan_supprimer.html', {
+        'plan': plan, 'ecoles_count': ecoles_count,
+    })
+
+
+@super_admin_required
+def plan_toggle_actif(request, pk):
+    """Active / désactive un plan (AJAX ou POST standard)."""
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+    plan = get_object_or_404(PlanAbonnement, pk=pk)
+    if request.method == 'POST':
+        plan.is_actif = not plan.is_actif
+        plan.save(update_fields=['is_actif'])
+        etat = 'activé' if plan.is_actif else 'désactivé'
+        messages.success(request, "Plan « %s » %s." % (plan.nom, etat))
+    return redirect('super_admin:plan_list')
+
+
+@super_admin_required
+def quotas_view(request):
+    """Vue des écoles approchant leurs limites de quotas."""
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+
+    # Seuil d'alerte : écoles dont le plan a des quotas
+    ecoles = (
+        Ecole.objects.filter(is_deleted=False, statut='active')
+        .select_related('plan')
+        .order_by('nom')
+    )
+
+    # On filtre uniquement les écoles avec un plan actif
+    ecoles_avec_plan = [e for e in ecoles if e.plan]
+
+    return render(request, 'super_admin/quotas.html', {
+        'ecoles': ecoles_avec_plan,
+    })
+
+
+@super_admin_required
+def abonnement_ecole(request, pk):
+    """Détail abonnement d'une école + changement de plan."""
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+
+    ecole = get_object_or_404(Ecole, pk=pk, is_deleted=False)
+    admin = AdminEcole.objects.filter(ecole=ecole).first()
+
+    # Récupérer ou créer l'Abonnement
+    from tenants.models import Abonnement, HistoriqueAbonnement
+    abonnement = None
+    try:
+        abonnement = ecole.abonnement_detail
+    except Exception:
+        pass
+
+    plans = PlanAbonnement.objects.filter(is_actif=True).order_by('ordre_affichage', 'prix_mensuel')
+    historique = []
+    if abonnement:
+        historique = abonnement.historique.select_related('ancien_plan', 'nouveau_plan')[:20]
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'changer_plan':
+            plan_id = request.POST.get('plan_id')
+            motif   = request.POST.get('motif', '').strip()
+            try:
+                nouveau_plan = PlanAbonnement.objects.get(pk=plan_id)
+            except PlanAbonnement.DoesNotExist:
+                messages.error(request, "Plan introuvable.")
+                return redirect('super_admin:abonnement_ecole', pk=pk)
+
+            if abonnement:
+                abonnement.changer_plan(
+                    nouveau_plan,
+                    motif=motif or "Changement manuel super-admin",
+                    modifie_par=request.super_admin.email,
+                )
+            else:
+                # Créer l'Abonnement si inexistant
+                from django.utils import timezone as tz
+                abonnement = Abonnement.objects.create(
+                    ecole=ecole,
+                    plan=nouveau_plan,
+                    date_debut=ecole.date_debut_abonnement or tz.now().date(),
+                    date_fin=ecole.date_fin_abonnement,
+                    statut='actif',
+                )
+                ecole.plan = nouveau_plan
+                ecole.save(update_fields=['plan'])
+            messages.success(request, "Plan changé vers « %s »." % nouveau_plan.nom)
+            logger.info('ABONNEMENT_PLAN_CHANGE ecole=%s plan=%s sa=%s',
+                        ecole.nom, nouveau_plan.nom, request.super_admin.email)
+
+        elif action == 'changer_statut':
+            statut  = request.POST.get('statut')
+            motif   = request.POST.get('motif', '').strip()
+            valides = ['actif', 'essai', 'expire', 'suspendu']
+            if statut in valides and abonnement:
+                abonnement.changer_statut(
+                    statut,
+                    motif=motif or "Changement manuel super-admin",
+                    modifie_par=request.super_admin.email,
+                )
+                # Synchroniser statut Ecole
+                mapping = {
+                    'actif':    'active',
+                    'essai':    'active',
+                    'expire':   'expiree',
+                    'suspendu': 'suspendue',
+                }
+                ecole.statut = mapping.get(statut, ecole.statut)
+                ecole.save(update_fields=['statut'])
+                messages.success(request, "Statut mis à jour : %s." % statut)
+
+        elif action == 'init_abonnement':
+            # Créer un Abonnement pour une école qui n'en a pas
+            from django.utils import timezone as tz
+            if ecole.plan and not abonnement:
+                abonnement = Abonnement.objects.create(
+                    ecole=ecole,
+                    plan=ecole.plan,
+                    date_debut=ecole.date_debut_abonnement or tz.now().date(),
+                    date_fin=ecole.date_fin_abonnement,
+                    statut='actif',
+                )
+                messages.success(request, "Abonnement initialisé avec succès.")
+            elif not ecole.plan:
+                messages.error(request, "Assignez d'abord un plan à cette école.")
+
+        elif action == 'notes':
+            if abonnement:
+                abonnement.notes_internes = request.POST.get('notes_internes', '')
+                abonnement.save(update_fields=['notes_internes', 'updated_at'])
+                messages.success(request, "Notes enregistrées.")
+
+        return redirect('super_admin:abonnement_ecole', pk=pk)
+
+    return render(request, 'super_admin/abonnement_ecole.html', {
+        'ecole':      ecole,
+        'admin':      admin,
+        'abonnement': abonnement,
+        'plans':      plans,
+        'historique': historique,
+    })
 
 
 # ── Maintenance ────────────────────────────────────────────────────────────────

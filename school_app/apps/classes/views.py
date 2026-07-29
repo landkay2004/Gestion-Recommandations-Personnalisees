@@ -651,6 +651,18 @@ def classe_list(request):
 @login_required
 @prefet_or_secretariat_required
 def classe_create(request):
+    # Vérification quota avant création
+    if request.method == 'POST':
+        try:
+            from tenants.utils.quotas import get_ecole_from_schema, check_quota
+            ecole = get_ecole_from_schema(request.session.get('tenant_schema'))
+            ok, msg = check_quota(ecole, 'classes')
+            if not ok:
+                messages.error(request, msg)
+                return redirect('classe_list')
+        except Exception:
+            pass
+
     form = ClasseForm(request.POST or None)
     if form.is_valid():
         form.save()

@@ -23,14 +23,20 @@ urlpatterns = [
     path('ecoles/<int:pk>/restaurer/',               views.ecole_restaurer,         name='ecole_restaurer'),
     path('ecoles/<int:pk>/supprimer-definitif/',     views.ecole_supprimer_definitif, name='ecole_supprimer_definitif'),
     path('ecoles/<int:pk>/regenerer-mdp/',           views.regenerer_mdp_admin,     name='regenerer_mdp_admin'),
+    path('ecoles/<int:pk>/abonnement/',              views.abonnement_ecole,        name='abonnement_ecole'),
 
     # Corbeille
     path('corbeille/',  views.corbeille_list,  name='corbeille_list'),
 
     # Plans
-    path('plans/',                   views.plan_list,    name='plan_list'),
-    path('plans/nouveau/',           views.plan_creer,   name='plan_creer'),
-    path('plans/<int:pk>/modifier/', views.plan_modifier, name='plan_modifier'),
+    path('plans/',                       views.plan_list,          name='plan_list'),
+    path('plans/nouveau/',               views.plan_creer,         name='plan_creer'),
+    path('plans/<int:pk>/modifier/',     views.plan_modifier,      name='plan_modifier'),
+    path('plans/<int:pk>/supprimer/',    views.plan_supprimer,     name='plan_supprimer'),
+    path('plans/<int:pk>/toggle/',       views.plan_toggle_actif,  name='plan_toggle_actif'),
+
+    # Quotas
+    path('quotas/',   views.quotas_view,  name='quotas'),
 
     # Maintenance
     path('maintenance/',                  views.maintenance_list,   name='maintenance_list'),

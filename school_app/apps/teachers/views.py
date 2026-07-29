@@ -35,6 +35,18 @@ def teacher_list(request):
 @login_required
 @prefet_or_secretariat_required
 def teacher_create(request):
+    # Vérification quota avant création
+    if request.method == 'POST':
+        try:
+            from tenants.utils.quotas import get_ecole_from_schema, check_quota
+            ecole = get_ecole_from_schema(request.session.get('tenant_schema'))
+            ok, msg = check_quota(ecole, 'enseignants')
+            if not ok:
+                messages.error(request, msg)
+                return redirect('teacher_list')
+        except Exception:
+            pass
+
     form = TeacherForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
         teacher, temp_password = form.save()

@@ -3,7 +3,7 @@ Middleware multi-tenant SGN :
   1. SessionTenantMiddleware  — routing PostgreSQL schema par session
   2. SuperAdminAuthMiddleware — injecte request.super_admin
   3. OnboardingMiddleware     — redirige wizard si non terminé
-  4. AbonnementMiddleware     — lecture seule / suspension
+  4. AbonnementMiddleware     — lecture seule / suspension + accès modules
   5. MaintenanceMiddleware    — mode maintenance
 """
 import logging
@@ -173,11 +173,26 @@ _ABONNEMENT_EXEMPT = (
 
 _READONLY_SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS'}
 
+# Mapping URL préfixe → clé module (pour le contrôle d'accès modules)
+_MODULE_URL_MAP = {
+    '/notes/':        'notes',
+    '/bulletins/':    'bulletins',
+    '/classes/':      'classes',
+    '/eleves/':       'eleves',
+    '/enseignants/':  'enseignants',
+    '/planning/':     'planning',
+    '/portail/':      'portail_parents',
+    '/cartes/':       'carte_eleve',
+    '/rapports/':     'rapports',
+    '/notifications/': 'notifications',
+}
+
 
 class AbonnementMiddleware:
     """
     - Abonnement expiré (hors grâce) → lecture seule (bloque POST/PUT/DELETE)
     - École suspendue → accès bloqué sauf admin école qui voit page suspension
+    - Module non inclus dans le plan → redirige avec message d'erreur
     """
 
     def __init__(self, get_response):
@@ -194,26 +209,51 @@ class AbonnementMiddleware:
 
         try:
             from tenants.models import Ecole
-            ecole = Ecole.objects.get(schema_name=schema)
+            ecole = Ecole.objects.select_related('plan').get(schema_name=schema)
         except Exception:
             return self.get_response(request)
 
-        # École suspendue
+        # ── École suspendue ──────────────────────────────────────────────────
         if ecole.statut == 'suspendue':
             if request.session.get('admin_ecole_id'):
                 return redirect('abonnement:suspendue')
             from django.template.loader import render_to_string
             from django.http import HttpResponse
-            html = render_to_string('abonnement/ecole_suspendue.html', {'ecole': ecole})
+            html = render_to_string('abonnement/ecole_suspendue.html', {
+                'ecole': ecole,
+                'ecole_statut': 'suspendue',
+                'lecture_seule': False,
+            })
             return HttpResponse(html, status=403)
 
-        # Lecture seule
+        # ── Lecture seule (abonnement expiré hors grâce) ─────────────────────
         if ecole.acces_lecture_seule and request.method not in _READONLY_SAFE_METHODS:
-            from django.contrib import messages
-            messages.warning(request,
+            from django.contrib import messages as dj_messages
+            dj_messages.warning(
+                request,
                 "Votre abonnement a expiré. L'école est en mode lecture seule. "
-                "Contactez l'administrateur pour renouveler.")
+                "Contactez l'administrateur pour renouveler."
+            )
             return redirect(request.path)
+
+        # ── Contrôle d'accès module ──────────────────────────────────────────
+        plan = ecole.plan
+        if plan:
+            modules = plan.modules_inclus or []
+            if modules:  # liste vide = tout autorisé (rétrocompat)
+                for url_prefix, module_key in _MODULE_URL_MAP.items():
+                    if request.path.startswith(url_prefix):
+                        if module_key not in modules:
+                            from django.contrib import messages as dj_messages
+                            from tenants.models import MODULES_DICT
+                            label = MODULES_DICT.get(module_key, module_key)
+                            dj_messages.error(
+                                request,
+                                "Le module « %s » n'est pas inclus dans votre plan « %s ». "
+                                "Contactez l'administrateur pour mettre à niveau votre abonnement."
+                                % (label, plan.nom)
+                            )
+                            return redirect('dashboard')
 
         return self.get_response(request)
 
