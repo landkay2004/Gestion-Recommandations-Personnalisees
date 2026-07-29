@@ -536,8 +536,13 @@ def platform_settings(request):
     settings_obj = PlatformSettings.get_settings()
     form = PlatformSettingsForm(request.POST or None, request.FILES or None, instance=settings_obj)
     if request.method == 'POST' and form.is_valid():
-        form.save()
-        messages.success(request, "Paramètres de la plateforme enregistrés.")
+        obj = form.save(commit=False)
+        # Conserver le mot de passe SMTP existant si le champ est laissé vide
+        # (PasswordInput ne re-affiche jamais la valeur — un champ vide = "ne pas changer")
+        if not form.cleaned_data.get('smtp_password'):
+            obj.smtp_password = settings_obj.smtp_password
+        obj.save()
+        messages.success(request, "Paramètres de la plateforme enregistrés avec succès.")
         return redirect('super_admin:platform_settings')
     return render(request, 'super_admin/parametres.html', {
         'form': form, 'obj': settings_obj, 'platform_settings': settings_obj,

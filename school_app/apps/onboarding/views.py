@@ -112,22 +112,31 @@ def etape2_config(request):
     _switch_tenant_schema(admin.ecole.schema_name)
 
     initial = {}
+    ecole = admin.ecole  # données saisies par le super admin lors de la création
     try:
         from school_settings.models import SchoolInfo
         info = SchoolInfo.get_info()
         initial = {
-            'nom_ecole':              info.nom,
-            'type_etablissement':     info.type_etablissement,
-            'annee_scolaire_actuelle': info.annee_scolaire_actuelle,
-            'province':               info.province,
-            'ville':                  info.ville,
-            'commune':                info.commune,
-            'code_ecole':             info.code,
-            'telephone':              info.telephone,
-            'email_contact':          info.email_contact,
+            # Nom : SchoolInfo en priorité, sinon nom saisi par le super admin
+            'nom_ecole':               info.nom or ecole.nom or '',
+            'type_etablissement':      info.type_etablissement or '',
+            'annee_scolaire_actuelle': info.annee_scolaire_actuelle or '',
+            'province':                info.province or '',
+            'ville':                   info.ville or ecole.ville or '',
+            'commune':                 info.commune or '',
+            'code_ecole':              info.code or '',
+            # Téléphone/email : SchoolInfo, sinon données du super admin
+            'telephone':               info.telephone or ecole.contact_telephone or '',
+            'email_contact':           info.email_contact or ecole.contact_email or '',
         }
     except Exception:
-        pass
+        # Fallback minimal : données du super admin
+        initial = {
+            'nom_ecole':    ecole.nom or '',
+            'ville':        ecole.ville or '',
+            'telephone':    ecole.contact_telephone or '',
+            'email_contact': ecole.contact_email or '',
+        }
     # Toujours revenir au schéma public après lecture
     _switch_public_schema()
 
