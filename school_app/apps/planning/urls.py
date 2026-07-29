@@ -18,5 +18,6 @@ urlpatterns = [
 
     # Créneaux horaires
     path('creneaux/',                       views.creneau_list,   name='creneau_list'),
+    path('creneaux/<int:pk>/modifier/',     views.creneau_update, name='creneau_update'),
     path('creneaux/<int:pk>/supprimer/',    views.creneau_delete, name='creneau_delete'),
 ]

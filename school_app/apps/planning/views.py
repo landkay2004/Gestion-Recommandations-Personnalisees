@@ -73,6 +73,28 @@ def creneau_list(request):
 
 @login_required
 @prefet_or_secretariat_required
+def creneau_update(request, pk):
+    creneau = get_object_or_404(CreneauHoraire, pk=pk)
+    form = CreneauHoraireForm(request.POST or None, instance=creneau)
+    if request.method == 'POST' and form.is_valid():
+        try:
+            obj = form.save(commit=False)
+            obj.full_clean()
+            obj.save()
+            messages.success(request, "Créneau modifié.")
+            return redirect('creneau_list')
+        except ValidationError as e:
+            for field, errs in (e.message_dict.items() if hasattr(e, 'message_dict') else [('__all__', e.messages)]):
+                for err in errs:
+                    form.add_error(field if field != '__all__' else None, err)
+    return render(request, 'planning/creneau_form.html', {
+        'form': form, 'obj': creneau,
+        'titre': f'Modifier le créneau — {creneau}',
+    })
+
+
+@login_required
+@prefet_or_secretariat_required
 def creneau_delete(request, pk):
     creneau = get_object_or_404(CreneauHoraire, pk=pk)
     if request.method == 'POST':

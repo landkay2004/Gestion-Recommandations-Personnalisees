@@ -269,7 +269,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 # ─────────────────────────────────────────────────────────────────────────────
 EMAIL_BACKEND = os.environ.get(
     'EMAIL_BACKEND',
-    'django.core.mail.backends.console.EmailBackend'
+    'config.email_backend.DynamicEmailBackend'
 )
 EMAIL_HOST          = os.environ.get('EMAIL_HOST', 'localhost')
 EMAIL_PORT          = int(os.environ.get('EMAIL_PORT', 587))

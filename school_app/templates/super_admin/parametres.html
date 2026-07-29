@@ -91,6 +91,94 @@
         </div>
       </div>
 
+      <!-- ── SMTP / E-mail ── -->
+      <div class="card mb-4 border-warning">
+        <div class="card-header d-flex align-items-center gap-2 bg-warning bg-opacity-10">
+          <i class="bi bi-envelope-fill text-warning"></i>
+          <span class="fw-semibold">Configuration e-mail (SMTP)</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info d-flex gap-2 py-2 small mb-3" role="alert">
+            <i class="bi bi-info-circle-fill mt-1 flex-shrink-0"></i>
+            <div>
+              Activez l'envoi SMTP pour que les e-mails (identifiants, notifications) soient vraiment envoyés.
+              Sans activation, les e-mails sont affichés uniquement dans les logs serveur (mode développement).
+            </div>
+          </div>
+
+          <!-- Activer SMTP -->
+          <div class="form-check form-switch mb-4">
+            {{ form.smtp_actif }}
+            <label class="form-check-label fw-semibold ms-2" for="{{ form.smtp_actif.id_for_label }}">
+              {{ form.smtp_actif.label }}
+            </label>
+            <div class="form-text">Décochez pour utiliser le mode console (développement).</div>
+          </div>
+
+          <div id="smtp-fields">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">{{ form.smtp_host.label }}</label>
+                {{ form.smtp_host }}
+                <div class="form-text">Ex&nbsp;: smtp.gmail.com, smtp.office365.com</div>
+                {% if form.smtp_host.errors %}<div class="text-danger small mt-1">{{ form.smtp_host.errors.0 }}</div>{% endif %}
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">{{ form.smtp_port.label }}</label>
+                {{ form.smtp_port }}
+                <div class="form-text">587 (TLS) ou 465 (SSL)</div>
+              </div>
+              <div class="col-md-3 d-flex align-items-end pb-1">
+                <div class="form-check">
+                  {{ form.smtp_use_tls }}
+                  <label class="form-check-label" for="{{ form.smtp_use_tls.id_for_label }}">{{ form.smtp_use_tls.label }}</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">{{ form.smtp_user.label }}</label>
+                {{ form.smtp_user }}
+                <div class="form-text">Adresse e-mail ou nom d'utilisateur SMTP</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">{{ form.smtp_password.label }}</label>
+                <div class="input-group">
+                  {{ form.smtp_password }}
+                  <button class="btn btn-outline-secondary" type="button" id="toggle-smtp-pwd" title="Afficher/Masquer">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+                <div class="form-text">Mot de passe d'application pour Gmail / App password</div>
+              </div>
+              <div class="col-md-8">
+                <label class="form-label">{{ form.smtp_from_email.label }}</label>
+                {{ form.smtp_from_email }}
+                <div class="form-text">Adresse expéditrice affichée dans les e-mails envoyés</div>
+              </div>
+            </div>
+
+            <!-- Test e-mail -->
+            <div class="mt-4 p-3 rounded-3" style="background:#f8f9fa;border:1px dashed #dee2e6">
+              <div class="fw-semibold small mb-2"><i class="bi bi-send-check me-2 text-primary"></i>Tester la configuration</div>
+              <form method="post" action="{% url 'super_admin:test_email' %}" class="d-flex gap-2 align-items-end flex-wrap">
+                {% csrf_token %}
+                <div class="flex-grow-1">
+                  <label class="form-label small">Adresse de test</label>
+                  <input type="email" name="email_test" class="form-control" placeholder="votre@email.com" required>
+                </div>
+                <button type="submit" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-send me-1"></i>Envoyer un e-mail test
+                </button>
+              </form>
+              {% if messages %}{% for m in messages %}
+                {% if 'test' in m.message|lower or 'smtp' in m.message|lower or 'email' in m.message|lower %}
+                <div class="alert alert-{{ m.tags|default:'info' }} small py-2 mt-2 mb-0">{{ m }}</div>
+                {% endif %}
+              {% endfor %}{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="d-flex gap-2">
         <button type="submit" class="btn btn-primary">
           <i class="bi bi-check-circle-fill me-1"></i>Enregistrer les paramètres
@@ -108,7 +196,7 @@
         <span class="fw-semibold">Aperçu actuel</span>
       </div>
       <div class="card-body">
-        <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:var(--color-primary);color:#fff;">
+        <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:{{ obj.couleur_principale|default:'var(--color-primary)' }};color:#fff;">
           {% if obj.site_logo %}
             <img src="{{ obj.site_logo.url }}" alt="Logo" style="height:36px;object-fit:contain;border-radius:7px;">
           {% else %}
@@ -133,14 +221,68 @@
       </div>
     </div>
 
+    <!-- Statut SMTP -->
+    <div class="card mt-3">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i class="bi bi-envelope-check {% if obj.smtp_actif %}text-success{% else %}text-secondary{% endif %}"></i>
+        <span class="fw-semibold">Statut e-mail</span>
+      </div>
+      <div class="card-body small">
+        {% if obj.smtp_actif and obj.smtp_host %}
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-success">Actif</span>
+            <span class="text-muted">Envoi SMTP activé</span>
+          </div>
+          <ul class="list-unstyled text-muted mb-0">
+            <li><i class="bi bi-server me-2 text-primary"></i>{{ obj.smtp_host }}:{{ obj.smtp_port }}</li>
+            <li><i class="bi bi-person me-2 text-primary"></i>{{ obj.smtp_user }}</li>
+            <li><i class="bi bi-envelope me-2 text-primary"></i>{{ obj.smtp_from_email }}</li>
+          </ul>
+        {% else %}
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-secondary">Console</span>
+            <span class="text-muted">E-mails affichés dans les logs</span>
+          </div>
+          <div class="mt-2 text-muted">Activez SMTP pour envoyer de vrais e-mails aux écoles.</div>
+        {% endif %}
+      </div>
+    </div>
+
     <div class="card mt-3">
       <div class="card-header"><i class="bi bi-info-circle text-primary me-2"></i>À savoir</div>
       <div class="card-body small text-muted">
-        <p class="mb-2">Le <strong>nom du site</strong> remplace automatiquement « SGN RDC » dans les titres de pages et les e-mails envoyés aux écoles.</p>
-        <p class="mb-0">Le <strong>logo</strong> apparaît dans la sidebar et les en-têtes de toutes les pages admin.</p>
+        <p class="mb-2">Le <strong>nom du site</strong> remplace automatiquement « SGN RDC » dans les titres de pages et les e-mails.</p>
+        <p class="mb-2">Le <strong>logo</strong> apparaît dans la sidebar et les en-têtes de toutes les pages admin.</p>
+        <p class="mb-0">Pour Gmail, utilisez un <strong>mot de passe d'application</strong> (pas votre mot de passe principal) et activez l'accès IMAP.</p>
       </div>
     </div>
   </div>
 
 </div>
+
+<script>
+// Toggle visibilité mot de passe SMTP
+const toggleBtn = document.getElementById('toggle-smtp-pwd');
+if (toggleBtn) {
+  toggleBtn.addEventListener('click', () => {
+    const pwdField = document.getElementById('{{ form.smtp_password.id_for_label }}');
+    if (!pwdField) return;
+    const isText = pwdField.type === 'text';
+    pwdField.type = isText ? 'password' : 'text';
+    toggleBtn.querySelector('i').className = isText ? 'bi bi-eye' : 'bi bi-eye-slash';
+  });
+}
+
+// Afficher/masquer les champs SMTP selon le toggle "smtp_actif"
+const smtpToggle = document.getElementById('{{ form.smtp_actif.id_for_label }}');
+const smtpFields = document.getElementById('smtp-fields');
+function toggleSmtpFields() {
+  if (!smtpFields || !smtpToggle) return;
+  smtpFields.style.opacity = smtpToggle.checked ? '1' : '0.45';
+}
+if (smtpToggle) {
+  smtpToggle.addEventListener('change', toggleSmtpFields);
+  toggleSmtpFields();
+}
+</script>
 {% endblock %}

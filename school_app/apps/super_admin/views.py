@@ -658,8 +658,27 @@ def disable_2fa(request):
 
 
 # ── Email helper ──────────────────────────────────────────────────────────────
+def _get_smtp_from_email():
+    """Retourne l'adresse expéditrice depuis PlatformSettings si SMTP actif, sinon settings."""
+    try:
+        from super_admin.models import PlatformSettings
+        ps = PlatformSettings.objects.get(pk=1)
+        if ps.smtp_actif and ps.smtp_from_email:
+            return ps.smtp_from_email
+    except Exception:
+        pass
+    return django_settings.DEFAULT_FROM_EMAIL
+
+
 def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
-    subject = ("[Renouvellement] " if regeneration else "") + "Vos identifiants - Plateforme SGN RDC"
+    try:
+        from super_admin.models import PlatformSettings
+        ps = PlatformSettings.objects.get(pk=1)
+        site_name = ps.site_name or 'SGN RDC'
+    except Exception:
+        site_name = 'SGN RDC'
+
+    subject = ("[Renouvellement] " if regeneration else "") + "Vos identifiants - Plateforme %s" % site_name
     message = (
         "Bonjour %s,\n\n"
         "%s\n\n"
@@ -668,16 +687,18 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
         "  Mot de passe temp. : %s\n\n"
         "Connexion : %s\n"
         "Vous devrez changer votre mot de passe a la premiere connexion.\n\n"
-        "-- Plateforme SGN RDC"
+        "-- %s"
     ) % (
         admin.get_full_name(),
         "Un nouveau mot de passe temporaire a ete genere pour votre compte." if regeneration
-            else ("Votre ecole \u00ab %s \u00bb a ete creee sur la plateforme SGN RDC." % ecole.nom),
+            else ("Votre ecole \u00ab %s \u00bb a ete creee sur la plateforme %s." % (ecole.nom, site_name)),
         admin.email,
         temp_pwd,
         request.build_absolute_uri('/login/'),
+        site_name,
     )
     try:
-        send_mail(subject, message, django_settings.DEFAULT_FROM_EMAIL, [admin.email], fail_silently=True)
+        send_mail(subject, message, _get_smtp_from_email(), [admin.email], fail_silently=False)
+        logger.info('CREDENTIALS_EMAIL_SENT to=%s', admin.email)
     except Exception as e:
         logger.warning('CREDENTIALS_EMAIL_FAILED to=%s err=%s', admin.email, e)

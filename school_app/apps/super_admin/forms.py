@@ -159,6 +159,8 @@ class PlatformSettingsForm(forms.ModelForm):
         fields = [
             'site_name', 'site_slogan', 'site_devise', 'site_logo',
             'adresse', 'email_contact', 'telephone', 'site_web', 'couleur_principale',
+            'smtp_actif', 'smtp_host', 'smtp_port', 'smtp_use_tls',
+            'smtp_user', 'smtp_password', 'smtp_from_email',
         ]
         widgets = {
             'site_name':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'SGN RDC'}),
@@ -170,6 +172,14 @@ class PlatformSettingsForm(forms.ModelForm):
             'telephone':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}),
             'site_web':    forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://…'}),
             'couleur_principale': forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
+            # SMTP
+            'smtp_actif':      forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch'}),
+            'smtp_host':       forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'smtp.gmail.com'}),
+            'smtp_port':       forms.NumberInput(attrs={'class': 'form-control'}),
+            'smtp_use_tls':    forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'smtp_user':       forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'utilisateur@domaine.com', 'autocomplete': 'off'}),
+            'smtp_password':   forms.PasswordInput(attrs={'class': 'form-control', 'autocomplete': 'new-password'}),
+            'smtp_from_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'noreply@ecole.cd'}),
         }
         labels = {
             'site_name':         'Nom du site / plateforme',
