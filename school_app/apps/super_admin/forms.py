@@ -250,6 +250,9 @@ class PlatformSettingsForm(forms.ModelForm):
             'adresse', 'email_contact', 'telephone', 'site_web', 'couleur_principale',
             'smtp_actif', 'smtp_host', 'smtp_port', 'smtp_use_tls',
             'smtp_user', 'smtp_password', 'smtp_from_email',
+            # Alertes quota
+            'alerte_quota_seuil', 'alerte_quota_email_actif', 'alerte_quota_app_actif',
+            'alerte_quota_message_email', 'alerte_quota_message_app',
         ]
         widgets = {
             'site_name':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'SGN RDC'}),
@@ -269,6 +272,24 @@ class PlatformSettingsForm(forms.ModelForm):
             'smtp_user':       forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'utilisateur@domaine.com', 'autocomplete': 'off'}),
             'smtp_password':   forms.PasswordInput(attrs={'class': 'form-control', 'autocomplete': 'new-password'}),
             'smtp_from_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'noreply@ecole.cd'}),
+            # Alertes quota
+            'alerte_quota_seuil': forms.NumberInput(attrs={
+                'class': 'form-control', 'min': 0, 'max': 100,
+                'placeholder': '80',
+            }),
+            'alerte_quota_email_actif': forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch'}),
+            'alerte_quota_app_actif':   forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch'}),
+            'alerte_quota_message_email': forms.Textarea(attrs={
+                'class': 'form-control', 'rows': 6,
+                'placeholder': (
+                    "Bonjour,\n\nL'école {ecole} a atteint {pourcentage}% de son quota "
+                    "{ressource} ({usage}/{maximum}).\n\nCordialement,\n{site}"
+                ),
+            }),
+            'alerte_quota_message_app': forms.Textarea(attrs={
+                'class': 'form-control', 'rows': 3,
+                'placeholder': "Quota {ressource} : {usage}/{maximum} ({pourcentage}% utilisé).",
+            }),
         }
         labels = {
             'site_name':         'Nom du site / plateforme',
@@ -287,6 +308,11 @@ class PlatformSettingsForm(forms.ModelForm):
             'smtp_user':         'Identifiant SMTP',
             'smtp_password':     'Mot de passe SMTP',
             'smtp_from_email':   'Adresse d\'expédition (From)',
+            'alerte_quota_seuil':           'Seuil d\'alerte (%)',
+            'alerte_quota_email_actif':     'Alertes quota par e-mail',
+            'alerte_quota_app_actif':       'Alertes quota dans l\'app',
+            'alerte_quota_message_email':   'Message e-mail personnalisé',
+            'alerte_quota_message_app':     'Message in-app personnalisé',
         }
 
 

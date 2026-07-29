@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alerte quota — {{ site_name }}</title>
+<style>
+  body { margin:0; padding:0; background:#F1F5F9; font-family:'Segoe UI',Arial,sans-serif; }
+  .wrapper { max-width:600px; margin:32px auto; background:#ffffff; border-radius:12px;
+             box-shadow:0 2px 16px rgba(0,0,0,.08); overflow:hidden; }
+  .header  { background:{{ couleur|default:'#4D44B5' }}; padding:28px 40px; }
+  .header img { height:40px; margin-bottom:10px; display:block; }
+  .header h1  { color:#fff; margin:0; font-size:20px; font-weight:700; }
+  .header p   { color:rgba(255,255,255,.8); margin:4px 0 0; font-size:13px; }
+  .alert-banner { background:#FEF3C7; border-bottom:3px solid #F59E0B;
+                  padding:16px 40px; display:flex; align-items:center; gap:12px; }
+  .alert-icon { font-size:28px; flex-shrink:0; }
+  .alert-text { font-size:14px; color:#78350F; font-weight:600; line-height:1.4; }
+  .body    { padding:32px 40px; }
+  .greeting{ font-size:15px; color:#1E293B; font-weight:600; margin-bottom:8px; }
+  .intro   { color:#475569; font-size:14px; line-height:1.6; margin-bottom:24px; }
+  .quotas-table { width:100%; border-collapse:collapse; margin-bottom:24px;
+                  border-radius:8px; overflow:hidden; border:1px solid #E2E8F0; }
+  .quotas-table thead th { background:#F8FAFC; padding:10px 14px; font-size:12px;
+                            font-weight:700; color:#64748B; text-transform:uppercase;
+                            letter-spacing:.6px; text-align:left; border-bottom:1px solid #E2E8F0; }
+  .quotas-table tbody td { padding:10px 14px; font-size:13px; color:#334155;
+                            border-bottom:1px solid #F1F5F9; }
+  .quotas-table tbody tr:last-child td { border-bottom:none; }
+  .progress-wrap { background:#E2E8F0; border-radius:20px; height:8px; overflow:hidden; }
+  .progress-fill { height:8px; border-radius:20px; }
+  .progress-fill.warning  { background:#F59E0B; }
+  .progress-fill.critical { background:#EF4444; }
+  .progress-fill.ok       { background:#10B981; }
+  .pct-badge { display:inline-block; padding:2px 8px; border-radius:20px;
+               font-size:11px; font-weight:700; }
+  .pct-badge.warning  { background:#FEF3C7; color:#92400E; }
+  .pct-badge.critical { background:#FEE2E2; color:#991B1B; }
+  .cta-btn { display:block; background:{{ couleur|default:'#4D44B5' }}; color:#fff !important;
+             text-align:center; padding:13px 24px; border-radius:8px; font-size:14px;
+             font-weight:600; text-decoration:none; margin:0 auto 20px; letter-spacing:.3px; }
+  .custom-msg { background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px;
+                padding:14px 18px; margin-bottom:24px; }
+  .custom-msg p { margin:0; font-size:14px; color:#166534; line-height:1.6; }
+  .footer  { background:#F8FAFC; border-top:1px solid #E2E8F0; padding:20px 40px;
+             text-align:center; }
+  .footer p { margin:0; font-size:12px; color:#94A3B8; line-height:1.6; }
+  @media (max-width:600px) {
+    .body, .header, .footer, .alert-banner { padding:20px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- En-tête -->
+  <div class="header">
+    {% if logo_url %}<img src="{{ logo_url }}" alt="{{ site_name }}">{% endif %}
+    <h1>{{ site_name }}</h1>
+    <p>Alerte de dépassement de quota</p>
+  </div>
+
+  <!-- Bannière alerte -->
+  <div class="alert-banner">
+    <span class="alert-icon">⚠️</span>
+    <div class="alert-text">
+      Un ou plusieurs quotas de votre école <strong>{{ ecole_nom }}</strong>
+      approchent de leur limite.
+    </div>
+  </div>
+
+  <!-- Corps -->
+  <div class="body">
+    <p class="greeting">Bonjour {{ prenom_nom }},</p>
+    <p class="intro">{{ intro }}</p>
+
+    <!-- Message personnalisé si configuré -->
+    {% if message_personnalise %}
+    <div class="custom-msg">
+      <p>{{ message_personnalise }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Tableau des quotas en alerte -->
+    {% if quotas_en_alerte %}
+    <table class="quotas-table">
+      <thead>
+        <tr>
+          <th>Ressource</th>
+          <th>Utilisé</th>
+          <th>Maximum</th>
+          <th>Utilisation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for q in quotas_en_alerte %}
+        <tr>
+          <td><strong>{{ q.label }}</strong></td>
+          <td>{{ q.usage }}</td>
+          <td>{{ q.maximum }}</td>
+          <td>
+            <div class="progress-wrap" style="margin-bottom:4px;">
+              <div class="progress-fill {% if q.pourcentage >= 95 %}critical{% elif q.pourcentage >= 80 %}warning{% else %}ok{% endif %}"
+                   style="width:{{ q.pourcentage|floatformat:0 }}%;"></div>
+            </div>
+            <span class="pct-badge {% if q.pourcentage >= 95 %}critical{% else %}warning{% endif %}">
+              {{ q.pourcentage|floatformat:0 }}%
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+
+    <!-- Bouton voir abonnement -->
+    <a href="{{ abonnement_url }}" class="cta-btn">Voir mon abonnement →</a>
+
+    <p style="font-size:13px;color:#94A3B8;text-align:center;margin-top:16px;line-height:1.6;">
+      Pour augmenter vos quotas, contactez l'administrateur de la plateforme
+      ou demandez un changement de plan.
+    </p>
+  </div>
+
+  <!-- Pied de page -->
+  <div class="footer">
+    <p>
+      Notification automatique envoyée par <strong>{{ site_name }}</strong>.<br>
+      Ce message a été généré le {{ date_envoi }}. Ne répondez pas à cet e-mail.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -224,6 +224,107 @@
         </div>
       </div>
 
+      <!-- ── 5. Alertes de quota ───────────────────────────────────── -->
+      <div class="card mb-3 section-card border-warning border-opacity-25">
+        <div class="card-header d-flex align-items-center justify-content-between section-toggle py-2 bg-warning-subtle"
+             data-bs-toggle="collapse" data-bs-target="#sec-alertes" aria-expanded="false" role="button">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-bell-fill text-warning" style="font-size:.9rem;"></i>
+            <span class="fw-semibold small">Alertes de quota</span>
+            {% if obj.alerte_quota_email_actif or obj.alerte_quota_app_actif %}
+              <span class="badge bg-warning text-dark ms-1" style="font-size:.62rem;">Seuil : {{ obj.alerte_quota_seuil }}%</span>
+            {% else %}
+              <span class="badge bg-secondary ms-1" style="font-size:.62rem;">Inactif</span>
+            {% endif %}
+          </div>
+          <i class="bi bi-chevron-down chevron-icon"></i>
+        </div>
+        <div class="collapse" id="sec-alertes">
+          <div class="card-body pt-2 pb-3">
+            <p class="text-muted small mb-3">
+              Configurez les alertes automatiques envoyées aux administrateurs d'école
+              lorsque leurs quotas (élèves, enseignants, classes, utilisateurs) approchent
+              de la limite de leur plan. Utilisez la commande
+              <code>python manage.py send_quota_alerts</code> (ou un cron) pour les déclencher.
+            </p>
+
+            <!-- Seuil + toggles -->
+            <div class="row g-3 mb-3">
+              <div class="col-md-4">
+                <label class="form-label form-label-sm fw-semibold">
+                  {{ form.alerte_quota_seuil.label }}
+                  <span class="text-muted fw-normal">(0–100)</span>
+                </label>
+                <div class="input-group input-group-sm">
+                  {{ form.alerte_quota_seuil }}
+                  <span class="input-group-text">%</span>
+                </div>
+                <div class="form-text">
+                  Ex : 80 → alerte si ≥ 80% d'un quota est utilisé.
+                </div>
+                {% if form.alerte_quota_seuil.errors %}
+                  <div class="text-danger small mt-1">{{ form.alerte_quota_seuil.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 d-flex flex-column justify-content-center gap-2 mt-2">
+                <div class="form-check form-switch">
+                  {{ form.alerte_quota_email_actif }}
+                  <label class="form-check-label small ms-2" for="{{ form.alerte_quota_email_actif.id_for_label }}">
+                    <i class="bi bi-envelope me-1 text-primary"></i>{{ form.alerte_quota_email_actif.label }}
+                  </label>
+                </div>
+                <div class="form-check form-switch">
+                  {{ form.alerte_quota_app_actif }}
+                  <label class="form-check-label small ms-2" for="{{ form.alerte_quota_app_actif.id_for_label }}">
+                    <i class="bi bi-app-indicator me-1 text-info"></i>{{ form.alerte_quota_app_actif.label }}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Message e-mail personnalisé -->
+            <div class="mb-3">
+              <label class="form-label form-label-sm fw-semibold">
+                <i class="bi bi-envelope-paper me-1 text-primary"></i>{{ form.alerte_quota_message_email.label }}
+              </label>
+              {{ form.alerte_quota_message_email }}
+              <div class="form-text">
+                Variables disponibles :
+                <code>{ecole}</code>, <code>{ressource}</code>, <code>{usage}</code>,
+                <code>{maximum}</code>, <code>{pourcentage}</code>, <code>{site}</code>.
+                Laissez vide pour utiliser le message par défaut.
+              </div>
+            </div>
+
+            <!-- Message in-app personnalisé -->
+            <div class="mb-2">
+              <label class="form-label form-label-sm fw-semibold">
+                <i class="bi bi-bell me-1 text-info"></i>{{ form.alerte_quota_message_app.label }}
+              </label>
+              {{ form.alerte_quota_message_app }}
+              <div class="form-text">
+                Message court pour la notification dans l'application.
+                Variables : <code>{ecole}</code>, <code>{ressource}</code>,
+                <code>{usage}</code>, <code>{maximum}</code>, <code>{pourcentage}</code>.
+              </div>
+            </div>
+
+            <!-- Exemple d'utilisation -->
+            <div class="alert alert-light border py-2 small mb-0 mt-3">
+              <div class="fw-semibold mb-1">
+                <i class="bi bi-terminal me-1"></i>Déclenchement des alertes
+              </div>
+              <div class="text-muted">
+                <code>python manage.py send_quota_alerts</code> — envoie les alertes maintenant<br>
+                <code>python manage.py send_quota_alerts --dry-run</code> — aperçu sans envoi<br>
+                <code>python manage.py send_quota_alerts --seuil 70</code> — seuil temporaire à 70%<br>
+                <strong>Cron recommandé :</strong> <code>0 6 * * * cd /app && python manage.py send_quota_alerts</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── Boutons enregistrer ────────────────────────────────────── -->
       <div class="d-flex gap-2 align-items-center">
         <button type="submit" class="btn btn-primary btn-sm px-4" id="btn-save">

@@ -113,6 +113,35 @@ class PlatformSettings(models.Model):
     smtp_from_email  = models.CharField("Adresse d'expédition (From)", max_length=200,
                                          blank=True, default='noreply@sgn-rdc.local')
 
+    # ── Alertes de quota ──────────────────────────────────────────────────────
+    alerte_quota_seuil = models.PositiveIntegerField(
+        "Seuil d'alerte quota (%)", default=80,
+        help_text="Pourcentage d'utilisation à partir duquel une alerte est envoyée (0–100)."
+    )
+    alerte_quota_email_actif = models.BooleanField(
+        "Alertes quota par e-mail", default=True,
+        help_text="Envoyer un e-mail à l'admin de l'école quand un quota atteint le seuil."
+    )
+    alerte_quota_app_actif = models.BooleanField(
+        "Alertes quota dans l'app", default=True,
+        help_text="Afficher une notification in-app à l'administrateur de l'école."
+    )
+    alerte_quota_message_email = models.TextField(
+        "Modèle de message e-mail (alerte quota)", blank=True, default='',
+        help_text=(
+            "Variables disponibles : {ecole}, {ressource}, {usage}, {maximum}, {pourcentage}, {site}. "
+            "Laissez vide pour utiliser le message par défaut."
+        )
+    )
+    alerte_quota_message_app = models.TextField(
+        "Modèle de message in-app (alerte quota)", blank=True, default='',
+        help_text=(
+            "Message court affiché dans la notification in-app. "
+            "Variables : {ecole}, {ressource}, {usage}, {maximum}, {pourcentage}. "
+            "Laissez vide pour le message par défaut."
+        )
+    )
+
     class Meta:
         app_label = 'super_admin'
         verbose_name = "Paramètres de la plateforme"

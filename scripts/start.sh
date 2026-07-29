@@ -87,7 +87,21 @@ if [[ -n "${VIRTUAL_ENV:-}" ]]; then
     ok "Environnement virtuel actif : $VIRTUAL_ENV"
 
 elif [[ -n "${REPL_ID:-}" ]]; then
-    ok "Environnement Replit détecté — dépendances gérées par Nix"
+    ok "Environnement Replit détecté"
+    # Sur Replit, les packages sont dans .pythonlibs (déjà dans sys.path)
+    # On vérifie si Django est importable ; si non, on tente pip --break-system-packages
+    if "$PYTHON_BIN" -c "import django, dotenv, tenants" 2>/dev/null; then
+        DJANGO_VER="$("$PYTHON_BIN" -c "import django; print(django.__version__)" 2>/dev/null)"
+        ok "Dépendances disponibles (Django $DJANGO_VER)"
+    else
+        warn "Dépendances manquantes — tentative d'installation..."
+        "$PYTHON_BIN" -m pip install -r "$APP_DIR/requirements.txt" \
+            --quiet --disable-pip-version-check --break-system-packages 2>/dev/null \
+            || "$PYTHON_BIN" -m pip install -r "$APP_DIR/requirements.txt" \
+               --quiet --disable-pip-version-check 2>/dev/null \
+            || warn "Installation pip impossible — vérifiez les dépendances."
+        ok "Tentative d'installation terminée"
+    fi
 
 else
     VENV_DIR="${VENV_DIR:-$ROOT_DIR/.venv}"

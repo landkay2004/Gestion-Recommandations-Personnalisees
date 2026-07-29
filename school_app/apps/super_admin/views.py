@@ -924,6 +924,7 @@ def _get_smtp_from_email():
 
 def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
     from django.core.mail import get_connection, EmailMessage as DjangoEmailMessage
+    from django.template.loader import render_to_string
     try:
         from super_admin.models import PlatformSettings
         ps = PlatformSettings.objects.get(pk=1)
@@ -932,7 +933,7 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
         ps = None
         site_name = 'SGN RDC'
 
-    # Construire la connexion SMTP depuis PlatformSettings (comme le test e-mail)
+    # Construire la connexion SMTP depuis PlatformSettings
     if ps and ps.smtp_actif and ps.smtp_host:
         conn = get_connection(
             backend='django.core.mail.backends.smtp.EmailBackend',
@@ -956,7 +957,32 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
     )
 
     subject = ("[Renouvellement] " if regeneration else "") + "Vos identifiants — %s" % site_name
-    body = (
+
+    # ── Logo ──────────────────────────────────────────────────────────────
+    logo_url = ''
+    try:
+        if ps and ps.site_logo:
+            logo_url = request.build_absolute_uri(ps.site_logo.url)
+    except Exception:
+        pass
+
+    # ── E-mail HTML ────────────────────────────────────────────────────────
+    html_body = render_to_string('emails/credentials.html', {
+        'site_name':    site_name,
+        'site_slogan':  ps.site_slogan if ps else '',
+        'site_web':     ps.site_web if ps else '',
+        'couleur':      ps.couleur_principale if ps else '#4D44B5',
+        'logo_url':     logo_url,
+        'prenom_nom':   admin.get_full_name(),
+        'intro':        intro,
+        'email':        admin.email,
+        'mot_de_passe': temp_pwd,
+        'login_url':    login_url,
+        'subject':      subject,
+    })
+
+    # ── Fallback texte brut ────────────────────────────────────────────────
+    txt_body = (
         "Bonjour %(nom)s,\n\n"
         "%(intro)s\n\n"
         "Identifiants de connexion :\n"
@@ -977,13 +1003,18 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
     try:
         msg = DjangoEmailMessage(
             subject=subject,
-            body=body,
+            body=html_body,
             from_email=from_email,
             to=[admin.email],
             connection=conn,
         )
+        msg.content_subtype = 'html'
         msg.send(fail_silently=False)
         logger.info('CREDENTIALS_EMAIL_SENT to=%s via=%s', admin.email,
                     ('%s:%s' % (ps.smtp_host, ps.smtp_port)) if conn else 'console')
     except Exception as e:
         logger.warning('CREDENTIALS_EMAIL_FAILED to=%s err=%s', admin.email, e)
+        # Fallback console : logguer le corps texte brut
+        logger.info(
+            'CREDENTIALS_EMAIL_FALLBACK_BODY:\n%s', txt_body
+        )
