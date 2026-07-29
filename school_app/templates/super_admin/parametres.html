@@ -3,204 +3,263 @@
 {% block page_title %}Paramètres de la plateforme{% endblock %}
 
 {% block content %}
+
+{% if messages %}
+  {% for m in messages %}
+  <div class="alert alert-{{ m.tags|default:'info' }} alert-dismissible fade show d-flex gap-2 mb-3" role="alert">
+    <i class="bi bi-{% if 'success' in m.tags %}check-circle-fill{% elif 'error' in m.tags or 'danger' in m.tags %}x-circle-fill{% else %}info-circle-fill{% endif %} mt-1 flex-shrink-0"></i>
+    <div>{{ m|safe }}</div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+{% endif %}
+
 <div class="row g-4">
 
-  <!-- ── Colonne principale ── -->
+  <!-- ═══════════════════════ COLONNE PRINCIPALE ═══════════════════════ -->
   <div class="col-lg-8">
     <form id="platform-settings-form" method="post" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
 
-      <!-- Identité -->
-      <div class="card mb-4">
-        <div class="card-header d-flex align-items-center gap-2">
-          <i class="bi bi-globe2 text-primary"></i>
-          <span class="fw-semibold">Identité de la plateforme</span>
-        </div>
-        <div class="card-body">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">{{ form.site_name.label }} <span class="text-danger">*</span></label>
-              {{ form.site_name }}
-              {% if form.site_name.errors %}<div class="text-danger small mt-1">{{ form.site_name.errors.0 }}</div>{% endif %}
-              <div class="form-text">Ce nom sera affiché partout sur la plateforme.</div>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ form.site_slogan.label }}</label>
-              {{ form.site_slogan }}
-            </div>
-            <div class="col-md-8">
-              <label class="form-label">{{ form.site_devise.label }}</label>
-              {{ form.site_devise }}
-              <div class="form-text">Phrase ou citation affichée dans les pages d'accueil.</div>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">{{ form.couleur_principale.label }}</label>
-              {{ form.couleur_principale }}
-            </div>
+      <!-- ── 1. Identité ─────────────────────────────────────────────── -->
+      <div class="card mb-3 section-card">
+        <div class="card-header d-flex align-items-center justify-content-between section-toggle"
+             data-bs-toggle="collapse" data-bs-target="#sec-identite" aria-expanded="true">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-globe2 text-primary"></i>
+            <span class="fw-semibold">Identité de la plateforme</span>
           </div>
+          <i class="bi bi-chevron-up chevron-icon"></i>
         </div>
-      </div>
-
-      <!-- Logo -->
-      <div class="card mb-4">
-        <div class="card-header d-flex align-items-center gap-2">
-          <i class="bi bi-image text-primary"></i>
-          <span class="fw-semibold">Logo de la plateforme</span>
-        </div>
-        <div class="card-body">
-          <div class="d-flex align-items-start gap-4 flex-wrap">
-            {% if obj.site_logo %}
-            <div class="text-center">
-              <img src="{{ obj.site_logo.url }}" alt="Logo actuel" style="height:72px;object-fit:contain;border-radius:10px;border:1px solid var(--color-border);padding:6px;background:#f8f9fa;">
-              <div class="text-muted small mt-1">Logo actuel</div>
-            </div>
-            {% endif %}
-            <div class="flex-grow-1">
-              {{ form.site_logo }}
-              <div class="form-text mt-1">PNG ou SVG recommandé. Affiché dans la sidebar et les en-têtes.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Coordonnées -->
-      <div class="card mb-4">
-        <div class="card-header d-flex align-items-center gap-2">
-          <i class="bi bi-telephone text-primary"></i>
-          <span class="fw-semibold">Coordonnées de contact</span>
-        </div>
-        <div class="card-body">
-          <div class="row g-3">
-            <div class="col-12">
-              <label class="form-label">{{ form.adresse.label }}</label>
-              {{ form.adresse }}
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">{{ form.email_contact.label }}</label>
-              {{ form.email_contact }}
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">{{ form.telephone.label }}</label>
-              {{ form.telephone }}
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">{{ form.site_web.label }}</label>
-              {{ form.site_web }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── SMTP / E-mail ── -->
-      <div class="card mb-4 border-warning">
-        <div class="card-header d-flex align-items-center gap-2 bg-warning bg-opacity-10">
-          <i class="bi bi-envelope-fill text-warning"></i>
-          <span class="fw-semibold">Configuration e-mail (SMTP)</span>
-        </div>
-        <div class="card-body">
-          <div class="alert alert-info d-flex gap-2 py-2 small mb-3" role="alert">
-            <i class="bi bi-info-circle-fill mt-1 flex-shrink-0"></i>
-            <div>
-              Activez l'envoi SMTP pour que les e-mails (identifiants, notifications) soient vraiment envoyés.
-              Sans activation, les e-mails sont affichés uniquement dans les logs serveur (mode développement).
-            </div>
-          </div>
-
-          <!-- Activer SMTP -->
-          <div class="form-check form-switch mb-4">
-            {{ form.smtp_actif }}
-            <label class="form-check-label fw-semibold ms-2" for="{{ form.smtp_actif.id_for_label }}">
-              {{ form.smtp_actif.label }}
-            </label>
-            <div class="form-text">Décochez pour utiliser le mode console (développement).</div>
-          </div>
-
-          <div id="smtp-fields">
+        <div class="collapse show" id="sec-identite">
+          <div class="card-body">
             <div class="row g-3">
               <div class="col-md-6">
-                <label class="form-label">{{ form.smtp_host.label }}</label>
-                {{ form.smtp_host }}
-                <div class="form-text">Ex&nbsp;: smtp.gmail.com, smtp.office365.com</div>
-                {% if form.smtp_host.errors %}<div class="text-danger small mt-1">{{ form.smtp_host.errors.0 }}</div>{% endif %}
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">{{ form.smtp_port.label }}</label>
-                {{ form.smtp_port }}
-                <div class="form-text">587 (TLS) ou 465 (SSL)</div>
-              </div>
-              <div class="col-md-3 d-flex align-items-end pb-1">
-                <div class="form-check">
-                  {{ form.smtp_use_tls }}
-                  <label class="form-check-label" for="{{ form.smtp_use_tls.id_for_label }}">{{ form.smtp_use_tls.label }}</label>
-                </div>
+                <label class="form-label">{{ form.site_name.label }} <span class="text-danger">*</span></label>
+                {{ form.site_name }}
+                {% if form.site_name.errors %}<div class="text-danger small mt-1">{{ form.site_name.errors.0 }}</div>{% endif %}
+                <div class="form-text">Affiché dans les titres de pages et les e-mails.</div>
               </div>
               <div class="col-md-6">
-                <label class="form-label">{{ form.smtp_user.label }}</label>
-                {{ form.smtp_user }}
-                <div class="form-text">Adresse e-mail ou nom d'utilisateur SMTP</div>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">{{ form.smtp_password.label }}</label>
-                <div class="input-group">
-                  {{ form.smtp_password }}
-                  <button class="btn btn-outline-secondary" type="button" id="toggle-smtp-pwd" title="Afficher/Masquer">
-                    <i class="bi bi-eye"></i>
-                  </button>
-                </div>
-                <div class="form-text">Mot de passe d'application pour Gmail / App password</div>
+                <label class="form-label">{{ form.site_slogan.label }}</label>
+                {{ form.site_slogan }}
               </div>
               <div class="col-md-8">
-                <label class="form-label">{{ form.smtp_from_email.label }}</label>
-                {{ form.smtp_from_email }}
-                <div class="form-text">Adresse expéditrice affichée dans les e-mails envoyés</div>
+                <label class="form-label">{{ form.site_devise.label }}</label>
+                {{ form.site_devise }}
+                <div class="form-text">Phrase ou citation affichée sur les pages d'accueil.</div>
               </div>
-            </div>
-
-            <!-- Test e-mail -->
-            <div class="mt-4 p-3 rounded-3" style="background:#f8f9fa;border:1px dashed #dee2e6">
-              <div class="fw-semibold small mb-2"><i class="bi bi-send-check me-2 text-primary"></i>Tester la configuration</div>
-              <form method="post" action="{% url 'super_admin:test_email' %}" class="d-flex gap-2 align-items-end flex-wrap">
-                {% csrf_token %}
-                <div class="flex-grow-1">
-                  <label class="form-label small">Adresse de test</label>
-                  <input type="email" name="email_test" class="form-control" placeholder="votre@email.com">
+              <div class="col-md-4">
+                <label class="form-label">{{ form.couleur_principale.label }}</label>
+                <div class="d-flex align-items-center gap-2">
+                  {{ form.couleur_principale }}
+                  <span class="small text-muted" id="color-preview-label">{{ obj.couleur_principale|default:'#2563EB' }}</span>
                 </div>
-                <button type="submit" class="btn btn-outline-primary btn-sm">
-                  <i class="bi bi-send me-1"></i>Envoyer un e-mail test
-                </button>
-              </form>
-              {% if messages %}{% for m in messages %}
-                {% if 'test' in m.message|lower or 'smtp' in m.message|lower or 'email' in m.message|lower %}
-                <div class="alert alert-{{ m.tags|default:'info' }} small py-2 mt-2 mb-0">{{ m }}</div>
-                {% endif %}
-              {% endfor %}{% endif %}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary">
-          <i class="bi bi-check-circle-fill me-1"></i>Enregistrer les paramètres
+      <!-- ── 2. Logo ────────────────────────────────────────────────── -->
+      <div class="card mb-3 section-card">
+        <div class="card-header d-flex align-items-center justify-content-between section-toggle"
+             data-bs-toggle="collapse" data-bs-target="#sec-logo" aria-expanded="true">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-image text-primary"></i>
+            <span class="fw-semibold">Logo de la plateforme</span>
+          </div>
+          <i class="bi bi-chevron-up chevron-icon"></i>
+        </div>
+        <div class="collapse show" id="sec-logo">
+          <div class="card-body">
+            <div class="d-flex align-items-start gap-4 flex-wrap">
+              {% if obj.site_logo %}
+              <div class="text-center">
+                <img src="{{ obj.site_logo.url }}" alt="Logo actuel"
+                     style="height:72px;object-fit:contain;border-radius:10px;border:1px solid var(--color-border);padding:6px;background:#f8f9fa;">
+                <div class="text-muted small mt-1">Logo actuel</div>
+              </div>
+              {% endif %}
+              <div class="flex-grow-1">
+                {{ form.site_logo }}
+                <div class="form-text mt-1">PNG ou SVG recommandé — affiché dans la sidebar et les en-têtes.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3. Coordonnées ─────────────────────────────────────────── -->
+      <div class="card mb-3 section-card">
+        <div class="card-header d-flex align-items-center justify-content-between section-toggle"
+             data-bs-toggle="collapse" data-bs-target="#sec-contact" aria-expanded="false">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-telephone text-primary"></i>
+            <span class="fw-semibold">Coordonnées de contact</span>
+          </div>
+          <i class="bi bi-chevron-down chevron-icon"></i>
+        </div>
+        <div class="collapse" id="sec-contact">
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">{{ form.adresse.label }}</label>
+                {{ form.adresse }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">{{ form.email_contact.label }}</label>
+                {{ form.email_contact }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">{{ form.telephone.label }}</label>
+                {{ form.telephone }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">{{ form.site_web.label }}</label>
+                {{ form.site_web }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 4. SMTP ────────────────────────────────────────────────── -->
+      <div class="card mb-4 section-card border-warning">
+        <div class="card-header d-flex align-items-center justify-content-between section-toggle bg-warning bg-opacity-10"
+             data-bs-toggle="collapse" data-bs-target="#sec-smtp" aria-expanded="true">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-envelope-fill text-warning"></i>
+            <span class="fw-semibold">Configuration e-mail (SMTP)</span>
+            {% if obj.smtp_actif and obj.smtp_host %}
+              <span class="badge bg-success ms-1" style="font-size:.65rem;">Actif</span>
+            {% else %}
+              <span class="badge bg-secondary ms-1" style="font-size:.65rem;">Console</span>
+            {% endif %}
+          </div>
+          <i class="bi bi-chevron-up chevron-icon"></i>
+        </div>
+        <div class="collapse show" id="sec-smtp">
+          <div class="card-body">
+            <div class="alert alert-info d-flex gap-2 py-2 small mb-4" role="alert">
+              <i class="bi bi-info-circle-fill mt-1 flex-shrink-0"></i>
+              <div>Activez SMTP pour envoyer de vrais e-mails (identifiants, notifications).
+              Sans activation, les e-mails s'affichent uniquement dans les logs serveur.</div>
+            </div>
+
+            <div class="form-check form-switch mb-4">
+              {{ form.smtp_actif }}
+              <label class="form-check-label fw-semibold ms-2" for="{{ form.smtp_actif.id_for_label }}">
+                {{ form.smtp_actif.label }}
+              </label>
+              <div class="form-text">Décochez pour utiliser le mode console (développement).</div>
+            </div>
+
+            <div id="smtp-fields">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">{{ form.smtp_host.label }}</label>
+                  {{ form.smtp_host }}
+                  <div class="form-text">Ex : smtp.gmail.com · smtp.office365.com</div>
+                  {% if form.smtp_host.errors %}<div class="text-danger small mt-1">{{ form.smtp_host.errors.0 }}</div>{% endif %}
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">{{ form.smtp_port.label }}</label>
+                  {{ form.smtp_port }}
+                  <div class="form-text">587 (TLS) ou 465 (SSL)</div>
+                </div>
+                <div class="col-md-3 d-flex align-items-end pb-1">
+                  <div class="form-check">
+                    {{ form.smtp_use_tls }}
+                    <label class="form-check-label" for="{{ form.smtp_use_tls.id_for_label }}">{{ form.smtp_use_tls.label }}</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">{{ form.smtp_user.label }}</label>
+                  {{ form.smtp_user }}
+                  <div class="form-text">Adresse e-mail ou nom d'utilisateur SMTP</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">{{ form.smtp_password.label }}</label>
+                  <div class="input-group">
+                    {{ form.smtp_password }}
+                    <button class="btn btn-outline-secondary" type="button" id="toggle-smtp-pwd" title="Afficher/Masquer">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                  <div class="form-text">Mot de passe d'application (Gmail) · App password</div>
+                </div>
+                <div class="col-md-8">
+                  <label class="form-label">{{ form.smtp_from_email.label }}</label>
+                  {{ form.smtp_from_email }}
+                  <div class="form-text">Adresse expéditrice affichée dans les e-mails</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Boutons enregistrer ────────────────────────────────────── -->
+      <div class="d-flex gap-2 align-items-center">
+        <button type="submit" class="btn btn-primary px-4" id="btn-save">
+          <i class="bi bi-check-circle-fill me-2"></i>Enregistrer les paramètres
         </button>
         <a href="{% url 'super_admin:dashboard' %}" class="btn btn-outline-secondary">Annuler</a>
+        <span id="save-indicator" class="text-muted small ms-2" style="display:none;">
+          <span class="spinner-border spinner-border-sm me-1"></span>Enregistrement…
+        </span>
       </div>
     </form>
-  </div>
 
-  <!-- ── Colonne droite : aperçu ── -->
+    <!-- ═══ TEST E-MAIL — formulaire séparé, HORS du form principal ══ -->
+    <div class="card mt-4 border-primary border-opacity-25">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i class="bi bi-send-check text-primary"></i>
+        <span class="fw-semibold">Tester la configuration e-mail</span>
+      </div>
+      <div class="card-body">
+        <p class="text-muted small mb-3">
+          Envoyez un e-mail de test pour vérifier que votre configuration SMTP fonctionne correctement.
+          Le résultat s'affiche immédiatement sans recharger la page.
+        </p>
+        <div class="d-flex gap-2 align-items-end flex-wrap">
+          <div class="flex-grow-1">
+            <label class="form-label small fw-semibold">Adresse de destination</label>
+            <input type="email" id="email-test-input" class="form-control"
+                   placeholder="votre@email.com" autocomplete="off">
+          </div>
+          <button type="button" id="btn-test-email" class="btn btn-outline-primary">
+            <i class="bi bi-send me-1"></i>Envoyer un e-mail test
+          </button>
+        </div>
+        <!-- Résultat du test -->
+        <div id="test-email-result" class="mt-3" style="display:none;"></div>
+      </div>
+    </div>
+
+  </div><!-- /col-lg-8 -->
+
+  <!-- ═══════════════════════ COLONNE DROITE ══════════════════════════ -->
   <div class="col-lg-4">
-    <div class="card">
+
+    <!-- Aperçu visuel -->
+    <div class="card mb-3">
       <div class="card-header d-flex align-items-center gap-2">
         <i class="bi bi-eye text-primary"></i>
         <span class="fw-semibold">Aperçu actuel</span>
       </div>
       <div class="card-body">
-        <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:{{ obj.couleur_principale|default:'var(--color-primary)' }};color:#fff;">
+        <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3"
+             style="background:{{ obj.couleur_principale|default:'#2563EB' }};color:#fff;">
           {% if obj.site_logo %}
-            <img src="{{ obj.site_logo.url }}" alt="Logo" style="height:36px;object-fit:contain;border-radius:7px;">
+            <img src="{{ obj.site_logo.url }}" alt="Logo"
+                 style="height:36px;object-fit:contain;border-radius:7px;">
           {% else %}
-            <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:1.1rem;"><i class="bi bi-mortarboard-fill"></i></div>
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.2);
+                        display:grid;place-items:center;font-size:1.1rem;">
+              <i class="bi bi-mortarboard-fill"></i>
+            </div>
           {% endif %}
           <div>
             <div style="font-weight:800;font-size:.95rem;line-height:1.2;">{{ obj.site_name }}</div>
@@ -221,8 +280,8 @@
       </div>
     </div>
 
-    <!-- Statut SMTP -->
-    <div class="card mt-3">
+    <!-- Statut e-mail -->
+    <div class="card mb-3">
       <div class="card-header d-flex align-items-center gap-2">
         <i class="bi bi-envelope-check {% if obj.smtp_actif %}text-success{% else %}text-secondary{% endif %}"></i>
         <span class="fw-semibold">Statut e-mail</span>
@@ -230,59 +289,165 @@
       <div class="card-body small">
         {% if obj.smtp_actif and obj.smtp_host %}
           <div class="d-flex align-items-center gap-2 mb-2">
-            <span class="badge bg-success">Actif</span>
-            <span class="text-muted">Envoi SMTP activé</span>
+            <span class="badge bg-success">SMTP actif</span>
           </div>
           <ul class="list-unstyled text-muted mb-0">
-            <li><i class="bi bi-server me-2 text-primary"></i>{{ obj.smtp_host }}:{{ obj.smtp_port }}</li>
-            <li><i class="bi bi-person me-2 text-primary"></i>{{ obj.smtp_user }}</li>
+            <li class="mb-1"><i class="bi bi-server me-2 text-primary"></i>{{ obj.smtp_host }}:{{ obj.smtp_port }}</li>
+            <li class="mb-1"><i class="bi bi-person me-2 text-primary"></i>{{ obj.smtp_user }}</li>
             <li><i class="bi bi-envelope me-2 text-primary"></i>{{ obj.smtp_from_email }}</li>
           </ul>
         {% else %}
-          <div class="d-flex align-items-center gap-2">
-            <span class="badge bg-secondary">Console</span>
-            <span class="text-muted">E-mails affichés dans les logs</span>
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-secondary">Mode console</span>
           </div>
-          <div class="mt-2 text-muted">Activez SMTP pour envoyer de vrais e-mails aux écoles.</div>
+          <p class="text-muted mb-0">Les e-mails s'affichent dans les logs serveur. Activez SMTP pour les envoyer vraiment.</p>
         {% endif %}
       </div>
     </div>
 
-    <div class="card mt-3">
-      <div class="card-header"><i class="bi bi-info-circle text-primary me-2"></i>À savoir</div>
+    <!-- À savoir -->
+    <div class="card">
+      <div class="card-header"><i class="bi bi-lightbulb text-warning me-2"></i>Aide rapide</div>
       <div class="card-body small text-muted">
-        <p class="mb-2">Le <strong>nom du site</strong> remplace automatiquement « SGN RDC » dans les titres de pages et les e-mails.</p>
-        <p class="mb-2">Le <strong>logo</strong> apparaît dans la sidebar et les en-têtes de toutes les pages admin.</p>
-        <p class="mb-0">Pour Gmail, utilisez un <strong>mot de passe d'application</strong> (pas votre mot de passe principal) et activez l'accès IMAP.</p>
+        <p class="mb-2">Le <strong>nom du site</strong> remplace « SGN RDC » dans tous les titres et e-mails.</p>
+        <p class="mb-2">Le <strong>logo</strong> apparaît dans la sidebar et les en-têtes de toutes les pages.</p>
+        <p class="mb-2">Pour Gmail, utilisez un <strong>mot de passe d'application</strong> (pas votre mot de passe principal).</p>
+        <p class="mb-0">Les sections <strong>Coordonnées</strong> sont optionnelles — cliquez sur l'en-tête pour les ouvrir.</p>
       </div>
     </div>
-  </div>
 
-</div>
+  </div><!-- /col-lg-4 -->
+
+</div><!-- /row -->
+
+
+<style>
+.section-card .card-header.section-toggle {
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+.section-card .card-header.section-toggle:hover {
+  background: rgba(var(--bs-primary-rgb), .04) !important;
+}
+.chevron-icon {
+  transition: transform .25s ease;
+  font-size: .85rem;
+  color: #6c757d;
+}
+.section-card .card-header[aria-expanded="false"] .chevron-icon {
+  transform: rotate(-90deg);
+}
+</style>
 
 <script>
-// Toggle visibilité mot de passe SMTP
+/* ── Afficher/masquer mot de passe SMTP ──────────────────────────── */
 const toggleBtn = document.getElementById('toggle-smtp-pwd');
 if (toggleBtn) {
   toggleBtn.addEventListener('click', () => {
-    const pwdField = document.getElementById('{{ form.smtp_password.id_for_label }}');
-    if (!pwdField) return;
-    const isText = pwdField.type === 'text';
-    pwdField.type = isText ? 'password' : 'text';
-    toggleBtn.querySelector('i').className = isText ? 'bi bi-eye' : 'bi bi-eye-slash';
+    const f = document.getElementById('{{ form.smtp_password.id_for_label }}');
+    if (!f) return;
+    const show = f.type === 'password';
+    f.type = show ? 'text' : 'password';
+    toggleBtn.querySelector('i').className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
   });
 }
 
-// Afficher/masquer les champs SMTP selon le toggle "smtp_actif"
+/* ── Opacité champs SMTP selon le switch ─────────────────────────── */
 const smtpToggle = document.getElementById('{{ form.smtp_actif.id_for_label }}');
 const smtpFields = document.getElementById('smtp-fields');
-function toggleSmtpFields() {
+function syncSmtpFields() {
   if (!smtpFields || !smtpToggle) return;
-  smtpFields.style.opacity = smtpToggle.checked ? '1' : '0.45';
+  smtpFields.style.opacity    = smtpToggle.checked ? '1'   : '0.45';
+  smtpFields.style.pointerEvents = smtpToggle.checked ? 'auto' : 'none';
 }
 if (smtpToggle) {
-  smtpToggle.addEventListener('change', toggleSmtpFields);
-  toggleSmtpFields();
+  smtpToggle.addEventListener('change', syncSmtpFields);
+  syncSmtpFields();
+}
+
+/* ── Indicateur pendant la sauvegarde ───────────────────────────── */
+const settingsForm   = document.getElementById('platform-settings-form');
+const saveBtn        = document.getElementById('btn-save');
+const saveIndicator  = document.getElementById('save-indicator');
+if (settingsForm) {
+  settingsForm.addEventListener('submit', () => {
+    if (saveBtn)       { saveBtn.disabled = true; }
+    if (saveIndicator) { saveIndicator.style.display = 'inline-flex'; }
+  });
+}
+
+/* ── Chevron : sync aria-expanded → rotation CSS ────────────────── */
+document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(trigger => {
+  const target = document.querySelector(trigger.dataset.bsTarget);
+  if (!target) return;
+  function syncChevron() {
+    const expanded = target.classList.contains('show');
+    trigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  }
+  target.addEventListener('shown.bs.collapse',  syncChevron);
+  target.addEventListener('hidden.bs.collapse', syncChevron);
+});
+
+/* ── Test e-mail via AJAX ────────────────────────────────────────── */
+const btnTest   = document.getElementById('btn-test-email');
+const testInput = document.getElementById('email-test-input');
+const testResult= document.getElementById('test-email-result');
+
+if (btnTest) {
+  btnTest.addEventListener('click', async () => {
+    const email = testInput ? testInput.value.trim() : '';
+    if (!email) {
+      showTestResult(false, 'Veuillez saisir une adresse e-mail de destination.');
+      testInput && testInput.focus();
+      return;
+    }
+
+    // État chargement
+    btnTest.disabled = true;
+    btnTest.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Envoi en cours…';
+    testResult.style.display = 'none';
+
+    try {
+      const fd = new FormData();
+      fd.append('email_test', email);
+      fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+      const resp = await fetch('{% url "super_admin:test_email" %}', {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: fd,
+      });
+      const data = await resp.json();
+      showTestResult(data.ok, data.message);
+    } catch(e) {
+      showTestResult(false, 'Erreur réseau : ' + e.message);
+    } finally {
+      btnTest.disabled = false;
+      btnTest.innerHTML = '<i class="bi bi-send me-1"></i>Envoyer un e-mail test';
+    }
+  });
+}
+
+function showTestResult(ok, msg) {
+  if (!testResult) return;
+  testResult.style.display = 'block';
+  const icon = ok ? 'check-circle-fill' : 'x-circle-fill';
+  const cls  = ok ? 'success' : 'danger';
+  testResult.innerHTML = `
+    <div class="alert alert-${cls} d-flex gap-2 align-items-start py-3 mb-0">
+      <i class="bi bi-${icon} flex-shrink-0 mt-1"></i>
+      <div>${msg}</div>
+    </div>`;
+}
+
+/* ── Aperçu couleur en temps réel ───────────────────────────────── */
+const colorInput = document.getElementById('{{ form.couleur_principale.id_for_label }}');
+const colorLabel = document.getElementById('color-preview-label');
+if (colorInput && colorLabel) {
+  colorInput.addEventListener('input', () => {
+    colorLabel.textContent = colorInput.value;
+  });
 }
 </script>
 {% endblock %}

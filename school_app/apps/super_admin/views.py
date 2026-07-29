@@ -546,19 +546,34 @@ def platform_settings(request):
 
 @super_admin_required
 def test_email(request):
-    """Envoie un email de test via les paramètres SMTP configurés."""
+    """Envoie un email de test via les paramètres SMTP configurés.
+    Répond en JSON si la requête est AJAX, sinon redirige."""
+    import json as _json
     from super_admin.models import PlatformSettings
+
+    is_ajax = (
+        request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        or 'application/json' in request.headers.get('Accept', '')
+    )
+
     if request.method != 'POST':
+        if is_ajax:
+            from django.http import JsonResponse
+            return JsonResponse({'ok': False, 'message': 'Méthode non autorisée.'}, status=405)
         return redirect('super_admin:platform_settings')
 
     dest = request.POST.get('email_test', '').strip()
     if not dest:
+        if is_ajax:
+            from django.http import JsonResponse
+            return JsonResponse({'ok': False, 'message': 'Indiquez une adresse e-mail de destination.'})
         messages.error(request, "Indiquez une adresse de destination pour le test.")
         return redirect('super_admin:platform_settings')
 
     settings_obj = PlatformSettings.get_settings()
     try:
         from django.core.mail import get_connection, EmailMessage
+        mode = 'console'
         if settings_obj.smtp_actif and settings_obj.smtp_host:
             conn = get_connection(
                 backend='django.core.mail.backends.smtp.EmailBackend',
@@ -570,26 +585,54 @@ def test_email(request):
                 fail_silently=False,
             )
             from_email = settings_obj.smtp_from_email or 'noreply@sgn-rdc.local'
+            mode = 'smtp'
         else:
             conn = None
             from_email = django_settings.DEFAULT_FROM_EMAIL
 
+        site_name = settings_obj.site_name or 'SGN RDC'
         msg = EmailMessage(
-            subject="[SGN RDC] Test d'envoi email",
+            subject="[%s] ✅ Test d'envoi e-mail — configuration OK" % site_name,
             body=(
                 "Bonjour,\n\n"
-                "Ceci est un email de test envoyé depuis la console SGN RDC.\n"
-                "Si vous recevez ce message, la configuration SMTP est correcte.\n\n"
-                "— Plateforme SGN RDC"
-            ),
+                "Ceci est un e-mail de test envoyé depuis la console d'administration de %(site)s.\n\n"
+                "✅ Si vous recevez ce message, la configuration %(mode)s est correcte.\n\n"
+                "Détails :\n"
+                "  Expéditeur  : %(from)s\n"
+                "  Destinataire : %(to)s\n"
+                "  Mode         : %(mode_label)s\n\n"
+                "— Plateforme %(site)s"
+            ) % {
+                'site': site_name,
+                'from': from_email,
+                'to': dest,
+                'mode': mode.upper(),
+                'mode_label': 'SMTP réel (%s:%s)' % (settings_obj.smtp_host, settings_obj.smtp_port)
+                              if mode == 'smtp' else 'Console (logs serveur)',
+            },
             from_email=from_email,
             to=[dest],
             connection=conn,
         )
         msg.send()
-        messages.success(request, "Email de test envoyé à %s avec succès." % dest)
+
+        success_msg = (
+            "✅ E-mail de test envoyé à <strong>%s</strong> via SMTP (%s)." % (dest, settings_obj.smtp_host)
+            if mode == 'smtp'
+            else "📋 E-mail de test affiché dans les <strong>logs serveur</strong> (mode console — SMTP non activé). Destinataire : %s." % dest
+        )
+
+        if is_ajax:
+            from django.http import JsonResponse
+            return JsonResponse({'ok': True, 'message': success_msg, 'mode': mode})
+        messages.success(request, success_msg)
+
     except Exception as e:
-        messages.error(request, "Échec de l'envoi : %s" % str(e))
+        err_msg = "Échec de l'envoi : %s" % str(e)
+        if is_ajax:
+            from django.http import JsonResponse
+            return JsonResponse({'ok': False, 'message': err_msg})
+        messages.error(request, err_msg)
 
     return redirect('super_admin:platform_settings')
 
