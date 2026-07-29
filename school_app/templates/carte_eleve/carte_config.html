@@ -435,6 +435,34 @@
 .tpl-sw-premium .tpl-sw-l2, .tpl-sw-premium .tpl-sw-l3 { background: rgba(254,243,199,.45); }
 .tpl-sw-premium .tpl-sw-qr { background: rgba(254,243,199,.15); border: 1px solid rgba(217,119,6,.5); }
 .tpl-sw-premium .tpl-sw-foot { background: rgba(0,0,0,.35); border-top: 1px solid rgba(217,119,6,.3); }
+/* Horizon */
+.tpl-sw-horizon { background: #fff; border: 1px solid #e0f2fe; }
+.tpl-sw-horizon .tpl-sw-bar { background: linear-gradient(135deg,#0369a1,#0ea5e9); }
+.tpl-sw-horizon .tpl-sw-l1 { background: #0f172a; }
+.tpl-sw-horizon .tpl-sw-l2, .tpl-sw-horizon .tpl-sw-l3 { background: #cbd5e1; }
+.tpl-sw-horizon .tpl-sw-qr { background: #e0f2fe; border: 1px solid #bae6fd; }
+.tpl-sw-horizon .tpl-sw-foot { background: #f0f9ff; border-top: 2px solid #0ea5e9; }
+/* Congo */
+.tpl-sw-congo { background: linear-gradient(165deg,#003DA5,#0050CC); }
+.tpl-sw-congo .tpl-sw-bar { background: rgba(0,0,0,.2); border-bottom: 2px solid #F7D618; }
+.tpl-sw-congo .tpl-sw-l1 { background: #F7D618; }
+.tpl-sw-congo .tpl-sw-l2, .tpl-sw-congo .tpl-sw-l3 { background: rgba(255,255,255,.55); }
+.tpl-sw-congo .tpl-sw-qr { background: rgba(247,214,24,.2); border: 1px solid rgba(247,214,24,.5); }
+.tpl-sw-congo .tpl-sw-foot { background: #CE1021; }
+/* Emeraude */
+.tpl-sw-emeraude { background: linear-gradient(145deg,#064e3b,#065f46 70%,#047857); }
+.tpl-sw-emeraude .tpl-sw-bar { background: rgba(0,0,0,.2); border-bottom: 1px solid rgba(16,185,129,.45); }
+.tpl-sw-emeraude .tpl-sw-l1 { background: #6ee7b7; }
+.tpl-sw-emeraude .tpl-sw-l2, .tpl-sw-emeraude .tpl-sw-l3 { background: rgba(255,255,255,.5); }
+.tpl-sw-emeraude .tpl-sw-qr { background: rgba(16,185,129,.2); border: 1px solid rgba(16,185,129,.5); }
+.tpl-sw-emeraude .tpl-sw-foot { background: rgba(0,0,0,.28); border-top: 1px solid rgba(16,185,129,.28); }
+/* Crépuscule */
+.tpl-sw-crepuscule { background: linear-gradient(145deg,#2e1065,#3b0764 60%,#4c0d7f); }
+.tpl-sw-crepuscule .tpl-sw-bar { background: rgba(0,0,0,.28); border-bottom: 1px solid rgba(168,85,247,.45); }
+.tpl-sw-crepuscule .tpl-sw-l1 { background: #d8b4fe; }
+.tpl-sw-crepuscule .tpl-sw-l2, .tpl-sw-crepuscule .tpl-sw-l3 { background: rgba(245,243,255,.45); }
+.tpl-sw-crepuscule .tpl-sw-qr { background: rgba(168,85,247,.2); border: 1px solid rgba(168,85,247,.5); }
+.tpl-sw-crepuscule .tpl-sw-foot { background: rgba(0,0,0,.38); border-top: 1px solid rgba(168,85,247,.32); }
 
 .tpl-label { font-size: .78rem; font-weight: 600; color: #374151; }
 
@@ -476,49 +504,48 @@
 }
 .prev-tab.active { background: #fff; color: var(--primary); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
 
-/* Preview card — shared elements are imported from carte_single.html
-   We duplicate only what's needed for the preview here */
+/* Preview card */
 .prev-card {
-  width: 320px; height: 203px;
+  width: 360px; height: 228px;
   border-radius: 12px; overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,.18);
+  box-shadow: 0 6px 28px rgba(0,0,0,.22), 0 1px 4px rgba(0,0,0,.1);
   display: flex; flex-direction: column;
-  /* CSS vars */
+  -webkit-font-smoothing: antialiased;
   --c1: #1e3a5f; --c2: #2563eb;
 }
 
-/* Copie des styles de carte depuis carte_single.html */
-.prev-card .cr-top { padding:.5rem .7rem; display:flex; align-items:center; justify-content:space-between; gap:.45rem; flex-shrink:0; }
-.prev-card .cr-logo-row { display:flex; align-items:center; gap:.45rem; flex:1; min-width:0; }
-.prev-card .cr-logo-img  { height:28px; object-fit:contain; flex-shrink:0; }
-.prev-card .cr-logo-placeholder { width:28px; height:28px; border-radius:4px; flex-shrink:0; background:rgba(255,255,255,.15); display:flex; align-items:center; justify-content:center; font-size:.9rem; }
-.prev-card .cr-school-name { font-size:.6rem; font-weight:800; line-height:1.2; }
-.prev-card .cr-school-sub  { font-size:.5rem; opacity:.7; line-height:1.2; margin-top:.05rem; }
-.prev-card .cr-badge { font-size:.47rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:.18rem .45rem; border-radius:3px; white-space:nowrap; flex-shrink:0; }
-.prev-card .cr-body { flex:1; display:flex; padding:.5rem .7rem; gap:.55rem; align-items:flex-start; overflow:hidden; }
-.prev-card .cr-photo-wrap { width:58px; height:70px; border-radius:6px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.6rem; opacity:.5; }
+/* Éléments carte — miroir de carte_single.html (360×228) */
+.prev-card .cr-top { padding:.56rem .78rem; display:flex; align-items:center; justify-content:space-between; gap:.5rem; flex-shrink:0; }
+.prev-card .cr-logo-row { display:flex; align-items:center; gap:.5rem; flex:1; min-width:0; }
+.prev-card .cr-logo-img  { height:32px; object-fit:contain; flex-shrink:0; }
+.prev-card .cr-logo-placeholder { width:32px; height:32px; border-radius:4px; flex-shrink:0; background:rgba(255,255,255,.15); display:flex; align-items:center; justify-content:center; font-size:1rem; }
+.prev-card .cr-school-name { font-size:.68rem; font-weight:800; line-height:1.2; }
+.prev-card .cr-school-sub  { font-size:.57rem; opacity:.75; line-height:1.2; margin-top:.06rem; }
+.prev-card .cr-badge { font-size:.53rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:.2rem .5rem; border-radius:3px; white-space:nowrap; flex-shrink:0; }
+.prev-card .cr-body { flex:1; display:flex; padding:.56rem .78rem; gap:.6rem; align-items:flex-start; overflow:hidden; }
+.prev-card .cr-photo-wrap { width:65px; height:78px; border-radius:7px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.8rem; opacity:.5; }
 .prev-card .cr-photo-wrap img { width:100%; height:100%; object-fit:cover; }
-.prev-card .cr-info { flex:1; display:flex; flex-direction:column; gap:.22rem; min-width:0; }
-.prev-card .cr-badge-carte { display:inline-block; font-size:.46rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:.14rem .4rem; border-radius:3px; width:fit-content; }
-.prev-card .cr-name   { font-size:.76rem; font-weight:800; line-height:1.2; }
-.prev-card .cr-prenom { font-size:.58rem; opacity:.8; }
-.prev-card .cr-detail { font-size:.57rem; opacity:.75; line-height:1.3; }
-.prev-card .cr-classe-badge { font-size:.57rem; font-weight:700; padding:.18rem .45rem; border-radius:4px; width:fit-content; margin-top:.1rem; }
+.prev-card .cr-info { flex:1; display:flex; flex-direction:column; gap:.24rem; min-width:0; }
+.prev-card .cr-badge-carte { display:inline-block; font-size:.52rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:.15rem .45rem; border-radius:3px; width:fit-content; }
+.prev-card .cr-name   { font-size:.86rem; font-weight:800; line-height:1.2; }
+.prev-card .cr-prenom { font-size:.66rem; opacity:.82; }
+.prev-card .cr-detail { font-size:.64rem; opacity:.75; line-height:1.3; }
+.prev-card .cr-classe-badge { font-size:.64rem; font-weight:700; padding:.2rem .5rem; border-radius:4px; width:fit-content; margin-top:.1rem; }
 .prev-card .cr-qr-wrap { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
-.prev-card .cr-qr-img  { width:50px; height:50px; border-radius:3px; background:#fff; padding:2px; }
-.prev-card .cr-qr-lbl  { font-size:.4rem; opacity:.55; margin-top:.15rem; text-align:center; line-height:1.3; }
-.prev-card .cr-foot { display:flex; align-items:center; justify-content:space-between; padding:.28rem .7rem; flex-shrink:0; }
-.prev-card .cr-foot-mat   { font-size:.52rem; font-family:monospace; letter-spacing:.04em; }
-.prev-card .cr-foot-annee { font-size:.5rem; }
-.prev-card .cr-strip      { width:34px; height:7px; border-radius:2px; }
-.prev-card .cv-top   { height:18px; flex-shrink:0; }
-.prev-card .cv-strip { height:20px; flex-shrink:0; margin:.4rem 0; position:relative; }
-.prev-card .cv-body { flex:1; padding:.35rem .7rem; display:flex; flex-direction:column; gap:.25rem; overflow:hidden; }
-.prev-card .cv-school { font-size:.68rem; font-weight:800; }
-.prev-card .cv-info   { font-size:.55rem; display:flex; align-items:center; gap:.3rem; }
-.prev-card .cv-devise { font-size:.58rem; font-style:italic; border-left:2px solid var(--c2); padding-left:.4rem; margin-top:.15rem; }
-.prev-card .cv-msg    { font-size:.52rem; opacity:.65; line-height:1.4; margin-top:.1rem; }
-.prev-card .cv-footer { font-size:.46rem; text-align:center; padding:.25rem; flex-shrink:0; }
+.prev-card .cr-qr-img  { width:56px; height:56px; border-radius:3px; background:#fff; padding:2px; image-rendering:pixelated; }
+.prev-card .cr-qr-lbl  { font-size:.45rem; opacity:.55; margin-top:.17rem; text-align:center; line-height:1.3; }
+.prev-card .cr-foot { display:flex; align-items:center; justify-content:space-between; padding:.32rem .78rem; flex-shrink:0; }
+.prev-card .cr-foot-mat   { font-size:.59rem; font-family:monospace; letter-spacing:.04em; }
+.prev-card .cr-foot-annee { font-size:.57rem; }
+.prev-card .cr-strip      { width:38px; height:8px; border-radius:2px; }
+.prev-card .cv-top   { height:20px; flex-shrink:0; }
+.prev-card .cv-strip { height:22px; flex-shrink:0; margin:.45rem 0; position:relative; }
+.prev-card .cv-body { flex:1; padding:.38rem .78rem; display:flex; flex-direction:column; gap:.26rem; overflow:hidden; }
+.prev-card .cv-school { font-size:.77rem; font-weight:800; }
+.prev-card .cv-info   { font-size:.62rem; display:flex; align-items:center; gap:.3rem; }
+.prev-card .cv-devise { font-size:.65rem; font-style:italic; border-left:2px solid var(--c2); padding-left:.45rem; margin-top:.15rem; }
+.prev-card .cv-msg    { font-size:.59rem; opacity:.65; line-height:1.45; margin-top:.1rem; }
+.prev-card .cv-footer { font-size:.52rem; text-align:center; padding:.28rem; flex-shrink:0; }
 
 /* TEMPLATE CLASSES pour prev-card — identiques à carte_single.html */
 .prev-card.tpl-classique { background:linear-gradient(135deg,#0f172a 0%,var(--c1) 60%,var(--c2) 100%); color:#fff; }
@@ -606,13 +633,91 @@
 .prev-card.tpl-premium .cr-foot { background:rgba(0,0,0,.35); border-top:1px solid rgba(217,119,6,.3); } .prev-card.tpl-premium .cr-foot-mat { color:rgba(254,243,199,.65); } .prev-card.tpl-premium .cr-foot-annee { color:rgba(254,243,199,.6); }
 .prev-card.tpl-premium .cr-strip { background:linear-gradient(90deg,var(--c2),#fbbf24); }
 .prev-card.tpl-premium.prev-verso { background:linear-gradient(160deg,var(--c1) 0%,#292524 100%); color:#fef3c7; }
-.prev-card.tpl-premium.prev-verso .cv-top { background:rgba(0,0,0,.25); border-bottom:1px solid rgba(217,119,6,.4); }
-.prev-card.tpl-premium.prev-verso .cv-strip { background:rgba(0,0,0,.3); border-top:1px solid rgba(217,119,6,.25); border-bottom:1px solid rgba(217,119,6,.25); }
+.prev-card.tpl-premium.prev-verso .cv-top { background:rgba(0,0,0,.28); border-bottom:1px solid rgba(217,119,6,.42); }
+.prev-card.tpl-premium.prev-verso .cv-strip { background:rgba(0,0,0,.32); border-top:1px solid rgba(217,119,6,.28); border-bottom:1px solid rgba(217,119,6,.28); }
 .prev-card.tpl-premium.prev-verso .cv-school { color:var(--c2); font-weight:700; }
 .prev-card.tpl-premium.prev-verso .cv-info { color:rgba(254,243,199,.7); }
 .prev-card.tpl-premium.prev-verso .cv-devise { border-left-color:var(--c2); color:var(--c2); }
 .prev-card.tpl-premium.prev-verso .cv-msg { color:rgba(254,243,199,.5); }
-.prev-card.tpl-premium.prev-verso .cv-footer { background:rgba(0,0,0,.4); border-top:1px solid rgba(217,119,6,.3); color:rgba(254,243,199,.45); }
+.prev-card.tpl-premium.prev-verso .cv-footer { background:rgba(0,0,0,.42); border-top:1px solid rgba(217,119,6,.32); color:rgba(254,243,199,.48); }
+
+/* ── HORIZON ── */
+.prev-card.tpl-horizon { background:#fff; color:#0f172a; }
+.prev-card.tpl-horizon .cr-top { background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 100%); border-bottom:none; }
+.prev-card.tpl-horizon .cr-badge { background:rgba(255,255,255,.24); color:#fff; border:1px solid rgba(255,255,255,.35); }
+.prev-card.tpl-horizon .cr-school-name { color:#fff; } .prev-card.tpl-horizon .cr-school-sub { color:rgba(255,255,255,.82); opacity:1; }
+.prev-card.tpl-horizon .cr-logo-placeholder { background:rgba(255,255,255,.22); color:rgba(255,255,255,.85); }
+.prev-card.tpl-horizon .cr-badge-carte { background:#e0f2fe; color:var(--c1); border:1px solid #bae6fd; }
+.prev-card.tpl-horizon .cr-name { color:#0f172a; font-weight:900; } .prev-card.tpl-horizon .cr-detail,.prev-card.tpl-horizon .cr-prenom { color:#64748b; }
+.prev-card.tpl-horizon .cr-classe-badge { background:var(--c2); color:#fff; }
+.prev-card.tpl-horizon .cr-photo-wrap { border:2.5px solid var(--c2); background:#e0f2fe; color:var(--c2); }
+.prev-card.tpl-horizon .cr-foot { background:#f0f9ff; border-top:2px solid var(--c2); } .prev-card.tpl-horizon .cr-foot-mat { color:#334155; } .prev-card.tpl-horizon .cr-foot-annee { color:#64748b; }
+.prev-card.tpl-horizon .cr-strip { background:linear-gradient(90deg,var(--c1),var(--c2)); }
+.prev-card.tpl-horizon.prev-verso { background:#f0f9ff; color:#0f172a; }
+.prev-card.tpl-horizon.prev-verso .cv-top { background:linear-gradient(135deg,var(--c1),var(--c2)); }
+.prev-card.tpl-horizon.prev-verso .cv-strip { background:#e0f2fe; border-top:1px solid #bae6fd; border-bottom:1px solid #bae6fd; }
+.prev-card.tpl-horizon.prev-verso .cv-school { color:var(--c1); }
+.prev-card.tpl-horizon.prev-verso .cv-devise { border-left-color:var(--c2); color:var(--c1); }
+.prev-card.tpl-horizon.prev-verso .cv-footer { background:linear-gradient(135deg,var(--c1),var(--c2)); color:rgba(255,255,255,.82); }
+
+/* ── CONGO ── */
+.prev-card.tpl-congo { background:linear-gradient(165deg,var(--c1) 0%,#0050CC 100%); color:#fff; }
+.prev-card.tpl-congo .cr-top { background:rgba(0,0,0,.18); border-bottom:2px solid var(--c2); }
+.prev-card.tpl-congo .cr-badge { background:rgba(247,214,24,.22); color:var(--c2); border:1px solid rgba(247,214,24,.55); }
+.prev-card.tpl-congo .cr-school-name { color:var(--c2); font-weight:900; } .prev-card.tpl-congo .cr-school-sub { color:rgba(255,255,255,.75); opacity:1; }
+.prev-card.tpl-congo .cr-logo-placeholder { background:rgba(255,255,255,.14); color:rgba(255,255,255,.75); }
+.prev-card.tpl-congo .cr-badge-carte { background:rgba(247,214,24,.15); color:var(--c2); border:1px solid rgba(247,214,24,.45); }
+.prev-card.tpl-congo .cr-name { color:#fff; font-weight:900; } .prev-card.tpl-congo .cr-detail,.prev-card.tpl-congo .cr-prenom { color:rgba(255,255,255,.72); }
+.prev-card.tpl-congo .cr-classe-badge { background:var(--c2); color:var(--c1); font-weight:800; }
+.prev-card.tpl-congo .cr-photo-wrap { border:2.5px solid var(--c2); background:rgba(255,255,255,.07); color:rgba(255,255,255,.4); }
+.prev-card.tpl-congo .cr-foot { background:#CE1021; } .prev-card.tpl-congo .cr-foot-mat { color:rgba(255,255,255,.88); } .prev-card.tpl-congo .cr-foot-annee { color:rgba(255,255,255,.78); }
+.prev-card.tpl-congo .cr-strip { background:linear-gradient(90deg,var(--c2),#fde047); }
+.prev-card.tpl-congo.prev-verso { background:#fff; color:#0f172a; }
+.prev-card.tpl-congo.prev-verso .cv-top { background:var(--c1); }
+.prev-card.tpl-congo.prev-verso .cv-strip { background:#CE1021; }
+.prev-card.tpl-congo.prev-verso .cv-school { color:var(--c1); }
+.prev-card.tpl-congo.prev-verso .cv-devise { border-left-color:var(--c1); color:var(--c1); }
+.prev-card.tpl-congo.prev-verso .cv-footer { background:var(--c1); color:rgba(255,255,255,.72); }
+
+/* ── EMERAUDE ── */
+.prev-card.tpl-emeraude { background:linear-gradient(145deg,var(--c1) 0%,#065f46 70%,#047857 100%); color:#fff; }
+.prev-card.tpl-emeraude .cr-top { background:rgba(0,0,0,.18); border-bottom:1px solid rgba(16,185,129,.42); }
+.prev-card.tpl-emeraude .cr-badge { background:rgba(16,185,129,.25); color:#6ee7b7; border:1px solid rgba(16,185,129,.52); }
+.prev-card.tpl-emeraude .cr-school-name { color:#6ee7b7; font-weight:800; } .prev-card.tpl-emeraude .cr-school-sub { color:rgba(255,255,255,.68); opacity:1; }
+.prev-card.tpl-emeraude .cr-logo-placeholder { background:rgba(255,255,255,.12); color:rgba(255,255,255,.7); }
+.prev-card.tpl-emeraude .cr-badge-carte { background:rgba(16,185,129,.2); color:#6ee7b7; border:1px solid rgba(16,185,129,.45); }
+.prev-card.tpl-emeraude .cr-name { color:#fff; font-weight:900; } .prev-card.tpl-emeraude .cr-detail,.prev-card.tpl-emeraude .cr-prenom { color:rgba(255,255,255,.68); }
+.prev-card.tpl-emeraude .cr-classe-badge { background:var(--c2); color:var(--c1); font-weight:800; }
+.prev-card.tpl-emeraude .cr-photo-wrap { border:2.5px solid var(--c2); background:rgba(255,255,255,.05); color:rgba(255,255,255,.38); }
+.prev-card.tpl-emeraude .cr-foot { background:rgba(0,0,0,.28); border-top:1px solid rgba(16,185,129,.28); } .prev-card.tpl-emeraude .cr-foot-mat { color:rgba(255,255,255,.72); } .prev-card.tpl-emeraude .cr-foot-annee { color:rgba(255,255,255,.62); }
+.prev-card.tpl-emeraude .cr-strip { background:linear-gradient(90deg,var(--c2),#6ee7b7); }
+.prev-card.tpl-emeraude.prev-verso { background:#fff; color:#0f172a; }
+.prev-card.tpl-emeraude.prev-verso .cv-top { background:linear-gradient(90deg,var(--c1),#065f46); }
+.prev-card.tpl-emeraude.prev-verso .cv-strip { background:#ecfdf5; border-top:1px solid #a7f3d0; border-bottom:1px solid #a7f3d0; }
+.prev-card.tpl-emeraude.prev-verso .cv-school { color:var(--c1); }
+.prev-card.tpl-emeraude.prev-verso .cv-devise { border-left-color:var(--c2); color:var(--c1); }
+.prev-card.tpl-emeraude.prev-verso .cv-footer { background:var(--c1); color:rgba(255,255,255,.72); }
+
+/* ── CREPUSCULE ── */
+.prev-card.tpl-crepuscule { background:linear-gradient(145deg,var(--c1) 0%,#3b0764 60%,#4c0d7f 100%); color:#f5f3ff; }
+.prev-card.tpl-crepuscule .cr-top { background:rgba(0,0,0,.24); border-bottom:1px solid rgba(168,85,247,.42); }
+.prev-card.tpl-crepuscule .cr-badge { background:rgba(168,85,247,.22); color:#d8b4fe; border:1px solid rgba(168,85,247,.48); }
+.prev-card.tpl-crepuscule .cr-school-name { color:#d8b4fe; font-weight:800; } .prev-card.tpl-crepuscule .cr-school-sub { color:rgba(245,243,255,.62); opacity:1; }
+.prev-card.tpl-crepuscule .cr-logo-placeholder { background:rgba(255,255,255,.1); color:rgba(245,243,255,.65); }
+.prev-card.tpl-crepuscule .cr-badge-carte { background:rgba(168,85,247,.18); color:#d8b4fe; border:1px solid rgba(168,85,247,.42); }
+.prev-card.tpl-crepuscule .cr-name { color:#faf5ff; font-weight:900; } .prev-card.tpl-crepuscule .cr-detail,.prev-card.tpl-crepuscule .cr-prenom { color:rgba(245,243,255,.65); }
+.prev-card.tpl-crepuscule .cr-classe-badge { background:var(--c2); color:#faf5ff; font-weight:700; }
+.prev-card.tpl-crepuscule .cr-photo-wrap { border:2.5px solid var(--c2); background:rgba(255,255,255,.04); color:rgba(245,243,255,.38); }
+.prev-card.tpl-crepuscule .cr-foot { background:rgba(0,0,0,.38); border-top:1px solid rgba(168,85,247,.32); } .prev-card.tpl-crepuscule .cr-foot-mat { color:rgba(245,243,255,.65); } .prev-card.tpl-crepuscule .cr-foot-annee { color:rgba(245,243,255,.58); }
+.prev-card.tpl-crepuscule .cr-strip { background:linear-gradient(90deg,var(--c2),#c084fc); }
+.prev-card.tpl-crepuscule.prev-verso { background:linear-gradient(160deg,var(--c1) 0%,#3b0764 100%); color:#f5f3ff; }
+.prev-card.tpl-crepuscule.prev-verso .cv-top { background:rgba(0,0,0,.32); border-bottom:1px solid rgba(168,85,247,.42); }
+.prev-card.tpl-crepuscule.prev-verso .cv-strip { background:rgba(168,85,247,.16); border-top:1px solid rgba(168,85,247,.28); border-bottom:1px solid rgba(168,85,247,.28); }
+.prev-card.tpl-crepuscule.prev-verso .cv-school { color:#d8b4fe; font-weight:700; }
+.prev-card.tpl-crepuscule.prev-verso .cv-info { color:rgba(245,243,255,.72); }
+.prev-card.tpl-crepuscule.prev-verso .cv-devise { border-left-color:var(--c2); color:#d8b4fe; }
+.prev-card.tpl-crepuscule.prev-verso .cv-msg { color:rgba(245,243,255,.52); }
+.prev-card.tpl-crepuscule.prev-verso .cv-footer { background:rgba(0,0,0,.42); border-top:1px solid rgba(168,85,247,.32); color:rgba(245,243,255,.48); }
 
 /* Éléments masqués dans l'aperçu */
 .pf-hidden { visibility: hidden; }
@@ -626,11 +731,16 @@ const TPL_DEFAULTS = {
   institutionnel: { c1: '#14532d', c2: '#d97706' },
   minimaliste:    { c1: '#111827', c2: '#374151' },
   premium:        { c1: '#1c1917', c2: '#d97706' },
+  horizon:        { c1: '#0369a1', c2: '#0ea5e9' },
+  congo:          { c1: '#003DA5', c2: '#F7D618' },
+  emeraude:       { c1: '#064e3b', c2: '#10b981' },
+  crepuscule:     { c1: '#2e1065', c2: '#a855f7' },
 };
 
 const TPL_NAMES = {
   classique: 'Classique', moderne: 'Moderne',
   institutionnel: 'Institutionnel', minimaliste: 'Minimaliste', premium: 'Premium',
+  horizon: 'Horizon', congo: 'Congo', emeraude: 'Emeraude', crepuscule: 'Crépuscule',
 };
 
 const ALL_TPLS = Object.keys(TPL_DEFAULTS);

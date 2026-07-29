@@ -8,6 +8,10 @@ class CarteConfig(models.Model):
         ('institutionnel', 'Institutionnel'),
         ('minimaliste',    'Minimaliste'),
         ('premium',        'Premium'),
+        ('horizon',        'Horizon'),
+        ('congo',          'Congo'),
+        ('emeraude',       'Emeraude'),
+        ('crepuscule',     'Crépuscule'),
     ]
 
     modele             = models.CharField(max_length=20, choices=MODELES, default='classique',
