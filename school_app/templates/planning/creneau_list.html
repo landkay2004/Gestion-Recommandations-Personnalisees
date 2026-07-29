@@ -66,25 +66,82 @@
               <!-- Créneaux du jour -->
               <div class="flex-grow-1 d-flex flex-wrap gap-2 align-items-center p-3">
                 {% for c in group.list %}
-                  {% if c.type_creneau == 'cours' %}{% with bg="#EFF6FF" border="#2563EB" color="#1D4ED8" %}
-                  {% elif c.type_creneau == 'repos' %}{% with bg="#F3F4F6" border="#6B7280" color="#374151" %}
-                  {% elif c.type_creneau == 'recreation' %}{% with bg="#ECFDF5" border="#10B981" color="#065F46" %}
-                  {% elif c.type_creneau == 'priere' %}{% with bg="#F5F3FF" border="#7C3AED" color="#4C1D95" %}
-                  {% else %}{% with bg="#FFFBEB" border="#F59E0B" color="#92400E" %}
+                  {% if c.type_creneau == 'cours' %}
+                    {% with bg="#EFF6FF" border="#2563EB" color="#1D4ED8" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
+                  {% elif c.type_creneau == 'repos' %}
+                    {% with bg="#F3F4F6" border="#6B7280" color="#374151" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
+                  {% elif c.type_creneau == 'recreation' %}
+                    {% with bg="#ECFDF5" border="#10B981" color="#065F46" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
+                  {% elif c.type_creneau == 'priere' %}
+                    {% with bg="#F5F3FF" border="#7C3AED" color="#4C1D95" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
+                  {% else %}
+                    {% with bg="#FFFBEB" border="#F59E0B" color="#92400E" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
                   {% endif %}
-                  <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
-                       style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
-                    <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
-                    <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
-                    <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
-                          onsubmit="return confirm('Supprimer ce créneau ?')">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
-                        <i class="bi bi-x-lg"></i>
-                      </button>
-                    </form>
-                  </div>
-                  {% endwith %}
                 {% endfor %}
               </div>
             </div>

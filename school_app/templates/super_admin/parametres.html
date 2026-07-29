@@ -7,7 +7,7 @@
 
   <!-- ── Colonne principale ── -->
   <div class="col-lg-8">
-    <form method="post" enctype="multipart/form-data" novalidate>
+    <form id="platform-settings-form" method="post" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
 
       <!-- Identité -->
@@ -163,7 +163,7 @@
                 {% csrf_token %}
                 <div class="flex-grow-1">
                   <label class="form-label small">Adresse de test</label>
-                  <input type="email" name="email_test" class="form-control" placeholder="votre@email.com" required>
+                  <input type="email" name="email_test" class="form-control" placeholder="votre@email.com">
                 </div>
                 <button type="submit" class="btn btn-outline-primary btn-sm">
                   <i class="bi bi-send me-1"></i>Envoyer un e-mail test
