@@ -50,3 +50,13 @@ python-dotenv>=1.0
 qrcode>=7.4
 reportlab>=4.0
 whitenoise>=6.0
+Django
+django-tenants
+openpyxl
+Pillow
+psycopg2-binary
+pyotp
+python-dotenv
+qrcode
+reportlab
+whitenoise
