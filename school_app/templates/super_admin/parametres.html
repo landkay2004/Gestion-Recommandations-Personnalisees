@@ -194,9 +194,12 @@
                   </div>
                   {% if obj.smtp_password %}
                   <div class="form-text text-success">
-                    <i class="bi bi-check-circle me-1"></i>Mot de passe enregistré — laissez vide pour le conserver.
+                    <i class="bi bi-check-circle me-1"></i>Mot de passe SMTP déjà configuré. Laissez ce champ vide pour le conserver.
                   </div>
                   {% else %}
+                  <div class="form-text text-warning">
+                    <i class="bi bi-exclamation-triangle me-1"></i>Ce champ est vide car le mot de passe SMTP n'est pas stocké publiquement. Laissez vide pour conserver l'ancien mot de passe si vous ne voulez pas le changer.
+                  </div>
                   <div class="form-text">Pour Gmail : utilisez un <strong>mot de passe d'application</strong> (pas votre MDP principal).</div>
                   {% endif %}
                 </div>
