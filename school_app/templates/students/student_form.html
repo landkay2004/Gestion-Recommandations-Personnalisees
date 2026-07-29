@@ -426,8 +426,8 @@
   function restoreFormData() {
     if (!studentForm) return;
     /* Ne pas restaurer si le formulaire contient déjà des données Django (mode édition ou erreurs) */
-    const hasInstance = {{ 'true' if obj else 'false' }};
-    const hasErrors   = {{ 'true' if form.errors else 'false' }};
+    const hasInstance = {% if obj %}true{% else %}false{% endif %};
+    const hasErrors   = {% if form.errors %}true{% else %}false{% endif %};
     if (hasInstance || hasErrors) { sessionStorage.removeItem(STORAGE_KEY); return; }
 
     let saved;
