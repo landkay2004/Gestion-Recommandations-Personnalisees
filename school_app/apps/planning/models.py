@@ -25,11 +25,22 @@ class CreneauHoraire(models.Model):
         (5, 'Vendredi'),
         (6, 'Samedi'),
     ]
+    TYPE_CHOICES = [
+        ('cours',      'Cours'),
+        ('repos',      'Repos / Pause'),
+        ('recreation', 'Récréation'),
+        ('priere',     'Prière / Recueillement'),
+        ('repas',      'Repas'),
+    ]
     jour = models.PositiveSmallIntegerField("Jour", choices=JOUR_CHOICES)
     heure_debut = models.TimeField("Heure de début")
     heure_fin = models.TimeField("Heure de fin")
     libelle = models.CharField("Libellé", max_length=60, blank=True,
                                help_text="Ex : « 08h00–09h00 ». Généré automatiquement si vide.")
+    type_creneau = models.CharField(
+        "Type", max_length=20, choices=TYPE_CHOICES, default='cours',
+        help_text="'Repos' bloque la case dans la grille sans permettre d'y affecter un cours."
+    )
 
     class Meta:
         ordering = ['jour', 'heure_debut']

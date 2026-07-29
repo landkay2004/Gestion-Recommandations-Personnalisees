@@ -111,8 +111,19 @@ def planning_list(request):
 
     # Organiser en grille jour → créneau → séances
     jours = list(range(1, 7))  # 1=Lundi … 6=Samedi
-    creneaux = CreneauHoraire.objects.order_by('jour', 'heure_debut')
-    grille = _build_grille(seances, creneaux, jours)
+    tous_creneaux = CreneauHoraire.objects.order_by('heure_debut', 'heure_fin', 'jour')
+
+    # Plages horaires uniques (pour les lignes du tableau)
+    seen_times = set()
+    time_slots = []
+    for c in tous_creneaux:
+        key = (c.heure_debut, c.heure_fin)
+        if key not in seen_times:
+            seen_times.add(key)
+            time_slots.append(c)   # on garde un objet représentatif
+
+    # Grille : {(heure_debut, heure_fin): {jour: {'seances': [...], 'creneau': obj}}}
+    grille_table = _build_grille_table(seances, tous_creneaux, jours)
 
     return render(request, 'planning/planning_list.html', {
         'annees': annees,
@@ -121,11 +132,13 @@ def planning_list(request):
         'enseignants': enseignants,
         'classe_id': str(classe_id) if classe_id else '',
         'enseignant_id': str(enseignant_id) if enseignant_id else '',
-        'grille': grille,
+        'grille_table': grille_table,
+        'time_slots': time_slots,
         'jours': jours,
         'JOURS_LABELS': {1:'Lundi',2:'Mardi',3:'Mercredi',4:'Jeudi',5:'Vendredi',6:'Samedi'},
         'nb_seances': seances.count(),
         'annee_active': annee,
+        'annee_id_for_new': annee_id,
     })
 
 
@@ -137,6 +150,66 @@ def _build_grille(seances, creneaux, jours):
         c = s.creneau.pk
         grille.setdefault(j, {}).setdefault(c, []).append(s)
     return grille
+
+
+def _build_grille_table(seances, tous_creneaux, jours):
+    """
+    Retourne une liste de lignes pour le tableau hebdomadaire.
+    Chaque ligne : {heure_debut, heure_fin, libelle, type_creneau, is_repos, cells:{jour: {creneau, seances, is_repos}}}
+    """
+    # Index séances par creneau_pk
+    seances_by_creneau = {}
+    for s in seances:
+        seances_by_creneau.setdefault(s.creneau_id, []).append(s)
+
+    # Index creneaux par jour → {(hd, hf): obj}
+    creneau_index = {}
+    for c in tous_creneaux:
+        creneau_index.setdefault(c.jour, {})[(c.heure_debut, c.heure_fin)] = c
+
+    # Plages horaires uniques (dans l'ordre)
+    seen = set()
+    time_keys = []
+    for c in tous_creneaux:
+        k = (c.heure_debut, c.heure_fin)
+        if k not in seen:
+            seen.add(k)
+            time_keys.append(k)
+
+    rows = []
+    for hd, hf in time_keys:
+        # Créneau représentatif pour libellé / type
+        repr_c = None
+        for j in jours:
+            repr_c = creneau_index.get(j, {}).get((hd, hf))
+            if repr_c:
+                break
+
+        type_c = repr_c.type_creneau if repr_c else 'cours'
+        libelle = (repr_c.libelle if repr_c and repr_c.libelle
+                   else "%s–%s" % (hd.strftime('%Hh%M'), hf.strftime('%Hh%M')))
+
+        cells = {}
+        for j in jours:
+            c = creneau_index.get(j, {}).get((hd, hf))
+            cells[j] = {
+                'creneau': c,
+                'seances': seances_by_creneau.get(c.pk, []) if c else [],
+                'is_repos': (c.type_creneau != 'cours') if c else False,
+                'type_display': c.get_type_creneau_display() if c else '',
+                'creneau_pk': c.pk if c else None,
+            }
+
+        rows.append({
+            'heure_debut': hd,
+            'heure_fin':   hf,
+            'libelle':     libelle,
+            'type_creneau': type_c,
+            'is_repos':    type_c != 'cours',
+            'cells':       cells,
+        })
+
+    return rows
 
 
 # ─── Séances (CRUD) ───────────────────────────────────────────────────────────

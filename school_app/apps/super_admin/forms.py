@@ -172,15 +172,22 @@ class PlatformSettingsForm(forms.ModelForm):
             'couleur_principale': forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
         }
         labels = {
-            'site_name':   'Nom du site / plateforme',
-            'site_slogan': 'Slogan',
-            'site_devise': 'Devise',
-            'site_logo':   'Logo de la plateforme',
-            'adresse':     'Adresse postale',
-            'email_contact': 'E-mail de contact',
-            'telephone':   'Téléphone',
-            'site_web':    'Site web',
-            'couleur_principale': 'Couleur principale',
+            'site_name':         'Nom du site / plateforme',
+            'site_slogan':       'Slogan',
+            'site_devise':       'Devise',
+            'site_logo':         'Logo de la plateforme',
+            'adresse':           'Adresse postale',
+            'email_contact':     'E-mail de contact',
+            'telephone':         'Téléphone',
+            'site_web':          'Site web',
+            'couleur_principale':'Couleur principale',
+            'smtp_actif':        'Activer l\'envoi SMTP réel',
+            'smtp_host':         'Serveur SMTP (host)',
+            'smtp_port':         'Port',
+            'smtp_use_tls':      'Utiliser TLS/STARTTLS',
+            'smtp_user':         'Identifiant SMTP',
+            'smtp_password':     'Mot de passe SMTP',
+            'smtp_from_email':   'Adresse d\'expédition (From)',
         }
 
 

@@ -1,12 +1,12 @@
 {% extends "onboarding/base_wizard.html" %}
-{% block title %}Etape 2 — Configuration{% endblock %}
+{% block title %}Étape 2 — Configuration de l'école{% endblock %}
 {% block wizard_content %}
 <div class="ob-card">
   <div class="ob-card-head">
     <div class="ob-card-icon"><i class="bi bi-building-fill"></i></div>
     <div>
-      <h2>Configurez votre école</h2>
-      <p>Ces informations seront visibles sur les bulletins et documents officiels.</p>
+      <h2>Configurez votre établissement</h2>
+      <p>Ces informations figureront sur les bulletins, cartes d'élèves et documents officiels.</p>
     </div>
   </div>
 
@@ -16,11 +16,31 @@
 
   <form method="post" enctype="multipart/form-data" class="ob-form">
     {% csrf_token %}
+
+    <!-- Identité de l'établissement -->
     <div class="mb-3">
       <label class="form-label fw-semibold">{{ form.nom_ecole.label }} <span class="text-danger">*</span></label>
       {{ form.nom_ecole }}
       {% if form.nom_ecole.errors %}<div class="text-danger small mt-1">{{ form.nom_ecole.errors.0 }}</div>{% endif %}
     </div>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">{{ form.type_etablissement.label }}</label>
+        {{ form.type_etablissement }}
+        <div class="form-text">Institut, Collège, Lycée, École primaire…</div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">{{ form.annee_scolaire_actuelle.label }}</label>
+        {{ form.annee_scolaire_actuelle }}
+        <div class="form-text">Ex : 2025-2026</div>
+        {% if form.annee_scolaire_actuelle.errors %}
+          <div class="text-danger small mt-1">{{ form.annee_scolaire_actuelle.errors.0 }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Localisation -->
     <div class="row g-3 mb-3">
       <div class="col-md-4">
         <label class="form-label fw-semibold">{{ form.province.label }}</label>
@@ -35,19 +55,38 @@
         {{ form.commune }}
       </div>
     </div>
+
     <div class="mb-3">
       <label class="form-label fw-semibold">{{ form.code_ecole.label }}</label>
       {{ form.code_ecole }}
-      <div class="form-text">Code administratif MEPSP (optionnel)</div>
+      <div class="form-text">Code administratif MEPSP (ex : 62024/101/03/1)</div>
     </div>
+
+    <!-- Contact -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">{{ form.telephone.label }}</label>
+        {{ form.telephone }}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">{{ form.email_contact.label }}</label>
+        {{ form.email_contact }}
+        {% if form.email_contact.errors %}
+          <div class="text-danger small mt-1">{{ form.email_contact.errors.0 }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Logo -->
     <div class="mb-4">
       <label class="form-label fw-semibold">{{ form.logo.label }}</label>
       {{ form.logo }}
-      <div class="form-text">PNG ou JPG, max 2 Mo. Apparait sur les bulletins.</div>
+      <div class="form-text">PNG ou JPG recommandé, max 2 Mo. Apparaît sur les bulletins et la carte élève.</div>
     </div>
+
     <div class="ob-actions">
       <a href="{% url 'onboarding:etape1_password' %}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left me-1"></i> Precedent
+        <i class="bi bi-arrow-left me-1"></i>Précédent
       </a>
       <button type="submit" class="btn-ob">
         Continuer <i class="bi bi-arrow-right ms-1"></i>

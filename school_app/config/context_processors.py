@@ -18,6 +18,23 @@ def school_info_safe(request):
         return {'school_info': None}
 
 
+def platform_settings_ctx(request):
+    """Injecte PlatformSettings + corbeille_count dans tous les templates."""
+    try:
+        from super_admin.models import PlatformSettings
+        ps = PlatformSettings.get_settings()
+        corbeille_count = 0
+        if request.path.startswith('/super-admin/'):
+            try:
+                from tenants.models import Ecole
+                corbeille_count = Ecole.objects.filter(statut='corbeille').count()
+            except Exception:
+                pass
+        return {'platform_settings': ps, 'corbeille_count': corbeille_count}
+    except Exception:
+        return {'platform_settings': None, 'corbeille_count': 0}
+
+
 def tenant_context(request):
     ctx = {'is_super_admin': False, 'current_ecole': None}
     sa = getattr(request, 'super_admin', None)

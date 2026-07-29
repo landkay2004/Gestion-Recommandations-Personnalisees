@@ -6,12 +6,30 @@ from django.conf import settings
 
 
 class SchoolInfo(models.Model):
+    TYPE_ETABLISSEMENT_CHOICES = [
+        ('',            '— Sélectionner —'),
+        ('ep',          'École Primaire'),
+        ('college',     'Collège'),
+        ('institut',    'Institut (Humanités générales)'),
+        ('lyceé',       'Lycée technique'),
+        ('athénée',     'Athénée'),
+        ('ecole_prof',  'École professionnelle'),
+        ('complexe',    'Complexe scolaire'),
+        ('autre',       'Autre'),
+    ]
+
     # ── Informations de base ────────────────────────────────────────────────
-    nom      = models.CharField(max_length=200, default="Institut Bungulu")
+    nom                    = models.CharField(max_length=200, default="Institut Bungulu")
+    type_etablissement     = models.CharField("Type d'établissement", max_length=30,
+                                              choices=TYPE_ETABLISSEMENT_CHOICES, blank=True, default='institut')
+    annee_scolaire_actuelle = models.CharField("Année scolaire en cours", max_length=20, blank=True, default='',
+                                               help_text="Ex : 2025-2026")
     province = models.CharField(max_length=100, default="Nord-Kivu")
     ville    = models.CharField(max_length=100, default="Beni")
     commune  = models.CharField(max_length=100, default="Bungulu")
     code     = models.CharField(max_length=50,  default="62024 / 101 / 03 / 1")
+    telephone       = models.CharField("Téléphone", max_length=50, blank=True, default='')
+    email_contact   = models.EmailField("Email de contact", blank=True, default='')
     logo     = models.ImageField(upload_to='school/', null=True, blank=True)
 
     # ── PWA Système (back-office : préfets, enseignants) ───────────────────

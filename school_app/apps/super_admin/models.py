@@ -102,6 +102,17 @@ class PlatformSettings(models.Model):
     site_web     = models.URLField("Site web",        blank=True)
     couleur_principale = models.CharField("Couleur principale", max_length=7, default="#4D44B5")
 
+    # ── Email / SMTP ──────────────────────────────────────────────────────────
+    smtp_actif       = models.BooleanField("Activer l'envoi SMTP réel", default=False)
+    smtp_host        = models.CharField("Serveur SMTP", max_length=200, blank=True, default='',
+                                        help_text="Ex: smtp.gmail.com, smtp.office365.com")
+    smtp_port        = models.PositiveIntegerField("Port SMTP", default=587)
+    smtp_use_tls     = models.BooleanField("Utiliser TLS", default=True)
+    smtp_user        = models.CharField("Identifiant SMTP", max_length=200, blank=True, default='')
+    smtp_password    = models.CharField("Mot de passe SMTP", max_length=300, blank=True, default='')
+    smtp_from_email  = models.CharField("Adresse d'expédition (From)", max_length=200,
+                                         blank=True, default='noreply@sgn-rdc.local')
+
     class Meta:
         app_label = 'super_admin'
         verbose_name = "Paramètres de la plateforme"

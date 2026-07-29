@@ -75,6 +75,15 @@
        class="nav-link {% if request.resolver_match.url_name == 'platform_settings' %}active{% endif %}">
       <i class="bi bi-gear-fill"></i><span>Paramètres</span>
     </a>
+
+    <div class="nav-section-label">Données</div>
+    <a href="{% url 'super_admin:corbeille_list' %}"
+       class="nav-link {% if request.resolver_match.url_name == 'corbeille_list' %}active{% endif %}">
+      <i class="bi bi-trash2-fill"></i><span>Corbeille</span>
+      {% if corbeille_count > 0 %}
+      <span class="badge bg-danger rounded-pill ms-auto">{{ corbeille_count }}</span>
+      {% endif %}
+    </a>
   </nav>
 
   <div class="sidebar-footer">

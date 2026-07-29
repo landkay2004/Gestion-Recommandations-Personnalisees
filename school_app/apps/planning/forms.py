@@ -19,9 +19,10 @@ class SalleForm(forms.ModelForm):
 class CreneauHoraireForm(forms.ModelForm):
     class Meta:
         model = CreneauHoraire
-        fields = ['jour', 'heure_debut', 'heure_fin', 'libelle']
+        fields = ['jour', 'type_creneau', 'heure_debut', 'heure_fin', 'libelle']
         widgets = {
             'jour': forms.Select(attrs={'class': 'form-select'}),
+            'type_creneau': forms.Select(attrs={'class': 'form-select'}),
             'heure_debut': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
             'heure_fin': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
             'libelle': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Généré automatiquement'}),

@@ -132,11 +132,15 @@ def etape2_config(request):
         try:
             from school_settings.models import SchoolInfo
             info = SchoolInfo.get_info()
-            info.nom      = d['nom_ecole']
-            info.province = d.get('province', '')
-            info.ville    = d.get('ville', '')
-            info.commune  = d.get('commune', '')
-            info.code     = d.get('code_ecole', '')
+            info.nom                     = d['nom_ecole']
+            info.type_etablissement      = d.get('type_etablissement', '')
+            info.annee_scolaire_actuelle = d.get('annee_scolaire_actuelle', '')
+            info.province                = d.get('province', '')
+            info.ville                   = d.get('ville', '')
+            info.commune                 = d.get('commune', '')
+            info.code                    = d.get('code_ecole', '')
+            info.telephone               = d.get('telephone', '')
+            info.email_contact           = d.get('email_contact', '')
             if 'logo' in request.FILES:
                 info.logo = request.FILES['logo']
             info.save()

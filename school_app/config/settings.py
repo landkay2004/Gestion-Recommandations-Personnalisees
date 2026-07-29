@@ -141,6 +141,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'config.context_processors.school_info_safe',
                 'config.context_processors.tenant_context',
+                'config.context_processors.platform_settings_ctx',
             ],
         },
     },

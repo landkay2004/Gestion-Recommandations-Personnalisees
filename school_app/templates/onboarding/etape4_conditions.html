@@ -1,24 +1,53 @@
 {% extends "onboarding/base_wizard.html" %}
-{% block title %}Etape 4 — Conditions{% endblock %}
+{% block title %}Étape 4 — Conditions d'utilisation{% endblock %}
 {% block wizard_content %}
 <div class="ob-card">
   <div class="ob-card-head">
     <div class="ob-card-icon" style="background:#fff4dc;color:#d8831f"><i class="bi bi-file-earmark-text-fill"></i></div>
     <div>
-      <h2>Conditions d’utilisation</h2>
-      <p>Lisez les engagements essentiels avant d’activer votre espace école.</p>
+      <h2>Conditions générales d'utilisation</h2>
+      <p>Lisez attentivement les engagements contractuels avant d'activer votre espace école.</p>
     </div>
   </div>
 
-  <div class="ob-terms mb-4">
-    <h3>Conditions générales d’utilisation — Plateforme SGN RDC</h3>
-    <p><strong>1. Objet</strong> — La presente plateforme est mise a disposition des etablissements scolaires pour la gestion administrative et pedagogique.</p>
-    <p><strong>2. Acces</strong> — L'acces est strictement reserve aux utilisateurs autorises de l'etablissement. Toute communication des identifiants a des tiers est interdite.</p>
-    <p><strong>3. Donnees personnelles</strong> — Les donnees des eleves et du personnel sont confidentielles. L'etablissement s'engage a les traiter conformement a la legislation en vigueur en RDC.</p>
-    <p><strong>4. Disponibilite</strong> — La plateforme est disponible 24h/24. Des maintenances programmees peuvent occasionner des interruptions temporaires, avec notification prealable.</p>
-    <p><strong>5. Responsabilite</strong> — L'etablissement est responsable de l'usage fait par ses utilisateurs. Le prestataire n'est pas responsable des pertes de donnees dues a un usage incorrect.</p>
-    <p><strong>6. Resiliation</strong> — En cas de non-paiement de l'abonnement, l'acces sera suspendu apres un delai de grace de 7 jours. Les donnees sont conservees 90 jours apres la resiliation.</p>
-    <p><strong>7. Propriete</strong> — Le logiciel et ses composants sont la propriete du prestataire. L'etablissement obtient un droit d'usage non exclusif et non cessible.</p>
+  <div class="ob-terms mb-4" style="max-height:420px;overflow-y:auto;padding-right:8px;">
+
+    <h3 class="fs-6 fw-bold mb-3">Conditions générales d'utilisation — Plateforme SGN RDC</h3>
+    <p class="text-muted small mb-3"><em>Version 2.0 — Juillet 2025. Ces conditions régissent l'accès et l'utilisation de la plateforme Système de Gestion Scolaire (SGN RDC).</em></p>
+
+    <p><strong>Art. 1 — Objet et champ d'application</strong><br>
+    La présente plateforme SGN RDC est mise à disposition des établissements scolaires agréés de la République Démocratique du Congo (RDC) pour la gestion administrative et pédagogique : saisie des notes, édition de bulletins officiels, gestion des élèves, des enseignants et du personnel. L'utilisation de la plateforme implique l'acceptation pleine et entière des présentes conditions.</p>
+
+    <p><strong>Art. 2 — Accès et comptes utilisateurs</strong><br>
+    L'accès est strictement réservé aux utilisateurs autorisés par l'établissement (préfet, directeur, enseignants, secrétariat). Chaque compte est personnel et non cessible. Toute communication des identifiants à des tiers non autorisés est formellement interdite et engage la responsabilité de l'établissement. En cas de perte ou de compromission, l'établissement doit en informer le prestataire sans délai.</p>
+
+    <p><strong>Art. 3 — Protection des données personnelles</strong><br>
+    Les données des élèves (nom, prénom, date de naissance, résultats scolaires, photos) et du personnel constituent des données à caractère personnel protégées. L'établissement, en qualité de responsable de traitement, s'engage à les traiter conformément à la législation en vigueur en RDC, à ne pas les communiquer à des tiers sans consentement préalable, et à mettre en place des mesures de sécurité adaptées. Le prestataire agit en qualité de sous-traitant et s'engage à ne pas exploiter ces données à des fins autres que la fourniture du service.</p>
+
+    <p><strong>Art. 4 — Obligations de l'établissement</strong><br>
+    L'établissement s'engage à : (i) utiliser la plateforme conformément aux lois RDC et aux bonnes pratiques pédagogiques ; (ii) saisir des données exactes et les maintenir à jour ; (iii) ne pas tenter de contourner les mesures de sécurité ; (iv) ne pas utiliser la plateforme à des fins illicites, frauduleuses ou contraires à l'ordre public ; (v) former ses utilisateurs à l'usage correct de l'outil.</p>
+
+    <p><strong>Art. 5 — Disponibilité et maintenance</strong><br>
+    Le prestataire s'engage à assurer la disponibilité de la plateforme 7j/7 dans la mesure du possible. Des maintenances programmées peuvent occasionner des interruptions, avec notification préalable sous 48 heures sauf urgence. Le prestataire ne peut être tenu responsable des interruptions dues à des causes extérieures (coupures réseau, cas de force majeure, etc.).</p>
+
+    <p><strong>Art. 6 — Tarification et abonnement</strong><br>
+    L'accès à la plateforme est conditionné au paiement de l'abonnement selon le plan souscrit. En cas de non-paiement à échéance, un délai de grâce de 7 jours est accordé avant suspension. Pendant la suspension, les données restent accessibles en lecture seule. Au-delà de 90 jours de suspension, le prestataire se réserve le droit d'archiver ou de supprimer les données, avec notification préalable.</p>
+
+    <p><strong>Art. 7 — Conservation et portabilité des données</strong><br>
+    Les données de l'établissement sont conservées pendant toute la durée de l'abonnement actif, plus 90 jours après résiliation. Sur demande écrite, l'établissement peut obtenir un export complet de ses données au format CSV ou PDF dans un délai de 15 jours ouvrables. Après le délai de conservation, les données sont supprimées de manière sécurisée et irréversible.</p>
+
+    <p><strong>Art. 8 — Propriété intellectuelle</strong><br>
+    La plateforme SGN RDC, ses algorithmes, interfaces, bases de données et toute documentation associée sont la propriété exclusive du prestataire. L'établissement bénéficie d'un droit d'usage non exclusif, non transférable et limité à la durée de l'abonnement. Toute reproduction, diffusion ou exploitation commerciale non autorisée est interdite.</p>
+
+    <p><strong>Art. 9 — Responsabilité et limitations</strong><br>
+    Le prestataire ne saurait être tenu responsable : (i) des erreurs de saisie commises par l'établissement ; (ii) des pertes de données résultant d'un usage incorrect ; (iii) des dommages indirects, manque à gagner ou pertes de données imputables à l'établissement. La responsabilité du prestataire est en tout état de cause plafonnée au montant des abonnements des 12 derniers mois.</p>
+
+    <p><strong>Art. 10 — Modifications et résiliation</strong><br>
+    Le prestataire se réserve le droit de modifier les présentes conditions, avec notification aux établissements sous 30 jours. La poursuite de l'utilisation après cette période vaut acceptation des nouvelles conditions. La résiliation peut être demandée par écrit à tout moment ; elle prend effet à l'échéance de la période d'abonnement en cours.</p>
+
+    <p><strong>Art. 11 — Loi applicable</strong><br>
+    Les présentes conditions sont régies par le droit de la République Démocratique du Congo. Tout litige relatif à leur interprétation ou exécution sera soumis aux juridictions compétentes de Kinshasa, après tentative de règlement amiable sous 30 jours.</p>
+
   </div>
 
   <form method="post">
@@ -29,15 +58,15 @@
     <div class="form-check ob-check mb-4">
       {{ form.accepter }}
       <label class="form-check-label fw-semibold" for="{{ form.accepter.id_for_label }}">
-        {{ form.accepter.label }}
+        J'ai lu et j'accepte les conditions générales d'utilisation de la plateforme SGN RDC (version 2.0).
       </label>
     </div>
     <div class="ob-actions">
       <a href="{% url 'onboarding:etape3_recapitulatif' %}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left me-1"></i> Precedent
+        <i class="bi bi-arrow-left me-1"></i>Précédent
       </a>
       <button type="submit" class="btn-ob">
-        Accepter et terminer <i class="bi bi-check-circle ms-1"></i>
+        Accepter et activer mon espace <i class="bi bi-check-circle ms-1"></i>
       </button>
     </div>
   </form>

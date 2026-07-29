@@ -539,7 +539,107 @@ def platform_settings(request):
         form.save()
         messages.success(request, "Paramètres de la plateforme enregistrés.")
         return redirect('super_admin:platform_settings')
-    return render(request, 'super_admin/parametres.html', {'form': form, 'obj': settings_obj})
+    return render(request, 'super_admin/parametres.html', {
+        'form': form, 'obj': settings_obj, 'platform_settings': settings_obj,
+    })
+
+
+@super_admin_required
+def test_email(request):
+    """Envoie un email de test via les paramètres SMTP configurés."""
+    from super_admin.models import PlatformSettings
+    if request.method != 'POST':
+        return redirect('super_admin:platform_settings')
+
+    dest = request.POST.get('email_test', '').strip()
+    if not dest:
+        messages.error(request, "Indiquez une adresse de destination pour le test.")
+        return redirect('super_admin:platform_settings')
+
+    settings_obj = PlatformSettings.get_settings()
+    try:
+        from django.core.mail import get_connection, EmailMessage
+        if settings_obj.smtp_actif and settings_obj.smtp_host:
+            conn = get_connection(
+                backend='django.core.mail.backends.smtp.EmailBackend',
+                host=settings_obj.smtp_host,
+                port=settings_obj.smtp_port,
+                username=settings_obj.smtp_user,
+                password=settings_obj.smtp_password,
+                use_tls=settings_obj.smtp_use_tls,
+                fail_silently=False,
+            )
+            from_email = settings_obj.smtp_from_email or 'noreply@sgn-rdc.local'
+        else:
+            conn = None
+            from_email = django_settings.DEFAULT_FROM_EMAIL
+
+        msg = EmailMessage(
+            subject="[SGN RDC] Test d'envoi email",
+            body=(
+                "Bonjour,\n\n"
+                "Ceci est un email de test envoyé depuis la console SGN RDC.\n"
+                "Si vous recevez ce message, la configuration SMTP est correcte.\n\n"
+                "— Plateforme SGN RDC"
+            ),
+            from_email=from_email,
+            to=[dest],
+            connection=conn,
+        )
+        msg.send()
+        messages.success(request, "Email de test envoyé à %s avec succès." % dest)
+    except Exception as e:
+        messages.error(request, "Échec de l'envoi : %s" % str(e))
+
+    return redirect('super_admin:platform_settings')
+
+
+# ── Corbeille ─────────────────────────────────────────────────────────────────
+@super_admin_required
+def corbeille_list(request):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+    ecoles = Ecole.objects.filter(statut='corbeille').order_by('-deleted_at')
+    return render(request, 'super_admin/corbeille.html', {'ecoles': ecoles})
+
+
+@super_admin_required
+def ecole_restaurer(request, pk):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+    ecole = get_object_or_404(Ecole, pk=pk, statut='corbeille')
+    if request.method == 'POST':
+        ecole.statut = 'suspendue'
+        ecole.is_deleted = False
+        ecole.deleted_at = None
+        ecole.save(update_fields=['statut', 'is_deleted', 'deleted_at'])
+        logger.info('ECOLE_RESTAUREE pk=%s nom=%s sa=%s', pk, ecole.nom,
+                    request.super_admin.email)
+        messages.success(request, "École « %s » restaurée (statut : suspendue)." % ecole.nom)
+    return redirect('super_admin:corbeille_list')
+
+
+@super_admin_required
+def ecole_supprimer_definitif(request, pk):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+    ecole = get_object_or_404(Ecole, pk=pk, statut='corbeille')
+    if request.method == 'POST':
+        confirmation = request.POST.get('confirmation', '').strip()
+        if confirmation != ecole.nom:
+            messages.error(request,
+                "Confirmez en tapant exactement le nom de l'école : « %s »." % ecole.nom)
+            return redirect('super_admin:corbeille_list')
+        nom = ecole.nom
+        try:
+            ecole.delete()
+            logger.info('ECOLE_SUPPRIMEE_DEFINITIF nom=%s sa=%s', nom,
+                        request.super_admin.email)
+            messages.success(request, "École « %s » supprimée définitivement." % nom)
+        except Exception as e:
+            logger.error('ECOLE_SUPPRIMER_DEFINITIF_ERROR: %s', e)
+            messages.error(request, "Erreur lors de la suppression : %s" % e)
+    return redirect('super_admin:corbeille_list')
 
 
 @super_admin_required
