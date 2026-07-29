@@ -116,14 +116,20 @@ def etape2_config(request):
         from school_settings.models import SchoolInfo
         info = SchoolInfo.get_info()
         initial = {
-            'nom_ecole': info.nom,
-            'province': info.province,
-            'ville': info.ville,
-            'commune': info.commune,
-            'code_ecole': info.code,
+            'nom_ecole':              info.nom,
+            'type_etablissement':     info.type_etablissement,
+            'annee_scolaire_actuelle': info.annee_scolaire_actuelle,
+            'province':               info.province,
+            'ville':                  info.ville,
+            'commune':                info.commune,
+            'code_ecole':             info.code,
+            'telephone':              info.telephone,
+            'email_contact':          info.email_contact,
         }
     except Exception:
         pass
+    # Toujours revenir au schéma public après lecture
+    _switch_public_schema()
 
     form = ConfigurationEcoleForm(request.POST or None, request.FILES or None, initial=initial)
     if request.method == 'POST' and form.is_valid():
