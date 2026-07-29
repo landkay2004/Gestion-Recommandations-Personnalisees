@@ -747,34 +747,67 @@ def _get_smtp_from_email():
 
 
 def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
+    from django.core.mail import get_connection, EmailMessage as DjangoEmailMessage
     try:
         from super_admin.models import PlatformSettings
         ps = PlatformSettings.objects.get(pk=1)
         site_name = ps.site_name or 'SGN RDC'
     except Exception:
+        ps = None
         site_name = 'SGN RDC'
 
-    subject = ("[Renouvellement] " if regeneration else "") + "Vos identifiants - Plateforme %s" % site_name
-    message = (
-        "Bonjour %s,\n\n"
-        "%s\n\n"
-        "Identifiants de connexion :\n"
-        "  Email              : %s\n"
-        "  Mot de passe temp. : %s\n\n"
-        "Connexion : %s\n"
-        "Vous devrez changer votre mot de passe a la premiere connexion.\n\n"
-        "-- %s"
-    ) % (
-        admin.get_full_name(),
-        "Un nouveau mot de passe temporaire a ete genere pour votre compte." if regeneration
-            else ("Votre ecole \u00ab %s \u00bb a ete creee sur la plateforme %s." % (ecole.nom, site_name)),
-        admin.email,
-        temp_pwd,
-        request.build_absolute_uri('/login/'),
-        site_name,
+    # Construire la connexion SMTP depuis PlatformSettings (comme le test e-mail)
+    if ps and ps.smtp_actif and ps.smtp_host:
+        conn = get_connection(
+            backend='django.core.mail.backends.smtp.EmailBackend',
+            host=ps.smtp_host,
+            port=ps.smtp_port,
+            username=ps.smtp_user,
+            password=ps.smtp_password,
+            use_tls=ps.smtp_use_tls,
+            fail_silently=False,
+        )
+        from_email = ps.smtp_from_email or 'noreply@sgn-rdc.local'
+    else:
+        conn = None
+        from_email = django_settings.DEFAULT_FROM_EMAIL
+
+    login_url = request.build_absolute_uri('/login/')
+    intro = (
+        "Un nouveau mot de passe temporaire a été généré pour votre compte."
+        if regeneration
+        else "Votre école « %s » a été créée sur la plateforme %s." % (ecole.nom, site_name)
     )
+
+    subject = ("[Renouvellement] " if regeneration else "") + "Vos identifiants — %s" % site_name
+    body = (
+        "Bonjour %(nom)s,\n\n"
+        "%(intro)s\n\n"
+        "Identifiants de connexion :\n"
+        "  E-mail             : %(email)s\n"
+        "  Mot de passe temp. : %(pwd)s\n\n"
+        "Connexion : %(url)s\n"
+        "Vous devrez changer votre mot de passe à la première connexion.\n\n"
+        "— %(site)s"
+    ) % {
+        'nom':   admin.get_full_name(),
+        'intro': intro,
+        'email': admin.email,
+        'pwd':   temp_pwd,
+        'url':   login_url,
+        'site':  site_name,
+    }
+
     try:
-        send_mail(subject, message, _get_smtp_from_email(), [admin.email], fail_silently=False)
-        logger.info('CREDENTIALS_EMAIL_SENT to=%s', admin.email)
+        msg = DjangoEmailMessage(
+            subject=subject,
+            body=body,
+            from_email=from_email,
+            to=[admin.email],
+            connection=conn,
+        )
+        msg.send(fail_silently=False)
+        logger.info('CREDENTIALS_EMAIL_SENT to=%s via=%s', admin.email,
+                    ('%s:%s' % (ps.smtp_host, ps.smtp_port)) if conn else 'console')
     except Exception as e:
         logger.warning('CREDENTIALS_EMAIL_FAILED to=%s err=%s', admin.email, e)
