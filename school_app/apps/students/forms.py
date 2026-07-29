@@ -49,3 +49,5 @@ class StudentForm(forms.ModelForm):
                 annee_scolaire=annee
             ).select_related('section').order_by('nom', 'section__nom')
         self.fields['tuteur'].required = False
+        # Force le format ISO pour le champ date (obligatoire avec type="date")
+        self.fields['date_naissance'].input_formats = ['%Y-%m-%d']
