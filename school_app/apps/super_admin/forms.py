@@ -153,6 +153,27 @@ class MaintenanceForm(forms.Form):
 
 class PlatformSettingsForm(forms.ModelForm):
 
+    def clean_smtp_host(self):
+        host = self.cleaned_data.get('smtp_host', '').strip()
+        if not host:
+            return host
+        # Détecter si l'utilisateur a saisi une adresse e-mail au lieu d'un nom de serveur
+        import re
+        if '@' in host:
+            raise forms.ValidationError(
+                "Ce champ doit contenir le nom du serveur SMTP, pas une adresse e-mail. "
+                "Exemples : smtp.gmail.com, smtp.office365.com — "
+                "pas %(value)s.",
+                params={'value': host},
+            )
+        # Vérification basique qu'il ressemble à un hostname
+        if not re.match(r'^[a-zA-Z0-9]([a-zA-Z0-9\-\.]+)$', host):
+            raise forms.ValidationError(
+                "Nom de serveur SMTP invalide. "
+                "Exemples valides : smtp.gmail.com, mail.mondomaine.cd"
+            )
+        return host
+
     class Meta:
         from super_admin.models import PlatformSettings
         model = PlatformSettings

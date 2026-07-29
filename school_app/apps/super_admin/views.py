@@ -633,7 +633,35 @@ def test_email(request):
         messages.success(request, success_msg)
 
     except Exception as e:
-        err_msg = "Échec de l'envoi : %s" % str(e)
+        err_raw = str(e)
+        # Traduire les erreurs techniques les plus courantes en messages clairs
+        if 'getaddrinfo failed' in err_raw or 'getaddrinfo' in err_raw or 'Errno 11003' in err_raw or 'Errno 11001' in err_raw:
+            err_msg = (
+                "❌ Serveur SMTP introuvable : <strong>%s</strong> ne peut pas être résolu.<br>"
+                "Le champ <em>Serveur SMTP</em> doit contenir un nom de domaine comme "
+                "<code>smtp.gmail.com</code> ou <code>smtp.office365.com</code>, "
+                "pas une adresse e-mail."
+            ) % settings_obj.smtp_host
+        elif 'Connection refused' in err_raw or 'Errno 111' in err_raw or 'Errno 10061' in err_raw:
+            err_msg = (
+                "❌ Connexion refusée par <strong>%s</strong> sur le port <strong>%s</strong>.<br>"
+                "Vérifiez que le port est correct (587 pour TLS, 465 pour SSL) et que le serveur autorise les connexions SMTP."
+            ) % (settings_obj.smtp_host, settings_obj.smtp_port)
+        elif 'Authentication' in err_raw or 'auth' in err_raw.lower() or '535' in err_raw or '534' in err_raw:
+            err_msg = (
+                "❌ Authentification refusée.<br>"
+                "Pour Gmail, utilisez un <strong>mot de passe d'application</strong> "
+                "(pas votre mot de passe principal). "
+                "<a href='https://myaccount.google.com/apppasswords' target='_blank'>Créer un mot de passe d'application →</a>"
+            )
+        elif 'timed out' in err_raw.lower() or 'timeout' in err_raw.lower():
+            err_msg = (
+                "❌ Délai dépassé — le serveur <strong>%s</strong> ne répond pas.<br>"
+                "Vérifiez l'adresse du serveur et le port."
+            ) % settings_obj.smtp_host
+        else:
+            err_msg = "❌ Échec de l'envoi : <code>%s</code>" % err_raw
+
         if is_ajax:
             from django.http import JsonResponse
             return JsonResponse({'ok': False, 'message': err_msg})
