@@ -129,8 +129,12 @@ a:hover { color: var(--color-primary-hover); }
   background: rgba(0,0,0,.45);
   z-index: 1040;
   backdrop-filter: blur(2px);
+  pointer-events: none;
 }
-.sidebar-overlay.active { display: block; }
+.sidebar-overlay.active {
+  display: block;
+  pointer-events: auto;
+}
 
 /* ── Sidebar header ── */
 .sidebar-header {
@@ -914,11 +918,18 @@ a:hover { color: var(--color-primary-hover); }
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
   z-index: 8000;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
   transition: opacity .3s ease;
 }
-#sgn-overlay.active { opacity: 1; pointer-events: all; }
+#sgn-overlay.active {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+}
 
 .sgn-overlay-card {
   background: var(--bg-card);

@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='planabonnement',
             name='slug',
-            field=models.SlugField(blank=True, max_length=100, unique=True, verbose_name='Slug'),
+            field=models.SlugField(blank=True, max_length=100, null=True, unique=True, verbose_name='Slug'),
             preserve_default=False,
         ),
         migrations.AddField(
@@ -86,6 +86,11 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             code=_populate_slugs,
             reverse_code=migrations.RunPython.noop,
+        ),
+        migrations.AlterField(
+            model_name='planabonnement',
+            name='slug',
+            field=models.SlugField(blank=True, max_length=100, unique=True, verbose_name='Slug'),
         ),
 
         # ── Nouveau modèle Abonnement ─────────────────────────────────────────

@@ -479,8 +479,11 @@ const smtpToggle = document.getElementById('{{ form.smtp_actif.id_for_label }}')
 const smtpFields = document.getElementById('smtp-fields');
 function syncSmtpFields() {
   if (!smtpFields || !smtpToggle) return;
-  smtpFields.style.opacity       = smtpToggle.checked ? '1'    : '0.5';
-  smtpFields.style.pointerEvents = smtpToggle.checked ? 'auto' : 'none';
+  smtpFields.style.opacity = smtpToggle.checked ? '1' : '0.55';
+  smtpFields.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type === 'button' || el.type === 'submit' || el.type === 'hidden') return;
+    el.disabled = !smtpToggle.checked;
+  });
 }
 if (smtpToggle) { smtpToggle.addEventListener('change', syncSmtpFields); syncSmtpFields(); }
 
