@@ -164,8 +164,12 @@
   </div>
 </div>
 
+{% endblock %}
+
+{% block modals %}
 <!-- ══════════════════════════════════════════════════════════════════════
      MODAL — Créer un tuteur sans quitter le formulaire élève
+     Placé en dehors du contenu principal pour éviter tout conflit de z-index
 ══════════════════════════════════════════════════════════════════════ -->
 <div class="modal fade" id="modalNouveauTuteur" tabindex="-1"
      aria-labelledby="modalNouveauTuteurLabel" aria-hidden="true">
@@ -219,7 +223,6 @@
     </div>
   </div>
 </div>
-
 {% endblock %}
 
 {% block extra_js %}
@@ -354,7 +357,7 @@
         if (json.ok) {
           /* Tuteur créé — l'injecter directement dans le formulaire élève */
           selectTuteur(json.id, json.nom_complet, json.telephone);
-          bootstrap.Modal.getInstance(modalEl).hide();
+          bootstrap.Modal.getOrCreateInstance(modalEl).hide();
           /* Petit toast de confirmation */
           showToast('Tuteur « ' + json.nom_complet + ' » créé et sélectionné.', 'success');
         } else {
