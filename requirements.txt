@@ -30,3 +30,13 @@ reportlab
 whitenoise
 Django
 Django>=5.0
+Django
+django-tenants
+openpyxl
+Pillow
+psycopg2-binary
+pyotp
+python-dotenv
+qrcode
+reportlab
+whitenoise
