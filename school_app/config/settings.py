@@ -55,7 +55,6 @@ if _USE_TENANTS:
         'tenants',
         'super_admin',
         'onboarding',
-        'abonnement',
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
@@ -77,6 +76,7 @@ if _USE_TENANTS:
         'carte_eleve',
         'notifications',
         'planning',
+        'abonnement',
     ]
     INSTALLED_APPS = list(SHARED_APPS) + TENANT_APPS
     DATABASE_ROUTERS    = ['django_tenants.routers.TenantSyncRouter']

@@ -186,6 +186,32 @@ def prefet_or_secretariat_required(view_func):
     return wrapper
 
 
+def admin_ecole_required(view_func):
+    """Autorise uniquement l'admin_ecole."""
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        if not request.user.is_admin_ecole():
+            messages.error(request, "Accès réservé à l'administrateur d'école.")
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
+    wrapper.__name__ = view_func.__name__
+    return wrapper
+
+
+def comptable_required(view_func):
+    """Autorise comptable ET admin_ecole (pour supervision)."""
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        if request.user.role not in ('comptable', 'admin_ecole'):
+            messages.error(request, "Accès réservé au service comptable.")
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
+    wrapper.__name__ = view_func.__name__
+    return wrapper
+
+
 # ── Gestion des utilisateurs ──────────────────────────────────────────────────
 @login_required
 @prefet_required

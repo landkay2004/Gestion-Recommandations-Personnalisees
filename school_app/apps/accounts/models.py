@@ -34,6 +34,7 @@ class CustomUser(AbstractUser):
         ('prefet',       'Prefet des etudes'),
         ('enseignant',   'Enseignant'),
         ('secretariat',  'Secrétariat'),
+        ('comptable',    'Comptable'),
     ]
     role = models.CharField(
         max_length=20, choices=ROLE_CHOICES, default='enseignant', db_index=True
@@ -59,6 +60,9 @@ class CustomUser(AbstractUser):
 
     def is_secretariat(self):
         return self.role == 'secretariat'
+
+    def is_comptable(self):
+        return self.role == 'comptable'
 
     def is_prefet_or_secretariat(self):
         """Vrai pour prefet, admin_ecole et secretariat (gestion administrative)."""

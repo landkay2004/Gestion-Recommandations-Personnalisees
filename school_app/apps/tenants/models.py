@@ -388,6 +388,7 @@ class AnnuaireUtilisateur(models.Model):
         ('prefet',       'Prefet'),
         ('enseignant',   'Enseignant'),
         ('secretariat',  'Secrétariat'),
+        ('comptable',    'Comptable'),
     ]
     email        = models.EmailField(unique=True, db_index=True)
     schema_name  = models.CharField(max_length=63)
