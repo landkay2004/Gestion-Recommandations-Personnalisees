@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Console plateforme{% endblock %} — {{ platform_settings.site_name|default:"SGN RDC" }}</title>
+  <title>{% block title %}Console plateforme{% endblock %} — {{ platform_settings.site_name|default:"EducNet" }}</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,7 @@
       {% endif %}
     </div>
     <div class="sidebar-title">
-      <span class="s-school">{{ platform_settings.site_name|default:"SGN RDC"|truncatechars:22 }}</span>
+      <span class="s-school">{{ platform_settings.site_name|default:"EducNet"|truncatechars:22 }}</span>
       <span class="s-role">{{ platform_settings.site_slogan|default:"School Governance Network"|truncatechars:26 }}</span>
     </div>
   </div>

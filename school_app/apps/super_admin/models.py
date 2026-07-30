@@ -47,7 +47,7 @@ class SuperAdmin(models.Model):
     def get_totp_uri(self):
         return pyotp.totp.TOTP(self.totp_secret).provisioning_uri(
             name=self.email,
-            issuer_name='SGN RDC Platform'
+            issuer_name='EducNet Platform'
         )
 
     def verify_totp(self, code):
@@ -91,8 +91,8 @@ class SuperAdmin(models.Model):
 
 
 class PlatformSettings(models.Model):
-    """Paramètres globaux de la plateforme SGN RDC (singleton pk=1)."""
-    site_name    = models.CharField("Nom du site",    max_length=200, default="SGN RDC")
+    """Paramètres globaux de la plateforme EducNet (singleton pk=1)."""
+    site_name    = models.CharField("Nom du site",    max_length=200, default="EducNet")
     site_slogan  = models.CharField("Slogan",         max_length=300, blank=True, default="School Governance Network")
     site_devise  = models.CharField("Devise",         max_length=300, blank=True)
     site_logo    = models.ImageField("Logo plateforme", upload_to='platform/', null=True, blank=True)
@@ -111,7 +111,7 @@ class PlatformSettings(models.Model):
     smtp_user        = models.CharField("Identifiant SMTP", max_length=200, blank=True, default='')
     smtp_password    = models.CharField("Mot de passe SMTP", max_length=300, blank=True, default='')
     smtp_from_email  = models.CharField("Adresse d'expédition (From)", max_length=200,
-                                         blank=True, default='noreply@sgn-rdc.local')
+                                         blank=True, default='noreply@educnet.local')
 
     # ── Alertes de quota ──────────────────────────────────────────────────────
     alerte_quota_seuil = models.PositiveIntegerField(

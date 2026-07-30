@@ -66,7 +66,7 @@ class ConfigurationEcoleForm(forms.Form):
 
 class ConditionsForm(forms.Form):
     accepter = forms.BooleanField(
-        label="J'ai lu et j'accepte les conditions generales d'utilisation de la plateforme SGN RDC.",
+        label="J'ai lu et j'accepte les conditions generales d'utilisation de la plateforme EducNet.",
         error_messages={'required': "Vous devez accepter les conditions pour continuer."},
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
     )

@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Communications — SGN RDC{% endblock %}
+{% block title %}Communications — EducNet{% endblock %}
 {% block breadcrumb %}<li class="breadcrumb-item active">Communications</li>{% endblock %}
 {% block content %}
 <div class="page-header">
   <div>
     <span class="eyebrow"><i class="bi bi-megaphone-fill me-1"></i>Centre d'information</span>
     <h1 class="page-title">Communications</h1>
-    <p class="text-muted small mb-0">Les informations officielles de la plateforme SGN RDC.</p>
+    <p class="text-muted small mb-0">Les informations officielles de la plateforme EducNet.</p>
   </div>
 </div>
 
@@ -34,7 +34,7 @@
               <div class="text-secondary communication-message">{{ annonce.message|linebreaksbr }}</div>
               <div class="small text-muted mt-3">
                 <i class="bi bi-shield-check me-1"></i>
-                Publié par l'équipe SGN RDC{% if annonce.auteur_nom %} · {{ annonce.auteur_nom }}{% endif %}
+                Publié par l'équipe EducNet{% if annonce.auteur_nom %} · {{ annonce.auteur_nom }}{% endif %}
               </div>
             </div>
           </div>

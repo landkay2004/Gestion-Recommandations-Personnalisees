@@ -816,13 +816,13 @@ def test_email(request):
                 use_tls=settings_obj.smtp_use_tls,
                 fail_silently=False,
             )
-            from_email = settings_obj.smtp_from_email or 'noreply@sgn-rdc.local'
+            from_email = settings_obj.smtp_from_email or 'noreply@educnet.local'
             mode = 'smtp'
         else:
             conn = None
             from_email = django_settings.DEFAULT_FROM_EMAIL
 
-        site_name = settings_obj.site_name or 'SGN RDC'
+        site_name = settings_obj.site_name or 'EducNet'
         msg = EmailMessage(
             subject="[%s] ✅ Test d'envoi e-mail — configuration OK" % site_name,
             body=(
@@ -979,10 +979,10 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
     try:
         from super_admin.models import PlatformSettings
         ps = PlatformSettings.objects.get(pk=1)
-        site_name = ps.site_name or 'SGN RDC'
+        site_name = ps.site_name or 'EducNet'
     except Exception:
         ps = None
-        site_name = 'SGN RDC'
+        site_name = 'EducNet'
 
     # Construire la connexion SMTP depuis PlatformSettings
     if ps and ps.smtp_actif and ps.smtp_host:
@@ -995,7 +995,7 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
             use_tls=ps.smtp_use_tls,
             fail_silently=False,
         )
-        from_email = ps.smtp_from_email or 'noreply@sgn-rdc.local'
+        from_email = ps.smtp_from_email or 'noreply@educnet.local'
     else:
         conn = None
         from_email = django_settings.DEFAULT_FROM_EMAIL

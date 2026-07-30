@@ -1,6 +1,22 @@
-# SGN RDC — Système de Gestion des Notes
+# EducNet — Système de Gestion des Notes
 
 Plateforme web **multi-tenant** de gestion scolaire pour les établissements de la République Démocratique du Congo. Bulletins officiels MEPSP, planning, portail parents, carte élève, gestion multi-écoles.
+
+---
+
+## Nouveautés — Version 3.1 (Juillet 2026)
+
+| Nouveauté | Description |
+|---|---|
+| **Rebrand EducNet** | La plateforme est renommée **EducNet** — tous les titres, e-mails et templates mis à jour |
+| **Module Comptable** | Nouvelle app `comptable` : gestion des paiements scolaires, encaissement par élève, historique des paiements, tableau de bord comptable dédié |
+| **Frais scolaires** | App `abonnement` enrichie : types de frais paramétrables, facturation, confirmation de paiements plateforme |
+| **Seed automatique** | Le script `start.sh` déclenche `seed_test_school` (PostgreSQL) ou `seed_sqlite_users` (SQLite) **et** `seed_super_admin` à chaque démarrage |
+| **Design — padding amélioré** | Espacement élargi dans les tableaux, cartes et en-têtes de page pour une meilleure lisibilité |
+| **Journal des opérations** | Traçabilité complète des clôtures d'années, promotions et transferts d'élèves |
+| **Niveaux & Promotions** | Gestion des niveaux d'étude, clôture d'année scolaire, promotion automatique des élèves |
+| **Archives portail** | Consultation des bulletins des années précédentes via le portail parents |
+| **Rate limiting login** | Protection anti-brute-force sur les routes de connexion (école + super-admin) |
 
 ---
 
@@ -203,7 +219,7 @@ Chaque école possède son **propre schéma PostgreSQL** (ex: `ecole_test`, `ins
 
 1. Activez la **validation en 2 étapes** sur votre compte Google
 2. Accédez à [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
-3. Créez une app password pour **« Autre (SGN RDC) »**
+3. Créez une app password pour **« Autre (EducNet) »**
 4. Copiez le mot de passe généré (16 caractères) dans le champ SMTP Password
 
 ### Configuration Outlook / Office 365
@@ -221,9 +237,9 @@ Sans configuration SMTP active, tous les e-mails sont affichés dans les **logs 
 
 ```
 [CONSOLE EMAIL]
-From: noreply@sgn-rdc.local
+From: noreply@educnet.local
 To: admin@ecole.cd
-Subject: Vos identifiants - Plateforme SGN RDC
+Subject: Vos identifiants - Plateforme EducNet
 ...
 ```
 
@@ -510,7 +526,7 @@ En ligne de commande :
 cd school_app
 python3 manage.py shell -c "
 from django.core.mail import send_mail
-send_mail('Test SGN', 'Bonjour depuis SGN RDC', 'noreply@test.local', ['votre@email.com'])
+send_mail('Test SGN', 'Bonjour depuis EducNet', 'noreply@test.local', ['votre@email.com'])
 print('OK')
 "
 ```
@@ -600,8 +616,8 @@ Vérifiez que `CSRF_TRUSTED_ORIGINS` dans `settings.py` contient votre domaine d
 
 ## Licence
 
-Usage interne — Plateforme SGN RDC © 2025–2026. Tous droits réservés.
+Usage interne — Plateforme EducNet © 2025–2026. Tous droits réservés.
 
 ---
 
-*Généré le 29 juillet 2026 — Version 3.0*
+*Généré le 30 juillet 2026 — Version 3.1 — EducNet*

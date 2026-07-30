@@ -42,7 +42,7 @@ printf '%s%s\n' "$C_BLUE$C_BOLD" \
 printf '%s%s\n' "$C_BLUE$C_BOLD" \
 '                                                              '
 printf '%s%s%s\n' "$C_CYAN$C_BOLD" \
-'         Plateforme de Gestion Scolaire  —  SGN RDC          ' "$C_RESET"
+'         Plateforme de Gestion Scolaire  —  EducNet          ' "$C_RESET"
 hr
 printf '\n'
 
@@ -68,12 +68,11 @@ if ! PYTHON_BIN="$(find_python)"; then
 fi
 
 PYTHON_VER="$("$PYTHON_BIN" --version 2>&1)"
-step "0/5" "Environnement Python"
-ok "Exécutable : $PYTHON_BIN  ($PYTHON_VER)"
 
-# ── Étape 1 — Environnement Python ───────────────────────────────────────────
+# ── Étape 1 — Environnement et dépendances ───────────────────────────────────
 cd "$ROOT_DIR"
-step "1/5" "Environnement et dépendances"
+step "1/6" "Environnement et dépendances"
+ok "Exécutable : $PYTHON_BIN  ($PYTHON_VER)"
 
 if [[ -n "${VIRTUAL_ENV:-}" ]]; then
     if [[ -x "$VIRTUAL_ENV/bin/python" ]]; then
@@ -138,7 +137,7 @@ fi
 cd "$APP_DIR"
 
 # ── Étape 2 — Connexion base de données ──────────────────────────────────────
-step "2/5" "Connexion à la base de données"
+step "2/6" "Connexion à la base de données"
 
 if [[ "${SKIP_DB_CHECK:-0}" == "1" ]]; then
     warn "Vérification DB sautée (SKIP_DB_CHECK=1)"
@@ -167,21 +166,25 @@ fi
 step "4/6" "Données de test (seed)"
 
 if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
-    "$PYTHON_BIN" manage.py seed_test_school
-    ok "Données de test créées/mises à jour"
+    # Mode PostgreSQL : école de test + super-admin
+    if "$PYTHON_BIN" manage.py help seed_test_school >/dev/null 2>&1; then
+        "$PYTHON_BIN" manage.py seed_test_school && ok "École de test créée/mise à jour (seed_test_school)"
+    fi
+    if "$PYTHON_BIN" manage.py help seed_super_admin >/dev/null 2>&1; then
+        "$PYTHON_BIN" manage.py seed_super_admin >/dev/null 2>&1 && ok "Super-admin créé/mis à jour"
+    fi
 else
-    # Mode SQLite : super-admin + comptes école de test
-    "$PYTHON_BIN" manage.py seed_sqlite_users
-    ok "Comptes SQLite créés/mis à jour"
-
-    # Créer/mettre à jour le super-admin de test si la commande existe
+    # Mode SQLite : comptes de test + super-admin
+    if "$PYTHON_BIN" manage.py help seed_sqlite_users >/dev/null 2>&1; then
+        "$PYTHON_BIN" manage.py seed_sqlite_users && ok "Comptes SQLite créés/mis à jour (seed_sqlite_users)"
+    fi
     if "$PYTHON_BIN" manage.py help seed_super_admin >/dev/null 2>&1; then
         "$PYTHON_BIN" manage.py seed_super_admin >/dev/null 2>&1 && ok "Super-admin de test créé/mis à jour"
     fi
 
-    # Afficher un résumé des credentials SQLite
+    # Afficher un résumé des credentials
     printf '\n'
-    printf '  %s%s%s\n' "$C_CYAN$C_BOLD" "── Credentials SQLite ────────────────────────────────────────" "$C_RESET"
+    printf '  %s%s%s\n' "$C_CYAN$C_BOLD" "── Credentials EducNet (SQLite) ──────────────────────────────" "$C_RESET"
     printf '  %-14s  %-34s  %s\n' "Super-admin"  "superadmin@test.local"       "SuperAdmin@2025!"
     printf '  %-14s  %-34s  %s\n' "Admin-école"  "admin@ecoletest.local"        "Admin@Ecole2025!"
     printf '  %-14s  %-34s  %s\n' "Préfet"       "prefet@ecoletest.local"       "Prefet@Ecole2025!"
@@ -190,7 +193,7 @@ else
     printf '\n'
 fi
 
-# ── Étape 5 — Fichiers statiques ─────────────────────────────────────────────
+# ── Étape 5 — Fichiers statiques ──────────────────────────────────────────────
 step "5/6" "Fichiers statiques"
 
 if [[ "${SKIP_COLLECTSTATIC:-0}" == "1" ]]; then

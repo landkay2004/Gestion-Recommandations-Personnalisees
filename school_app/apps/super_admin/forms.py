@@ -265,7 +265,7 @@ class PlatformSettingsForm(forms.ModelForm):
             'alerte_quota_message_email', 'alerte_quota_message_app',
         ]
         widgets = {
-            'site_name':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'SGN RDC'}),
+            'site_name':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'EducNet'}),
             'site_slogan': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'School Governance Network'}),
             'site_devise': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Votre devise ou citation…'}),
             'site_logo':   forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),

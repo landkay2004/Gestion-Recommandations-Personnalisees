@@ -1,4 +1,4 @@
-# Système de Gestion des Notes — SGN RDC
+# Système de Gestion des Notes — EducNet
 
 Application web Django multi-tenant de gestion scolaire pour les établissements de la République Démocratique du Congo.  
 Fonctionnalités : notes, bulletins officiels, planning, cartes d'élèves, portail parents, frais scolaires, abonnements.

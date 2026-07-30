@@ -195,7 +195,7 @@ class Command(BaseCommand):
         from django.template.loader import render_to_string
         from django.conf import settings as django_settings
 
-        site_name = ps.site_name or 'SGN RDC'
+        site_name = ps.site_name or 'EducNet'
 
         # ── Connexion SMTP ──────────────────────────────────────────────
         if ps.smtp_actif and ps.smtp_host:
@@ -208,7 +208,7 @@ class Command(BaseCommand):
                 use_tls=ps.smtp_use_tls,
                 fail_silently=False,
             )
-            from_email = ps.smtp_from_email or 'noreply@sgn-rdc.local'
+            from_email = ps.smtp_from_email or 'noreply@educnet.local'
         else:
             conn = None
             from_email = django_settings.DEFAULT_FROM_EMAIL
@@ -291,7 +291,7 @@ class Command(BaseCommand):
         """
         from django.db import connection
 
-        site_name = ps.site_name or 'SGN RDC'
+        site_name = ps.site_name or 'EducNet'
         nb_crees  = 0
 
         # Basculer vers le schéma de l'école pour accéder aux modèles tenant

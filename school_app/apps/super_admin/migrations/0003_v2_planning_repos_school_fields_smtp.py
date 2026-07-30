@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='platformsettings',
             name='smtp_from_email',
-            field=models.CharField(blank=True, default='noreply@sgn-rdc.local', max_length=200, verbose_name="Adresse d'expédition (From)"),
+            field=models.CharField(blank=True, default='noreply@educnet.local', max_length=200, verbose_name="Adresse d'expédition (From)"),
         ),
         migrations.AddField(
             model_name='platformsettings',

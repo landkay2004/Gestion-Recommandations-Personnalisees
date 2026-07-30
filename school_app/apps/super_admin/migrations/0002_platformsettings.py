@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
             name='PlatformSettings',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('site_name', models.CharField(default='SGN RDC', max_length=200, verbose_name='Nom du site')),
+                ('site_name', models.CharField(default='EducNet', max_length=200, verbose_name='Nom du site')),
                 ('site_slogan', models.CharField(blank=True, default='School Governance Network', max_length=300, verbose_name='Slogan')),
                 ('site_devise', models.CharField(blank=True, max_length=300, verbose_name='Devise')),
                 ('site_logo', models.ImageField(blank=True, null=True, upload_to='platform/', verbose_name='Logo plateforme')),

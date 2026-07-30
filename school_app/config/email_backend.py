@@ -1,5 +1,5 @@
 """
-Backend e-mail dynamique — SGN RDC
+Backend e-mail dynamique — EducNet
 Utilise les paramètres SMTP de PlatformSettings quand smtp_actif=True,
 sinon bascule sur le backend console (développement).
 
