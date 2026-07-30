@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% block title %}{{ titre }}{% endblock %}
-{% block breadcrumb %}<li class="breadcrumb-item"><a href="{% url 'planning_list' %}">Planning</a></li><li class="breadcrumb-item active">{{ titre }}</li>{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'planning_list' %}">Planning</a></li>
+<li class="breadcrumb-item active">{{ titre }}</li>
+{% endblock %}
 {% block content %}
 <div class="page-header">
   <h1 class="page-title"><i class="bi bi-calendar-plus-fill text-primary me-2"></i>{{ titre }}</h1>
 </div>
 
-<div class="card" style="max-width:580px">
+<div class="card" style="max-width:640px">
   <div class="card-body">
+
     {% if form.non_field_errors %}
     <div class="alert alert-danger py-2 small">
       <i class="bi bi-exclamation-triangle-fill me-1"></i>
@@ -15,27 +19,162 @@
     </div>
     {% endif %}
 
-    <form method="post">
+    <form method="post" id="seanceForm">
       {% csrf_token %}
-      {% for field in form %}
+
+      {# ── Année scolaire ── #}
       <div class="mb-3">
-        <label class="form-label fw-medium small">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
-        {{ field }}
-        {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
-        {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors|join:', ' }}</div>{% endif %}
+        <label class="form-label fw-medium small">
+          {{ form.annee_scolaire.label }}
+          <span class="text-danger">*</span>
+        </label>
+        {{ form.annee_scolaire }}
+        {% if form.annee_scolaire.errors %}<div class="text-danger small mt-1">{{ form.annee_scolaire.errors|join:', ' }}</div>{% endif %}
       </div>
-      {% endfor %}
+
+      {# ── Filtre : Classe ── #}
+      <div class="mb-3">
+        <label class="form-label fw-medium small" for="id_classe_filter">
+          {{ form.classe.label }}
+          <span class="badge bg-info-subtle text-info ms-1" style="font-size:.7rem">Filtre</span>
+        </label>
+        {{ form.classe }}
+        {% if form.classe.help_text %}
+          <div class="form-text">{{ form.classe.help_text }}</div>
+        {% endif %}
+      </div>
+
+      {# ── Cours (filtré par classe) ── #}
+      <div class="mb-3">
+        <label class="form-label fw-medium small" for="id_matiere_classe">
+          {{ form.matiere_classe.label }}
+          <span class="text-danger">*</span>
+        </label>
+        <div id="matiere-loading" class="d-none mb-1">
+          <span class="spinner-border spinner-border-sm text-primary me-1"></span>
+          <span class="small text-muted">Chargement des cours…</span>
+        </div>
+        {{ form.matiere_classe }}
+        {% if form.matiere_classe.errors %}<div class="text-danger small mt-1">{{ form.matiere_classe.errors|join:', ' }}</div>{% endif %}
+        <div id="matiere-hint" class="form-text text-muted d-none">
+          <i class="bi bi-funnel me-1"></i>Cours filtrés pour la classe sélectionnée.
+        </div>
+      </div>
+
+      {# ── Créneau ── #}
+      <div class="mb-3">
+        <label class="form-label fw-medium small">
+          {{ form.creneau.label }}
+          <span class="text-danger">*</span>
+        </label>
+        {{ form.creneau }}
+        {% if form.creneau.errors %}<div class="text-danger small mt-1">{{ form.creneau.errors|join:', ' }}</div>{% endif %}
+      </div>
+
+      {# ── Salle (optionnelle) ── #}
+      <div class="mb-3">
+        <label class="form-label fw-medium small">{{ form.salle.label }}</label>
+        {{ form.salle }}
+        {% if form.salle.errors %}<div class="text-danger small mt-1">{{ form.salle.errors|join:', ' }}</div>{% endif %}
+      </div>
 
       <div class="alert alert-info small py-2 mb-3">
         <i class="bi bi-info-circle me-1"></i>
-        Le système détecte automatiquement les conflits d'enseignant, de classe et de salle.
+        Seuls les créneaux de type <strong>Cours</strong> sont proposés. Le système détecte automatiquement les conflits d'enseignant, de classe et de salle.
       </div>
 
       <div class="d-flex gap-2 mt-4">
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check2 me-1"></i>Enregistrer
+        </button>
         <a href="{% url 'planning_list' %}" class="btn btn-outline-secondary">Annuler</a>
       </div>
     </form>
   </div>
 </div>
+
+<script>
+(function () {
+  var classeSelect   = document.getElementById('id_classe_filter');
+  var matiereSelect  = document.getElementById('id_matiere_classe');
+  var loadingEl      = document.getElementById('matiere-loading');
+  var hintEl         = document.getElementById('matiere-hint');
+  var anneeSelect    = document.querySelector('[name="annee_scolaire"]');
+
+  // Valeur initiale de matiere_classe (pour la mise à jour)
+  var initialMatiereId = matiereSelect ? matiereSelect.value : '';
+
+  function getAnneeId() {
+    return anneeSelect ? anneeSelect.value : '';
+  }
+
+  function fetchMatieres(classeId) {
+    if (!matiereSelect) return;
+    if (!classeId) {
+      // Vider et désactiver
+      matiereSelect.innerHTML = '<option value="">— Sélectionnez d\'abord une classe —</option>';
+      hintEl.classList.add('d-none');
+      return;
+    }
+    loadingEl.classList.remove('d-none');
+    matiereSelect.disabled = true;
+
+    var url = "{% url 'matieres_par_classe' %}?classe_id=" + classeId;
+    var anneeId = getAnneeId();
+    if (anneeId) url += '&annee_id=' + anneeId;
+
+    fetch(url, {headers: {'X-Requested-With': 'XMLHttpRequest'}})
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        matiereSelect.innerHTML = '';
+        if (data.matieres.length === 0) {
+          matiereSelect.innerHTML = '<option value="">Aucun cours trouvé pour cette classe</option>';
+        } else {
+          var opt = document.createElement('option');
+          opt.value = ''; opt.textContent = '— Choisir un cours —';
+          matiereSelect.appendChild(opt);
+          data.matieres.forEach(function (mc) {
+            var o = document.createElement('option');
+            o.value = mc.id;
+            o.textContent = mc.label;
+            if (String(mc.id) === initialMatiereId) o.selected = true;
+            matiereSelect.appendChild(o);
+          });
+          hintEl.classList.remove('d-none');
+        }
+      })
+      .catch(function () {
+        matiereSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+      })
+      .finally(function () {
+        loadingEl.classList.add('d-none');
+        matiereSelect.disabled = false;
+      });
+  }
+
+  if (classeSelect) {
+    classeSelect.addEventListener('change', function () {
+      initialMatiereId = ''; // réinitialiser lors d'un changement manuel
+      fetchMatieres(this.value);
+    });
+
+    // Déclencher au chargement si une classe est déjà sélectionnée
+    if (classeSelect.value) {
+      fetchMatieres(classeSelect.value);
+    } else {
+      matiereSelect.innerHTML = '<option value="">— Sélectionnez d\'abord une classe —</option>';
+    }
+  }
+
+  // Si l'année change, recharger les matières
+  if (anneeSelect) {
+    anneeSelect.addEventListener('change', function () {
+      if (classeSelect && classeSelect.value) {
+        initialMatiereId = '';
+        fetchMatieres(classeSelect.value);
+      }
+    });
+  }
+})();
+</script>
 {% endblock %}

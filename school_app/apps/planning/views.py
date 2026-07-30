@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.http import JsonResponse
 
 from accounts.views import prefet_or_secretariat_required
 from classes.models import AnneeScolaire, Classe
@@ -238,12 +239,49 @@ def _build_grille_table(seances, tous_creneaux, jours):
 
 @login_required
 @prefet_or_secretariat_required
+def matieres_par_classe(request):
+    """
+    Endpoint AJAX : renvoie les MatiereClasse d'une classe donnée.
+    GET /planning/ajax/matieres/?classe_id=X[&annee_id=Y]
+    """
+    classe_id = request.GET.get('classe_id')
+    annee_id  = request.GET.get('annee_id')
+
+    if not classe_id:
+        return JsonResponse({'matieres': []})
+
+    qs = MatiereClasse.objects.filter(
+        classe_id=classe_id
+    ).select_related('matiere', 'enseignant__user').order_by('matiere__nom')
+
+    if annee_id:
+        qs = qs.filter(classe__annee_scolaire_id=annee_id)
+
+    data = [
+        {
+            'id':    mc.pk,
+            'label': str(mc.matiere) + (f' — {mc.enseignant}' if mc.enseignant else ''),
+        }
+        for mc in qs
+    ]
+    return JsonResponse({'matieres': data})
+
+
+@login_required
+@prefet_or_secretariat_required
 def seance_create(request):
-    annee = AnneeScolaire.objects.filter(active=True).first()
+    annee    = AnneeScolaire.objects.filter(active=True).first()
+    # Récupérer la classe pré-sélectionnée depuis l'URL ou le POST
+    classe_id  = request.POST.get('classe') or request.GET.get('classe')
+    creneau_id = request.GET.get('creneau')
+    initial    = {'annee_scolaire': annee}
+    if creneau_id:
+        initial['creneau'] = creneau_id
     form = SeanceHoraireForm(
         request.POST or None,
         annee_scolaire=annee,
-        initial={'annee_scolaire': annee},
+        classe_id=classe_id,
+        initial=initial,
     )
     if request.method == 'POST' and form.is_valid():
         try:
@@ -257,17 +295,22 @@ def seance_create(request):
     return render(request, 'planning/seance_form.html', {
         'form': form,
         'titre': 'Ajouter une séance',
+        'annee': annee,
     })
 
 
 @login_required
 @prefet_or_secretariat_required
 def seance_update(request, pk):
-    seance = get_object_or_404(SeanceHoraire, pk=pk)
+    seance    = get_object_or_404(SeanceHoraire, pk=pk)
+    classe_id = request.POST.get('classe') or (
+        seance.matiere_classe.classe_id if seance.matiere_classe_id else None
+    )
     form = SeanceHoraireForm(
         request.POST or None,
         instance=seance,
         annee_scolaire=seance.annee_scolaire,
+        classe_id=classe_id,
     )
     if request.method == 'POST' and form.is_valid():
         try:
@@ -282,6 +325,7 @@ def seance_update(request, pk):
         'form': form,
         'titre': 'Modifier la séance',
         'obj': seance,
+        'annee': seance.annee_scolaire,
     })
 
 

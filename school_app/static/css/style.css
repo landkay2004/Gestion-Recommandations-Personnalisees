@@ -510,15 +510,15 @@ a:hover { color: var(--color-primary-hover); }
 /* =====================================================================
    PAGE CONTENT
    ===================================================================== */
-.page-content { flex: 1; padding: 28px 28px 60px; }
+.page-content { flex: 1; padding: 32px 32px 72px; }
 
 .page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
 }
 
 .page-title {

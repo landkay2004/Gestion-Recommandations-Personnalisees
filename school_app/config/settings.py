@@ -17,14 +17,29 @@ sys.path.insert(0, str(BASE_DIR / 'apps'))
 # ─────────────────────────────────────────────────────────────────────────────
 # SÉCURITÉ
 # ─────────────────────────────────────────────────────────────────────────────
-SECRET_KEY = os.environ.get(
-    'DJANGO_SECRET_KEY',
-    'django-insecure-rdcschool-2024-secret-key-change-in-production'
-)
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = ['*']
+_raw_secret = os.environ.get('DJANGO_SECRET_KEY', '')
+if not _raw_secret:
+    import secrets as _secrets
+    _raw_secret = _secrets.token_urlsafe(64)
+SECRET_KEY = _raw_secret
 
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').strip().lower() in ('true', '1', 'yes')
+
+# En production, restreindre les hôtes autorisés
 _site_url = os.environ.get('DJANGO_SITE_URL', '').strip()
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [
+        'localhost', '127.0.0.1',
+        '.replit.dev', '.replit.app', '.pythonanywhere.com',
+    ]
+    if _site_url:
+        from urllib.parse import urlparse as _up
+        _h = _up(_site_url).hostname
+        if _h:
+            ALLOWED_HOSTS.append(_h)
+
 CSRF_TRUSTED_ORIGINS = [
     'https://*.replit.dev',
     'https://*.spock.replit.dev',
@@ -229,6 +244,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 8}},
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
@@ -266,7 +282,12 @@ SESSION_COOKIE_HTTPONLY         = True
 SESSION_COOKIE_SAMESITE         = 'Lax'
 SESSION_COOKIE_AGE              = 28800
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_ENGINE                  = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_NAME             = 'sgn_session'
+# Cookies sécurisés uniquement en production HTTPS
+SESSION_COOKIE_SECURE           = not DEBUG
+CSRF_COOKIE_SECURE              = not DEBUG
+CSRF_COOKIE_HTTPONLY            = True
 
 # ─────────────────────────────────────────────────────────────────────────────
 # EMAIL
@@ -288,6 +309,14 @@ DEFAULT_FROM_EMAIL  = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@sgn-rdc.loca
 SECURE_BROWSER_XSS_FILTER   = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS             = 'SAMEORIGIN'
+SECURE_REFERRER_POLICY      = 'strict-origin-when-cross-origin'
+
+# En production : activer HSTS + redirection HTTPS
+if not DEBUG:
+    SECURE_HSTS_SECONDS        = 31536000   # 1 an
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD        = True
+    SECURE_SSL_REDIRECT        = False      # géré par le reverse proxy (Replit/nginx)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CACHE

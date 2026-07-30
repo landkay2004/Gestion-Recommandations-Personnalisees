@@ -39,7 +39,10 @@
           <div class="tpl-grid">
 
             {% for val, label in config.MODELES %}
-            <label class="tpl-option {% if config.modele == val %}active{% endif %}" data-tpl="{{ val }}">
+            {% with is_prem=val|slice:"-1:" %}
+            <label class="tpl-option {% if config.modele == val %}active{% endif %}"
+                   data-tpl="{{ val }}"
+                   {% if is_prem == "✦" or val in "horizon,congo,emeraude,crepuscule,rubis,ocean,aurore" %}data-premium="1"{% endif %}>
               <input type="radio" name="modele" value="{{ val }}"
                      {% if config.modele == val %}checked{% endif %}
                      onchange="onTemplateChange('{{ val }}')">
@@ -55,9 +58,12 @@
                 </div>
                 <div class="tpl-sw-foot"></div>
               </div>
-              <span class="tpl-label">{{ label }}</span>
+              <span class="tpl-label{% if val in "horizon,congo,emeraude,crepuscule,rubis,ocean,aurore" %}-premium{% endif %}">
+                {{ label }}
+              </span>
               <i class="bi bi-check-circle-fill tpl-check"></i>
             </label>
+            {% endwith %}
             {% endfor %}
 
           </div>
@@ -463,8 +469,39 @@
 .tpl-sw-crepuscule .tpl-sw-l2, .tpl-sw-crepuscule .tpl-sw-l3 { background: rgba(245,243,255,.45); }
 .tpl-sw-crepuscule .tpl-sw-qr { background: rgba(168,85,247,.2); border: 1px solid rgba(168,85,247,.5); }
 .tpl-sw-crepuscule .tpl-sw-foot { background: rgba(0,0,0,.38); border-top: 1px solid rgba(168,85,247,.32); }
+/* Rubis */
+.tpl-sw-rubis { background: linear-gradient(145deg,#7f1d1d,#991b1b 60%,#b91c1c); }
+.tpl-sw-rubis .tpl-sw-bar { background: rgba(0,0,0,.22); border-bottom: 1.5px solid rgba(245,158,11,.5); }
+.tpl-sw-rubis .tpl-sw-l1 { background: #fde68a; }
+.tpl-sw-rubis .tpl-sw-l2, .tpl-sw-rubis .tpl-sw-l3 { background: rgba(255,241,242,.5); }
+.tpl-sw-rubis .tpl-sw-qr { background: rgba(245,158,11,.2); border: 1px solid rgba(245,158,11,.5); }
+.tpl-sw-rubis .tpl-sw-foot { background: rgba(0,0,0,.3); border-top: 1px solid rgba(245,158,11,.35); }
+/* Océan */
+.tpl-sw-ocean { background: linear-gradient(155deg,#0c4a6e,#075985 55%,#0369a1); }
+.tpl-sw-ocean .tpl-sw-bar { background: rgba(0,0,0,.15); border-bottom: 1.5px solid rgba(6,182,212,.45); }
+.tpl-sw-ocean .tpl-sw-l1 { background: #a5f3fc; }
+.tpl-sw-ocean .tpl-sw-l2, .tpl-sw-ocean .tpl-sw-l3 { background: rgba(240,249,255,.45); }
+.tpl-sw-ocean .tpl-sw-qr { background: rgba(6,182,212,.2); border: 1px solid rgba(6,182,212,.5); }
+.tpl-sw-ocean .tpl-sw-foot { background: rgba(0,0,0,.22); border-top: 1px solid rgba(6,182,212,.35); }
+/* Aurore */
+.tpl-sw-aurore { background: linear-gradient(145deg,#431407,#7c2d12 50%,#9a3412); }
+.tpl-sw-aurore .tpl-sw-bar { background: rgba(0,0,0,.22); border-bottom: 1.5px solid rgba(249,115,22,.5); }
+.tpl-sw-aurore .tpl-sw-l1 { background: #fed7aa; }
+.tpl-sw-aurore .tpl-sw-l2, .tpl-sw-aurore .tpl-sw-l3 { background: rgba(255,247,237,.45); }
+.tpl-sw-aurore .tpl-sw-qr { background: rgba(249,115,22,.2); border: 1px solid rgba(249,115,22,.5); }
+.tpl-sw-aurore .tpl-sw-foot { background: rgba(0,0,0,.28); border-top: 1px solid rgba(249,115,22,.38); }
+
+/* Badge premium sur les swatches */
+.tpl-option[data-premium] .tpl-swatch::after {
+  content: '✦';
+  position: absolute; top: 3px; right: 4px;
+  font-size: .6rem; color: #f59e0b;
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+}
+.tpl-swatch { position: relative; }
 
 .tpl-label { font-size: .78rem; font-weight: 600; color: #374151; }
+.tpl-label-premium { font-size: .78rem; font-weight: 600; color: #b45309; }
 
 /* Couleurs */
 .color-input-wrap { display: flex; align-items: center; gap: .5rem; }
@@ -719,6 +756,60 @@
 .prev-card.tpl-crepuscule.prev-verso .cv-msg { color:rgba(245,243,255,.52); }
 .prev-card.tpl-crepuscule.prev-verso .cv-footer { background:rgba(0,0,0,.42); border-top:1px solid rgba(168,85,247,.32); color:rgba(245,243,255,.48); }
 
+/* ── RUBIS ── */
+.prev-card.tpl-rubis { background:linear-gradient(145deg,#7f1d1d 0%,#991b1b 60%,#b91c1c 100%); color:#fff1f2; }
+.prev-card.tpl-rubis .cr-top { background:rgba(0,0,0,.2); border-bottom:1.5px solid rgba(245,158,11,.55); }
+.prev-card.tpl-rubis .cr-badge { background:rgba(245,158,11,.22); color:#fde68a; border:1px solid rgba(245,158,11,.5); }
+.prev-card.tpl-rubis .cr-school-name { color:#fde68a; font-weight:900; } .prev-card.tpl-rubis .cr-school-sub { color:rgba(255,241,242,.68); opacity:1; }
+.prev-card.tpl-rubis .cr-badge-carte { background:rgba(245,158,11,.18); color:#fde68a; border:1px solid rgba(245,158,11,.42); }
+.prev-card.tpl-rubis .cr-name { color:#fff1f2; font-weight:900; } .prev-card.tpl-rubis .cr-detail,.prev-card.tpl-rubis .cr-prenom { color:rgba(255,241,242,.68); }
+.prev-card.tpl-rubis .cr-classe-badge { background:var(--c2); color:var(--c1); font-weight:800; }
+.prev-card.tpl-rubis .cr-photo-wrap { border:2.5px solid var(--c2); background:rgba(255,255,255,.06); color:rgba(255,241,242,.4); }
+.prev-card.tpl-rubis .cr-foot { background:rgba(0,0,0,.32); border-top:1px solid rgba(245,158,11,.35); } .prev-card.tpl-rubis .cr-foot-mat { color:rgba(255,241,242,.65); } .prev-card.tpl-rubis .cr-foot-annee { color:rgba(255,241,242,.6); }
+.prev-card.tpl-rubis .cr-strip { background:linear-gradient(90deg,var(--c2),#fbbf24); }
+.prev-card.tpl-rubis.prev-verso { background:#fff; color:#1e293b; }
+.prev-card.tpl-rubis.prev-verso .cv-top { background:linear-gradient(90deg,#7f1d1d,#991b1b); }
+.prev-card.tpl-rubis.prev-verso .cv-strip { background:#7f1d1d; }
+.prev-card.tpl-rubis.prev-verso .cv-school { color:#7f1d1d; }
+.prev-card.tpl-rubis.prev-verso .cv-devise { border-left-color:var(--c2); color:var(--c2); }
+.prev-card.tpl-rubis.prev-verso .cv-footer { background:#7f1d1d; color:rgba(255,255,255,.72); }
+
+/* ── OCÉAN ── */
+.prev-card.tpl-ocean { background:linear-gradient(155deg,#0c4a6e 0%,#075985 55%,#0369a1 100%); color:#f0f9ff; }
+.prev-card.tpl-ocean .cr-top { background:rgba(0,0,0,.15); border-bottom:1.5px solid rgba(6,182,212,.45); }
+.prev-card.tpl-ocean .cr-badge { background:rgba(6,182,212,.25); color:#67e8f9; border:1px solid rgba(6,182,212,.5); }
+.prev-card.tpl-ocean .cr-school-name { color:#a5f3fc; font-weight:800; } .prev-card.tpl-ocean .cr-school-sub { color:rgba(240,249,255,.72); opacity:1; }
+.prev-card.tpl-ocean .cr-badge-carte { background:rgba(6,182,212,.2); color:#67e8f9; border:1px solid rgba(6,182,212,.45); }
+.prev-card.tpl-ocean .cr-name { color:#f0f9ff; font-weight:900; } .prev-card.tpl-ocean .cr-detail,.prev-card.tpl-ocean .cr-prenom { color:rgba(240,249,255,.68); }
+.prev-card.tpl-ocean .cr-classe-badge { background:var(--c2); color:var(--c1); font-weight:800; }
+.prev-card.tpl-ocean .cr-photo-wrap { border:2.5px solid var(--c2); background:rgba(255,255,255,.06); color:rgba(240,249,255,.4); }
+.prev-card.tpl-ocean .cr-foot { background:rgba(0,0,0,.25); border-top:1px solid rgba(6,182,212,.35); } .prev-card.tpl-ocean .cr-foot-mat { color:rgba(240,249,255,.72); } .prev-card.tpl-ocean .cr-foot-annee { color:rgba(240,249,255,.62); }
+.prev-card.tpl-ocean .cr-strip { background:linear-gradient(90deg,var(--c2),#22d3ee); }
+.prev-card.tpl-ocean.prev-verso { background:#f0f9ff; color:#0f172a; }
+.prev-card.tpl-ocean.prev-verso .cv-top { background:linear-gradient(90deg,#0c4a6e,#075985); }
+.prev-card.tpl-ocean.prev-verso .cv-strip { background:#e0f2fe; border-top:1px solid #bae6fd; border-bottom:1px solid #bae6fd; }
+.prev-card.tpl-ocean.prev-verso .cv-school { color:#0c4a6e; }
+.prev-card.tpl-ocean.prev-verso .cv-devise { border-left-color:var(--c2); color:#0c4a6e; }
+.prev-card.tpl-ocean.prev-verso .cv-footer { background:#0c4a6e; color:rgba(255,255,255,.75); }
+
+/* ── AURORE ── */
+.prev-card.tpl-aurore { background:linear-gradient(145deg,#431407 0%,#7c2d12 50%,#9a3412 100%); color:#fff7ed; }
+.prev-card.tpl-aurore .cr-top { background:rgba(0,0,0,.2); border-bottom:1.5px solid rgba(249,115,22,.5); }
+.prev-card.tpl-aurore .cr-badge { background:rgba(249,115,22,.25); color:#fdba74; border:1px solid rgba(249,115,22,.5); }
+.prev-card.tpl-aurore .cr-school-name { color:#fed7aa; font-weight:900; } .prev-card.tpl-aurore .cr-school-sub { color:rgba(255,247,237,.68); opacity:1; }
+.prev-card.tpl-aurore .cr-badge-carte { background:rgba(249,115,22,.2); color:#fdba74; border:1px solid rgba(249,115,22,.45); }
+.prev-card.tpl-aurore .cr-name { color:#fff7ed; font-weight:900; } .prev-card.tpl-aurore .cr-detail,.prev-card.tpl-aurore .cr-prenom { color:rgba(255,247,237,.68); }
+.prev-card.tpl-aurore .cr-classe-badge { background:var(--c2); color:#fff; font-weight:800; }
+.prev-card.tpl-aurore .cr-photo-wrap { border:2.5px solid var(--c2); background:rgba(255,255,255,.06); color:rgba(255,247,237,.4); }
+.prev-card.tpl-aurore .cr-foot { background:rgba(0,0,0,.3); border-top:1px solid rgba(249,115,22,.38); } .prev-card.tpl-aurore .cr-foot-mat { color:rgba(255,247,237,.68); } .prev-card.tpl-aurore .cr-foot-annee { color:rgba(255,247,237,.6); }
+.prev-card.tpl-aurore .cr-strip { background:linear-gradient(90deg,var(--c2),#fb923c); }
+.prev-card.tpl-aurore.prev-verso { background:#fff7ed; color:#1c1917; }
+.prev-card.tpl-aurore.prev-verso .cv-top { background:linear-gradient(90deg,#431407,#7c2d12); }
+.prev-card.tpl-aurore.prev-verso .cv-strip { background:#ffedd5; border-top:1px solid #fed7aa; border-bottom:1px solid #fed7aa; }
+.prev-card.tpl-aurore.prev-verso .cv-school { color:#7c2d12; }
+.prev-card.tpl-aurore.prev-verso .cv-devise { border-left-color:var(--c2); color:#7c2d12; }
+.prev-card.tpl-aurore.prev-verso .cv-footer { background:#7c2d12; color:rgba(255,255,255,.72); }
+
 /* Éléments masqués dans l'aperçu */
 .pf-hidden { visibility: hidden; }
 </style>
@@ -735,12 +826,16 @@ const TPL_DEFAULTS = {
   congo:          { c1: '#003DA5', c2: '#F7D618' },
   emeraude:       { c1: '#064e3b', c2: '#10b981' },
   crepuscule:     { c1: '#2e1065', c2: '#a855f7' },
+  rubis:          { c1: '#7f1d1d', c2: '#f59e0b' },
+  ocean:          { c1: '#0c4a6e', c2: '#06b6d4' },
+  aurore:         { c1: '#7c2d12', c2: '#f97316' },
 };
 
 const TPL_NAMES = {
   classique: 'Classique', moderne: 'Moderne',
   institutionnel: 'Institutionnel', minimaliste: 'Minimaliste', premium: 'Premium',
-  horizon: 'Horizon', congo: 'Congo', emeraude: 'Emeraude', crepuscule: 'Crépuscule',
+  horizon: 'Horizon ✦', congo: 'Congo ✦', emeraude: 'Émeraude ✦', crepuscule: 'Crépuscule ✦',
+  rubis: 'Rubis ✦', ocean: 'Océan ✦', aurore: 'Aurore ✦',
 };
 
 const ALL_TPLS = Object.keys(TPL_DEFAULTS);

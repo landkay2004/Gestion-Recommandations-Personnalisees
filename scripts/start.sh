@@ -149,8 +149,8 @@ else
     ok "Connexion établie : $DB_VENDOR"
 fi
 
-# ── Étape 3 — Migrations et données de base ───────────────────────────────────
-step "3/5" "Migrations et données initiales"
+# ── Étape 3 — Migrations ──────────────────────────────────────────────────────
+step "3/6" "Migrations"
 
 if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
     "$PYTHON_BIN" manage.py migrate_schemas --noinput
@@ -158,19 +158,40 @@ if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
 
     "$PYTHON_BIN" manage.py init_public_tenant
     ok "Tenant public initialisé"
-
-    "$PYTHON_BIN" manage.py seed_test_school
-    ok "Données de test créées/mises à jour"
 else
     "$PYTHON_BIN" manage.py migrate --noinput
     ok "Migrations SQLite appliquées"
-
-    "$PYTHON_BIN" manage.py seed_sqlite_users
-    ok "Comptes SQLite créés/mis à jour"
 fi
 
-# ── Étape 4 — Fichiers statiques ─────────────────────────────────────────────
-step "4/5" "Fichiers statiques"
+# ── Étape 4 — Données & comptes de test ───────────────────────────────────────
+step "4/6" "Données de test (seed)"
+
+if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
+    "$PYTHON_BIN" manage.py seed_test_school
+    ok "Données de test créées/mises à jour"
+else
+    # Mode SQLite : super-admin + comptes école de test
+    "$PYTHON_BIN" manage.py seed_sqlite_users
+    ok "Comptes SQLite créés/mis à jour"
+
+    # Créer/mettre à jour le super-admin de test si la commande existe
+    if "$PYTHON_BIN" manage.py help seed_super_admin >/dev/null 2>&1; then
+        "$PYTHON_BIN" manage.py seed_super_admin >/dev/null 2>&1 && ok "Super-admin de test créé/mis à jour"
+    fi
+
+    # Afficher un résumé des credentials SQLite
+    printf '\n'
+    printf '  %s%s%s\n' "$C_CYAN$C_BOLD" "── Credentials SQLite ────────────────────────────────────────" "$C_RESET"
+    printf '  %-14s  %-34s  %s\n' "Super-admin"  "superadmin@test.local"       "SuperAdmin@2025!"
+    printf '  %-14s  %-34s  %s\n' "Admin-école"  "admin@ecoletest.local"        "Admin@Ecole2025!"
+    printf '  %-14s  %-34s  %s\n' "Préfet"       "prefet@ecoletest.local"       "Prefet@Ecole2025!"
+    printf '  %-14s  %-34s  %s\n' "Enseignant"   "enseignant@ecoletest.local"   "Enseignant@2025!"
+    printf '  %-14s  %-34s  %s\n' "Secrétariat"  "secretariat@ecoletest.local"  "Secretariat@2025!"
+    printf '\n'
+fi
+
+# ── Étape 5 — Fichiers statiques ─────────────────────────────────────────────
+step "5/6" "Fichiers statiques"
 
 if [[ "${SKIP_COLLECTSTATIC:-0}" == "1" ]]; then
     warn "Collectstatic sauté (SKIP_COLLECTSTATIC=1)"
@@ -179,8 +200,8 @@ else
     ok "$STATIC_OUT"
 fi
 
-# ── Étape 5 — Démarrage du serveur ───────────────────────────────────────────
-step "5/5" "Démarrage du serveur"
+# ── Étape 6 — Démarrage du serveur ───────────────────────────────────────────
+step "6/6" "Démarrage du serveur"
 
 printf '\n'
 hr

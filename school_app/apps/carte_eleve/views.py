@@ -12,7 +12,7 @@ from classes.models import Classe, AnneeScolaire
 from portail.models import PortailAcces, PortailConfig
 from school_settings.models import SchoolInfo
 from students.models import Student
-from .models import CarteConfig
+from .models import CarteConfig, MODELES_PREMIUM
 
 
 def _get_acces(eleve):

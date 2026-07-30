@@ -1,17 +1,26 @@
 from django.db import models
 
 
+# Modèles nécessitant un abonnement premium
+MODELES_PREMIUM = {'horizon', 'congo', 'emeraude', 'crepuscule', 'rubis', 'ocean', 'aurore'}
+
+
 class CarteConfig(models.Model):
     MODELES = [
+        # ── Modèles standard ──────────────────────────────────────────────────
         ('classique',      'Classique'),
         ('moderne',        'Moderne'),
         ('institutionnel', 'Institutionnel'),
         ('minimaliste',    'Minimaliste'),
         ('premium',        'Premium'),
-        ('horizon',        'Horizon'),
-        ('congo',          'Congo'),
-        ('emeraude',       'Emeraude'),
-        ('crepuscule',     'Crépuscule'),
+        # ── Modèles premium (plan Professionnel ou Entreprise) ────────────────
+        ('horizon',        'Horizon ✦'),
+        ('congo',          'Congo ✦'),
+        ('emeraude',       'Émeraude ✦'),
+        ('crepuscule',     'Crépuscule ✦'),
+        ('rubis',          'Rubis ✦'),
+        ('ocean',          'Océan ✦'),
+        ('aurore',         'Aurore ✦'),
     ]
 
     modele             = models.CharField(max_length=20, choices=MODELES, default='classique',
@@ -53,6 +62,10 @@ class CarteConfig(models.Model):
     def get_config(cls):
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
+
+    @property
+    def est_premium(self):
+        return self.modele in MODELES_PREMIUM
 
     def __str__(self):
         return f'Configuration cartes — {self.get_modele_display()}'
