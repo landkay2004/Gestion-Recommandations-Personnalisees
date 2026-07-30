@@ -56,4 +56,12 @@ urlpatterns = [
     # Paramètres
     path('parametres/',             views.platform_settings, name='platform_settings'),
     path('parametres/test-email/',  views.test_email,        name='test_email'),
+
+    # Demandes d'abonnement
+    path('demandes/',              views.demandes_abonnement,       name='demandes_abonnement'),
+    path('demandes/<int:pk>/',     views.demande_abonnement_detail, name='demande_abonnement_detail'),
+
+    # Paiements plateforme (mobile money / virement)
+    path('paiements/',             views.paiements_plateforme,       name='paiements_plateforme'),
+    path('paiements/<int:pk>/',    views.paiement_plateforme_detail, name='paiement_plateforme_detail'),
 ]

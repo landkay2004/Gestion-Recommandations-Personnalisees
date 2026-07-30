@@ -77,6 +77,7 @@ if _USE_TENANTS:
         'notifications',
         'planning',
         'abonnement',
+        'comptable',
     ]
     INSTALLED_APPS = list(SHARED_APPS) + TENANT_APPS
     DATABASE_ROUTERS    = ['django_tenants.routers.TenantSyncRouter']
@@ -106,6 +107,7 @@ else:
         'carte_eleve',
         'notifications',
         'planning',
+        'comptable',
     ]
 
 # ─────────────────────────────────────────────────────────────────────────────

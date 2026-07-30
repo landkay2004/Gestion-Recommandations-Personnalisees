@@ -134,11 +134,11 @@
     <a href="{% url 'abonnement:frais_list' %}" class="nav-link {% if request.resolver_match.url_name in 'frais_list frais_create frais_update frais_delete' %}active{% endif %}">
       <i class="bi bi-cash-coin"></i><span>Types de frais</span>
     </a>
-    <a href="{% url 'abonnement:comptable_list' %}" class="nav-link {% if request.resolver_match.url_name in 'comptable_list comptable_create comptable_update' %}active{% endif %}">
+    <a href="{% url 'comptable:comptable_list' %}" class="nav-link {% if request.resolver_match.url_name in 'comptable_list comptable_create comptable_update' %}active{% endif %}">
       <i class="bi bi-calculator"></i><span>Comptables</span>
     </a>
     {% endif %}
-    <a href="{% url 'abonnement:historique_paiements' %}" class="nav-link {% if request.resolver_match.url_name == 'historique_paiements' %}active{% endif %}">
+    <a href="{% url 'comptable:historique_paiements' %}" class="nav-link {% if request.resolver_match.url_name == 'historique_paiements' %}active{% endif %}">
       <i class="bi bi-receipt"></i><span>Historique paiements</span>
     </a>
 
@@ -277,15 +277,15 @@
 
   <nav class="sidebar-nav">
     <div class="nav-section-label">Principal</div>
-    <a href="{% url 'abonnement:comptable_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'comptable_dashboard' %}active{% endif %}">
+    <a href="{% url 'comptable:comptable_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'comptable_dashboard' %}active{% endif %}">
       <i class="bi bi-grid-fill"></i><span>Tableau de bord</span>
     </a>
 
     <div class="nav-section-label">Encaissement</div>
-    <a href="{% url 'abonnement:recherche_eleve' %}" class="nav-link {% if request.resolver_match.url_name in 'recherche_eleve encaissement' %}active{% endif %}">
+    <a href="{% url 'comptable:recherche_eleve' %}" class="nav-link {% if request.resolver_match.url_name in 'recherche_eleve encaissement' %}active{% endif %}">
       <i class="bi bi-cash-coin"></i><span>Nouveau paiement</span>
     </a>
-    <a href="{% url 'abonnement:historique_paiements' %}" class="nav-link {% if request.resolver_match.url_name == 'historique_paiements' %}active{% endif %}">
+    <a href="{% url 'comptable:historique_paiements' %}" class="nav-link {% if request.resolver_match.url_name == 'historique_paiements' %}active{% endif %}">
       <i class="bi bi-clock-history"></i><span>Historique</span>
     </a>
 

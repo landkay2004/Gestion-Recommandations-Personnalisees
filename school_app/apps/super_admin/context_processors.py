@@ -4,11 +4,14 @@ from django.db.models import Q
 
 
 def platform_settings(request):
-    """Injecte PlatformSettings et le compteur d'annonces actives dans tous les templates."""
+    """Injecte PlatformSettings, annonces actives, et badges demandes/paiements."""
     ctx = {
         'platform_settings': None,
         'annonces_count': 0,
         'annonces_list': [],
+        'demandes_abonnement_count': 0,
+        'paiements_plateforme_count': 0,
+        'corbeille_count': 0,
     }
     # PlatformSettings (singleton)
     try:
@@ -17,7 +20,7 @@ def platform_settings(request):
     except Exception:
         pass
 
-    # Annonces actives (publiées et non expirées) — seulement pour les super admins connectés
+    # Seulement pour les super admins connectés
     if getattr(request, 'super_admin', None):
         try:
             from tenants.models import AnnoncePlateforme
@@ -29,4 +32,30 @@ def platform_settings(request):
             ctx['annonces_count'] = len(ctx['annonces_list'])
         except Exception:
             pass
+
+        # Badge demandes d'abonnement en attente
+        try:
+            from tenants.models import DemandeAbonnement
+            ctx['demandes_abonnement_count'] = DemandeAbonnement.objects.filter(
+                statut='en_attente'
+            ).count()
+        except Exception:
+            pass
+
+        # Badge paiements plateforme en attente
+        try:
+            from tenants.models import PaiementPlatforme
+            ctx['paiements_plateforme_count'] = PaiementPlatforme.objects.filter(
+                statut='en_attente'
+            ).count()
+        except Exception:
+            pass
+
+        # Corbeille
+        try:
+            from tenants.models import Ecole
+            ctx['corbeille_count'] = Ecole.objects.filter(statut='corbeille').count()
+        except Exception:
+            pass
+
     return ctx

@@ -18,6 +18,28 @@ logger     = logging.getLogger('sgn')
 
 
 # ── Authentification ──────────────────────────────────────────────────────────
+_LOGIN_FAILS = {}    # {ip: [timestamp, …]}
+_MAX_FAILS   = 15
+_LOCKOUT_S   = 600  # 10 minutes
+
+
+def _is_locked(ip):
+    import time as _time
+    now = _time.time()
+    attempts = [t for t in _LOGIN_FAILS.get(ip, []) if now - t < _LOCKOUT_S]
+    _LOGIN_FAILS[ip] = attempts
+    return len(attempts) >= _MAX_FAILS
+
+
+def _record_fail(ip):
+    import time as _time
+    _LOGIN_FAILS.setdefault(ip, []).append(_time.time())
+
+
+def _clear_fails(ip):
+    _LOGIN_FAILS.pop(ip, None)
+
+
 def login_view(request):
     if request.user.is_authenticated:
         if request.user.must_change_password:
@@ -27,6 +49,14 @@ def login_view(request):
     # Super-admin a sa propre page de login
     if getattr(request, 'super_admin', None):
         return redirect('super_admin:dashboard')
+
+    client_ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() \
+                or request.META.get('REMOTE_ADDR', '')
+
+    if request.method == 'POST' and _is_locked(client_ip):
+        from django.contrib.messages import error as msg_error
+        msg_error(request, "Trop de tentatives de connexion. Réessayez dans 10 minutes.")
+        return redirect('login')
 
     form = LoginForm(request, data=request.POST or None)
     if request.method == 'POST':

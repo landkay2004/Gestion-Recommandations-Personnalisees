@@ -3,4 +3,5 @@
 - [Corrections sécurité UI](security-ui-fixes.md) — sidebar, rôles, mot de passe enseignants corrigés
 - [Phase 3 implementation](phase3-implementation.md) — Niveau, clôture, promotions, archives portail, journal des opérations
 - [Phase stabilisation](phase-stabilisation.md) — Maxima CRUD, photo élève, reset intégré, accès manuel portail, état des 15 points
-- [Architecture multi-tenant](multi-tenant-architecture.md) — données plateforme en public, données scolaires et identifiants dans le schéma de l’école
+- [Architecture multi-tenant](multi-tenant-architecture.md) — données plateforme en public, données scolaires et identifiants dans le schéma de l'école
+- [App comptable + paiements plateforme](comptable-paiements.md) — app comptable séparée, URL namespace comptable:*, DemandeAbonnement+PaiementPlatforme dans tenants, vues super_admin, rate limiting login

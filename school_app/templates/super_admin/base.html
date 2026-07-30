@@ -70,6 +70,22 @@
       <i class="bi bi-speedometer2"></i><span>Quotas des écoles</span>
     </a>
 
+    <div class="nav-section-label">Notifications</div>
+    <a href="{% url 'super_admin:demandes_abonnement' %}"
+       class="nav-link {% if 'demande' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-envelope-paper"></i><span>Demandes de plan</span>
+      {% if demandes_abonnement_count > 0 %}
+      <span class="badge bg-warning text-dark rounded-pill ms-auto">{{ demandes_abonnement_count }}</span>
+      {% endif %}
+    </a>
+    <a href="{% url 'super_admin:paiements_plateforme' %}"
+       class="nav-link {% if 'paiement_plateforme' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-phone"></i><span>Paiements Mobile Money</span>
+      {% if paiements_plateforme_count > 0 %}
+      <span class="badge bg-danger rounded-pill ms-auto">{{ paiements_plateforme_count }}</span>
+      {% endif %}
+    </a>
+
     <div class="nav-section-label">Système</div>
     <a href="{% url 'super_admin:maintenance_list' %}"
        class="nav-link {% if 'maintenance' in request.resolver_match.url_name %}active{% endif %}">

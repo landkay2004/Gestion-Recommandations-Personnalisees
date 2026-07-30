@@ -31,4 +31,5 @@ urlpatterns = [
     path('notifications/', include('notifications.urls')),
     path('planning/',     include('planning.urls')),
     path('abonnement/',   include('abonnement.urls', namespace='abonnement')),
+    path('comptable/',    include('comptable.urls',  namespace='comptable')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

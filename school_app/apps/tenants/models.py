@@ -468,3 +468,117 @@ class AnnoncePlateforme(models.Model):
 
     def __str__(self):
         return self.titre
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# DEMANDE D'ABONNEMENT (écoles → super admin)
+# ════════════════════════════════════════════════════════════════════════════
+
+class DemandeAbonnement(models.Model):
+    """
+    Demande de changement / renouvellement de plan soumise par l'admin-école.
+    Visible dans le back-office super-admin avec badge de notification.
+    """
+    STATUT_CHOICES = [
+        ('en_attente', 'En attente'),
+        ('approuvee',  'Approuvée'),
+        ('rejetee',    'Rejetée'),
+        ('annulee',    'Annulée'),
+    ]
+
+    ecole          = models.ForeignKey(Ecole, on_delete=models.CASCADE,
+                                        related_name='demandes_abonnement',
+                                        verbose_name='École')
+    plan_souhaite  = models.ForeignKey(PlanAbonnement, on_delete=models.SET_NULL,
+                                        null=True, related_name='+',
+                                        verbose_name='Plan souhaité')
+    plan_actuel    = models.ForeignKey(PlanAbonnement, on_delete=models.SET_NULL,
+                                        null=True, blank=True, related_name='+',
+                                        verbose_name='Plan actuel')
+    message        = models.TextField('Message de l\'école', blank=True)
+    contact_email  = models.EmailField('Email contact', blank=True)
+    contact_nom    = models.CharField('Nom contact', max_length=200, blank=True)
+    statut         = models.CharField('Statut', max_length=20,
+                                       choices=STATUT_CHOICES, default='en_attente',
+                                       db_index=True)
+    reponse_admin  = models.TextField('Réponse super-admin', blank=True)
+    traite_par     = models.CharField('Traité par', max_length=200, blank=True)
+    traite_le      = models.DateTimeField('Traité le', null=True, blank=True)
+    created_at     = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = 'tenants'
+        ordering = ['-created_at']
+        verbose_name = 'Demande d\'abonnement'
+        verbose_name_plural = 'Demandes d\'abonnement'
+
+    def __str__(self):
+        return 'Demande %s — %s (%s)' % (
+            self.ecole.nom,
+            self.plan_souhaite.nom if self.plan_souhaite else '?',
+            self.statut,
+        )
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# PAIEMENT PLATEFORME (mobile money / virement pour abonnement)
+# ════════════════════════════════════════════════════════════════════════════
+
+def _preuve_upload_path(instance, filename):
+    import os, uuid
+    ext = os.path.splitext(filename)[1].lower()
+    return 'paiements_plateforme/%s%s' % (uuid.uuid4().hex, ext)
+
+
+class PaiementPlatforme(models.Model):
+    """
+    Paiement soumis par l'école pour son abonnement plateforme.
+    Inclut preuve (capture mobile money / reçu virement) validée par le super-admin.
+    """
+    MODE_CHOICES = [
+        ('mobile_money', 'Mobile Money'),
+        ('virement',     'Virement bancaire'),
+        ('especes',      'Espèces'),
+    ]
+    STATUT_CHOICES = [
+        ('en_attente', 'En attente de validation'),
+        ('valide',     'Validé'),
+        ('rejete',     'Rejeté'),
+    ]
+
+    ecole              = models.ForeignKey(Ecole, on_delete=models.CASCADE,
+                                            related_name='paiements_plateforme',
+                                            verbose_name='École')
+    montant            = models.DecimalField('Montant (USD)', max_digits=10, decimal_places=2)
+    mode               = models.CharField('Mode', max_length=20, choices=MODE_CHOICES)
+    numero_transaction = models.CharField('N° transaction', max_length=100, blank=True)
+    preuve             = models.FileField('Preuve', upload_to=_preuve_upload_path,
+                                           null=True, blank=True)
+    notes              = models.TextField('Notes école', blank=True)
+    statut             = models.CharField('Statut', max_length=20,
+                                           choices=STATUT_CHOICES, default='en_attente',
+                                           db_index=True)
+    # Validation super-admin
+    valide_par         = models.CharField('Validé par', max_length=200, blank=True)
+    valide_le          = models.DateTimeField('Validé le', null=True, blank=True)
+    notes_admin        = models.TextField('Notes admin', blank=True)
+    # Jours d'abonnement accordés suite à la validation
+    jours_accordes     = models.IntegerField('Jours accordés', default=0)
+    # Traçabilité sécurité
+    ip_soumission      = models.GenericIPAddressField('IP soumission', null=True, blank=True)
+    created_at         = models.DateTimeField(auto_now_add=True)
+    updated_at         = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        app_label = 'tenants'
+        ordering = ['-created_at']
+        verbose_name = 'Paiement plateforme'
+        verbose_name_plural = 'Paiements plateforme'
+
+    def __str__(self):
+        return 'Paiement %s — %s USD (%s)' % (
+            self.ecole.nom, self.montant, self.statut
+        )
+
+    def get_mode_display_label(self):
+        return dict(self.MODE_CHOICES).get(self.mode, self.mode)

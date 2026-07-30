@@ -1,13 +1,10 @@
 """
-Formulaires pour la gestion des frais scolaires.
+Formulaires pour la gestion des frais scolaires et paiements plateforme.
+Les formulaires comptable sont dans l'app comptable/forms.py.
 """
 from decimal import Decimal
-
 from django import forms
-from django.contrib.auth.validators import UnicodeUsernameValidator
-
-from .models import TypeFrais, Paiement
-from accounts.models import CustomUser, generate_temp_password
+from .models import TypeFrais
 
 
 # ── TypeFrais ─────────────────────────────────────────────────────────────────
@@ -32,125 +29,54 @@ class TypeFraisForm(forms.ModelForm):
         self.fields['classe'].required = False
 
 
-# ── Paiement ──────────────────────────────────────────────────────────────────
+# ── Paiement plateforme (mobile money / virement d'abonnement) ───────────────
 
-class PaiementForm(forms.ModelForm):
-    class Meta:
-        model = Paiement
-        fields = ['type_frais', 'montant_paye', 'mode_paiement']
-        widgets = {
-            'type_frais':    forms.Select(attrs={'class': 'form-select'}),
-            'montant_paye':  forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0.01'}),
-            'mode_paiement': forms.Select(attrs={'class': 'form-select'}),
-        }
+class PaiementPlateformeForm(forms.Form):
+    MODE_CHOICES = [
+        ('mobile_money', 'Mobile Money (M-Pesa, Airtel Money, Orange Money…)'),
+        ('virement',     'Virement bancaire'),
+        ('especes',      'Espèces (remise en main propre)'),
+    ]
 
-    def __init__(self, *args, eleve=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.eleve = eleve
-        if eleve:
-            # N'afficher que les frais non soldés applicables à cet élève
-            from .utils import get_frais_a_payer
-            frais_ids = [f['type_frais'].pk for f in get_frais_a_payer(eleve)]
-            self.fields['type_frais'].queryset = TypeFrais.objects.filter(pk__in=frais_ids, actif=True)
+    montant = forms.DecimalField(
+        label="Montant payé (USD)",
+        min_value=Decimal('1.00'),
+        max_digits=10, decimal_places=2,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control', 'step': '0.01', 'min': '1',
+            'placeholder': 'Ex : 50.00',
+        }),
+    )
+    mode = forms.ChoiceField(
+        label="Mode de paiement",
+        choices=MODE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+    )
+    numero_transaction = forms.CharField(
+        label="Numéro de transaction / référence",
+        max_length=100, required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ex : MP2026XXXXXX (optionnel)',
+        }),
+    )
+    preuve = forms.FileField(
+        label="Preuve de paiement",
+        required=False,
+        help_text="Capture d'écran, reçu photo ou PDF. Formats : JPG, PNG, PDF, WebP. Max 5 Mo.",
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.jpg,.jpeg,.png,.pdf,.webp'}),
+    )
+    notes = forms.CharField(
+        label="Commentaire (optionnel)",
+        max_length=500, required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control', 'rows': 3,
+            'placeholder': 'Informations supplémentaires…',
+        }),
+    )
 
-    def clean_montant_paye(self):
-        montant = self.cleaned_data.get('montant_paye')
-        type_frais = self.cleaned_data.get('type_frais')
-        if montant and montant <= Decimal('0'):
+    def clean_montant(self):
+        m = self.cleaned_data.get('montant')
+        if m and m <= Decimal('0'):
             raise forms.ValidationError("Le montant doit être supérieur à zéro.")
-        if montant and type_frais and self.eleve:
-            from .utils import get_frais_a_payer
-            frais_list = get_frais_a_payer(self.eleve)
-            reste = next(
-                (f['reste_du'] for f in frais_list if f['type_frais'].pk == type_frais.pk),
-                None
-            )
-            if reste is not None and montant > reste:
-                raise forms.ValidationError(
-                    f"Montant supérieur au reste dû ({reste} USD). "
-                    "Les paiements en excédent ne sont pas autorisés."
-                )
-        return montant
-
-    def clean_type_frais(self):
-        tf = self.cleaned_data.get('type_frais')
-        if tf and self.eleve:
-            # Vérification côté serveur : frais déjà soldé ?
-            from .utils import get_frais_a_payer
-            frais_ids = [f['type_frais'].pk for f in get_frais_a_payer(self.eleve)]
-            if tf.pk not in frais_ids:
-                raise forms.ValidationError("Ce frais est déjà soldé ou inapplicable à cet élève.")
-        return tf
-
-
-# ── Création d'un compte comptable ───────────────────────────────────────────
-
-class ComptableCreateForm(forms.Form):
-    first_name = forms.CharField(
-        label="Prénom", max_length=150,
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
-    )
-    last_name = forms.CharField(
-        label="Nom", max_length=150,
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
-    )
-    email = forms.EmailField(
-        label="Adresse e-mail",
-        widget=forms.EmailInput(attrs={'class': 'form-control'}),
-    )
-    telephone = forms.CharField(
-        label="Téléphone", max_length=20, required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
-    )
-
-    def clean_email(self):
-        email = self.cleaned_data['email'].strip().lower()
-        if CustomUser.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError("Un utilisateur avec cet e-mail existe déjà.")
-        return email
-
-    def save(self, schema_name):
-        """Crée le CustomUser comptable et l'enregistre dans l'AnnuaireUtilisateur."""
-        from tenants.models import AnnuaireUtilisateur
-        email = self.cleaned_data['email']
-        base_username = email.split('@')[0]
-        username = base_username
-        n = 1
-        while CustomUser.objects.filter(username=username).exists():
-            username = f"{base_username}{n}"
-            n += 1
-
-        temp_pwd = generate_temp_password()
-        user = CustomUser(
-            username=username,
-            email=email,
-            first_name=self.cleaned_data['first_name'],
-            last_name=self.cleaned_data['last_name'],
-            telephone=self.cleaned_data.get('telephone', ''),
-            role='comptable',
-            must_change_password=True,
-        )
-        user.set_password(temp_pwd)
-        user.save()
-
-        AnnuaireUtilisateur.objects.get_or_create(
-            email=email.lower(),
-            defaults={'schema_name': schema_name, 'type_compte': 'comptable'},
-        )
-        return user, temp_pwd
-
-
-class ComptableUpdateForm(forms.ModelForm):
-    class Meta:
-        model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'telephone', 'is_active']
-        widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name':  forms.TextInput(attrs={'class': 'form-control'}),
-            'email':      forms.EmailInput(attrs={'class': 'form-control'}),
-            'telephone':  forms.TextInput(attrs={'class': 'form-control'}),
-            'is_active':  forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
-        labels = {
-            'is_active': 'Compte actif',
-        }
+        return m

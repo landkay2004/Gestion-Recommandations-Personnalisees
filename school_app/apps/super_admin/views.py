@@ -47,33 +47,67 @@ def _needs_2fa_verification(request):
 
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
+_SA_LOGIN_FAILS = {}   # {ip: [timestamp, …]}
+_SA_MAX_FAILS   = 10
+_SA_LOCKOUT_S   = 600  # 10 minutes
+
+
+def _sa_is_locked(ip):
+    import time
+    now = time.time()
+    attempts = [t for t in _SA_LOGIN_FAILS.get(ip, []) if now - t < _SA_LOCKOUT_S]
+    _SA_LOGIN_FAILS[ip] = attempts
+    return len(attempts) >= _SA_MAX_FAILS
+
+
+def _sa_record_fail(ip):
+    import time
+    _SA_LOGIN_FAILS.setdefault(ip, []).append(time.time())
+
+
+def _sa_clear_fails(ip):
+    _SA_LOGIN_FAILS.pop(ip, None)
+
+
 def login_view(request):
     if getattr(request, 'super_admin', None):
         return redirect('super_admin:dashboard')
 
+    client_ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() \
+                or request.META.get('REMOTE_ADDR', '')
     error = None
     form = LoginSuperAdminForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
-        email    = form.cleaned_data['email'].lower().strip()
-        password = form.cleaned_data['password']
-        try:
-            sa = SuperAdmin.objects.get(email__iexact=email, is_active=True)
-            if sa.check_password(password):
-                request.session['super_admin_id']  = sa.pk
-                request.session['tenant_schema']   = 'public'
-                request.session['user_type']       = 'super_admin'
-                request.session['sa_2fa_verified'] = not sa.totp_enabled
-                sa.last_login = timezone.now()
-                sa.save(update_fields=['last_login'])
-                logger_sec.info('CONNEXION super_admin email=%s', email)
-                if sa.totp_enabled:
-                    return redirect('super_admin:verify_2fa')
-                return redirect('super_admin:dashboard')
-            else:
+        # Rate limiting anti-brute-force
+        if _sa_is_locked(client_ip):
+            logger_sec.warning('SA_LOGIN_LOCKED ip=%s', client_ip)
+            error = "Trop de tentatives. Réessayez dans 10 minutes."
+        else:
+            email    = form.cleaned_data['email'].lower().strip()
+            password = form.cleaned_data['password']
+            try:
+                sa = SuperAdmin.objects.get(email__iexact=email, is_active=True)
+                if sa.check_password(password):
+                    _sa_clear_fails(client_ip)
+                    request.session['super_admin_id']  = sa.pk
+                    request.session['tenant_schema']   = 'public'
+                    request.session['user_type']       = 'super_admin'
+                    request.session['sa_2fa_verified'] = not sa.totp_enabled
+                    sa.last_login = timezone.now()
+                    sa.save(update_fields=['last_login'])
+                    logger_sec.info('CONNEXION super_admin email=%s ip=%s', email, client_ip)
+                    if sa.totp_enabled:
+                        return redirect('super_admin:verify_2fa')
+                    return redirect('super_admin:dashboard')
+                else:
+                    _sa_record_fail(client_ip)
+                    logger_sec.warning('SA_LOGIN_FAIL email=%s ip=%s', email, client_ip)
+                    error = "Email ou mot de passe incorrect."
+            except SuperAdmin.DoesNotExist:
+                _sa_record_fail(client_ip)
+                logger_sec.warning('SA_LOGIN_UNKNOWNEMAIL email=%s ip=%s', email, client_ip)
                 error = "Email ou mot de passe incorrect."
-        except SuperAdmin.DoesNotExist:
-            error = "Email ou mot de passe incorrect."
 
     from super_admin.models import PlatformSettings
     return render(request, 'super_admin/login.html', {
@@ -1052,3 +1086,232 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
         logger.info(
             'CREDENTIALS_EMAIL_FALLBACK_BODY:\n%s', txt_body
         )
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# DEMANDES D'ABONNEMENT
+# ════════════════════════════════════════════════════════════════════════════
+
+@super_admin_required
+def demandes_abonnement(request):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+
+    from tenants.models import DemandeAbonnement
+    filtre_statut = request.GET.get('statut', '')
+
+    qs = DemandeAbonnement.objects.select_related(
+        'ecole', 'plan_souhaite', 'plan_actuel'
+    )
+    if filtre_statut:
+        qs = qs.filter(statut=filtre_statut)
+    qs = qs.order_by('-created_at')
+
+    nb_en_attente = DemandeAbonnement.objects.filter(statut='en_attente').count()
+
+    return render(request, 'super_admin/demandes_abonnement.html', {
+        'demandes':      qs,
+        'filtre_statut': filtre_statut,
+        'total':         qs.count(),
+        'nb_en_attente': nb_en_attente,
+    })
+
+
+@super_admin_required
+def demande_abonnement_detail(request, pk):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+
+    from tenants.models import DemandeAbonnement
+    demande = get_object_or_404(
+        DemandeAbonnement.objects.select_related('ecole', 'plan_souhaite', 'plan_actuel'),
+        pk=pk,
+    )
+
+    if request.method == 'POST' and demande.statut == 'en_attente':
+        action         = request.POST.get('action', '')
+        reponse_admin  = request.POST.get('reponse_admin', '').strip()[:1000]
+        appliquer_plan = request.POST.get('appliquer_plan') == '1'
+        sa             = request.super_admin
+
+        if action in ('approuver', 'rejeter'):
+            demande.statut       = 'approuvee' if action == 'approuver' else 'rejetee'
+            demande.reponse_admin = reponse_admin
+            demande.traite_par   = sa.get_full_name() or sa.email
+            demande.traite_le    = timezone.now()
+            demande.save()
+
+            if action == 'approuver' and appliquer_plan and demande.plan_souhaite:
+                try:
+                    ecole = demande.ecole
+                    from tenants.models import Abonnement, HistoriqueAbonnement
+                    abonnement = None
+                    try:
+                        abonnement = ecole.abonnement_detail
+                    except Exception:
+                        pass
+
+                    if abonnement:
+                        abonnement.changer_plan(
+                            demande.plan_souhaite,
+                            motif='Demande approuvée via console super-admin',
+                            modifie_par=sa.get_full_name() or sa.email,
+                        )
+                    else:
+                        from datetime import date, timedelta
+                        Abonnement.objects.create(
+                            ecole=ecole,
+                            plan=demande.plan_souhaite,
+                            statut='actif',
+                            date_debut=date.today(),
+                            date_fin=date.today() + timedelta(days=30),
+                        )
+                        ecole.plan = demande.plan_souhaite
+                        ecole.save(update_fields=['plan', 'updated_at'])
+
+                    logger.info(
+                        'DEMANDE_APPROUVEE pk=%s ecole=%s plan=%s par=%s',
+                        demande.pk, demande.ecole.nom,
+                        demande.plan_souhaite.nom, sa.email
+                    )
+                    messages.success(
+                        request,
+                        f"Demande approuvée et plan « {demande.plan_souhaite.nom} » appliqué."
+                    )
+                except Exception as e:
+                    logger.error('DEMANDE_PLAN_APPLY_FAIL pk=%s err=%s', demande.pk, e)
+                    messages.warning(
+                        request,
+                        "Demande approuvée, mais impossible d'appliquer le plan : %s" % e
+                    )
+            else:
+                msg = "Demande approuvée." if action == 'approuver' else "Demande rejetée."
+                messages.success(request, msg)
+
+            return redirect('super_admin:demande_abonnement_detail', pk=pk)
+
+    return render(request, 'super_admin/demande_abonnement_detail.html', {
+        'demande':         demande,
+        'sa_2fa_enabled': request.super_admin.totp_enabled,
+    })
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# PAIEMENTS PLATEFORME (mobile money / virement)
+# ════════════════════════════════════════════════════════════════════════════
+
+@super_admin_required
+def paiements_plateforme(request):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+
+    from tenants.models import PaiementPlatforme
+    filtre_statut = request.GET.get('statut', '')
+    qs = PaiementPlatforme.objects.select_related('ecole')
+    if filtre_statut:
+        qs = qs.filter(statut=filtre_statut)
+    qs = qs.order_by('-created_at')
+
+    nb_en_attente = PaiementPlatforme.objects.filter(statut='en_attente').count()
+
+    return render(request, 'super_admin/paiements_plateforme.html', {
+        'paiements':     qs,
+        'filtre_statut': filtre_statut,
+        'total':         qs.count(),
+        'nb_en_attente': nb_en_attente,
+    })
+
+
+@super_admin_required
+def paiement_plateforme_detail(request, pk):
+    if _needs_2fa_verification(request):
+        return redirect('super_admin:verify_2fa')
+
+    from tenants.models import PaiementPlatforme
+    paiement = get_object_or_404(
+        PaiementPlatforme.objects.select_related('ecole'),
+        pk=pk,
+    )
+    sa = request.super_admin
+
+    if request.method == 'POST' and paiement.statut == 'en_attente':
+        action = request.POST.get('action', '')
+
+        # Vérification TOTP si 2FA activé
+        if sa.totp_enabled:
+            totp_code = request.POST.get('totp_code', '').strip()
+            if not sa.verify_totp(totp_code) and not sa.use_recovery_code(totp_code):
+                messages.error(
+                    request,
+                    "Code 2FA invalide. Validation annulée."
+                )
+                logger_sec.warning(
+                    'PAIEMENT_PLATEFORME_2FA_FAIL pk=%s par=%s ip=%s',
+                    pk, sa.email,
+                    request.META.get('REMOTE_ADDR', ''),
+                )
+                return redirect('super_admin:paiement_plateforme_detail', pk=pk)
+
+        if action == 'valider':
+            notes_admin    = request.POST.get('notes_admin', '').strip()[:500]
+            jours_accordes = int(request.POST.get('jours_accordes', '0') or 0)
+
+            paiement.statut         = 'valide'
+            paiement.valide_par     = sa.get_full_name() or sa.email
+            paiement.valide_le      = timezone.now()
+            paiement.notes_admin    = notes_admin
+            paiement.jours_accordes = jours_accordes
+            paiement.save()
+
+            # Prolonger l'abonnement si jours_accordes > 0
+            if jours_accordes > 0:
+                try:
+                    from datetime import date, timedelta
+                    from tenants.models import Abonnement
+                    ecole = paiement.ecole
+                    abonnement = None
+                    try:
+                        abonnement = ecole.abonnement_detail
+                    except Exception:
+                        pass
+
+                    if abonnement:
+                        base = max(abonnement.date_fin or date.today(), date.today())
+                        abonnement.date_fin = base + timedelta(days=jours_accordes)
+                        abonnement.statut   = 'actif'
+                        abonnement.save(update_fields=['date_fin', 'statut', 'updated_at'])
+                        ecole.date_fin_abonnement = abonnement.date_fin
+                        ecole.statut = 'active'
+                        ecole.save(update_fields=['date_fin_abonnement', 'statut', 'updated_at'])
+                except Exception as e:
+                    logger.error('PAIEMENT_PROLONGER_ABONNEMENT_FAIL pk=%s err=%s', pk, e)
+
+            logger_sec.info(
+                'PAIEMENT_PLATEFORME_VALIDE pk=%s ecole=%s montant=%s par=%s',
+                pk, paiement.ecole.nom, paiement.montant, sa.email,
+            )
+            messages.success(
+                request,
+                f"Paiement validé. {jours_accordes} jours accordés à « {paiement.ecole.nom} »."
+            )
+
+        elif action == 'rejeter':
+            notes_admin = request.POST.get('notes_admin', '').strip()[:500]
+            paiement.statut      = 'rejete'
+            paiement.valide_par  = sa.get_full_name() or sa.email
+            paiement.valide_le   = timezone.now()
+            paiement.notes_admin = notes_admin
+            paiement.save()
+
+            logger_sec.info(
+                'PAIEMENT_PLATEFORME_REJETE pk=%s ecole=%s par=%s',
+                pk, paiement.ecole.nom, sa.email,
+            )
+            messages.warning(request, "Paiement rejeté.")
+
+        return redirect('super_admin:paiement_plateforme_detail', pk=pk)
+
+    return render(request, 'super_admin/paiement_plateforme_detail.html', {
+        'paiement':       paiement,
+        'sa_2fa_enabled': sa.totp_enabled,
+    })

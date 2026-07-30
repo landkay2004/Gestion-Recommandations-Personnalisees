@@ -1,0 +1,135 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Demande — {{ demande.ecole.nom }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4" style="max-width:900px">
+
+  <div class="d-flex align-items-center gap-2 mb-4">
+    <a href="{% url 'super_admin:demandes_abonnement' %}" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+    <h4 class="fw-bold mb-0">
+      <i class="bi bi-envelope-paper me-2 text-primary"></i>
+      Demande de {{ demande.ecole.nom }}
+    </h4>
+  </div>
+
+  {% if messages %}
+  {% for msg in messages %}
+  <div class="alert alert-{% if msg.tags == 'error' %}danger{% elif msg.tags == 'success' %}success{% elif msg.tags == 'warning' %}warning{% else %}info{% endif %} alert-dismissible fade show">
+    {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="row g-4">
+
+    <!-- Détails de la demande -->
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header fw-semibold bg-transparent">
+          <i class="bi bi-info-circle me-1"></i>Détails
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-5 text-muted">École</dt>
+            <dd class="col-sm-7 fw-medium">{{ demande.ecole.nom }}</dd>
+
+            <dt class="col-sm-5 text-muted">Contact</dt>
+            <dd class="col-sm-7">{{ demande.contact_nom|default:'—' }}<br>
+              <small class="text-muted">{{ demande.contact_email|default:'' }}</small>
+            </dd>
+
+            <dt class="col-sm-5 text-muted">Plan actuel</dt>
+            <dd class="col-sm-7">{{ demande.plan_actuel.nom|default:'Aucun' }}</dd>
+
+            <dt class="col-sm-5 text-muted">Plan souhaité</dt>
+            <dd class="col-sm-7 fw-bold text-primary">
+              {{ demande.plan_souhaite.nom|default:'?' }}
+              {% if demande.plan_souhaite %}
+              <br><small class="text-muted fw-normal">{{ demande.plan_souhaite.prix_mensuel|floatformat:0 }} USD/mois</small>
+              {% endif %}
+            </dd>
+
+            <dt class="col-sm-5 text-muted">Soumis le</dt>
+            <dd class="col-sm-7">{{ demande.created_at|date:"d/m/Y à H:i" }}</dd>
+
+            <dt class="col-sm-5 text-muted">Statut</dt>
+            <dd class="col-sm-7">
+              {% if demande.statut == 'en_attente' %}
+                <span class="badge bg-warning text-dark">En attente</span>
+              {% elif demande.statut == 'approuvee' %}
+                <span class="badge bg-success">Approuvée par {{ demande.traite_par }}</span>
+              {% elif demande.statut == 'rejetee' %}
+                <span class="badge bg-danger">Rejetée par {{ demande.traite_par }}</span>
+              {% endif %}
+            </dd>
+          </dl>
+
+          {% if demande.message %}
+          <hr>
+          <div class="text-muted small mb-1">Message de l'école :</div>
+          <blockquote class="blockquote fs-6 border-start ps-3">{{ demande.message }}</blockquote>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire de traitement -->
+    <div class="col-md-6">
+      {% if demande.statut == 'en_attente' %}
+      <div class="card shadow-sm">
+        <div class="card-header fw-semibold bg-transparent">
+          <i class="bi bi-check2-square me-1"></i>Traiter la demande
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label fw-medium">Réponse / Note</label>
+              <textarea name="reponse_admin" class="form-control" rows="3"
+                placeholder="Message optionnel pour l'admin-école…"></textarea>
+            </div>
+
+            <!-- Appliquer le changement de plan -->
+            <div class="form-check mb-3">
+              <input type="checkbox" name="appliquer_plan" value="1" id="appliquer_plan" class="form-check-input" checked>
+              <label class="form-check-label" for="appliquer_plan">
+                Appliquer le changement de plan immédiatement
+              </label>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="submit" name="action" value="approuver" class="btn btn-success">
+                <i class="bi bi-check-circle me-1"></i>Approuver
+              </button>
+              <button type="submit" name="action" value="rejeter" class="btn btn-danger"
+                      onclick="return confirm('Confirmer le rejet de cette demande ?')">
+                <i class="bi bi-x-circle me-1"></i>Rejeter
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <div class="card shadow-sm border-{{ demande.statut|yesno:'success,danger' }}">
+        <div class="card-body text-center py-4">
+          {% if demande.statut == 'approuvee' %}
+          <i class="bi bi-check-circle-fill text-success fs-1"></i>
+          <p class="mt-2 mb-0">Approuvée le {{ demande.traite_le|date:"d/m/Y" }} par {{ demande.traite_par }}</p>
+          {% else %}
+          <i class="bi bi-x-circle-fill text-danger fs-1"></i>
+          <p class="mt-2 mb-0">Rejetée le {{ demande.traite_le|date:"d/m/Y" }} par {{ demande.traite_par }}</p>
+          {% endif %}
+          {% if demande.reponse_admin %}
+          <div class="mt-3 text-muted small border-top pt-3">{{ demande.reponse_admin }}</div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
