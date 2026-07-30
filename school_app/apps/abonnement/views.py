@@ -102,7 +102,7 @@ def demande_changement(request):
 
     if not ecole:
         messages.error(request, "Impossible de trouver les informations de votre école.")
-        return redirect('mon_abonnement')
+        return redirect('abonnement:mon_abonnement')
 
     from tenants.models import PlanAbonnement
     plans = PlanAbonnement.objects.filter(
@@ -141,7 +141,7 @@ def demande_changement(request):
             "Votre demande de changement vers le plan « %s » a été envoyée à l'administrateur. "
             "Vous serez contacté dans les plus brefs délais." % plan_souhaite.nom
         )
-        return redirect('mon_abonnement')
+        return redirect('abonnement:mon_abonnement')
 
     return render(request, 'abonnement/demande_changement.html', {
         'ecole': ecole,

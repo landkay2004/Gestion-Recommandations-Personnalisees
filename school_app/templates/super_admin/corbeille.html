@@ -73,39 +73,35 @@
                 <i class="bi bi-arrow-counterclockwise me-1"></i>Restaurer
               </button>
             </form>
-            <!-- Supprimer définitivement — modal -->
             <button type="button" class="btn btn-sm btn-danger ms-1"
-                    data-bs-toggle="modal" data-bs-target="#modal-del-{{ ecole.pk }}">
+                    data-bs-toggle="collapse" data-bs-target="#confirm-del-{{ ecole.pk }}"
+                    aria-expanded="false" aria-controls="confirm-del-{{ ecole.pk }}">
               <i class="bi bi-trash3-fill me-1"></i>Supprimer définitivement
             </button>
-
-            <!-- Modal confirmation -->
-            <div class="modal fade" id="modal-del-{{ ecole.pk }}" tabindex="-1">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Suppression définitive</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                    <p class="mb-2">Cette action est <strong>irréversible</strong>. Toutes les données de l'école
-                      <strong>« {{ ecole.nom }} »</strong> seront effacées définitivement.</p>
-                    <p class="text-muted small mb-3">Tapez le nom exact de l'école pour confirmer :</p>
-                    <form method="post" action="{% url 'super_admin:ecole_supprimer_definitif' ecole.pk %}"
-                          id="form-del-{{ ecole.pk }}">
-                      {% csrf_token %}
-                      <input type="text" name="confirmation" class="form-control mb-3"
-                             placeholder="{{ ecole.nom }}" autocomplete="off">
-                      <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-outline-secondary flex-fill"
-                                data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-danger flex-fill">
-                          <i class="bi bi-trash3-fill me-1"></i>Supprimer définitivement
-                        </button>
-                      </div>
-                    </form>
-                  </div>
+          </td>
+        </tr>
+        <tr class="collapse" id="confirm-del-{{ ecole.pk }}">
+          <td colspan="5" class="bg-light">
+            <div class="p-3 border rounded">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+                <div class="text-muted">
+                  <strong>Confirmation requise</strong><br>
+                  Tapez le nom exact de l'école <strong>« {{ ecole.nom }} »</strong> pour valider la suppression.
                 </div>
+                <form method="post" action="{% url 'super_admin:ecole_supprimer_definitif' ecole.pk %}" class="w-100">
+                  {% csrf_token %}
+                  <div class="row gx-2 gy-2 align-items-end">
+                    <div class="col-md">
+                      <input type="text" name="confirmation" class="form-control form-control-sm"
+                             placeholder="{{ ecole.nom }}" autocomplete="off">
+                    </div>
+                    <div class="col-md-auto d-grid">
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash3-fill me-1"></i>Supprimer définitivement
+                      </button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </td>
@@ -116,4 +112,20 @@
   </div>
 </div>
 {% endif %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof bootstrap === 'undefined') return;
+    document.querySelectorAll('[data-bs-toggle="collapse"][data-bs-target^="#confirm-del-"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('tr.collapse.show').forEach(function (openRow) {
+          if (openRow.id !== btn.dataset.bsTarget.slice(1)) {
+            const collapse = bootstrap.Collapse.getInstance(openRow) || new bootstrap.Collapse(openRow, {toggle:false});
+            collapse.hide();
+          }
+        });
+      });
+    });
+  });
+</script>
 {% endblock %}

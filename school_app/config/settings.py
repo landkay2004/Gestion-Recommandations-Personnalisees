@@ -121,10 +121,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'config.middleware.SuperAdminAuthMiddleware',
     'accounts.middleware.ForcePasswordChangeMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'config.middleware.OnboardingMiddleware',
     'config.middleware.AbonnementMiddleware',
     'config.middleware.MaintenanceMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 

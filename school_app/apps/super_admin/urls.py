@@ -44,8 +44,9 @@ urlpatterns = [
     path('maintenance/<int:pk>/toggle/',  views.maintenance_toggle, name='maintenance_toggle'),
 
     # Communications
-    path('communications/',          views.communication_list,  name='communication_list'),
-    path('communications/nouvelle/', views.communication_creer, name='communication_creer'),
+    path('communications/',                    views.communication_list,      name='communication_list'),
+    path('communications/nouvelle/',           views.communication_creer,     name='communication_creer'),
+    path('communications/<int:pk>/supprimer/', views.communication_supprimer, name='communication_supprimer'),
 
     # Profil & 2FA
     path('profil/',         views.profil,      name='profil'),

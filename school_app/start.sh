@@ -60,4 +60,4 @@ echo "[4/5] Collecte des fichiers statiques"
 "$PYTHON_BIN" manage.py collectstatic --noinput
 
 echo "[5/5] Démarrage du serveur sur le port $PORT"
-exec "$PYTHON_BIN" manage.py runserver "0.0.0.0:$PORT" --noreload
+exec "$PYTHON_BIN" manage.py runserver "0.0.0.0:$PORT"

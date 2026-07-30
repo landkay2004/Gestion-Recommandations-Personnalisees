@@ -189,4 +189,4 @@ printf '  %sServeur actif sur le port %s%s%s\n' \
 hr
 printf '\n'
 
-exec "$PYTHON_BIN" manage.py runserver "0.0.0.0:$PORT" --noreload
+exec "$PYTHON_BIN" manage.py runserver "0.0.0.0:$PORT"
