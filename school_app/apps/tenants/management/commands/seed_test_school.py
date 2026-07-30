@@ -2,7 +2,7 @@
 Crée une école de test complète avec tous les types de comptes SGN,
 des données scolaires réalistes et des données de démonstration :
 
-  Utilisateurs : super-admin, admin-école, préfet, enseignant, secrétariat
+  Utilisateurs : super-admin, admin-école, préfet, enseignant, secrétariat, comptable
   Données      : année scolaire, sections, niveaux, classes, matières,
                  affectations, élèves, notes (1ère et 2ème périodes)
 
@@ -37,6 +37,9 @@ PWD_ENSEIGNANT    = 'Enseignant@2025!'
 
 EMAIL_SECRETARIAT = 'secretariat@ecoletest.local'
 PWD_SECRETARIAT   = 'Secretariat@2025!'
+
+EMAIL_COMPTABLE   = 'comptable@ecoletest.local'
+PWD_COMPTABLE     = 'Comptable@2025!'
 
 # ── Données scolaires de démonstration ───────────────────────────────────────
 SECTIONS = ['Scientifique', 'Littéraire', 'Commerciale et Gestion']
@@ -326,6 +329,7 @@ class Command(BaseCommand):
             dict(email=EMAIL_PREFET,      role='prefet',       pwd=PWD_PREFET,      prenom='Joseph',      nom='Préfet'),
             dict(email=EMAIL_ENSEIGNANT,  role='enseignant',   pwd=PWD_ENSEIGNANT,  prenom='Paul',        nom='Enseignant'),
             dict(email=EMAIL_SECRETARIAT, role='secretariat',  pwd=PWD_SECRETARIAT, prenom='Anne',        nom='Secrétariat'),
+            dict(email=EMAIL_COMPTABLE,   role='comptable',    pwd=PWD_COMPTABLE,   prenom='Christophe',  nom='Comptable'),
         ]
 
         for u in users_to_create:
@@ -402,6 +406,7 @@ class Command(BaseCommand):
             (EMAIL_PREFET,      'prefet'),
             (EMAIL_ENSEIGNANT,  'enseignant'),
             (EMAIL_SECRETARIAT, 'secretariat'),
+            (EMAIL_COMPTABLE,   'comptable'),
         ]
         for prenom, postnom, nom, genre, suffix in ENSEIGNANTS_SUP:
             email = '%s@ecoletest.local' % suffix
