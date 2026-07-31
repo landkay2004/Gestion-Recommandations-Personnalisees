@@ -131,17 +131,37 @@ def comptable_dashboard(request):
 @login_required
 @comptable_required
 def recherche_eleve(request):
-    """Recherche d'un élève avant encaissement."""
+    """Recherche d'un élève avant encaissement (supporte AJAX pour résultats dynamiques)."""
     from students.models import Student
+    import json
+
     q = request.GET.get('q', '').strip()
     eleves = []
-    if q:
+    if q and len(q) >= 2:
         eleves = Student.objects.select_related('classe').filter(
             Q(nom__icontains=q) |
             Q(postnom__icontains=q) |
             Q(prenom__icontains=q) |
             Q(matricule__icontains=q)
         ).order_by('nom', 'postnom')[:30]
+
+    # Réponse JSON pour les requêtes AJAX
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        from django.urls import reverse
+        data = [
+            {
+                'pk':        e.pk,
+                'nom':       e.nom_complet,
+                'matricule': e.matricule,
+                'classe':    str(e.classe) if e.classe else '',
+                'url':       reverse('comptable:encaissement', args=[e.pk]),
+            }
+            for e in eleves
+        ]
+        return HttpResponse(
+            json.dumps({'results': data, 'count': len(data)}),
+            content_type='application/json',
+        )
 
     return render(request, 'comptable/recherche_eleve.html', {
         'q': q, 'eleves': eleves,
@@ -151,63 +171,68 @@ def recherche_eleve(request):
 @login_required
 @comptable_required
 def encaissement(request, eleve_pk):
-    """Formulaire d'encaissement pour un élève."""
+    """Formulaire d'encaissement pour un élève — affiche toujours l'historique."""
     from students.models import Student
-    from abonnement.utils import get_frais_a_payer
+    from abonnement.utils import get_frais_a_payer, get_historique_paiements, get_resume_frais
     from .forms import PaiementForm
 
-    eleve = get_object_or_404(Student, pk=eleve_pk)
+    eleve         = get_object_or_404(Student.objects.select_related('classe'), pk=eleve_pk)
     frais_a_payer = get_frais_a_payer(eleve)
+    historique    = get_historique_paiements(eleve)
+    resume_frais  = get_resume_frais(eleve)
 
-    if not frais_a_payer:
-        messages.info(request, "Cet élève n'a aucun frais impayé.")
-        return redirect('comptable:recherche_eleve')
+    # Total général payé pour cet élève
+    total_paye = sum(p.montant_paye for p in historique)
 
-    form = PaiementForm(request.POST or None, eleve=eleve)
+    form = PaiementForm(request.POST or None, eleve=eleve) if frais_a_payer else None
 
-    if request.method == 'POST' and form.is_valid():
-        type_frais = form.cleaned_data['type_frais']
-        montant    = form.cleaned_data['montant_paye']
+    if request.method == 'POST':
+        if not frais_a_payer:
+            messages.warning(request, "Cet élève n'a aucun frais impayé à encaisser.")
+        elif form and form.is_valid():
+            type_frais = form.cleaned_data['type_frais']
+            montant    = form.cleaned_data['montant_paye']
 
-        frais_restants = get_frais_a_payer(eleve)
-        frais_valide   = next(
-            (f for f in frais_restants if f['type_frais'].pk == type_frais.pk),
-            None
-        )
-        if not frais_valide:
-            messages.error(request, "Ce frais est déjà soldé ou invalide.")
-            return redirect('comptable:encaissement', eleve_pk=eleve.pk)
-        if montant > frais_valide['reste_du']:
-            messages.error(
-                request,
-                f"Montant ({montant}) supérieur au reste dû ({frais_valide['reste_du']})."
+            frais_restants = get_frais_a_payer(eleve)
+            frais_valide   = next(
+                (f for f in frais_restants if f['type_frais'].pk == type_frais.pk),
+                None
             )
-            return redirect('comptable:encaissement', eleve_pk=eleve.pk)
+            if not frais_valide:
+                messages.error(request, "Ce frais est déjà soldé ou invalide.")
+            elif montant > frais_valide['reste_du']:
+                messages.error(
+                    request,
+                    f"Montant ({montant}) supérieur au reste dû ({frais_valide['reste_du']})."
+                )
+            else:
+                paiement           = form.save(commit=False)
+                paiement.eleve     = eleve
+                paiement.comptable = request.user
+                paiement.save()
 
-        paiement           = form.save(commit=False)
-        paiement.eleve     = eleve
-        paiement.comptable = request.user
-        paiement.save()
+                numero  = Facture.generer_numero()
+                facture = Facture.objects.create(paiement=paiement, numero_facture=numero)
 
-        numero  = Facture.generer_numero()
-        facture = Facture.objects.create(paiement=paiement, numero_facture=numero)
+                logger.info(
+                    'PAIEMENT_ENREGISTRE ref=%s eleve=%s frais=%s montant=%s comptable=%s',
+                    paiement.reference, eleve.nom_complet, type_frais.nom,
+                    montant, request.user.username,
+                )
 
-        logger.info(
-            'PAIEMENT_ENREGISTRE ref=%s eleve=%s frais=%s montant=%s comptable=%s',
-            paiement.reference, eleve.nom_complet, type_frais.nom,
-            montant, request.user.username,
-        )
-
-        messages.success(
-            request,
-            f"Paiement enregistré. Facture n° {facture.numero_facture} générée."
-        )
-        return redirect('comptable:facture_detail', pk=facture.pk)
+                messages.success(
+                    request,
+                    f"Paiement enregistré. Facture n° {facture.numero_facture} générée."
+                )
+                return redirect('comptable:facture_detail', pk=facture.pk)
 
     return render(request, 'comptable/encaissement.html', {
-        'eleve': eleve,
-        'form': form,
+        'eleve':        eleve,
+        'form':         form,
         'frais_a_payer': frais_a_payer,
+        'historique':   historique,
+        'resume_frais': resume_frais,
+        'total_paye':   total_paye,
     })
 
 

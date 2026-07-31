@@ -71,9 +71,8 @@ def etape1_password(request):
     admin = _get_admin(request)
     if not admin:
         return redirect('login')
-    if admin.onboarding_step >= 1:
-        return redirect(_etape_url(2))
-
+    # Permet d'accéder à cette étape même si déjà complétée (retour en arrière)
+    # Seule restriction : ne pas avancer si étape déjà complète sans soumission
     form = ChangePasswordOnboardingForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         new_pwd = form.cleaned_data['nouveau_mdp']
@@ -84,16 +83,20 @@ def etape1_password(request):
         user.must_change_password = False
         user.save(update_fields=['password', 'must_change_password'])
         _switch_public_schema()
-        admin.onboarding_step = 1
-        admin.save(update_fields=['onboarding_step'])
+        if admin.onboarding_step < 1:
+            admin.onboarding_step = 1
+            admin.save(update_fields=['onboarding_step'])
         logger.info('ONBOARDING_STEP1_DONE admin=%s', admin.email)
         return redirect(_etape_url(2))
 
+    # GET : si étape déjà complète, indiquer que c'est un changement optionnel
+    already_done = admin.onboarding_step >= 1
     return render(request, 'onboarding/etape1_password.html', {
         'admin': admin,
         'form': form,
         'etape': 1,
         'total_etapes': 4,
+        'already_done': already_done,
     })
 
 
@@ -103,10 +106,9 @@ def etape2_config(request):
     admin = _get_admin(request)
     if not admin:
         return redirect('login')
+    # Permet le retour en arrière depuis étape 3 ou 4
     if admin.onboarding_step < 1:
         return redirect(_etape_url(1))
-    if admin.onboarding_step >= 2:
-        return redirect(_etape_url(3))
 
     # Basculer vers le schéma de l'école pour charger SchoolInfo
     _switch_tenant_schema(admin.ecole.schema_name)
@@ -144,6 +146,7 @@ def etape2_config(request):
     if request.method == 'POST' and form.is_valid():
         d = form.cleaned_data
         _switch_tenant_schema(admin.ecole.schema_name)
+        save_ok = True
         try:
             from school_settings.models import SchoolInfo
             info = SchoolInfo.get_info()
@@ -160,15 +163,22 @@ def etape2_config(request):
                 info.logo = request.FILES['logo']
             info.save()
         except Exception as e:
+            save_ok = False
             logger.warning('ONBOARDING_STEP2_SAVE_ERROR: %s', e)
+            messages.error(request, f"Erreur lors de la sauvegarde : {e}")
 
         _switch_public_schema()
-        admin.onboarding_step = 2
-        admin.save(update_fields=['onboarding_step'])
-        return redirect(_etape_url(3))
+        if save_ok:
+            if admin.onboarding_step < 2:
+                admin.onboarding_step = 2
+                admin.save(update_fields=['onboarding_step'])
+            return redirect(_etape_url(3))
+        # Erreur : rester sur l'étape 2 avec les erreurs affichées
 
+    already_done = admin.onboarding_step >= 2
     return render(request, 'onboarding/etape2_config.html', {
         'admin': admin, 'form': form, 'etape': 2, 'total_etapes': 4,
+        'already_done': already_done,
     })
 
 
@@ -178,10 +188,9 @@ def etape3_recapitulatif(request):
     admin = _get_admin(request)
     if not admin:
         return redirect('login')
+    # Minimum : avoir fait étape 2. Permet retour depuis étape 4.
     if admin.onboarding_step < 2:
-        return redirect(_etape_url(admin.onboarding_step + 1))
-    if admin.onboarding_step >= 3:
-        return redirect(_etape_url(4))
+        return redirect(_etape_url(max(1, admin.onboarding_step + 1)))
 
     _switch_tenant_schema(admin.ecole.schema_name)
     school_info = None
@@ -190,11 +199,12 @@ def etape3_recapitulatif(request):
         school_info = SchoolInfo.get_info()
     except Exception:
         pass
+    _switch_public_schema()
 
     if request.method == 'POST':
-        _switch_public_schema()
-        admin.onboarding_step = 3
-        admin.save(update_fields=['onboarding_step'])
+        if admin.onboarding_step < 3:
+            admin.onboarding_step = 3
+            admin.save(update_fields=['onboarding_step'])
         return redirect(_etape_url(4))
 
     return render(request, 'onboarding/etape3_recapitulatif.html', {
@@ -212,10 +222,9 @@ def etape4_conditions(request):
     admin = _get_admin(request)
     if not admin:
         return redirect('login')
+    # Minimum : avoir fait étape 3. Accès toujours permis pour permettre relecture.
     if admin.onboarding_step < 3:
-        return redirect(_etape_url(admin.onboarding_step + 1))
-    if admin.onboarding_step >= 4:
-        return redirect(_etape_url(5))
+        return redirect(_etape_url(max(1, admin.onboarding_step + 1)))
 
     form = ConditionsForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
