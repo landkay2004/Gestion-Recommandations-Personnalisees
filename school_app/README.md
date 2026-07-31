@@ -20,7 +20,7 @@ Plateforme web multi-tenant de gestion scolaire pour les écoles en RDC.
 ## Rapide
 
 - Backend : Django 6.x
-- Base : PostgreSQL en prod, SQLite en dev
+- Base : PostgreSQL uniquement
 - Multi-tenancy : django-tenants
 - Frontend : Bootstrap 5
 
@@ -35,16 +35,12 @@ Plateforme web multi-tenant de gestion scolaire pour les écoles en RDC.
    - `pip install -r requirements.txt`
 3. Configurer la base de données
    - `DATABASE_URL=postgres://user:pass@host:5432/dbname`
-   - ou ne rien définir pour utiliser SQLite local
 4. Appliquer les migrations
    - PostgreSQL multi-tenant :
      - `python manage.py migrate_schemas --shared`
      - `python manage.py migrate_schemas`
-   - SQLite local :
-     - `python manage.py migrate`
 5. Charger les données de test
    - PostgreSQL : `python manage.py seed_test_school`
-   - SQLite : `python manage.py seed_sqlite_users`
 6. Démarrer le serveur
    - `python manage.py runserver`
 

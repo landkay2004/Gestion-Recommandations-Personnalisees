@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 import os
 from urllib.parse import urlparse
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -58,8 +59,7 @@ if _site_url:
 # ─────────────────────────────────────────────────────────────────────────────
 _USE_TENANTS = os.environ.get('DB_HOST', '') or os.environ.get('DATABASE_URL', '')
 
-# Ces paramètres sont nécessaires dès l'import de TenantMixin/DomainMixin,
-# y compris quand SQLite est utilisé pour le développement local.
+# Ces paramètres sont nécessaires dès l'import de TenantMixin/DomainMixin.
 TENANT_MODEL       = 'tenants.Ecole'
 TENANT_DOMAIN_MODEL = 'tenants.EcoleDomain'
 PUBLIC_SCHEMA_NAME = 'public'
@@ -97,33 +97,9 @@ if _USE_TENANTS:
     INSTALLED_APPS = list(SHARED_APPS) + TENANT_APPS
     DATABASE_ROUTERS    = ['django_tenants.routers.TenantSyncRouter']
 else:
-    # Mode SQLite (développement sans PostgreSQL)
-    INSTALLED_APPS = [
-        'tenants',
-        'super_admin',
-        'onboarding',
-        'abonnement',
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.messages',
-        'django.contrib.staticfiles',
-        'accounts',
-        'dashboard',
-        'students',
-        'teachers',
-        'subjects',
-        'classes',
-        'bulletin',
-        'grades',
-        'reports',
-        'school_settings',
-        'portail',
-        'carte_eleve',
-        'notifications',
-        'planning',
-        'comptable',
-    ]
+    raise ImproperlyConfigured(
+        'PostgreSQL requis : définissez DB_HOST ou DATABASE_URL dans votre fichier .env.'
+    )
 
 # ─────────────────────────────────────────────────────────────────────────────
 # MIDDLEWARE
@@ -222,15 +198,10 @@ if _pg_host and not _db_url:
     }
 
 if not _pg_host and not _db_url:
-    # SQLite pour développement local sans PostgreSQL
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-            'CONN_MAX_AGE': 60,
-            'OPTIONS': {'timeout': 20},
-        }
-    }
+    raise ImproperlyConfigured(
+        'Aucune configuration PostgreSQL détectée. ' \
+        'Définissez DB_HOST ou DATABASE_URL dans votre fichier .env.'
+    )
 
 # ─────────────────────────────────────────────────────────────────────────────
 # AUTHENTIFICATION

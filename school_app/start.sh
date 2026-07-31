@@ -53,7 +53,8 @@ echo "[3/5] Application des migrations"
 if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
     "$PYTHON_BIN" manage.py migrate_schemas --noinput
 else
-    "$PYTHON_BIN" manage.py migrate --noinput
+    echo "Erreur : PostgreSQL requis. Définissez DATABASE_URL ou DB_HOST dans votre fichier .env." >&2
+    exit 1
 fi
 
 echo "[4/5] Collecte des fichiers statiques"

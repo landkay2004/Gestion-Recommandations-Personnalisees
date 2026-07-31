@@ -33,8 +33,6 @@ TYPE_ETABLISSEMENT_CHOICES = [
     ('college',     'Collège'),
     ('institut',    'Institut (Humanités générales)'),
     ('lyceé',       'Lycée technique'),
-    ('athénée',     'Athénée'),
-    ('ecole_prof',  'École professionnelle'),
     ('complexe',    'Complexe scolaire'),
     ('autre',       'Autre'),
 ]
@@ -44,22 +42,22 @@ class ConfigurationEcoleForm(forms.Form):
     nom_ecole  = forms.CharField(label="Nom de l'établissement", max_length=200,
                                   widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Institut Bungulu', 'required': True}))
     type_etablissement = forms.ChoiceField(
-        label="Type d'établissement", choices=TYPE_ETABLISSEMENT_CHOICES, required=False,
-        widget=forms.Select(attrs={'class': 'form-select'}),
+        label="Type d'établissement", choices=TYPE_ETABLISSEMENT_CHOICES, required=True,
+        widget=forms.Select(attrs={'class': 'form-select', 'required': True}),
     )
     annee_scolaire_actuelle = forms.CharField(
-        label="Année scolaire en cours", max_length=20, required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : 2025-2026'}),
+        label="Année scolaire en cours", max_length=20, required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : 2025-2026', 'required': True}),
     )
-    province   = forms.CharField(label="Province",  max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    ville      = forms.CharField(label="Ville",     max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    province   = forms.CharField(label="Province",  max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'required': True}))
+    ville      = forms.CharField(label="Ville",     max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'required': True}))
     commune    = forms.CharField(label="Commune",   max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    code_ecole = forms.CharField(label="Code MEPSP", max_length=50, required=False,
-                                  widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : 62024/101/03/1'}))
-    telephone  = forms.CharField(label="Téléphone", max_length=50, required=False,
-                                  widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : +243 99 000 0000'}))
-    email_contact = forms.EmailField(label="E-mail de contact", required=False,
-                                      widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'contact@ecole.cd'}))
+    code_ecole = forms.CharField(label="Code MEPSP", max_length=50, required=True,
+                                  widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : 62024/101/03/1', 'required': True}))
+    telephone  = forms.CharField(label="Téléphone", max_length=50, required=True,
+                                  widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : +243 99 000 0000', 'required': True}))
+    email_contact = forms.EmailField(label="E-mail de contact", required=True,
+                                      widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'contact@ecole.cd', 'required': True}))
     logo       = forms.ImageField(label="Logo de l'école", required=False,
                                    widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}))
 

@@ -113,33 +113,44 @@ def etape2_config(request):
     # Basculer vers le schéma de l'école pour charger SchoolInfo
     _switch_tenant_schema(admin.ecole.schema_name)
 
-    initial = {}
     ecole = admin.ecole  # données saisies par le super admin lors de la création
     try:
         from school_settings.models import SchoolInfo
         info = SchoolInfo.get_info()
+
+        placeholder_values = {
+            'nom': 'Institut Bungulu',
+            'type_etablissement': 'institut',
+            'province': 'Nord-Kivu',
+            'ville': 'Beni',
+            'commune': 'Bungulu',
+            'code': '62024 / 101 / 03 / 1',
+        }
+
+        def _info_value(field, fallback=''):
+            value = getattr(info, field, '') or ''
+            if field in placeholder_values and value == placeholder_values[field]:
+                return fallback
+            return value or fallback
+
         initial = {
-            # Nom : SchoolInfo en priorité, sinon nom saisi par le super admin
-            'nom_ecole':               info.nom or ecole.nom or '',
-            'type_etablissement':      info.type_etablissement or '',
-            'annee_scolaire_actuelle': info.annee_scolaire_actuelle or '',
-            'province':                info.province or '',
-            'ville':                   info.ville or ecole.ville or '',
-            'commune':                 info.commune or '',
-            'code_ecole':              info.code or '',
-            # Téléphone/email : SchoolInfo, sinon données du super admin
-            'telephone':               info.telephone or ecole.contact_telephone or '',
-            'email_contact':           info.email_contact or ecole.contact_email or '',
+            'nom_ecole':               _info_value('nom', ecole.nom or ''),
+            'type_etablissement':      _info_value('type_etablissement', ''),
+            'annee_scolaire_actuelle': _info_value('annee_scolaire_actuelle', ''),
+            'province':                _info_value('province', ''),
+            'ville':                   _info_value('ville', ecole.ville or ''),
+            'commune':                 _info_value('commune', ''),
+            'code_ecole':              _info_value('code', ''),
+            'telephone':               _info_value('telephone', ecole.contact_telephone or ''),
+            'email_contact':           _info_value('email_contact', ecole.contact_email or ''),
         }
     except Exception:
-        # Fallback minimal : données du super admin
         initial = {
             'nom_ecole':    ecole.nom or '',
             'ville':        ecole.ville or '',
             'telephone':    ecole.contact_telephone or '',
             'email_contact': ecole.contact_email or '',
         }
-    # Toujours revenir au schéma public après lecture
     _switch_public_schema()
 
     form = ConfigurationEcoleForm(request.POST or None, request.FILES or None, initial=initial)
@@ -162,6 +173,26 @@ def etape2_config(request):
             if 'logo' in request.FILES:
                 info.logo = request.FILES['logo']
             info.save()
+
+            annee_scolaire = d.get('annee_scolaire_actuelle', '').strip()
+            if annee_scolaire:
+                from classes.models import AnneeScolaire
+                try:
+                    annee_obj, created = AnneeScolaire.objects.get_or_create(
+                        annee=annee_scolaire,
+                        defaults={'active': True}
+                    )
+                    if not created and not annee_obj.active:
+                        if annee_obj.cloturee:
+                            messages.warning(
+                                request,
+                                "L'année scolaire saisie est clôturée et ne peut pas être activée."
+                            )
+                        else:
+                            annee_obj.active = True
+                            annee_obj.save()
+                except Exception as e:
+                    logger.warning('ONBOARDING_STEP2_ACTIVATE_YEAR_ERROR: %s', e)
         except Exception as e:
             save_ok = False
             logger.warning('ONBOARDING_STEP2_SAVE_ERROR: %s', e)

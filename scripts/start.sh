@@ -4,6 +4,12 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 APP_DIR="$ROOT_DIR/school_app"
 PORT="${PORT:-8000}"
 
+# ── Chargement du fichier .env si présent ───────────────────────────────────
+if [[ -f "$APP_DIR/.env" ]]; then
+    # shellcheck source=/dev/null
+    source "$APP_DIR/.env"
+fi
+
 # ── Couleurs (désactivées si le terminal ne les supporte pas) ─────────────────
 if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && [[ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]]; then
     C_RESET="$(tput sgr0)";  C_BOLD="$(tput bold)"
@@ -158,15 +164,14 @@ if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
     "$PYTHON_BIN" manage.py init_public_tenant
     ok "Tenant public initialisé"
 else
-    "$PYTHON_BIN" manage.py migrate --noinput
-    ok "Migrations SQLite appliquées"
+    err "PostgreSQL requis : définissez DATABASE_URL ou DB_HOST dans votre fichier .env."
+    exit 1
 fi
 
 # ── Étape 4 — Données & comptes de test ───────────────────────────────────────
 step "4/6" "Données de test (seed)"
 
 if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
-    # Mode PostgreSQL : école de test + super-admin
     if "$PYTHON_BIN" manage.py help seed_test_school >/dev/null 2>&1; then
         "$PYTHON_BIN" manage.py seed_test_school && ok "École de test créée/mise à jour (seed_test_school)"
     fi
@@ -174,23 +179,8 @@ if [[ -n "${DATABASE_URL:-}" || -n "${DB_HOST:-}" ]]; then
         "$PYTHON_BIN" manage.py seed_super_admin >/dev/null 2>&1 && ok "Super-admin créé/mis à jour"
     fi
 else
-    # Mode SQLite : comptes de test + super-admin
-    if "$PYTHON_BIN" manage.py help seed_sqlite_users >/dev/null 2>&1; then
-        "$PYTHON_BIN" manage.py seed_sqlite_users && ok "Comptes SQLite créés/mis à jour (seed_sqlite_users)"
-    fi
-    if "$PYTHON_BIN" manage.py help seed_super_admin >/dev/null 2>&1; then
-        "$PYTHON_BIN" manage.py seed_super_admin >/dev/null 2>&1 && ok "Super-admin de test créé/mis à jour"
-    fi
-
-    # Afficher un résumé des credentials
-    printf '\n'
-    printf '  %s%s%s\n' "$C_CYAN$C_BOLD" "── Credentials EducNet (SQLite) ──────────────────────────────" "$C_RESET"
-    printf '  %-14s  %-34s  %s\n' "Super-admin"  "superadmin@test.local"       "SuperAdmin@2025!"
-    printf '  %-14s  %-34s  %s\n' "Admin-école"  "admin@ecoletest.local"        "Admin@Ecole2025!"
-    printf '  %-14s  %-34s  %s\n' "Préfet"       "prefet@ecoletest.local"       "Prefet@Ecole2025!"
-    printf '  %-14s  %-34s  %s\n' "Enseignant"   "enseignant@ecoletest.local"   "Enseignant@2025!"
-    printf '  %-14s  %-34s  %s\n' "Secrétariat"  "secretariat@ecoletest.local"  "Secretariat@2025!"
-    printf '\n'
+    err "PostgreSQL requis pour le démarrage : définissez DATABASE_URL ou DB_HOST dans votre fichier .env."
+    exit 1
 fi
 
 # ── Étape 5 — Fichiers statiques ──────────────────────────────────────────────

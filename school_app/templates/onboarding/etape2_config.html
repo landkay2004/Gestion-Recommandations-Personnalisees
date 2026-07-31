@@ -90,6 +90,9 @@
         <div class="col-12">
           <label class="ob2-label">{{ form.code_ecole.label }}</label>
           {{ form.code_ecole }}
+          {% if form.code_ecole.errors %}
+            <div class="text-danger small mt-1">{{ form.code_ecole.errors.0 }}</div>
+          {% endif %}
           <div class="form-text small">Code administratif MEPSP — ex : 62024/101/03/1</div>
         </div>
       </div>
@@ -150,75 +153,99 @@
 <style>
 /* ── Sections onboarding étape 2 ──────────────────────────────────── */
 .ob2-section {
-  border: 1px solid var(--color-border, #e2e8f0);
-  border-radius: 10px;
-  margin-bottom: .5rem;
+  border: 1px solid rgba(148, 163, 184, .18);
+  border-radius: 14px;
+  margin-bottom: .85rem;
   overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 8px rgba(15, 23, 42, .04);
 }
 .ob2-section-header {
   display: flex;
   align-items: center;
-  gap: .5rem;
-  padding: .6rem .85rem;
-  background: var(--color-surface, #f8fafc);
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--color-text, #1e293b);
+  gap: .75rem;
+  padding: .8rem 1rem;
+  background: #f8fafc;
+  font-size: .85rem;
+  font-weight: 700;
+  color: #1f2937;
+  justify-content: space-between;
+  transition: background .2s, color .2s;
+}
+.ob2-section-header:hover {
+  background: #eef2f7;
 }
 .ob2-toggle {
   cursor: pointer;
   user-select: none;
-  transition: background .12s;
 }
-.ob2-toggle:hover { background: #eef2f7; }
 .ob2-section-body {
-  padding: .75rem .85rem;
+  padding: .85rem 1rem 1.1rem;
   background: #fff;
+  transition: max-height .25s ease, opacity .25s ease, padding .25s ease;
+  max-height: 2000px;
+  opacity: 1;
 }
 .ob2-section-body.ob2-collapse {
-  display: none;
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  overflow: hidden;
 }
 .ob2-section-body.ob2-collapse.open {
-  display: block;
+  max-height: 1200px;
+  opacity: 1;
+  padding: .85rem 1rem 1.1rem;
 }
 .ob2-chevron {
-  font-size: .72rem;
-  color: #94a3b8;
+  font-size: .78rem;
+  color: #475569;
   transition: transform .2s ease;
 }
 .ob2-toggle[aria-expanded="true"] .ob2-chevron {
   transform: rotate(-180deg);
 }
 .ob2-label {
-  font-size: .78rem;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: .25rem;
+  font-size: .79rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: .35rem;
   display: block;
 }
 .ob2-badge-filled {
-  font-size: .65rem;
-  background: rgba(37,99,235,.1);
-  color: #2563eb;
-  border-radius: 20px;
-  padding: 1px 8px;
-  font-weight: 500;
+  font-size: .68rem;
+  background: rgba(37,99,235,.12);
+  color: #1d4ed8;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
+  max-width: 150px;
 }
 .ob2-badge-opt {
-  font-size: .62rem;
+  font-size: .67rem;
   background: #f1f5f9;
-  color: #64748b;
-  border-radius: 20px;
-  padding: 1px 8px;
-  font-weight: 500;
+  color: #475569;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-weight: 600;
+}
+.ob2-section-body .form-control,
+.ob2-section-body .form-select,
+.ob2-section-body textarea {
+  min-height: 42px;
+}
+.ob2-section-body .form-text {
+  margin-top: .3rem;
 }
 /* Section identité toujours ouverte */
 .ob2-section:first-child .ob2-section-body {
   display: block !important;
+  max-height: 1200px;
+  opacity: 1;
 }
 </style>
 {% endblock %}
@@ -247,5 +274,22 @@ document.querySelectorAll('.ob2-toggle').forEach(header => {
     header.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
   });
 });
+
+const configForm = document.getElementById('form-config');
+if (configForm) {
+  configForm.addEventListener('invalid', (event) => {
+    const invalidField = event.target;
+    const section = invalidField.closest('.ob2-section');
+    if (section) {
+      const body = section.querySelector('.ob2-section-body');
+      const header = section.querySelector('.ob2-section-header.ob2-toggle');
+      if (body && !body.classList.contains('open')) {
+        body.classList.add('open');
+        if (header) header.setAttribute('aria-expanded', 'true');
+      }
+    }
+    invalidField.focus();
+  }, true);
+}
 </script>
 {% endblock %}
