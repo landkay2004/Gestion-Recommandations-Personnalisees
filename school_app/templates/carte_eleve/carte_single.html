@@ -79,13 +79,11 @@ body {
   transform-style: preserve-3d;
   transition: transform .55s cubic-bezier(.4, 0, .2, 1);
   border-radius: 12px;
-  /* ── Rendu net : force le compositing GPU ── */
-  transform: translateZ(0);
   will-change: transform;
   -webkit-backface-visibility: hidden;
 }
 
-.flip-card.flipped .flip-inner { transform: rotateY(180deg) translateZ(0); }
+.flip-card.flipped .flip-inner { transform: rotateY(180deg); }
 
 .flip-front, .flip-back {
   position: absolute; inset: 0;
@@ -158,8 +156,7 @@ body {
   object-fit: cover; object-position: center top;
   display: block;
   transform: none;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: auto;
   -webkit-transform: translateZ(0) scale(1,1);
   -moz-transform: translateZ(0) scale(1,1);
 }

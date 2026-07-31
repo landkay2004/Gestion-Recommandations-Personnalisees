@@ -216,7 +216,7 @@ class AbonnementMiddleware:
         # ── École suspendue ──────────────────────────────────────────────────
         if ecole.statut == 'suspendue':
             if request.session.get('admin_ecole_id'):
-                return redirect('abonnement:suspendue')
+                return redirect('abonnement:ecole_suspendue')
             from django.template.loader import render_to_string
             from django.http import HttpResponse
             html = render_to_string('abonnement/ecole_suspendue.html', {

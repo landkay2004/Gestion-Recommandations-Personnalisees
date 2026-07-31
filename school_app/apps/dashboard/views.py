@@ -112,6 +112,9 @@ def dashboard(request):
         }
         return render(request, 'dashboard/index_prefet.html', context)
 
+    if user.is_comptable():
+        return redirect('comptable:comptable_dashboard')
+
     else:
         # ─── Dashboard Enseignant ───────────────────────────────────────
         try:
