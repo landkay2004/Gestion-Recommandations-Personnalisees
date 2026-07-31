@@ -617,55 +617,67 @@ class Command(BaseCommand):
                 connection.set_schema_to_public()
                 return
 
-            # ── Paiements pour les élèves existants ──────────────────────
+            # ── Paiements pour les élèves existants (idempotent) ─────────
+            # La référence déterministe SEED-{eleve_pk}-{tf_pk} garantit
+            # que get_or_create retrouve exactement le même enregistrement
+            # à chaque réexécution du seed — aucun doublon possible.
             rng = random.Random(99)
-            eleves = list(Student.objects.all()[:20])
-            types  = list(TypeFrais.objects.filter(actif=True, classe__isnull=True))
+            eleves = list(Student.objects.order_by('pk').all()[:20])
+            types  = list(TypeFrais.objects.filter(actif=True, classe__isnull=True).order_by('pk'))
             paiement_count = 0
             facture_count  = 0
 
-            now = timezone.now()
+            # Date de base fixe pour reproductibilité (indépendant de timezone.now())
+            from datetime import date as _date
+            base_date = timezone.make_aware(
+                timezone.datetime(2025, 9, 1, 8, 0, 0)
+            )
 
             for eleve in eleves:
-                # Chaque élève a payé 2–4 frais de manière aléatoire
-                nb_frais_payes = rng.randint(2, min(4, len(types)))
-                frais_payes    = rng.sample(types, nb_frais_payes)
+                # Sélection déterministe des frais à payer pour cet élève
+                rng_eleve = random.Random(eleve.pk * 31 + 7)
+                nb_frais_payes = rng_eleve.randint(2, min(4, len(types)))
+                frais_payes    = rng_eleve.sample(types, nb_frais_payes)
 
                 for tf in frais_payes:
-                    # Paiement partiel (acompte) ou total
+                    rng_pmt = random.Random(eleve.pk * 1000 + tf.pk)
                     montant_du  = tf.montant
-                    part        = rng.choice([0.5, 0.75, 1.0])
+                    part        = rng_pmt.choice([0.5, 0.75, 1.0])
                     montant_pay = (montant_du * decimal.Decimal(str(part))).quantize(
                         decimal.Decimal('0.01')
                     )
-                    # Date aléatoire dans les 6 derniers mois
-                    jours_ago = rng.randint(0, 180)
-                    date_pay  = now - timedelta(days=jours_ago)
-                    mode      = rng.choice(['especes', 'mobile_money', 'virement'])
+                    jours_ago = rng_pmt.randint(0, 180)
+                    date_pay  = base_date - timedelta(days=jours_ago)
+                    mode      = rng_pmt.choice(['especes', 'mobile_money', 'virement'])
 
-                    # Éviter les doublons (même élève + même frais + même montant)
-                    if Paiement.objects.filter(eleve=eleve, type_frais=tf).count() >= 2:
-                        continue
+                    # Référence stable dérivée des clés primaires — idempotente
+                    ref_seed = 'SEED-%d-%d' % (eleve.pk, tf.pk)
 
-                    p = Paiement.objects.create(
-                        eleve=eleve,
-                        type_frais=tf,
-                        montant_paye=montant_pay,
-                        date_paiement=date_pay,
-                        comptable=comptable,
-                        mode_paiement=mode,
+                    p, p_created = Paiement.objects.get_or_create(
+                        reference=ref_seed,
+                        defaults={
+                            'eleve':         eleve,
+                            'type_frais':    tf,
+                            'montant_paye':  montant_pay,
+                            'date_paiement': date_pay,
+                            'comptable':     comptable,
+                            'mode_paiement': mode,
+                        },
                     )
-                    paiement_count += 1
+                    if p_created:
+                        paiement_count += 1
 
-                    # Facture associée
-                    if not hasattr(p, 'facture') or not Facture.objects.filter(paiement=p).exists():
-                        num = Facture.generer_numero()
-                        Facture.objects.create(
-                            paiement=p,
-                            numero_facture=num,
-                            date_emission=date_pay,
-                        )
-                        facture_count += 1
+                    # Facture associée — créée une seule fois
+                    if not Facture.objects.filter(paiement=p).exists():
+                        # Numéro stable : FAC-SEED-{eleve_pk}-{tf_pk}
+                        num_seed = 'FAC-SEED-%d-%d' % (eleve.pk, tf.pk)
+                        if not Facture.objects.filter(numero_facture=num_seed).exists():
+                            Facture.objects.create(
+                                paiement=p,
+                                numero_facture=num_seed,
+                                date_emission=date_pay,
+                            )
+                            facture_count += 1
 
             self._ok("%d paiements créés (%d factures)" % (paiement_count, facture_count))
 
