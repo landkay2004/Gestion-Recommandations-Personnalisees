@@ -58,8 +58,8 @@ class AbonnementViewsTest(SimpleTestCase):
 
         with patch.dict('sys.modules', {'tenants.models': tenants_module, 'tenants': ModuleType('tenants')}), \
              patch('abonnement.views._envoyer_demande_email'), \
-             patch('abonnement.views.messages') as messages_mock, \
-             patch('abonnement.views.redirect', side_effect=lambda name: name) as redirect_mock:
+             patch.object(views, 'messages') as messages_mock, \
+             patch.object(views, 'redirect', side_effect=lambda name: name) as redirect_mock:
             response = views.demande_changement(request)
 
         self.assertEqual(response, 'abonnement:mon_abonnement')
