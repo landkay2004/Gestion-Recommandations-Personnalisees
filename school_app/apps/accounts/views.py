@@ -115,11 +115,6 @@ def login_view(request):
             except Exception:
                 pass
 
-            try:
-                connection.set_schema_to_public()
-            except Exception:
-                pass
-
             ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '?'))
             logger_sec.info('CONNEXION user=%s role=%s ip=%s', user.username, user.role, ip)
             if user.must_change_password:

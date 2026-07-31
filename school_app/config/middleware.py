@@ -8,6 +8,7 @@ Middleware multi-tenant SGN :
 """
 import logging
 from django.conf import settings
+from django.db import ProgrammingError
 from django.shortcuts import redirect
 from django.http import HttpResponseForbidden
 from django.utils import timezone
@@ -34,8 +35,21 @@ class SessionTenantMiddleware:
 
     def __call__(self, request):
         self._set_tenant(request)
-        response = self.get_response(request)
-        return response
+        try:
+            response = self.get_response(request)
+            return response
+        except ProgrammingError as exc:
+            if self._is_missing_table_error(exc):
+                try:
+                    from django.db import connection
+                    from django_tenants.utils import get_tenant_model
+                    self._use_public(connection, get_tenant_model())
+                except Exception:
+                    pass
+                for key in ['tenant_schema', 'user_type', 'super_admin_id', 'admin_ecole_id', 'sa_2fa_verified']:
+                    request.session.pop(key, None)
+                return redirect('login')
+            raise
 
     def _set_tenant(self, request):
         # Pas de multi-tenant en SQLite
@@ -72,6 +86,9 @@ class SessionTenantMiddleware:
             if tenant_schema:
                 try:
                     tenant = TenantModel.objects.get(schema_name=tenant_schema)
+                    if hasattr(tenant, 'is_accessible') and not tenant.is_accessible:
+                        self._use_public(connection, TenantModel)
+                        return
                     connection.set_tenant(tenant)
                     return
                 except TenantModel.DoesNotExist:
@@ -92,6 +109,10 @@ class SessionTenantMiddleware:
                 connection.set_schema_to_public()
             except Exception:
                 pass
+
+    def _is_missing_table_error(self, exc):
+        message = str(exc).lower()
+        return 'relation' in message and 'does not exist' in message
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -212,6 +233,14 @@ class AbonnementMiddleware:
             ecole = Ecole.objects.select_related('plan').get(schema_name=schema)
         except Exception:
             return self.get_response(request)
+
+        # ── École supprimée / corbeille ─────────────────────────────────────
+        if not ecole.is_accessible:
+            for key in ['tenant_schema', 'user_type', 'super_admin_id', 'admin_ecole_id', 'sa_2fa_verified']:
+                request.session.pop(key, None)
+            from django.contrib import messages as dj_messages
+            dj_messages.error(request, "Cette école a été supprimée et n'est plus accessible.")
+            return redirect('login')
 
         # ── École suspendue ──────────────────────────────────────────────────
         if ecole.statut == 'suspendue':

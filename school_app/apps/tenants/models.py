@@ -214,6 +214,10 @@ class Ecole(TenantMixin):
             return None
         return (self.date_fin_abonnement - timezone.now().date()).days
 
+    @property
+    def is_accessible(self):
+        return not self.is_deleted and self.statut != 'corbeille'
+
     def marquer_suppression(self):
         self.statut = 'corbeille'
         self.is_deleted = True

@@ -40,6 +40,9 @@ class MultiTenantAuthBackend:
         try:
             from tenants.models import AdminEcole
             admin = AdminEcole.objects.get(email__iexact=email, is_active=True)
+            if not admin.ecole.is_accessible:
+                logger_sec.warning('REFUS_CONNEXION admin_ecole email=%s ecole_suppression=%s', email, admin.ecole.schema_name)
+                return None
             _switch_schema(admin.ecole.schema_name)
             from django.contrib.auth import get_user_model
             UserModel = get_user_model()
@@ -62,9 +65,17 @@ class MultiTenantAuthBackend:
 
         # ── 3. Utilisateurs école (préfet/enseignant) ─────────────────────
         try:
-            from tenants.models import AnnuaireUtilisateur
+            from tenants.models import AnnuaireUtilisateur, Ecole
             entry = AnnuaireUtilisateur.objects.get(email__iexact=email)
             schema_name = entry.schema_name
+
+            try:
+                ecole = Ecole.objects.get(schema_name=schema_name)
+            except Ecole.DoesNotExist:
+                return None
+            if not ecole.is_accessible:
+                logger_sec.warning('REFUS_CONNEXION utilisateur email=%s schema=%s', email, schema_name)
+                return None
 
             # Basculer vers le bon schéma AVANT toute autre opération
             _switch_schema(schema_name)
