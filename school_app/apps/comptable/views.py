@@ -237,8 +237,11 @@ def encaissement(request, eleve_pk):
 
 
 @login_required
-@comptable_required
 def historique_paiements(request):
+    """Accessible au comptable, admin_ecole et préfet."""
+    if request.user.role not in ('comptable', 'admin_ecole', 'prefet'):
+        messages.error(request, "Accès réservé au service comptable et à la direction.")
+        return redirect('dashboard')
     from accounts.models import CustomUser
 
     qs = Paiement.objects.select_related(

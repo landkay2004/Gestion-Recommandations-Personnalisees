@@ -3,235 +3,831 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rejoindre EducNet — Demande d'inscription</title>
+  <title>EducNet — Rejoignez la plateforme de gestion scolaire n°1 en RDC</title>
+  <meta name="description" content="EducNet gère vos élèves, bulletins, parents et comptabilité depuis un espace école sécurisé. Demandez votre accès en 2 minutes.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    :root { --primary:#4d44b5; --primary-soft:#efedff; --ink:#0f172a; --muted:#64748b; --border:#e2e8f0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #4d44b5;
+      --primary-dark: #3d378f;
+      --primary-soft: #efedff;
+      --primary-mid: #6b64cc;
+      --ink: #0f172a;
+      --ink-mid: #334155;
+      --muted: #64748b;
+      --muted-light: #94a3b8;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --success: #16a34a;
+      --accent: #f97316;
+    }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: radial-gradient(ellipse at 10% 0%, #efedff 0%, #f8fafc 40%);
-      min-height: 100vh;
-      padding: 32px 16px 64px;
+      background: var(--bg);
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    .page-wrap { max-width: 680px; margin: 0 auto; }
-
-    /* Brand header */
-    .brand-row {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 40px;
+    /* ── NAVBAR ─────────────────────────────────────────────── */
+    .nav-wrap {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.90);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
     }
-    .brand-mark {
-      width: 46px; height: 46px; border-radius: 13px;
+    .navbar {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1100px; margin: 0 auto;
+      padding: 14px 24px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--ink);
+    }
+    .nav-logo-mark {
+      width: 38px; height: 38px; border-radius: 10px;
       background: var(--primary); color: #fff;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      box-shadow: 0 4px 14px rgba(77,68,181,.28);
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(77,68,181,.30);
+      flex-shrink: 0;
     }
-    .brand-name { font-size: 1rem; font-weight: 800; color: var(--ink); }
-    .brand-sub  { font-size: .7rem; color: var(--muted); }
+    .nav-brand-text .nav-name { font-size: .9rem; font-weight: 800; line-height: 1.2; }
+    .nav-brand-text .nav-tag  { font-size: .62rem; color: var(--muted); }
 
-    /* Hero */
-    .hero { margin-bottom: 36px; }
-    .hero h1 { font-size: 1.9rem; font-weight: 900; letter-spacing: -.05em; color: var(--ink); margin-bottom: 10px; }
-    .hero p   { font-size: .9rem; color: var(--muted); line-height: 1.7; }
-
-    /* Features */
-    .feature-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 36px; }
-    .feature {
-      padding: 16px; background: #fff;
-      border: 1.5px solid var(--border); border-radius: 16px;
-      text-align: center;
+    .nav-links {
+      display: flex; align-items: center; gap: 6px;
+      list-style: none;
     }
-    .feature i { font-size: 1.4rem; color: var(--primary); margin-bottom: 8px; display: block; }
-    .feature strong { font-size: .78rem; font-weight: 700; color: var(--ink); display: block; }
-    .feature span   { font-size: .7rem; color: var(--muted); line-height: 1.4; }
+    .nav-links a {
+      padding: 6px 14px; border-radius: 8px;
+      font-size: .82rem; font-weight: 500; color: var(--ink-mid);
+      text-decoration: none; transition: background .15s, color .15s;
+    }
+    .nav-links a:hover { background: var(--primary-soft); color: var(--primary); }
 
-    /* Form card */
+    .nav-cta {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .btn-login {
+      padding: 7px 16px; border-radius: 8px;
+      font-size: .82rem; font-weight: 600; color: var(--primary);
+      text-decoration: none; border: 1.5px solid var(--border);
+      background: #fff; transition: all .15s;
+    }
+    .btn-login:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .btn-nav-cta {
+      padding: 7px 18px; border-radius: 8px;
+      font-size: .82rem; font-weight: 700; color: #fff;
+      background: var(--primary); text-decoration: none;
+      box-shadow: 0 2px 8px rgba(77,68,181,.28);
+      transition: background .15s, transform .1s;
+    }
+    .btn-nav-cta:hover { background: var(--primary-dark); color: #fff; transform: translateY(-1px); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+    }
+
+    /* ── HERO ────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, #0f0c35 0%, #1e1b4b 35%, #312e81 65%, #1e3a5f 100%);
+      padding: 96px 24px 80px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(circle at 15% 25%, rgba(99,102,241,.22) 0%, transparent 45%),
+        radial-gradient(circle at 85% 70%, rgba(59,130,246,.16) 0%, transparent 40%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 999px;
+      background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.85); font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase; margin-bottom: 22px;
+      backdrop-filter: blur(6px);
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: blink 1.8s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    .hero h1 {
+      font-size: 3.2rem; font-weight: 900; color: #fff;
+      line-height: 1.1; letter-spacing: -.06em; margin-bottom: 18px;
+    }
+    .hero h1 .accent { color: #60a5fa; }
+    .hero p {
+      font-size: 1.05rem; color: rgba(255,255,255,.65);
+      line-height: 1.7; max-width: 560px; margin: 0 auto 32px;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+    }
+    .hero-btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 12px;
+      background: linear-gradient(90deg, #4d44b5, #6366f1);
+      color: #fff; font-size: .9rem; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 8px 28px rgba(77,68,181,.45);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(77,68,181,.55); color: #fff; }
+    .hero-btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 12px;
+      background: rgba(255,255,255,.10); border: 1.5px solid rgba(255,255,255,.22);
+      color: #fff; font-size: .9rem; font-weight: 600;
+      text-decoration: none; backdrop-filter: blur(6px);
+      transition: background .15s;
+    }
+    .hero-btn-secondary:hover { background: rgba(255,255,255,.17); color: #fff; }
+
+    .hero-stats {
+      display: flex; align-items: center; justify-content: center; gap: 32px;
+      margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      flex-wrap: wrap;
+    }
+    .hero-stat-item { text-align: center; }
+    .hero-stat-num  { font-size: 1.5rem; font-weight: 900; color: #fff; letter-spacing: -.04em; }
+    .hero-stat-lab  { font-size: .7rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2rem; }
+      .hero p  { font-size: .9rem; }
+    }
+
+    /* ── SECTION wrapper ─────────────────────────────────────── */
+    .section { padding: 80px 24px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-kicker {
+      display: inline-block;
+      font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .12em; color: var(--primary); margin-bottom: 10px;
+    }
+    .section-title { font-size: 2rem; font-weight: 900; color: var(--ink); letter-spacing: -.05em; margin-bottom: 12px; }
+    .section-sub { font-size: .95rem; color: var(--muted); line-height: 1.7; max-width: 540px; }
+    .section-center { text-align: center; }
+    .section-center .section-sub { margin: 0 auto; }
+
+    /* ── FEATURES ────────────────────────────────────────────── */
+    .features-bg { background: #fff; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .feature-card {
+      padding: 28px;
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      background: var(--card);
+      transition: box-shadow .2s, transform .2s, border-color .2s;
+    }
+    .feature-card:hover {
+      box-shadow: 0 8px 32px rgba(77,68,181,.10);
+      border-color: rgba(77,68,181,.3);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 13px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 16px;
+    }
+    .fi-blue   { background: #eff6ff; color: #2563eb; }
+    .fi-purple { background: var(--primary-soft); color: var(--primary); }
+    .fi-green  { background: #f0fdf4; color: #16a34a; }
+    .fi-orange { background: #fff7ed; color: #ea580c; }
+    .fi-teal   { background: #f0fdfa; color: #0d9488; }
+    .fi-rose   { background: #fff1f2; color: #e11d48; }
+    .feature-card h3 { font-size: .95rem; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+    .feature-card p  { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 580px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── HOW IT WORKS ────────────────────────────────────────── */
+    .how-bg { background: var(--bg); }
+    .steps-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px;
+    }
+    .step-card {
+      text-align: center; padding: 24px 16px;
+      background: #fff; border: 1.5px solid var(--border); border-radius: 18px;
+    }
+    .step-num {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--primary-soft); color: var(--primary);
+      font-size: 1rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px;
+    }
+    .step-card h3 { font-size: .88rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+    .step-card p  { font-size: .78rem; color: var(--muted); line-height: 1.6; }
+    @media (max-width: 768px) {
+      .steps-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .steps-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── PRICING ─────────────────────────────────────────────── */
+    .pricing-bg {
+      background: linear-gradient(180deg, #0f0c35 0%, #1e1b4b 100%);
+      position: relative; overflow: hidden;
+    }
+    .pricing-bg::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(circle at 70% 40%, rgba(99,102,241,.18) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .pricing-bg .section-kicker { color: #60a5fa; }
+    .pricing-bg .section-title  { color: #fff; }
+    .pricing-bg .section-sub    { color: rgba(255,255,255,.55); }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px; margin-top: 48px; position: relative; z-index: 1;
+    }
+    .plan-card {
+      background: rgba(255,255,255,.07);
+      border: 1.5px solid rgba(255,255,255,.12);
+      border-radius: 20px; padding: 32px 28px;
+      color: #fff; position: relative;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .plan-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.3);
+      border-color: rgba(255,255,255,.25);
+    }
+    .plan-card.featured {
+      background: linear-gradient(135deg, rgba(77,68,181,.6) 0%, rgba(99,102,241,.4) 100%);
+      border-color: rgba(99,102,241,.6);
+      box-shadow: 0 8px 32px rgba(77,68,181,.4);
+    }
+    .plan-badge {
+      display: inline-block;
+      font-size: .62rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 999px;
+      background: #4ade80; color: #0f172a;
+      margin-bottom: 16px;
+    }
+    .plan-name { font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; }
+    .plan-desc { font-size: .78rem; color: rgba(255,255,255,.55); line-height: 1.5; margin-bottom: 20px; }
+    .plan-price {
+      display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px;
+    }
+    .plan-price .amount  { font-size: 2.4rem; font-weight: 900; letter-spacing: -.05em; }
+    .plan-price .currency{ font-size: 1rem; font-weight: 600; color: rgba(255,255,255,.65); }
+    .plan-price .period  { font-size: .78rem; color: rgba(255,255,255,.45); margin-left: 2px; }
+    .plan-annual {
+      font-size: .72rem; color: rgba(255,255,255,.45); margin-bottom: 20px;
+    }
+    .plan-annual .save { color: #4ade80; font-weight: 700; }
+    .plan-divider { border: none; border-top: 1px solid rgba(255,255,255,.12); margin: 20px 0; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .plan-features li {
+      display: flex; align-items: flex-start; gap: 9px;
+      font-size: .8rem; color: rgba(255,255,255,.75);
+    }
+    .plan-features li i { color: #4ade80; flex-shrink: 0; margin-top: 1px; font-size: .8rem; }
+    .plan-cta {
+      display: block; width: 100%; margin-top: 24px;
+      padding: 11px; border-radius: 10px; border: none; cursor: pointer;
+      font-size: .875rem; font-weight: 700;
+      text-align: center; text-decoration: none;
+      transition: all .15s;
+    }
+    .plan-cta-outline {
+      background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.2); color: #fff;
+    }
+    .plan-cta-outline:hover { background: rgba(255,255,255,.16); color: #fff; }
+    .plan-cta-solid {
+      background: #fff; color: var(--primary);
+      box-shadow: 0 4px 16px rgba(0,0,0,.25);
+    }
+    .plan-cta-solid:hover { background: var(--primary-soft); }
+
+    /* Fallback when no plans in DB */
+    .pricing-fallback {
+      position: relative; z-index: 1; text-align: center;
+      padding: 60px 20px;
+    }
+    .pricing-fallback a {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 10px;
+      background: rgba(255,255,255,.12); border: 1.5px solid rgba(255,255,255,.2);
+      color: #fff; font-weight: 700; font-size: .875rem; text-decoration: none;
+      margin-top: 16px;
+    }
+
+    /* ── FORM SECTION ────────────────────────────────────────── */
+    .form-bg { background: #fff; }
+    .form-wrap {
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 48px; align-items: start;
+      max-width: 1000px; margin: 0 auto; padding-top: 8px;
+    }
+    .form-side-info { padding-top: 8px; }
+    .info-bullets { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+    .info-bullets li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: .85rem; color: var(--ink-mid);
+    }
+    .info-bullets li .ib-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: var(--primary-soft); color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .info-bullets li .ib-text strong { display: block; font-weight: 700; font-size: .83rem; color: var(--ink); }
+    .info-bullets li .ib-text span   { font-size: .76rem; color: var(--muted); }
+
+    .form-contact {
+      margin-top: 32px; padding: 20px;
+      background: var(--primary-soft); border-radius: 14px;
+      font-size: .82rem; color: var(--primary);
+    }
+    .form-contact strong { display: block; font-size: .85rem; margin-bottom: 8px; }
+    .form-contact a { color: var(--primary); font-weight: 600; }
+
     .form-card {
-      background: #fff;
-      border: 1px solid var(--border);
+      background: var(--bg);
+      border: 1.5px solid var(--border);
       border-radius: 20px;
-      padding: 36px 40px;
-      box-shadow: 0 4px 24px rgba(15,23,42,.06);
+      padding: 36px 32px;
     }
-    .form-card h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; }
-    .form-card .sub { font-size: .82rem; color: var(--muted); margin-bottom: 28px; line-height: 1.5; }
+    .form-card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+    .form-card .sub { font-size: .8rem; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
 
-    .section-title {
-      font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
-      color: var(--muted); margin-bottom: 14px; margin-top: 24px;
+    .section-title-sm {
+      font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--muted); margin: 20px 0 12px;
       padding-bottom: 8px; border-bottom: 1px solid var(--border);
     }
-    label { font-size: .8rem; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+    label { font-size: .8rem; font-weight: 600; color: var(--ink); }
     .form-control, .form-select {
       border-color: var(--border); border-radius: 10px; font-size: .875rem;
-      padding: .6rem .85rem; color: var(--ink);
+      padding: .55rem .85rem; color: var(--ink);
       transition: border-color .15s, box-shadow .15s;
     }
     .form-control:focus, .form-select:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(77,68,181,.12);
     }
-    .form-text { font-size: .72rem; color: var(--muted); }
     .btn-submit {
-      width: 100%; padding: .75rem; border-radius: 12px;
-      background: var(--primary); color: #fff; border: none;
-      font-size: .925rem; font-weight: 700; cursor: pointer;
-      box-shadow: 0 6px 18px rgba(77,68,181,.28);
-      transition: background .2s, transform .15s;
-      margin-top: 24px;
+      width: 100%; padding: .78rem; border-radius: 12px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-mid));
+      color: #fff; border: none; font-size: .9rem; font-weight: 700; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(77,68,181,.30);
+      transition: transform .15s, box-shadow .15s;
+      margin-top: 20px;
     }
-    .btn-submit:hover { background: #3f379b; transform: translateY(-1px); }
+    .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(77,68,181,.40); }
+    .privacy-note { font-size: .7rem; color: var(--muted); text-align: center; margin-top: 12px; }
 
-    .privacy-note {
-      font-size: .72rem; color: var(--muted); text-align: center;
-      margin-top: 14px; line-height: 1.55;
+    @media (max-width: 768px) {
+      .form-wrap { grid-template-columns: 1fr; gap: 32px; }
+      .form-side-info { order: 2; }
+      .form-card { order: 1; padding: 24px 18px; }
     }
 
-    @media (max-width: 600px) {
-      .feature-row { grid-template-columns: 1fr; }
-      .form-card { padding: 24px 18px; border-radius: 16px; }
+    /* ── SUCCESS ─────────────────────────────────────────────── */
+    .success-wrap {
+      max-width: 520px; margin: 0 auto; text-align: center; padding: 60px 20px;
     }
+    .success-icon {
+      width: 80px; height: 80px; border-radius: 22px;
+      background: #f0fdf4; color: #16a34a;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem; margin: 0 auto 24px;
+    }
+    .success-wrap h1 { font-size: 1.8rem; font-weight: 900; letter-spacing: -.04em; margin-bottom: 12px; }
+    .success-wrap p  { color: var(--muted); font-size: .9rem; line-height: 1.7; margin-bottom: 28px; }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    .footer {
+      background: var(--ink);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .footer p { font-size: .78rem; color: rgba(255,255,255,.35); }
+    .footer a  { color: rgba(255,255,255,.55); text-decoration: none; }
+    .footer a:hover { color: #fff; }
   </style>
 </head>
 <body>
-<div class="page-wrap">
 
-  <!-- Brand -->
-  <div class="brand-row">
-    <div class="brand-mark"><i class="bi bi-mortarboard-fill"></i></div>
-    <div>
-      <div class="brand-name">EducNet</div>
-      <div class="brand-sub">School Governance Network — RDC</div>
-    </div>
-  </div>
-
-  {% if success %}
-  <!-- Success state -->
-  <div style="text-align:center;padding:60px 20px;">
-    <div style="width:72px;height:72px;border-radius:20px;background:#e5f9f0;color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 20px;">
-      <i class="bi bi-check2"></i>
-    </div>
-    <h1 style="font-size:1.65rem;font-weight:900;letter-spacing:-.04em;margin-bottom:10px;">Demande envoyée !</h1>
-    <p style="color:var(--muted);font-size:.9rem;line-height:1.7;max-width:420px;margin:0 auto 28px;">
-      Votre demande d'inscription pour <strong>{{ nom_ecole }}</strong> a bien été reçue. Notre équipe vous contactera sous 48 heures sur <strong>{{ email }}</strong>.
-    </p>
-    <a href="/rejoindre/" style="color:var(--primary);font-size:.85rem;font-weight:600;text-decoration:none;">
-      <i class="bi bi-plus-circle me-1"></i>Soumettre une autre demande
+<!-- ══════════ NAVBAR ══════════ -->
+<div class="nav-wrap">
+  <nav class="navbar">
+    <a href="/rejoindre/" class="nav-brand">
+      <div class="nav-logo-mark"><i class="bi bi-mortarboard-fill"></i></div>
+      <div class="nav-brand-text">
+        <div class="nav-name">EducNet</div>
+        <div class="nav-tag">School Governance Network — RDC</div>
+      </div>
     </a>
-  </div>
-
-  {% else %}
-  <!-- Hero -->
-  <div class="hero">
-    <h1>Rejoignez EducNet</h1>
-    <p>Vous souhaitez intégrer votre établissement sur la plateforme EducNet ? Remplissez ce formulaire et notre équipe vous contactera pour activer votre espace école.</p>
-  </div>
-
-  <!-- Features -->
-  <div class="feature-row">
-    <div class="feature">
-      <i class="bi bi-building-check"></i>
-      <strong>Espace isolé</strong>
-      <span>Vos données dans un espace école privé et sécurisé</span>
+    <ul class="nav-links">
+      <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+      <li><a href="#comment">Comment ça marche</a></li>
+      <li><a href="#tarifs">Tarifs</a></li>
+      <li><a href="#inscription">Inscription</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="/login/" class="btn-login">Connexion</a>
+      <a href="#inscription" class="btn-nav-cta">Commencer</a>
     </div>
-    <div class="feature">
-      <i class="bi bi-file-earmark-pdf"></i>
-      <strong>Bulletins officiels</strong>
-      <span>Format MEPSP conforme aux exigences nationales</span>
+  </nav>
+</div>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Plateforme active en RDC
     </div>
-    <div class="feature">
-      <i class="bi bi-people-fill"></i>
-      <strong>Portail parents</strong>
-      <span>Accès QR pour les parents aux résultats de leurs enfants</span>
+    <h1>La gestion scolaire<br><span class="accent">simple et efficace</span></h1>
+    <p>EducNet centralise élèves, bulletins, enseignants, parents et comptabilité dans un espace école sécurisé et conforme aux exigences du MEPSP.</p>
+    <div class="hero-actions">
+      <a href="#inscription" class="hero-btn-primary">
+        <i class="bi bi-send-fill"></i> Demander l'accès gratuit
+      </a>
+      <a href="#tarifs" class="hero-btn-secondary">
+        <i class="bi bi-tag"></i> Voir les tarifs
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat-item">
+        <div class="hero-stat-num">100%</div>
+        <div class="hero-stat-lab">Conforme MEPSP</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-num">Multi-tenant</div>
+        <div class="hero-stat-lab">Données isolées</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-num">48h</div>
+        <div class="hero-stat-lab">Délai de mise en service</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-num">PDF</div>
+        <div class="hero-stat-lab">Bulletins automatiques</div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Form -->
-  <div class="form-card">
-    <h2>Formulaire de demande d'inscription</h2>
-    <div class="sub">Tous les champs marqués <span style="color:#ef4444;">*</span> sont obligatoires. Notre équipe traitera votre demande sous 48 heures.</div>
+<!-- ══════════ FONCTIONNALITÉS ══════════ -->
+<section class="section features-bg" id="fonctionnalites">
+  <div class="section-inner">
+    <div class="section-center">
+      <span class="section-kicker">Fonctionnalités</span>
+      <h2 class="section-title">Tout ce dont votre école a besoin</h2>
+      <p class="section-sub">Une plateforme complète pour gérer votre établissement au quotidien, de l'inscription à la publication des résultats.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon fi-blue"><i class="bi bi-people-fill"></i></div>
+        <h3>Gestion des élèves</h3>
+        <p>Inscriptions, matricules, profils, classes et historique complet de chaque élève en quelques clics.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-purple"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+        <h3>Bulletins officiels PDF</h3>
+        <p>Génération automatique des bulletins au format MEPSP avec signatures, notes et résultats.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-green"><i class="bi bi-qr-code-scan"></i></div>
+        <h3>Portail parents</h3>
+        <p>Les parents accèdent aux résultats de leurs enfants via un code QR ou un code d'accès dédié.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-orange"><i class="bi bi-cash-coin"></i></div>
+        <h3>Comptabilité scolaire</h3>
+        <p>Gestion des frais, encaissements, factures PDF et historique complet des paiements par élève.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-teal"><i class="bi bi-calendar-week-fill"></i></div>
+        <h3>Planning des cours</h3>
+        <p>Création et gestion des emplois du temps par classe, enseignant et salle avec gestion des conflits.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-rose"><i class="bi bi-credit-card-2-front-fill"></i></div>
+        <h3>Cartes d'élèves</h3>
+        <p>Impression de cartes d'identité scolaires avec photo, QR code et informations de l'établissement.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    {% if form.errors %}
-    <div class="alert alert-danger" style="border-radius:10px;font-size:.82rem;margin-bottom:20px;">
-      <i class="bi bi-exclamation-triangle-fill me-2"></i>
-      Veuillez corriger les erreurs ci-dessous.
+<!-- ══════════ COMMENT ÇA MARCHE ══════════ -->
+<section class="section how-bg" id="comment">
+  <div class="section-inner">
+    <div class="section-center">
+      <span class="section-kicker">Processus</span>
+      <h2 class="section-title">4 étapes pour démarrer</h2>
+      <p class="section-sub">De la demande d'inscription à la première connexion, notre équipe vous accompagne à chaque étape.</p>
+    </div>
+    <div class="steps-row">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Soumettez la demande</h3>
+        <p>Remplissez le formulaire ci-dessous avec les informations de votre établissement.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Notre équipe valide</h3>
+        <p>Nous examinons votre demande et vous contactons sous 48 heures pour les détails.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Votre espace est créé</h3>
+        <p>Un espace école isolé est configuré et vos identifiants d'administration vous sont envoyés.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3>Vous gérez votre école</h3>
+        <p>Importez vos données, ajoutez votre équipe et commencez à utiliser EducNet dès le premier jour.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TARIFS ══════════ -->
+<section class="section pricing-bg" id="tarifs">
+  <div class="section-inner">
+    <div class="section-center">
+      <span class="section-kicker">Tarification</span>
+      <h2 class="section-title">Des plans pour chaque taille d'école</h2>
+      <p class="section-sub">Choisissez le plan adapté à votre établissement. Tous les plans incluent les bulletins, les portails parents et l'assistance.</p>
+    </div>
+
+    {% if plans %}
+    <div class="pricing-grid">
+      {% for plan in plans %}
+      <div class="plan-card {% if forloop.counter == 2 %}featured{% endif %}">
+        {% if forloop.counter == 2 %}<div class="plan-badge"><i class="bi bi-star-fill me-1"></i>Populaire</div>{% endif %}
+        {% if plan.essai_gratuit_jours > 0 %}
+        <div class="plan-badge" style="background:rgba(96,165,250,.25);color:#60a5fa;">{{ plan.essai_gratuit_jours }} jours gratuits</div>
+        {% endif %}
+        <div class="plan-name">{{ plan.nom }}</div>
+        {% if plan.description %}
+        <div class="plan-desc">{{ plan.description|truncatechars:90 }}</div>
+        {% else %}
+        <div class="plan-desc">Pour les établissements jusqu'à {{ plan.max_eleves }} élèves avec toutes les fonctionnalités essentielles.</div>
+        {% endif %}
+        <div class="plan-price">
+          {% if plan.prix_mensuel and plan.prix_mensuel > 0 %}
+          <span class="currency">$</span>
+          <span class="amount">{{ plan.prix_mensuel|floatformat:0 }}</span>
+          <span class="period">/ mois</span>
+          {% else %}
+          <span class="amount">Gratuit</span>
+          {% endif %}
+        </div>
+        {% if plan.prix_mensuel and plan.prix_mensuel > 0 %}
+        <div class="plan-annual">
+          ou <strong>${{ plan.prix_annuel_effectif|floatformat:0 }}</strong> / an
+          {% with annual=plan.prix_annuel_effectif monthly_x12=plan.prix_mensuel|add:plan.prix_mensuel %}
+          <span class="save">— économisez jusqu'à 2 mois</span>
+          {% endwith %}
+        </div>
+        {% endif %}
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="bi bi-check-circle-fill"></i>{{ plan.max_eleves }} élèves maximum</li>
+          <li><i class="bi bi-check-circle-fill"></i>{{ plan.max_enseignants }} enseignants</li>
+          <li><i class="bi bi-check-circle-fill"></i>{{ plan.max_classes }} classes</li>
+          <li><i class="bi bi-check-circle-fill"></i>Bulletins PDF officiels MEPSP</li>
+          <li><i class="bi bi-check-circle-fill"></i>Portail parents QR Code</li>
+          <li><i class="bi bi-check-circle-fill"></i>Comptabilité &amp; factures</li>
+          {% if plan.max_stockage_go > 1 %}
+          <li><i class="bi bi-check-circle-fill"></i>{{ plan.max_stockage_go }} Go de stockage</li>
+          {% endif %}
+          {% if plan.quota_sms_mensuel > 0 %}
+          <li><i class="bi bi-check-circle-fill"></i>{{ plan.quota_sms_mensuel }} SMS / mois</li>
+          {% endif %}
+        </ul>
+        <a href="#inscription" class="plan-cta {% if forloop.counter == 2 %}plan-cta-solid{% else %}plan-cta-outline{% endif %}">
+          <i class="bi bi-arrow-right me-1"></i>Choisir ce plan
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="pricing-fallback">
+      <p style="color:rgba(255,255,255,.6);font-size:.9rem;">Nos plans sont personnalisés selon vos besoins.<br>Contactez-nous pour obtenir une offre adaptée à votre établissement.</p>
+      <a href="#inscription">
+        <i class="bi bi-envelope-fill"></i> Demander un devis
+      </a>
     </div>
     {% endif %}
-
-    <form method="post" id="joinForm">
-      {% csrf_token %}
-
-      <div class="section-title">Établissement</div>
-      <div class="row g-3 mb-3">
-        <div class="col-12">
-          <label>Nom de l'établissement <span style="color:#ef4444;">*</span></label>
-          {{ form.nom_ecole }}
-          {% if form.nom_ecole.errors %}<div style="color:#ef4444;font-size:.75rem;margin-top:4px;">{{ form.nom_ecole.errors.0 }}</div>{% endif %}
-        </div>
-        <div class="col-sm-6">
-          <label>Type d'établissement</label>
-          {{ form.type_ecole }}
-        </div>
-        <div class="col-sm-6">
-          <label>Province</label>
-          {{ form.province }}
-        </div>
-        <div class="col-12">
-          <label>Ville</label>
-          {{ form.ville }}
-        </div>
-      </div>
-
-      <div class="section-title">Contact du responsable</div>
-      <div class="row g-3 mb-3">
-        <div class="col-12">
-          <label>Nom du responsable <span style="color:#ef4444;">*</span></label>
-          {{ form.nom_responsable }}
-          {% if form.nom_responsable.errors %}<div style="color:#ef4444;font-size:.75rem;margin-top:4px;">{{ form.nom_responsable.errors.0 }}</div>{% endif %}
-        </div>
-        <div class="col-sm-6">
-          <label>Téléphone <span style="color:#ef4444;">*</span></label>
-          {{ form.telephone }}
-          {% if form.telephone.errors %}<div style="color:#ef4444;font-size:.75rem;margin-top:4px;">{{ form.telephone.errors.0 }}</div>{% endif %}
-        </div>
-        <div class="col-sm-6">
-          <label>Adresse e-mail <span style="color:#ef4444;">*</span></label>
-          {{ form.email }}
-          {% if form.email.errors %}<div style="color:#ef4444;font-size:.75rem;margin-top:4px;">{{ form.email.errors.0 }}</div>{% endif %}
-        </div>
-        <div class="col-12">
-          <label>Message (optionnel)</label>
-          {{ form.message }}
-          <div class="form-text">Nombre d'élèves estimé, besoins particuliers, questions…</div>
-        </div>
-      </div>
-
-      <button type="submit" class="btn-submit" id="submitBtn">
-        <i class="bi bi-send-fill me-2"></i>Envoyer la demande
-      </button>
-      <div class="privacy-note">
-        <i class="bi bi-shield-lock me-1"></i>
-        Vos informations sont traitées de manière confidentielle et ne seront jamais partagées à des tiers.
-      </div>
-    </form>
   </div>
-  {% endif %}
+</section>
 
-</div>
+<!-- ══════════ FORMULAIRE ══════════ -->
+<section class="section form-bg" id="inscription">
+  <div class="section-inner">
+
+    {% if success %}
+    <div class="success-wrap">
+      <div class="success-icon"><i class="bi bi-check2"></i></div>
+      <h1>Demande envoyée !</h1>
+      <p>Votre demande pour <strong>{{ nom_ecole }}</strong> a bien été reçue. Notre équipe vous contactera sous 48 heures sur <strong>{{ email }}</strong>.</p>
+      <a href="/rejoindre/" style="display:inline-flex;align-items:center;gap:6px;color:var(--primary);font-weight:700;text-decoration:none;font-size:.875rem;">
+        <i class="bi bi-plus-circle"></i> Soumettre une autre demande
+      </a>
+    </div>
+
+    {% else %}
+    <div class="form-wrap">
+
+      <!-- Colonne gauche : infos -->
+      <div class="form-side-info">
+        <span class="section-kicker">Inscription</span>
+        <h2 class="section-title" style="font-size:1.7rem;">Démarrons ensemble</h2>
+        <p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-top:8px;">
+          Remplissez le formulaire et notre équipe créera votre espace école en moins de 48 heures.
+        </p>
+        <ul class="info-bullets">
+          <li>
+            <div class="ib-icon"><i class="bi bi-shield-lock-fill"></i></div>
+            <div class="ib-text">
+              <strong>Données sécurisées &amp; isolées</strong>
+              <span>Votre espace est totalement isolé des autres établissements.</span>
+            </div>
+          </li>
+          <li>
+            <div class="ib-icon"><i class="bi bi-headset"></i></div>
+            <div class="ib-text">
+              <strong>Accompagnement inclus</strong>
+              <span>Configuration initiale, formation et support technique compris.</span>
+            </div>
+          </li>
+          <li>
+            <div class="ib-icon"><i class="bi bi-phone"></i></div>
+            <div class="ib-text">
+              <strong>Accès mobile-friendly</strong>
+              <span>Interface optimisée pour smartphone, tablette et ordinateur.</span>
+            </div>
+          </li>
+          <li>
+            <div class="ib-icon"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+            <div class="ib-text">
+              <strong>Conformité MEPSP garantie</strong>
+              <span>Bulletins et documents conformes aux exigences officielles RDC.</span>
+            </div>
+          </li>
+        </ul>
+        <div class="form-contact">
+          <strong><i class="bi bi-telephone-fill me-2"></i>Besoin d'informations ?</strong>
+          Contactez notre équipe avant de soumettre si vous avez des questions sur les plans ou la mise en service.<br>
+          <a href="mailto:contact@educnet.cd">contact@educnet.cd</a>
+        </div>
+      </div>
+
+      <!-- Colonne droite : formulaire -->
+      <div class="form-card">
+        <h2>Formulaire de demande</h2>
+        <p class="sub">Les champs <span style="color:#ef4444;">*</span> sont obligatoires. Traitement sous 48 heures.</p>
+
+        {% if form.errors %}
+        <div class="alert alert-danger d-flex align-items-center gap-2 mb-3" style="border-radius:10px;font-size:.82rem;">
+          <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+          Veuillez corriger les erreurs ci-dessous.
+        </div>
+        {% endif %}
+
+        <form method="post" id="joinForm">
+          {% csrf_token %}
+
+          <div class="section-title-sm">Établissement</div>
+          <div class="row g-3 mb-1">
+            <div class="col-12">
+              <label class="form-label">Nom de l'établissement <span style="color:#ef4444;">*</span></label>
+              {{ form.nom_ecole }}
+              {% if form.nom_ecole.errors %}<div class="text-danger" style="font-size:.73rem;margin-top:4px;">{{ form.nom_ecole.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label">Type</label>
+              {{ form.type_ecole }}
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label">Province</label>
+              {{ form.province }}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Ville</label>
+              {{ form.ville }}
+            </div>
+          </div>
+
+          <div class="section-title-sm">Contact du responsable</div>
+          <div class="row g-3 mb-1">
+            <div class="col-12">
+              <label class="form-label">Nom complet <span style="color:#ef4444;">*</span></label>
+              {{ form.nom_responsable }}
+              {% if form.nom_responsable.errors %}<div class="text-danger" style="font-size:.73rem;margin-top:4px;">{{ form.nom_responsable.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label">Téléphone <span style="color:#ef4444;">*</span></label>
+              {{ form.telephone }}
+              {% if form.telephone.errors %}<div class="text-danger" style="font-size:.73rem;margin-top:4px;">{{ form.telephone.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label">E-mail <span style="color:#ef4444;">*</span></label>
+              {{ form.email }}
+              {% if form.email.errors %}<div class="text-danger" style="font-size:.73rem;margin-top:4px;">{{ form.email.errors.0 }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="section-title-sm">Plan &amp; message</div>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Plan souhaité</label>
+              {{ form.plan_souhaite }}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Message (optionnel)</label>
+              {{ form.message }}
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <i class="bi bi-send-fill me-2"></i>Envoyer la demande
+          </button>
+          <p class="privacy-note">
+            <i class="bi bi-shield-lock me-1"></i>
+            Informations confidentielles — jamais partagées avec des tiers.
+          </p>
+        </form>
+      </div>
+
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <p>© 2026 <a href="#">EducNet</a> — Plateforme de gestion scolaire pour la RDC &nbsp;·&nbsp; <a href="/login/">Connexion établissement</a> &nbsp;·&nbsp; <a href="/super-admin/login/">Super-Admin</a></p>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+// Plan selection from pricing cards
+document.querySelectorAll('.plan-cta[href="#inscription"]').forEach((btn, idx) => {
+  btn.addEventListener('click', function(e) {
+    const planSelect = document.getElementById('{{ form.plan_souhaite.id_for_label }}');
+    if (planSelect) {
+      const opts = planSelect.options;
+      // skip the empty option (index 0), select plan by index
+      if (opts[idx + 1]) {
+        planSelect.value = opts[idx + 1].value;
+      }
+    }
+  });
+});
+
+// Submit feedback
 document.getElementById('joinForm')?.addEventListener('submit', function() {
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="width:14px;height:14px;"></span>Envoi en cours…';
+});
+
+// Smooth-scroll links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const id = this.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
 });
 </script>
 </body>

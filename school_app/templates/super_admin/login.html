@@ -38,15 +38,32 @@
         <i class="bi bi-shield-lock-fill"></i>Administration plateforme
       </div>
       <h1 class="login-brand-title">
-        Gérez l'ensemble<br>
-        du réseau scolaire,<br>
-        <span class="accent">en un seul endroit.</span>
+        Pilotez le réseau<br>
+        scolaire depuis<br>
+        <span class="accent">une console unifiée.</span>
       </h1>
       <p class="login-brand-sub">
-        Console super-admin — supervision des établissements, abonnements,
-        communications et maintenance du système.
+        Supervision des établissements, plans d'abonnement,
+        demandes d'inscription et maintenance du système — tout en un.
       </p>
-      <div class="login-brand-footer">
+
+      <!-- Console feature pills -->
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;">
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
+          <i class="bi bi-buildings-fill" style="color:#60a5fa;"></i> Toutes les écoles
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
+          <i class="bi bi-stars" style="color:#fbbf24;"></i> Plans &amp; abonnements
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
+          <i class="bi bi-building-add" style="color:#4ade80;"></i> Demandes d'inscription
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
+          <i class="bi bi-shield-fill-check" style="color:#a78bfa;"></i> Accès sécurisé 2FA
+        </span>
+      </div>
+
+      <div class="login-brand-footer" style="margin-top:28px;">
         Powered by <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong>
       </div>
     </div>

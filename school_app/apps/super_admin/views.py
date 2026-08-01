@@ -1365,12 +1365,22 @@ def demande_inscription_traiter(request, pk):
 def rejoindre_educnet(request):
     """Formulaire public de demande d'inscription à la plateforme."""
     from django import forms as dj_forms
-    from tenants.models import DemandeInscription
+    from tenants.models import DemandeInscription, PlanAbonnement
+
+    # Plans publics actifs pour la section tarification
+    plans_publics = list(PlanAbonnement.objects.filter(is_actif=True, est_public=True).order_by('ordre_affichage', 'prix_mensuel'))
 
     class DemandeInscriptionForm(dj_forms.ModelForm):
+        plan_souhaite = dj_forms.ModelChoiceField(
+            queryset=PlanAbonnement.objects.filter(is_actif=True, est_public=True).order_by('ordre_affichage', 'prix_mensuel'),
+            required=False,
+            empty_label="— Pas encore décidé —",
+            label="Plan souhaité",
+            widget=dj_forms.Select(attrs={'class': 'form-select'}),
+        )
         class Meta:
             model = DemandeInscription
-            fields = ['nom_ecole', 'type_ecole', 'nom_responsable', 'telephone', 'email', 'province', 'ville', 'message']
+            fields = ['nom_ecole', 'type_ecole', 'nom_responsable', 'telephone', 'email', 'province', 'ville', 'message', 'plan_souhaite']
             widgets = {
                 'nom_ecole':       dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Institut Technique de Kinshasa'}),
                 'type_ecole':      dj_forms.Select(attrs={'class': 'form-select'}),
@@ -1379,7 +1389,7 @@ def rejoindre_educnet(request):
                 'email':           dj_forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email@exemple.com'}),
                 'province':        dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Kinshasa'}),
                 'ville':           dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Kinshasa'}),
-                'message':         dj_forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': "Nombre d'élèves estimé, questions..."}),
+                'message':         dj_forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': "Nombre d'élèves, besoins spécifiques, questions..."}),
             }
 
     success = False
@@ -1405,4 +1415,5 @@ def rejoindre_educnet(request):
         'success': success,
         'nom_ecole': nom_ecole,
         'email': email_contact,
+        'plans': plans_publics,
     })

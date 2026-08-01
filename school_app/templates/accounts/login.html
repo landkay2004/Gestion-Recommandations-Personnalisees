@@ -9,15 +9,32 @@
         <i class="bi bi-building-fill"></i>Espace établissement
       </div>
       <h1 class="login-brand-title">
-        Nous sommes prêts à<br>
-        vous accompagner,<br>
-        <span class="accent">à chaque instant.</span>
+        Votre école,<br>
+        gérée en<br>
+        <span class="accent">toute simplicité.</span>
       </h1>
       <p class="login-brand-sub">
-        Gérez votre école depuis un seul espace — notes, bulletins,<br>
-        élèves, parents et communication en toute simplicité.
+        Notes, bulletins officiels, élèves, parents et comptabilité —
+        tout depuis un seul espace sécurisé.
       </p>
-      <div class="login-brand-footer">Powered by <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong></div>
+
+      <!-- Feature pills -->
+      <div class="login-brand-feats" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;">
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
+          <i class="bi bi-file-earmark-pdf-fill" style="color:#60a5fa;"></i> Bulletins PDF MEPSP
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
+          <i class="bi bi-qr-code-scan" style="color:#4ade80;"></i> Portail parents QR
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
+          <i class="bi bi-cash-coin" style="color:#fbbf24;"></i> Comptabilité intégrée
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
+          <i class="bi bi-shield-lock-fill" style="color:#a78bfa;"></i> Données isolées
+        </span>
+      </div>
+
+      <div class="login-brand-footer" style="margin-top:28px;">Powered by <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong></div>
     </div>
   </div>
 

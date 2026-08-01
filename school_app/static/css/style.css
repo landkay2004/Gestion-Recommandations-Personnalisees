@@ -1107,8 +1107,23 @@ a:hover { color: var(--color-primary-hover); }
 .main-content { min-width: 0; }
 
 /* ── Amélioration stat-cards à la transition md→xl ── */
-/* Force 3-par-ligne entre lg et xl (le breakpoint lg doit être déclaré
-   dans le template via col-lg-4, ceci est le fallback CSS si besoin) */
+/* Stat cards in 6-col xl layout — fixes truncation at 100% browser zoom */
+@media (min-width: 1200px) and (max-width: 1499px) {
+  .stat-card { padding: 14px 12px; gap: 10px; }
+  .stat-icon  { width: 42px; height: 42px; font-size: 1.05rem; }
+  .stat-value { font-size: 1.45rem; }
+  .stat-label { font-size: .7rem; }
+  .clock-widget .cw-time { font-size: 1.55rem; }
+  .clock-widget .cw-seconds { font-size: .85rem; }
+}
+@media (min-width: 1200px) and (max-width: 1350px) {
+  /* Very tight xl — further compress */
+  .stat-card { padding: 12px 10px; gap: 8px; }
+  .stat-icon  { width: 36px; height: 36px; font-size: .95rem; border-radius: 10px; }
+  .stat-value { font-size: 1.3rem; }
+  .stat-label { font-size: .65rem; }
+  .clock-widget .cw-time { font-size: 1.35rem; }
+}
 
 /* ── Horloge dans une colonne étroite (< 300px) ── */
 @media (max-width: 320px) {

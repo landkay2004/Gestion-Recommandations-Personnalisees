@@ -64,28 +64,40 @@
       <!-- ── 2. Logo ────────────────────────────────────────────────── -->
       <div class="card mb-2 section-card">
         <div class="card-header d-flex align-items-center justify-content-between section-toggle py-2"
-             data-bs-toggle="collapse" data-bs-target="#sec-logo" aria-expanded="false" role="button">
+             data-bs-toggle="collapse" data-bs-target="#sec-logo" aria-expanded="true" role="button">
           <div class="d-flex align-items-center gap-2">
             <i class="bi bi-image text-primary" style="font-size:.9rem;"></i>
             <span class="fw-semibold small">Logo de la plateforme</span>
-            {% if obj.site_logo %}<span class="badge bg-success-subtle text-success border ms-1" style="font-size:.62rem;"><i class="bi bi-check me-1"></i>Configuré</span>{% endif %}
+            {% if obj.site_logo %}<span class="badge bg-success-subtle text-success border ms-1" style="font-size:.62rem;"><i class="bi bi-check me-1"></i>Configuré</span>{% else %}<span class="badge bg-warning-subtle text-warning border ms-1" style="font-size:.62rem;">Non configuré</span>{% endif %}
           </div>
           <i class="bi bi-chevron-down chevron-icon"></i>
         </div>
-        <div class="collapse" id="sec-logo">
-          <div class="card-body pt-2 pb-3">
-            <div class="d-flex align-items-start gap-3 flex-wrap">
-              {% if obj.site_logo %}
-              <div class="text-center">
-                <img src="{{ obj.site_logo.url }}" alt="Logo actuel"
-                     style="height:60px;object-fit:contain;border-radius:8px;border:1px solid var(--color-border);padding:5px;background:#f8f9fa;">
-                <div class="text-muted small mt-1">Logo actuel</div>
+        <div class="collapse show" id="sec-logo">
+          <div class="card-body pt-3 pb-3">
+            <!-- Aperçu actuel + nouveau -->
+            <div class="d-flex align-items-start gap-4 flex-wrap mb-3">
+              <div class="text-center" id="logo-current-wrap" {% if not obj.site_logo %}style="display:none!important"{% endif %}>
+                <p class="text-muted mb-1" style="font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Logo actuel</p>
+                <div style="width:90px;height:90px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:1.5px solid var(--color-border);background:#f8fafc;padding:8px;">
+                  {% if obj.site_logo %}
+                  <img src="{{ obj.site_logo.url }}" alt="Logo actuel" id="logo-current-img"
+                       style="max-width:74px;max-height:74px;object-fit:contain;">
+                  {% endif %}
+                </div>
               </div>
-              {% endif %}
-              <div class="flex-grow-1">
-                {{ form.site_logo }}
-                <div class="form-text">PNG ou SVG — affiché dans la sidebar et les en-têtes.</div>
+              <div class="text-center d-none" id="logo-preview-wrap">
+                <p class="text-muted mb-1" style="font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Aperçu nouveau logo</p>
+                <div style="width:90px;height:90px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:2px solid var(--color-primary);background:#f8fafc;padding:8px;">
+                  <img src="" alt="Aperçu" id="logo-preview-img" style="max-width:74px;max-height:74px;object-fit:contain;">
+                </div>
               </div>
+            </div>
+            <div>
+              <label class="form-label form-label-sm fw-semibold" style="font-size:.8rem;">
+                <i class="bi bi-upload me-1"></i>Choisir un nouveau logo
+              </label>
+              {{ form.site_logo }}
+              <div class="form-text mt-1">PNG, JPG ou SVG recommandé — dimensions idéales : 200×200 px minimum. Le logo s'affiche dans la barre latérale, la page de connexion et les en-têtes d'e-mails.</div>
             </div>
           </div>
         </div>
@@ -561,6 +573,26 @@ const colorInput = document.getElementById('{{ form.couleur_principale.id_for_la
 const colorLabel = document.getElementById('color-preview-label');
 if (colorInput && colorLabel) {
   colorInput.addEventListener('input', () => { colorLabel.textContent = colorInput.value; });
+}
+
+/* ── Aperçu logo en temps réel ───────────────────────────────────── */
+const logoInput       = document.getElementById('{{ form.site_logo.id_for_label }}');
+const logoPreviewWrap = document.getElementById('logo-preview-wrap');
+const logoPreviewImg  = document.getElementById('logo-preview-img');
+if (logoInput && logoPreviewWrap && logoPreviewImg) {
+  logoInput.addEventListener('change', function() {
+    const file = this.files && this.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        logoPreviewImg.src = e.target.result;
+        logoPreviewWrap.classList.remove('d-none');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      logoPreviewWrap.classList.add('d-none');
+    }
+  });
 }
 </script>
 {% endblock %}
