@@ -196,6 +196,7 @@ def demande_changement(request):
 
 
 @login_required
+@admin_ecole_required
 def soumettre_paiement(request):
     """L'admin-école soumet une preuve de paiement d'abonnement (mobile money / virement)."""
     schema = request.session.get('tenant_schema', '')

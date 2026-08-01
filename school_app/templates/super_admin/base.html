@@ -78,6 +78,13 @@
       <span class="badge bg-warning text-dark rounded-pill ms-auto">{{ demandes_abonnement_count }}</span>
       {% endif %}
     </a>
+    <a href="{% url 'super_admin:demandes_inscription' %}"
+       class="nav-link {% if request.resolver_match.url_name == 'demandes_inscription' %}active{% endif %}">
+      <i class="bi bi-building-add nav-icon"></i><span>Demandes écoles</span>
+      {% if demandes_inscription_count > 0 %}
+      <span class="badge bg-success rounded-pill ms-auto">{{ demandes_inscription_count }}</span>
+      {% endif %}
+    </a>
     <a href="{% url 'super_admin:paiements_plateforme' %}"
        class="nav-link {% if 'paiement_plateforme' in request.resolver_match.url_name %}active{% endif %}">
       <i class="bi bi-phone"></i><span>Paiements Mobile Money</span>

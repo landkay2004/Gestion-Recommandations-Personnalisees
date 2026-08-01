@@ -7,7 +7,10 @@ Usage :
     notify(user, "Titre", "Description", categorie='ADMIN', priorite='SUCCES',
            type_notif='COMPTE_CREE', lien='/login/users/')
 """
+import logging
 from django.db import transaction
+
+logger = logging.getLogger('sgn')
 
 
 def notify(destinataires, titre, description='', categorie='SYSTEME', priorite='INFO',
@@ -52,8 +55,13 @@ def notify(destinataires, titre, description='', categorie='SYSTEME', priorite='
     try:
         with transaction.atomic():
             Notification.objects.bulk_create(notifs, ignore_conflicts=True)
-    except Exception:
-        pass  # Les notifications ne doivent jamais bloquer le flux principal
+    except Exception as exc:
+        # Les notifications ne doivent jamais bloquer le flux principal
+        # mais on trace l'erreur pour pouvoir la diagnostiquer
+        logger.error(
+            'NOTIFY_ERROR titre=%r destinataires=%d err=%s',
+            titre, len(users), exc, exc_info=True
+        )
 
 
 # ── Raccourcis ────────────────────────────────────────────────────────────────

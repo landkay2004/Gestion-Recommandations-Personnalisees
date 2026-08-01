@@ -148,7 +148,7 @@ class ProfileForm(forms.ModelForm):
             'email':        forms.EmailInput(attrs={'class': 'form-control'}),
             'telephone':    forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}),
             'bio':          forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Quelques mots sur vous…'}),
-            'photo_profil': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'photo_profil': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*', 'id': 'id_photo_profil'}),
         }
         labels = {
             'first_name':   'Prénom',

@@ -1315,3 +1315,94 @@ def paiement_plateforme_detail(request, pk):
         'paiement':       paiement,
         'sa_2fa_enabled': sa.totp_enabled,
     })
+
+
+# ── Demandes d'inscription (formulaire public) ────────────────────────────────
+
+@super_admin_required
+def demandes_inscription(request):
+    """Liste des demandes d'inscription soumises via le formulaire public."""
+    from tenants.models import DemandeInscription
+    statut = request.GET.get('statut', '')
+    qs = DemandeInscription.objects.all()
+    if statut:
+        qs = qs.filter(statut=statut)
+    nb_attente = DemandeInscription.objects.filter(statut='en_attente').count()
+    return render(request, 'super_admin/demandes_inscription.html', {
+        'demandes': qs,
+        'statut': statut,
+        'nb_attente': nb_attente,
+        'total': DemandeInscription.objects.count(),
+    })
+
+
+@super_admin_required
+def demande_inscription_traiter(request, pk):
+    """Approuver ou rejeter une demande d'inscription."""
+    from tenants.models import DemandeInscription
+    demande = get_object_or_404(DemandeInscription, pk=pk)
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        sa = getattr(request, 'super_admin', None)
+        traite_par = sa.email if sa else 'super-admin'
+        if action == 'approuver':
+            demande.statut = 'approuvee'
+            demande.traite_par = traite_par
+            demande.traite_le = timezone.now()
+            demande.save(update_fields=['statut', 'traite_par', 'traite_le', 'updated_at'])
+            messages.success(request, f"Demande de « {demande.nom_ecole} » approuvée.")
+        elif action == 'rejeter':
+            demande.statut = 'rejetee'
+            demande.traite_par = traite_par
+            demande.traite_le = timezone.now()
+            demande.save(update_fields=['statut', 'traite_par', 'traite_le', 'updated_at'])
+            messages.warning(request, f"Demande de « {demande.nom_ecole} » rejetée.")
+    return redirect('super_admin:demandes_inscription')
+
+
+# ── Formulaire public (sans authentification) ─────────────────────────────────
+
+def rejoindre_educnet(request):
+    """Formulaire public de demande d'inscription à la plateforme."""
+    from django import forms as dj_forms
+    from tenants.models import DemandeInscription
+
+    class DemandeInscriptionForm(dj_forms.ModelForm):
+        class Meta:
+            model = DemandeInscription
+            fields = ['nom_ecole', 'type_ecole', 'nom_responsable', 'telephone', 'email', 'province', 'ville', 'message']
+            widgets = {
+                'nom_ecole':       dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Institut Technique de Kinshasa'}),
+                'type_ecole':      dj_forms.Select(attrs={'class': 'form-select'}),
+                'nom_responsable': dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Prénom et nom'}),
+                'telephone':       dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}),
+                'email':           dj_forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email@exemple.com'}),
+                'province':        dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Kinshasa'}),
+                'ville':           dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Kinshasa'}),
+                'message':         dj_forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Nombre d'élèves estimé, questions…'}),
+            }
+
+    success = False
+    nom_ecole = ''
+    email_contact = ''
+
+    if request.method == 'POST':
+        form = DemandeInscriptionForm(request.POST)
+        if form.is_valid():
+            demande = form.save(commit=False)
+            x_forwarded = request.META.get('HTTP_X_FORWARDED_FOR')
+            demande.ip_soumission = x_forwarded.split(',')[0] if x_forwarded else request.META.get('REMOTE_ADDR')
+            demande.save()
+            success = True
+            nom_ecole = demande.nom_ecole
+            email_contact = demande.email
+            form = DemandeInscriptionForm()
+    else:
+        form = DemandeInscriptionForm()
+
+    return render(request, 'public/rejoindre.html', {
+        'form': form,
+        'success': success,
+        'nom_ecole': nom_ecole,
+        'email': email_contact,
+    })

@@ -461,6 +461,13 @@ document.getElementById('id_photo_profil_quick').addEventListener('change', func
     reader.onload = (e) => {
       preview.src = e.target.result;
       preview.classList.remove('d-none');
+      // Update avatar preview too
+      const avatarImg = document.getElementById('avatarImg');
+      const avatarInitials = document.getElementById('avatarInitials');
+      if (avatarImg) { avatarImg.src = e.target.result; }
+      else if (avatarInitials) {
+        avatarInitials.outerHTML = `<img src="${e.target.result}" alt="Aperçu" id="avatarImg" style="width:110px;height:110px;object-fit:cover;">`;
+      }
     };
     reader.readAsDataURL(file);
   }
@@ -470,11 +477,32 @@ document.getElementById('id_photo_profil_quick').addEventListener('change', func
       if (fileInput.files[0]) showPreview(fileInput.files[0]);
     });
   }
-  zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.style.borderColor = 'var(--color-primary)'; });
-  zone.addEventListener('dragleave', ()  => { zone.style.borderColor = ''; });
-  zone.addEventListener('drop', (e)     => {
-    e.preventDefault(); zone.style.borderColor = '';
-    if (e.dataTransfer.files[0]) { showPreview(e.dataTransfer.files[0]); }
+
+  zone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    zone.classList.add('drag-active');
+    zone.style.borderColor = 'var(--color-primary)';
+    zone.style.background = 'var(--color-primary-soft)';
+  });
+  zone.addEventListener('dragleave', () => {
+    zone.classList.remove('drag-active');
+    zone.style.borderColor = '';
+    zone.style.background = '';
+  });
+  zone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    zone.classList.remove('drag-active');
+    zone.style.borderColor = '';
+    zone.style.background = '';
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    // Assign file to the input via DataTransfer
+    try {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      fileInput.files = dt.files;
+    } catch (_) {}
+    showPreview(file);
   });
 })();
 

@@ -6,119 +6,92 @@
     <div class="ob-card-icon success"><i class="bi bi-clipboard-check-fill"></i></div>
     <div>
       <h2>Vérifiez vos informations</h2>
-      <p>Un dernier regard avant de valider la configuration de votre établissement.</p>
+      <p>Relisez vos données avant de valider. Vous pourrez tout modifier ultérieurement depuis les Paramètres.</p>
     </div>
   </div>
 
-  <!-- ── Identité de l'école ── -->
-  <div class="ob-section mb-3">
-    <div class="ob-section-title">Établissement</div>
+  <!-- Établissement -->
+  <div class="mb-4">
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <i class="bi bi-building text-primary" style="font-size:.95rem;"></i>
+      <span class="fw-bold" style="font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);">Établissement</span>
+    </div>
     <div class="ob-summary">
-      <div class="ob-summary-row">
-        <span>Nom</span>
-        <strong>{{ school_info.nom|default:ecole.nom }}</strong>
-      </div>
+      <div class="ob-summary-row"><span>Nom</span><strong>{{ school_info.nom|default:ecole.nom }}</strong></div>
       {% if school_info.type_etablissement %}
-      <div class="ob-summary-row">
-        <span>Type</span>
-        <strong>{{ school_info.get_type_etablissement_display }}</strong>
-      </div>
+      <div class="ob-summary-row"><span>Type</span><strong>{{ school_info.get_type_etablissement_display }}</strong></div>
       {% endif %}
       {% if school_info.annee_scolaire_actuelle %}
-      <div class="ob-summary-row">
-        <span>Année scolaire</span>
-        <strong>{{ school_info.annee_scolaire_actuelle }}</strong>
-      </div>
+      <div class="ob-summary-row"><span>Année scolaire</span><strong>{{ school_info.annee_scolaire_actuelle }}</strong></div>
       {% endif %}
-      <div class="ob-summary-row">
-        <span>Province</span>
-        <strong>{{ school_info.province|default:"—" }}</strong>
-      </div>
-      <div class="ob-summary-row">
-        <span>Ville / Commune</span>
-        <strong>{{ school_info.ville|default:"—" }}{% if school_info.commune %} / {{ school_info.commune }}{% endif %}</strong>
-      </div>
+      <div class="ob-summary-row"><span>Province</span><strong>{{ school_info.province|default:"—" }}</strong></div>
+      <div class="ob-summary-row"><span>Ville / Commune</span><strong>{{ school_info.ville|default:"—" }}{% if school_info.commune %} / {{ school_info.commune }}{% endif %}</strong></div>
       {% if school_info.code %}
-      <div class="ob-summary-row">
-        <span>Code MEPSP</span>
-        <strong>{{ school_info.code }}</strong>
-      </div>
+      <div class="ob-summary-row"><span>Code MEPSP</span><strong>{{ school_info.code }}</strong></div>
       {% endif %}
       {% if school_info.telephone %}
-      <div class="ob-summary-row">
-        <span>Téléphone</span>
-        <strong>{{ school_info.telephone }}</strong>
-      </div>
+      <div class="ob-summary-row"><span>Téléphone</span><strong>{{ school_info.telephone }}</strong></div>
       {% endif %}
       {% if school_info.email_contact %}
-      <div class="ob-summary-row">
-        <span>E-mail contact</span>
-        <strong>{{ school_info.email_contact }}</strong>
-      </div>
+      <div class="ob-summary-row"><span>E-mail contact</span><strong>{{ school_info.email_contact }}</strong></div>
       {% endif %}
       {% if school_info.logo %}
       <div class="ob-summary-row">
         <span>Logo</span>
-        <strong><img src="{{ school_info.logo.url }}" alt="Logo" style="height:32px;object-fit:contain;border-radius:6px;"></strong>
+        <img src="{{ school_info.logo.url }}" alt="Logo" style="height:36px;object-fit:contain;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1);">
       </div>
       {% endif %}
     </div>
   </div>
 
-  <!-- ── Compte administrateur ── -->
-  <div class="mb-3">
+  <!-- Compte administrateur -->
+  <div class="mb-4">
     <div class="d-flex align-items-center gap-2 mb-2">
-      <i class="bi bi-person-fill text-primary"></i>
-      <span class="fw-semibold text-muted" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.05em">Administrateur</span>
+      <i class="bi bi-person-fill text-primary" style="font-size:.95rem;"></i>
+      <span class="fw-bold" style="font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);">Administrateur</span>
     </div>
     <div class="ob-summary">
-      <div class="ob-summary-row">
-        <span>E-mail</span>
-        <strong>{{ admin.email }}</strong>
-      </div>
+      <div class="ob-summary-row"><span>E-mail</span><strong>{{ admin.email }}</strong></div>
       <div class="ob-summary-row">
         <span>Mot de passe</span>
-        <strong>
-          <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Modifié à l'étape 1</span>
-        </strong>
+        <span class="badge" style="background:#e5f9f0;color:#16a34a;font-size:.72rem;font-weight:700;">
+          <i class="bi bi-check-circle me-1"></i>Sécurisé à l'étape 1
+        </span>
       </div>
     </div>
   </div>
 
-  <!-- ── Abonnement ── -->
-  <div class="ob-section mb-4">
-    <div class="ob-section-title">Abonnement</div>
+  <!-- Abonnement -->
+  <div class="mb-4">
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <i class="bi bi-stars text-primary" style="font-size:.95rem;"></i>
+      <span class="fw-bold" style="font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);">Abonnement</span>
+    </div>
     <div class="ob-summary">
       <div class="ob-summary-row">
         <span>Plan</span>
-        <strong>{% if ecole.plan %}{{ ecole.plan.nom }}{% else %}<span class="text-muted">Non défini</span>{% endif %}</strong>
+        <strong>{% if ecole.plan %}{{ ecole.plan.nom }}{% else %}<span class="text-muted fst-italic">Non défini</span>{% endif %}</strong>
       </div>
       <div class="ob-summary-row">
         <span>Validité</span>
-        <strong>
-          {% if ecole.date_fin_abonnement %}
-            Jusqu'au {{ ecole.date_fin_abonnement|date:"d/m/Y" }}
-          {% else %}
-            <span class="text-muted">Non définie</span>
-          {% endif %}
-        </strong>
+        <strong>{% if ecole.date_fin_abonnement %}Jusqu'au {{ ecole.date_fin_abonnement|date:"d/m/Y" }}{% else %}<span class="text-muted fst-italic">Non définie</span>{% endif %}</strong>
       </div>
     </div>
   </div>
 
-  <div class="alert alert-info d-flex gap-2 py-2 small mb-4" role="alert">
+  <div class="alert alert-info d-flex gap-2 py-2 small mb-4" role="alert" style="border-radius:12px;font-size:.8rem;">
     <i class="bi bi-info-circle-fill mt-1 flex-shrink-0"></i>
     <div>Vous pourrez modifier ces informations à tout moment depuis les <strong>Paramètres de l'école</strong> après connexion.</div>
   </div>
 
   <div class="ob-actions">
-    <a href="{% url 'onboarding:etape2_config' %}" class="btn btn-outline-secondary">
+    <a href="{% url 'onboarding:etape2_config' %}" class="btn btn-outline-secondary" style="border-radius:10px;font-size:.875rem;">
       <i class="bi bi-pencil me-1"></i>Modifier
     </a>
     <form method="post">
       {% csrf_token %}
       <button type="submit" class="btn-ob">
-        C'est correct, continuer <i class="bi bi-arrow-right ms-1"></i>
+        C'est correct <i class="bi bi-arrow-right"></i>
       </button>
     </form>
   </div>

@@ -51,6 +51,15 @@ def platform_settings(request):
         except Exception:
             pass
 
+        # Badge demandes d'inscription (formulaire public)
+        try:
+            from tenants.models import DemandeInscription
+            ctx['demandes_inscription_count'] = DemandeInscription.objects.filter(
+                statut='en_attente'
+            ).count()
+        except Exception:
+            pass
+
         # Corbeille
         try:
             from tenants.models import Ecole

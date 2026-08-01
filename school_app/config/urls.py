@@ -32,4 +32,6 @@ urlpatterns = [
     path('planning/',     include('planning.urls')),
     path('abonnement/',   include('abonnement.urls', namespace='abonnement')),
     path('comptable/',    include('comptable.urls',  namespace='comptable')),
+    # Formulaire public d'inscription (sans authentification)
+    path('rejoindre/', include('super_admin.urls_public')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

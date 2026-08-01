@@ -438,6 +438,54 @@ class ModeMaintenance(models.Model):
         return "Maintenance %s%s - %s" % (scope, mod, 'Actif' if self.is_active else 'Inactif')
 
 
+class DemandeInscription(models.Model):
+    """
+    Demande publique d'inscription d'un établissement sur la plateforme.
+    Soumise via le formulaire public /rejoindre/ — traitée par le super-admin.
+    """
+    STATUT_CHOICES = [
+        ('en_attente', 'En attente'),
+        ('approuvee',  'Approuvée'),
+        ('rejetee',    'Rejetée'),
+    ]
+    TYPE_CHOICES = [
+        ('primaire',   'École primaire'),
+        ('secondaire', 'École secondaire'),
+        ('institut',   'Institut'),
+        ('lycee',      'Lycée'),
+        ('college',    'Collège'),
+        ('autre',      'Autre'),
+    ]
+
+    nom_ecole       = models.CharField('Nom de l\'établissement', max_length=200)
+    type_ecole      = models.CharField('Type d\'établissement', max_length=30,
+                                        choices=TYPE_CHOICES, blank=True)
+    nom_responsable = models.CharField('Nom du responsable', max_length=150)
+    telephone       = models.CharField('Téléphone', max_length=30)
+    email           = models.EmailField('E-mail')
+    province        = models.CharField('Province', max_length=100, blank=True)
+    ville           = models.CharField('Ville', max_length=100, blank=True)
+    message         = models.TextField('Message / Informations complémentaires', blank=True)
+    statut          = models.CharField('Statut', max_length=20,
+                                        choices=STATUT_CHOICES, default='en_attente',
+                                        db_index=True)
+    notes_admin     = models.TextField('Notes super-admin', blank=True)
+    traite_par      = models.CharField('Traité par', max_length=150, blank=True)
+    traite_le       = models.DateTimeField('Traité le', null=True, blank=True)
+    ip_soumission   = models.GenericIPAddressField('IP soumission', null=True, blank=True)
+    created_at      = models.DateTimeField(auto_now_add=True)
+    updated_at      = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        app_label = 'tenants'
+        ordering = ['-created_at']
+        verbose_name = 'Demande d\'inscription'
+        verbose_name_plural = 'Demandes d\'inscription'
+
+    def __str__(self):
+        return '%s — %s (%s)' % (self.nom_ecole, self.nom_responsable, self.statut)
+
+
 class AnnoncePlateforme(models.Model):
     """Communication publiée depuis le schéma public vers les écoles."""
 

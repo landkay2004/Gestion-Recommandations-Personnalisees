@@ -1,259 +1,391 @@
 {% extends "base.html" %}
 {% block title %}Mon abonnement{% endblock %}
 
-{% block content %}
-<div class="container-fluid py-3">
+{% block extra_css %}
+<style>
+/* ── Subscription page ──────────────────────────────────────────────────── */
+.sub-hero {
+  border-radius: 20px;
+  background: linear-gradient(135deg, #2d2687 0%, #4d44b5 55%, #7c72e8 100%);
+  padding: 32px 36px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+.sub-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(255,255,255,.1) 0%, transparent 55%);
+  pointer-events: none;
+}
+.sub-hero::after {
+  content: '';
+  position: absolute;
+  right: -40px; bottom: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.1);
+  pointer-events: none;
+}
+.sub-hero-title {
+  font-size: 1.6rem; font-weight: 900; letter-spacing: -.04em;
+  margin-bottom: 4px;
+}
+.sub-hero-sub {
+  font-size: .85rem; color: rgba(255,255,255,.72);
+}
+.sub-status-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: .78rem; font-weight: 700;
+  border-radius: 50px; padding: 5px 16px;
+}
+.sub-status-badge.actif    { background: rgba(34,197,94,.2); color: #4ade80; border: 1px solid rgba(34,197,94,.35); }
+.sub-status-badge.essai    { background: rgba(56,189,248,.2); color: #7dd3fc; border: 1px solid rgba(56,189,248,.3); }
+.sub-status-badge.expire   { background: rgba(251,191,36,.2); color: #fde68a; border: 1px solid rgba(251,191,36,.3); }
+.sub-status-badge.suspendu { background: rgba(248,113,113,.2); color: #fca5a5; border: 1px solid rgba(248,113,113,.3); }
 
-  <!-- En-tête -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h4 class="fw-bold mb-0"><i class="bi bi-stars me-2 text-primary"></i>Mon abonnement</h4>
-      <p class="text-muted small mb-0">Gérez votre plan et consultez vos quotas</p>
-    </div>
-    <a href="{% url 'abonnement:demande_changement' %}" class="btn btn-primary btn-sm">
-      <i class="bi bi-arrow-up-circle me-1"></i>Changer de plan
+.sub-meta-item {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.sub-meta-item label { font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.55); }
+.sub-meta-item strong { font-size: .92rem; font-weight: 700; color: #fff; }
+
+.sub-days-left {
+  font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1;
+}
+.sub-days-left.warning { color: #fde68a; }
+.sub-days-left.danger  { color: #fca5a5; }
+
+/* ── Quota cards ────────────────────────────────────────────────────────── */
+.quota-card {
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.quota-card:hover { border-color: var(--color-primary); box-shadow: 0 4px 16px rgba(77,68,181,.08); }
+.quota-card.alert-quota { border-color: #fbbf24; background: #fffbeb; }
+.quota-label { font-size: .8rem; font-weight: 600; color: var(--color-text); display: flex; align-items: center; gap: 6px; }
+.quota-count { font-size: 1.1rem; font-weight: 800; color: var(--color-text); }
+.quota-limit { font-size: .75rem; color: var(--color-muted); }
+.quota-bar   { height: 6px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin: 8px 0 5px; }
+.quota-fill  { height: 100%; border-radius: 999px; transition: width .6s ease; }
+.quota-fill.low    { background: #22c55e; }
+.quota-fill.medium { background: #f59e0b; }
+.quota-fill.high   { background: #ef4444; }
+
+/* ── Pricing cards ──────────────────────────────────────────────────────── */
+.plan-card {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 28px 24px;
+  background: #fff;
+  position: relative;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+  height: 100%;
+  display: flex; flex-direction: column;
+}
+.plan-card:hover { border-color: var(--color-primary); box-shadow: 0 8px 28px rgba(77,68,181,.12); transform: translateY(-2px); }
+.plan-card.current-plan {
+  border-color: var(--color-primary);
+  background: linear-gradient(145deg, #fff 0%, #faf9ff 100%);
+  box-shadow: 0 8px 32px rgba(77,68,181,.16);
+}
+.plan-card.popular {
+  border-color: var(--color-primary);
+}
+.plan-badge {
+  position: absolute;
+  top: -12px; left: 50%; transform: translateX(-50%);
+  font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em;
+  padding: 4px 14px; border-radius: 50px;
+  white-space: nowrap;
+}
+.plan-badge.current { background: var(--color-primary); color: #fff; }
+.plan-badge.popular { background: #f59e0b; color: #fff; }
+.plan-name { font-size: 1.1rem; font-weight: 800; color: var(--color-text); margin-bottom: 4px; }
+.plan-desc { font-size: .78rem; color: var(--color-muted); margin-bottom: 18px; line-height: 1.55; }
+.plan-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 6px; }
+.plan-price-amount { font-size: 2rem; font-weight: 900; color: var(--color-text); letter-spacing: -.04em; }
+.plan-price-cur    { font-size: .85rem; font-weight: 700; color: var(--color-muted); }
+.plan-price-period { font-size: .78rem; color: var(--color-muted); }
+.plan-yearly { font-size: .72rem; color: var(--color-muted); margin-bottom: 20px; }
+.plan-limits { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.plan-limit-chip {
+  font-size: .72rem; font-weight: 600;
+  background: #f1f5f9; color: #475569;
+  border-radius: 6px; padding: 3px 9px;
+}
+.plan-cta { margin-top: auto; }
+.btn-plan-select {
+  width: 100%;
+  padding: .6rem 1rem;
+  border-radius: 10px;
+  font-size: .85rem; font-weight: 700;
+  transition: all .2s;
+  border: 1.5px solid;
+  text-decoration: none;
+  display: block; text-align: center;
+}
+.btn-plan-select.primary { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+.btn-plan-select.primary:hover { background: #3f379b; color: #fff; }
+.btn-plan-select.outline { background: transparent; color: var(--color-primary); border-color: var(--color-primary); }
+.btn-plan-select.outline:hover { background: var(--color-primary-soft); }
+.btn-plan-select.current { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; cursor: default; }
+
+/* History table */
+.history-table { font-size: .82rem; }
+.history-table th { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--color-muted); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+  <div>
+    <h1 class="page-title"><i class="bi bi-stars me-2 text-primary"></i>Mon abonnement</h1>
+    <p class="page-subtitle">Gérez votre plan, quotas et historique</p>
+  </div>
+  <div class="d-flex gap-2">
+    {% if user.is_admin_ecole %}
+    <a href="{% url 'abonnement:soumettre_paiement' %}" class="btn btn-outline-success">
+      <i class="bi bi-phone me-2"></i>Payer par mobile
+    </a>
+    {% endif %}
+    <a href="{% url 'abonnement:demande_changement' %}" class="btn btn-primary">
+      <i class="bi bi-arrow-up-circle me-2"></i>Changer de plan
     </a>
   </div>
-
-  {% if messages %}
-  {% for msg in messages %}
-  <div class="alert alert-{% if msg.tags == 'error' %}danger{% elif msg.tags == 'success' %}success{% elif msg.tags == 'warning' %}warning{% else %}info{% endif %} alert-dismissible fade show">
-    {{ msg }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  </div>
-  {% endfor %}
-  {% endif %}
-
-  {% if not ecole %}
-  <div class="alert alert-warning">
-    <i class="bi bi-exclamation-triangle me-2"></i>
-    Impossible de charger les informations de votre école.
-  </div>
-  {% else %}
-
-  <div class="row g-4">
-
-    <!-- ── Plan actuel ─────────────────────────────────────────────────────── -->
-    <div class="col-12 col-lg-4">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <h6 class="fw-bold text-primary mb-3"><i class="bi bi-award-fill me-2"></i>Plan actuel</h6>
-          {% if ecole.plan %}
-          <div class="text-center py-2 mb-3">
-            <div class="fw-bold fs-3 text-dark">{{ ecole.plan.nom }}</div>
-            <div class="text-muted">{{ ecole.plan.description|truncatechars:80 }}</div>
-            <div class="mt-2">
-              <span class="fs-4 fw-bold text-primary">{{ ecole.plan.prix_mensuel|floatformat:0 }}</span>
-              <span class="text-muted"> USD/mois</span>
-            </div>
-            {% if ecole.plan.prix_annuel_effectif %}
-            <div class="text-muted small">ou {{ ecole.plan.prix_annuel_effectif|floatformat:0 }} USD/an</div>
-            {% endif %}
-          </div>
-
-          {% if abonnement %}
-          <div class="mb-3">
-            {% if abonnement.statut == 'actif' %}
-            <span class="badge bg-success w-100 py-2 fs-6">
-              <i class="bi bi-check-circle me-1"></i>Actif
-            </span>
-            {% elif abonnement.statut == 'essai' %}
-            <span class="badge bg-info w-100 py-2 fs-6">
-              <i class="bi bi-clock me-1"></i>Essai gratuit
-            </span>
-            {% elif abonnement.statut == 'expire' %}
-            <span class="badge bg-warning text-dark w-100 py-2 fs-6">
-              <i class="bi bi-exclamation-circle me-1"></i>Expiré
-            </span>
-            {% elif abonnement.statut == 'suspendu' %}
-            <span class="badge bg-danger w-100 py-2 fs-6">
-              <i class="bi bi-pause-circle me-1"></i>Suspendu
-            </span>
-            {% endif %}
-          </div>
-
-          <div class="list-group list-group-flush small">
-            <div class="list-group-item d-flex justify-content-between px-0">
-              <span class="text-muted">Début</span>
-              <span>{{ abonnement.date_debut|date:"d/m/Y"|default:"—" }}</span>
-            </div>
-            <div class="list-group-item d-flex justify-content-between px-0">
-              <span class="text-muted">Fin</span>
-              <span class="{% if abonnement.est_expire %}text-danger fw-bold{% endif %}">
-                {{ abonnement.date_fin|date:"d/m/Y"|default:"Sans limite" }}
-              </span>
-            </div>
-            {% if abonnement.jours_restants is not None %}
-            <div class="list-group-item d-flex justify-content-between px-0">
-              <span class="text-muted">Jours restants</span>
-              <span class="fw-bold {% if abonnement.jours_restants < 14 %}text-danger{% elif abonnement.jours_restants < 30 %}text-warning{% else %}text-success{% endif %}">
-                {{ abonnement.jours_restants }}j
-              </span>
-            </div>
-            {% endif %}
-          </div>
-          {% else %}
-          <div class="alert alert-info small mt-2 mb-0">
-            <i class="bi bi-info-circle me-1"></i>Plan actif. Contactez votre administrateur pour les détails.
-          </div>
-          {% endif %}
-
-          {% else %}
-          <div class="alert alert-warning">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            Aucun plan assigné à votre école.
-          </div>
-          {% endif %}
-
-          <div class="mt-3">
-            <a href="{% url 'abonnement:demande_changement' %}" class="btn btn-outline-primary w-100 btn-sm">
-              <i class="bi bi-arrow-up-circle me-1"></i>Changer de plan
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Quotas utilisés ─────────────────────────────────────────────────── -->
-    <div class="col-12 col-lg-8">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <h6 class="fw-bold text-primary mb-4"><i class="bi bi-bar-chart me-2"></i>Utilisation des quotas</h6>
-          {% if quotas %}
-          <div class="row g-4">
-            {% for key, data in quotas.items %}
-            <div class="col-sm-6">
-              <div class="p-3 border rounded {% if data.alerte %}border-warning{% else %}border-0 bg-light{% endif %}">
-                <div class="d-flex justify-content-between mb-1">
-                  <span class="fw-semibold small">
-                    {% if key == 'eleves' %}<i class="bi bi-people me-1"></i>Élèves
-                    {% elif key == 'enseignants' %}<i class="bi bi-person-badge me-1"></i>Enseignants
-                    {% elif key == 'classes' %}<i class="bi bi-building me-1"></i>Classes
-                    {% elif key == 'utilisateurs' %}<i class="bi bi-person-gear me-1"></i>Utilisateurs
-                    {% else %}{{ key }}
-                    {% endif %}
-                  </span>
-                  <span class="small fw-bold {% if data.pct >= 90 %}text-danger{% elif data.pct >= 75 %}text-warning{% else %}text-success{% endif %}">
-                    {{ data.count }} / {{ data.limit }}
-                  </span>
-                </div>
-                <div class="progress" style="height:8px;">
-                  <div class="progress-bar {% if data.pct >= 90 %}bg-danger{% elif data.pct >= 75 %}bg-warning{% else %}bg-success{% endif %}"
-                       style="width:{{ data.pct }}%"></div>
-                </div>
-                <div class="text-muted small mt-1">{{ data.pct }}% utilisé</div>
-                {% if data.alerte %}
-                <div class="text-warning small mt-1"><i class="bi bi-exclamation-triangle me-1"></i>Proche de la limite</div>
-                {% endif %}
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-          {% else %}
-          <div class="text-muted py-3">
-            <i class="bi bi-info-circle me-2"></i>
-            Les informations de quota ne sont pas disponibles.
-          </div>
-          {% endif %}
-
-          <!-- Modules inclus -->
-          {% if ecole.plan and ecole.plan.modules_inclus %}
-          <div class="mt-4">
-            <div class="fw-semibold small mb-2">Modules inclus dans votre plan</div>
-            <div class="d-flex flex-wrap gap-1">
-              {% for label in ecole.plan.get_modules_labels %}
-              <span class="badge bg-primary bg-opacity-10 text-primary py-1 px-2">
-                <i class="bi bi-check me-1"></i>{{ label }}
-              </span>
-              {% endfor %}
-            </div>
-          </div>
-          {% elif ecole.plan %}
-          <div class="mt-4">
-            <span class="badge bg-success bg-opacity-10 text-success">
-              <i class="bi bi-check-all me-1"></i>Tous les modules inclus
-            </span>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Historique ─────────────────────────────────────────────────────── -->
-    {% if historique %}
-    <div class="col-12">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="fw-bold text-primary mb-3"><i class="bi bi-clock-history me-2"></i>Historique des changements</h6>
-          <div class="table-responsive">
-            <table class="table table-sm table-hover align-middle small">
-              <thead class="table-light">
-                <tr>
-                  <th>Date</th>
-                  <th>Ancien plan</th>
-                  <th>Nouveau plan</th>
-                  <th>Statut</th>
-                  <th>Motif</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for h in historique %}
-                <tr>
-                  <td class="text-muted">{{ h.date_changement|date:"d/m/Y" }}</td>
-                  <td>{{ h.ancien_plan.nom|default:"—" }}</td>
-                  <td><strong>{{ h.nouveau_plan.nom|default:"—" }}</strong></td>
-                  <td>
-                    {% if h.ancien_statut != h.nouveau_statut %}
-                    <span class="text-muted">{{ h.ancien_statut }}</span>
-                    <i class="bi bi-arrow-right mx-1"></i>
-                    <strong>{{ h.nouveau_statut }}</strong>
-                    {% else %}—{% endif %}
-                  </td>
-                  <td class="text-muted">{{ h.motif|default:"—" }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %}
-
-    <!-- ── Plans disponibles ───────────────────────────────────────────────── -->
-    {% if plans_publics %}
-    <div class="col-12">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="fw-bold text-primary mb-3"><i class="bi bi-grid me-2"></i>Plans disponibles</h6>
-          <div class="row g-3">
-            {% for plan in plans_publics %}
-            <div class="col-12 col-md-4">
-              <div class="p-3 border rounded {% if ecole.plan and ecole.plan.pk == plan.pk %}border-primary{% endif %} h-100">
-                {% if ecole.plan and ecole.plan.pk == plan.pk %}
-                <div class="badge bg-primary mb-2">Plan actuel</div>
-                {% endif %}
-                <div class="fw-bold">{{ plan.nom }}</div>
-                <div class="text-primary fw-bold">{{ plan.prix_mensuel|floatformat:0 }} USD/mois</div>
-                {% if plan.description %}<p class="text-muted small mb-2">{{ plan.description|truncatechars:60 }}</p>{% endif %}
-                <div class="small text-muted">
-                  Jusqu'à {{ plan.max_eleves }} élèves · {{ plan.max_enseignants }} enseignants
-                </div>
-                {% if not ecole.plan or ecole.plan.pk != plan.pk %}
-                <a href="{% url 'abonnement:demande_changement' %}?plan={{ plan.pk }}" class="btn btn-sm btn-outline-primary mt-2">
-                  Choisir ce plan
-                </a>
-                {% endif %}
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %}
-
-  </div>
-  {% endif %}
 </div>
+
+{% for msg in messages %}
+<div class="alert alert-{% if msg.tags == 'error' %}danger{% elif msg.tags == 'success' %}success{% elif msg.tags == 'warning' %}warning{% else %}info{% endif %} alert-dismissible fade show" role="alert" style="border-radius:12px;">
+  {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endfor %}
+
+{% if not ecole %}
+<div class="alert alert-warning" style="border-radius:12px;">
+  <i class="bi bi-exclamation-triangle me-2"></i>Impossible de charger les informations de votre école.
+</div>
+{% else %}
+
+<!-- ── Hero: current plan ─────────────────────────────────────────────────── -->
+<div class="sub-hero">
+  <div class="row align-items-center g-4" style="position:relative;z-index:1;">
+    <div class="col-12 col-md-6">
+      <div class="sub-hero-sub mb-1">Plan actuel</div>
+      <div class="sub-hero-title">
+        {% if ecole.plan %}{{ ecole.plan.nom }}{% else %}Aucun plan{% endif %}
+      </div>
+      {% if ecole.plan %}
+      <div class="d-flex align-items-baseline gap-2 mt-2 mb-3">
+        <span style="font-size:1.8rem;font-weight:900;color:#fff;">{{ ecole.plan.prix_mensuel|floatformat:0 }}</span>
+        <span style="font-size:.85rem;color:rgba(255,255,255,.65);">USD / mois</span>
+        {% if ecole.plan.prix_annuel_effectif %}
+        <span style="font-size:.75rem;color:rgba(255,255,255,.5);">· {{ ecole.plan.prix_annuel_effectif|floatformat:0 }} USD/an</span>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if abonnement %}
+        {% if abonnement.statut == 'actif' %}
+        <span class="sub-status-badge actif"><i class="bi bi-check-circle-fill"></i>Actif</span>
+        {% elif abonnement.statut == 'essai' %}
+        <span class="sub-status-badge essai"><i class="bi bi-clock-fill"></i>Essai gratuit</span>
+        {% elif abonnement.statut == 'expire' %}
+        <span class="sub-status-badge expire"><i class="bi bi-exclamation-circle-fill"></i>Expiré</span>
+        {% elif abonnement.statut == 'suspendu' %}
+        <span class="sub-status-badge suspendu"><i class="bi bi-pause-circle-fill"></i>Suspendu</span>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="row g-3">
+        {% if abonnement %}
+        <div class="col-4">
+          <div class="sub-meta-item">
+            <label>Début</label>
+            <strong>{{ abonnement.date_debut|date:"d/m/Y"|default:"—" }}</strong>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="sub-meta-item">
+            <label>Fin</label>
+            <strong class="{% if abonnement.est_expire %}text-warning{% endif %}">
+              {{ abonnement.date_fin|date:"d/m/Y"|default:"Sans limite" }}
+            </strong>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="sub-meta-item">
+            <label>Jours restants</label>
+            {% if abonnement.jours_restants is not None %}
+            <div class="sub-days-left {% if abonnement.jours_restants < 14 %}danger{% elif abonnement.jours_restants < 30 %}warning{% endif %}">
+              {{ abonnement.jours_restants }}
+            </div>
+            <span style="font-size:.7rem;color:rgba(255,255,255,.55);">jours</span>
+            {% else %}
+            <strong>—</strong>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Modules -->
+      {% if ecole.plan %}
+      <div class="mt-3">
+        {% if ecole.plan.modules_inclus %}
+          {% for label in ecole.plan.get_modules_labels %}
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:600;background:rgba(255,255,255,.14);color:rgba(255,255,255,.9);border:1px solid rgba(255,255,255,.22);border-radius:50px;padding:2px 10px;margin:2px;">
+            <i class="bi bi-check2"></i>{{ label }}
+          </span>
+          {% endfor %}
+        {% else %}
+          <span style="font-size:.75rem;color:rgba(255,255,255,.72);"><i class="bi bi-check-all me-1"></i>Tous les modules inclus</span>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- ── Quotas ─────────────────────────────────────────────────────────────── -->
+{% if quotas %}
+<div class="mb-4">
+  <h5 class="fw-bold mb-3" style="font-size:1rem;"><i class="bi bi-bar-chart-fill text-primary me-2"></i>Utilisation des quotas</h5>
+  <div class="row g-3">
+    {% for key, data in quotas.items %}
+    <div class="col-sm-6 col-lg-3">
+      <div class="quota-card {% if data.alerte %}alert-quota{% endif %}">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <div class="quota-label">
+            {% if key == 'eleves' %}<i class="bi bi-people-fill text-primary"></i>Élèves
+            {% elif key == 'enseignants' %}<i class="bi bi-person-badge-fill text-success"></i>Enseignants
+            {% elif key == 'classes' %}<i class="bi bi-building text-warning"></i>Classes
+            {% elif key == 'utilisateurs' %}<i class="bi bi-person-gear text-info"></i>Utilisateurs
+            {% else %}<i class="bi bi-grid"></i>{{ key }}
+            {% endif %}
+          </div>
+          {% if data.alerte %}
+          <i class="bi bi-exclamation-triangle-fill text-warning" title="Proche de la limite"></i>
+          {% endif %}
+        </div>
+        <div class="d-flex align-items-baseline gap-2">
+          <span class="quota-count">{{ data.count }}</span>
+          <span class="quota-limit">/ {{ data.limit }}</span>
+        </div>
+        <div class="quota-bar">
+          <div class="quota-fill {% if data.pct >= 90 %}high{% elif data.pct >= 75 %}medium{% else %}low{% endif %}"
+               style="width:{{ data.pct }}%"></div>
+        </div>
+        <div style="font-size:.72rem;color:var(--color-muted);">{{ data.pct }}% utilisé</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- ── Available plans ────────────────────────────────────────────────────── -->
+{% if plans_publics %}
+<div class="mb-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="fw-bold mb-0" style="font-size:1rem;"><i class="bi bi-grid-1x2-fill text-primary me-2"></i>Plans disponibles</h5>
+    <a href="{% url 'abonnement:demande_changement' %}" class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-arrow-up-circle me-1"></i>Demander un changement
+    </a>
+  </div>
+  <div class="row g-3 align-items-stretch">
+    {% for plan in plans_publics %}
+    <div class="col-12 col-md-4">
+      <div class="plan-card {% if ecole.plan and ecole.plan.pk == plan.pk %}current-plan{% endif %}">
+        {% if ecole.plan and ecole.plan.pk == plan.pk %}
+        <span class="plan-badge current"><i class="bi bi-check2 me-1"></i>Votre plan</span>
+        {% endif %}
+
+        <div class="plan-name">{{ plan.nom }}</div>
+        {% if plan.description %}
+        <div class="plan-desc">{{ plan.description|truncatechars:80 }}</div>
+        {% endif %}
+
+        <div class="plan-price">
+          <span class="plan-price-amount">{{ plan.prix_mensuel|floatformat:0 }}</span>
+          <span class="plan-price-cur">USD</span>
+          <span class="plan-price-period">/mois</span>
+        </div>
+        {% if plan.prix_annuel_effectif %}
+        <div class="plan-yearly">ou {{ plan.prix_annuel_effectif|floatformat:0 }} USD/an <span style="color:#16a34a;font-weight:600;">— économisez</span></div>
+        {% endif %}
+
+        <div class="plan-limits">
+          <span class="plan-limit-chip"><i class="bi bi-people me-1"></i>{{ plan.max_eleves }} élèves</span>
+          <span class="plan-limit-chip"><i class="bi bi-person-badge me-1"></i>{{ plan.max_enseignants }} enseignants</span>
+          {% if plan.max_classes %}
+          <span class="plan-limit-chip"><i class="bi bi-building me-1"></i>{{ plan.max_classes }} classes</span>
+          {% endif %}
+        </div>
+
+        <div class="plan-cta">
+          {% if ecole.plan and ecole.plan.pk == plan.pk %}
+          <span class="btn-plan-select current"><i class="bi bi-check2 me-1"></i>Plan actuel</span>
+          {% else %}
+          <a href="{% url 'abonnement:demande_changement' %}?plan={{ plan.pk }}" class="btn-plan-select {% if plan.prix_mensuel > ecole.plan.prix_mensuel|default:0 %}primary{% else %}outline{% endif %}">
+            Choisir ce plan
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- ── History ─────────────────────────────────────────────────────────────── -->
+{% if historique %}
+<div class="card">
+  <div class="card-header">
+    <span><i class="bi bi-clock-history me-2 text-primary"></i>Historique des abonnements</span>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0 history-table">
+        <thead class="table-light">
+          <tr>
+            <th class="px-4 py-3">Date</th>
+            <th>Ancien plan</th>
+            <th>Nouveau plan</th>
+            <th>Statut</th>
+            <th>Motif</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for h in historique %}
+          <tr>
+            <td class="px-4 text-muted">{{ h.date_changement|date:"d/m/Y" }}</td>
+            <td class="text-muted">{{ h.ancien_plan.nom|default:"—" }}</td>
+            <td><strong>{{ h.nouveau_plan.nom|default:"—" }}</strong></td>
+            <td>
+              {% if h.ancien_statut != h.nouveau_statut %}
+              <span class="text-muted">{{ h.ancien_statut }}</span>
+              <i class="bi bi-arrow-right mx-1 text-primary" style="font-size:.7rem;"></i>
+              <strong>{{ h.nouveau_statut }}</strong>
+              {% else %}—{% endif %}
+            </td>
+            <td class="text-muted">{{ h.motif|default:"—" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endif %}{# end if ecole #}
 {% endblock %}

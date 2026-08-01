@@ -64,4 +64,8 @@ urlpatterns = [
     # Paiements plateforme (mobile money / virement)
     path('paiements/',             views.paiements_plateforme,       name='paiements_plateforme'),
     path('paiements/<int:pk>/',    views.paiement_plateforme_detail, name='paiement_plateforme_detail'),
+
+    # Demandes d'inscription (formulaire public)
+    path('demandes-inscription/',             views.demandes_inscription,          name='demandes_inscription'),
+    path('demandes-inscription/<int:pk>/',    views.demande_inscription_traiter,   name='demande_inscription_traiter'),
 ]
