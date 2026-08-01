@@ -11,95 +11,105 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="/static/css/style.css" rel="stylesheet">
   <style>
-    body { margin: 0; min-height: 100vh; display: flex; background: var(--bg-page); }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: flex; }
+    /* Override form-control inside super_admin login (no CSS vars here) */
+    .login-field-wrap .form-control {
+      background: #f8fafc !important;
+      border: 1.5px solid #e2e8f0 !important;
+      font-size: .875rem; height: 46px;
+      border-radius: 10px; padding-right: 2.8rem;
+    }
+    .login-field-wrap .form-control:focus {
+      border-color: #4d44b5 !important;
+      background: #fff !important;
+      box-shadow: 0 0 0 3px rgba(77,68,181,.12) !important;
+    }
   </style>
 </head>
 <body>
 
 <div class="login-split">
 
-  <!-- ── Panneau gauche branding ── -->
+  <!-- ── Panneau gauche : visuel ── -->
   <div class="login-brand">
     <div class="login-brand-inner">
-      <div class="login-brand-logo">
-        {% if platform_settings.site_logo %}
-          <img src="{{ platform_settings.site_logo.url }}" alt="Logo">
-        {% else %}
-          <i class="bi bi-mortarboard-fill"></i>
-        {% endif %}
-      </div>
       <div class="login-brand-kicker">
         <i class="bi bi-shield-lock-fill"></i>Administration plateforme
       </div>
-      <h1 class="login-brand-title">{{ platform_settings.site_name|default:"EducNet" }}</h1>
+      <h1 class="login-brand-title">
+        Gérez l'ensemble<br>
+        du réseau scolaire,<br>
+        <span class="accent">en un seul endroit.</span>
+      </h1>
       <p class="login-brand-sub">
-        {{ platform_settings.site_slogan|default:"School Governance Network" }}
-        {% if platform_settings.site_devise %}
-          <br><em style="color:rgba(255,255,255,.45);font-style:italic;">« {{ platform_settings.site_devise }} »</em>
-        {% endif %}
+        Console super-admin — supervision des établissements, abonnements,
+        communications et maintenance du système.
       </p>
-
-      <ul class="login-brand-feats">
-        <li><i class="bi bi-check-circle-fill"></i>Gestion centralisée du réseau scolaire</li>
-        <li><i class="bi bi-check-circle-fill"></i>Création et suivi des établissements</li>
-        <li><i class="bi bi-check-circle-fill"></i>Plans d'abonnement et communications</li>
-        <li><i class="bi bi-check-circle-fill"></i>Supervision de la maintenance système</li>
-      </ul>
-
-      <div class="login-brand-footer">Powered by <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong></div>
+      <div class="login-brand-footer">
+        Powered by <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong>
+      </div>
     </div>
   </div>
 
-  <!-- ── Panneau droit formulaire ── -->
+  <!-- ── Panneau droit : formulaire ── -->
   <div class="login-form-side">
     <div class="login-form-card">
 
-      <div class="login-form-icon" style="background:var(--color-primary-soft);color:var(--color-primary);">
-        <i class="bi bi-stars"></i>
+      <!-- Marque -->
+      <div class="login-form-logo">
+        <div class="login-form-logo-mark">
+          {% if platform_settings.site_logo %}
+            <img src="{{ platform_settings.site_logo.url }}" alt="Logo">
+          {% else %}
+            <i class="bi bi-stars"></i>
+          {% endif %}
+        </div>
+        <div class="login-form-logo-name">{{ platform_settings.site_name|default:"EducNet" }}</div>
+        <div class="login-form-logo-sub">Console plateforme</div>
       </div>
 
-      <div class="text-center mb-4">
-        <span class="badge rounded-pill" style="background:var(--color-primary-soft);color:var(--color-primary);font-size:.65rem;font-weight:800;letter-spacing:.08em;padding:5px 12px;">
-          <i class="bi bi-stars me-1"></i>CONSOLE PLATEFORME
-        </span>
-        <h2 class="fw-bold mt-2 mb-1" style="font-size:1.45rem;letter-spacing:-.03em;color:var(--color-dark);">Connexion administrateur</h2>
-        <p class="text-muted small mb-0">Accès réservé aux administrateurs de la plateforme</p>
-      </div>
+      <div class="login-form-heading">Connexion administrateur</div>
+      <div class="login-form-sub">Accès réservé aux super-administrateurs</div>
 
       {% if error %}
-      <div class="alert alert-danger d-flex align-items-center gap-2 py-2 mb-3" style="border-radius:10px;">
+      <div class="alert alert-danger d-flex align-items-center gap-2 py-2 mb-3" style="border-radius:10px;font-size:.82rem;">
         <i class="bi bi-x-circle-fill flex-shrink-0"></i>{{ error }}
       </div>
       {% endif %}
 
-      <form method="post" novalidate>
+      <form method="post" novalidate id="loginForm">
         {% csrf_token %}
+
         <div class="mb-3">
-          <label class="form-label fw-semibold" style="font-size:.875rem;">Adresse e-mail</label>
-          <input type="email" name="email" id="id_email" class="form-control"
-                 placeholder="admin@plateforme.local" autofocus
-                 value="{{ form.email.value|default:'' }}">
+          <label class="form-label fw-semibold" style="font-size:.8rem;color:#0f172a;">Adresse e-mail <span style="color:#ef4444;">*</span></label>
+          <div class="login-field-wrap">
+            <input type="email" name="email" id="id_email" class="form-control"
+                   placeholder="admin@plateforme.local" autofocus
+                   value="{{ form.email.value|default:'' }}">
+            <i class="bi bi-envelope login-field-icon"></i>
+          </div>
         </div>
-        <div class="mb-4">
-          <label class="form-label fw-semibold" style="font-size:.875rem;">Mot de passe</label>
-          <div class="position-relative">
+
+        <div class="mb-1">
+          <label class="form-label fw-semibold" style="font-size:.8rem;color:#0f172a;">Mot de passe <span style="color:#ef4444;">*</span></label>
+          <div class="login-field-wrap">
             <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••">
-            <button type="button" class="btn border-0 bg-transparent position-absolute end-0 top-50 translate-middle-y pe-3"
-                    style="color:var(--color-muted);" onclick="togglePwd()">
+            <button type="button" class="login-field-eye" onclick="togglePwd()" aria-label="Afficher/masquer">
               <i class="bi bi-eye" id="pwd-eye"></i>
             </button>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
-          <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+
+        <button type="submit" class="login-btn" id="loginBtn">
+          <i class="bi bi-box-arrow-in-right"></i>Se connecter
         </button>
       </form>
 
-      <div class="mt-4 pt-3 border-top text-center">
-        <a href="/login/" class="text-muted small d-inline-flex align-items-center gap-1">
-          <i class="bi bi-arrow-left"></i>Espace établissement
-        </a>
+      <div class="login-bottom-link mt-4">
+        <a href="/login/"><i class="bi bi-arrow-left me-1"></i>Retour vers l'espace établissement</a>
       </div>
+
     </div>
   </div>
 </div>
@@ -109,9 +119,15 @@
 function togglePwd() {
   const inp = document.getElementById('id_password');
   const eye = document.getElementById('pwd-eye');
-  if (inp.type === 'password') { inp.type = 'text'; eye.className = 'bi bi-eye-slash'; }
-  else { inp.type = 'password'; eye.className = 'bi bi-eye'; }
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  eye.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
 }
+document.getElementById('loginForm')?.addEventListener('submit', function() {
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm" style="width:14px;height:14px;"></span> Connexion…';
+});
 </script>
 </body>
 </html>

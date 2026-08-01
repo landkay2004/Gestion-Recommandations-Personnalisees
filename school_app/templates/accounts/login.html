@@ -2,104 +2,109 @@
 {% block auth_content %}
 <div class="login-split">
 
-  <!-- ── Panneau gauche : branding & fonctionnalités ── -->
+  <!-- ── Panneau gauche : visuel sombre + tagline ── -->
   <div class="login-brand">
     <div class="login-brand-inner">
-      <div class="login-brand-logo">
-        {% if school_info.logo %}
-          <img src="{{ school_info.logo.url }}" alt="{{ school_info.nom }}">
-        {% else %}
-          <i class="bi bi-mortarboard-fill"></i>
-        {% endif %}
-      </div>
       <div class="login-brand-kicker">
         <i class="bi bi-building-fill"></i>Espace établissement
       </div>
-      <h1 class="login-brand-title">{{ school_info.pwa_nom|default:"Système de Gestion Scolaire" }}</h1>
-      {% if school_info.nom %}
-        <p class="login-brand-sub">{{ school_info.nom }}</p>
-      {% else %}
-        <p class="login-brand-sub">Gérez votre école en toute simplicité.</p>
-      {% endif %}
-
-      <ul class="login-brand-feats">
-        <li><i class="bi bi-check-circle-fill"></i>Gestion des élèves &amp; enseignants</li>
-        <li><i class="bi bi-check-circle-fill"></i>Saisie et consultation des notes</li>
-        <li><i class="bi bi-check-circle-fill"></i>Bulletins officiels RDC en un clic</li>
-        <li><i class="bi bi-check-circle-fill"></i>Portail parents &amp; résultats en ligne</li>
-      </ul>
-
+      <h1 class="login-brand-title">
+        Nous sommes prêts à<br>
+        vous accompagner,<br>
+        <span class="accent">à chaque instant.</span>
+      </h1>
+      <p class="login-brand-sub">
+        Gérez votre école depuis un seul espace — notes, bulletins,<br>
+        élèves, parents et communication en toute simplicité.
+      </p>
       <div class="login-brand-footer">Powered by <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong></div>
     </div>
   </div>
 
-  <!-- ── Panneau droit : formulaire de connexion ── -->
+  <!-- ── Panneau droit : formulaire ── -->
   <div class="login-form-side">
     <div class="login-form-card">
 
-      <div class="login-form-icon">
-        {% if school_info.logo %}
-          <img src="{{ school_info.logo.url }}" alt="{{ school_info.nom }}">
-        {% else %}
-          <i class="bi bi-mortarboard-fill"></i>
+      <!-- Marque -->
+      <div class="login-form-logo">
+        <div class="login-form-logo-mark">
+          {% if school_info.logo %}
+            <img src="{{ school_info.logo.url }}" alt="{{ school_info.nom }}">
+          {% else %}
+            <i class="bi bi-mortarboard-fill"></i>
+          {% endif %}
+        </div>
+        <div class="login-form-logo-name">{{ school_info.pwa_nom|default:"EducNet" }}</div>
+        {% if school_info.nom %}
+        <div class="login-form-logo-sub">{{ school_info.nom }}</div>
         {% endif %}
       </div>
 
-      <div class="text-center mb-4">
-        <h2 class="fw-bold mb-1" style="font-size:1.45rem;letter-spacing:-.03em;color:var(--color-dark);">Connexion</h2>
-        <p class="text-muted small mb-0">Réservé au personnel autorisé</p>
-      </div>
+      <div class="login-form-heading">Connexion</div>
+      <div class="login-form-sub">Réservé au personnel autorisé</div>
 
       {% if form.errors %}
-      <div class="alert alert-danger d-flex align-items-center gap-2 py-2 mb-3" style="border-radius:10px;">
+      <div class="alert alert-danger d-flex align-items-center gap-2 py-2 mb-3" style="border-radius:10px;font-size:.82rem;">
         <i class="bi bi-exclamation-circle-fill flex-shrink-0"></i>Identifiants incorrects. Veuillez réessayer.
       </div>
       {% endif %}
 
       {% if messages %}
       {% for message in messages %}
-      <div class="alert alert-warning d-flex align-items-center gap-2 py-2 mb-3" style="border-radius:10px;">
+      <div class="alert alert-warning d-flex align-items-center gap-2 py-2 mb-3" style="border-radius:10px;font-size:.82rem;">
         <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>{{ message }}
       </div>
       {% endfor %}
       {% endif %}
 
-      <form method="post">
+      <form method="post" id="loginForm">
         {% csrf_token %}
+
         <div class="mb-3">
-          <label class="form-label fw-semibold" style="font-size:.875rem;">Adresse e-mail</label>
-          {{ form.username }}
+          <label class="form-label fw-semibold" style="font-size:.8rem;color:#0f172a;">Adresse e-mail <span style="color:#ef4444;">*</span></label>
+          <div class="login-field-wrap">
+            {{ form.username }}
+            <i class="bi bi-person login-field-icon"></i>
+          </div>
         </div>
-        <div class="mb-4">
-          <label class="form-label fw-semibold" style="font-size:.875rem;">Mot de passe</label>
-          <div class="position-relative">
+
+        <div class="mb-1">
+          <label class="form-label fw-semibold" style="font-size:.8rem;color:#0f172a;">Mot de passe <span style="color:#ef4444;">*</span></label>
+          <div class="login-field-wrap">
             {{ form.password }}
-            <button type="button" class="btn border-0 bg-transparent position-absolute end-0 top-50 translate-middle-y pe-3"
-                    style="color:var(--color-muted);z-index:5;" onclick="togglePwd(this)">
+            <button type="button" class="login-field-eye" onclick="togglePwd(this)" aria-label="Afficher/masquer">
               <i class="bi bi-eye"></i>
             </button>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
-          <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+
+        <button type="submit" class="login-btn" id="loginBtn">
+          <i class="bi bi-box-arrow-in-right"></i>Se connecter
         </button>
       </form>
 
-      <p class="text-center text-muted mt-4 small d-flex align-items-center justify-content-center gap-1">
-        <i class="bi bi-shield-lock"></i>Accès réservé au personnel autorisé
-      </p>
+      <div class="login-bottom-link">
+        <i class="bi bi-shield-lock me-1"></i>Accès réservé — personnel autorisé uniquement
+      </div>
+
     </div>
   </div>
 </div>
 
 <script>
 function togglePwd(btn) {
-  const wrap = btn.closest('.position-relative');
-  const inp  = wrap ? wrap.querySelector('input[type="password"], input[type="text"]') : null;
+  const wrap = btn.closest('.login-field-wrap');
+  const inp  = wrap && wrap.querySelector('input');
   const eye  = btn.querySelector('i');
   if (!inp) return;
-  if (inp.type === 'password') { inp.type = 'text'; eye.className = 'bi bi-eye-slash'; }
-  else { inp.type = 'password'; eye.className = 'bi bi-eye'; }
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  eye.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
 }
+document.getElementById('loginForm')?.addEventListener('submit', function() {
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm" style="width:14px;height:14px;"></span> Connexion…';
+});
 </script>
 {% endblock %}
