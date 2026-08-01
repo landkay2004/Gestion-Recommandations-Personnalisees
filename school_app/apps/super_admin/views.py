@@ -1379,7 +1379,7 @@ def rejoindre_educnet(request):
                 'email':           dj_forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email@exemple.com'}),
                 'province':        dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Kinshasa'}),
                 'ville':           dj_forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex : Kinshasa'}),
-                'message':         dj_forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Nombre d'élèves estimé, questions…'}),
+                'message':         dj_forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': "Nombre d'élèves estimé, questions..."}),
             }
 
     success = False

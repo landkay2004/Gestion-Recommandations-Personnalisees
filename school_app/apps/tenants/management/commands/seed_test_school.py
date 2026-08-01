@@ -45,124 +45,336 @@ PWD_COMPTABLE     = 'Comptable@2025!'
 SECTIONS = ['Scientifique', 'Littéraire', 'Commerciale et Gestion']
 
 NIVEAUX = [
-    {'nom': '1ère Année',  'ordre': 1, 'cycle': 'primaire'},
-    {'nom': '2ème Année',  'ordre': 2, 'cycle': 'primaire'},
-    {'nom': '3ème Année',  'ordre': 3, 'cycle': 'primaire'},
-    {'nom': '4ème Année',  'ordre': 4, 'cycle': 'primaire'},
-    {'nom': '5ème Année',  'ordre': 5, 'cycle': 'secondaire'},
-    {'nom': '6ème Année',  'ordre': 6, 'cycle': 'secondaire'},
+    {'nom': '7ème', 'ordre': 1, 'cycle': 'secondaire'},
+    {'nom': '8ème', 'ordre': 2, 'cycle': 'secondaire'},
+    {'nom': '1ère', 'ordre': 3, 'cycle': 'secondaire'},
+    {'nom': '2ème', 'ordre': 4, 'cycle': 'secondaire'},
+    {'nom': '3ème', 'ordre': 5, 'cycle': 'secondaire'},
+    {'nom': '4ème', 'ordre': 6, 'cycle': 'secondaire'},
 ]
 
 # (niveau_nom, section_nom, nom_classe)
 CLASSES = [
-    ('5ème Année', 'Scientifique',              'A'),
-    ('5ème Année', 'Scientifique',              'B'),
-    ('5ème Année', 'Commerciale et Gestion',    'A'),
-    ('6ème Année', 'Scientifique',              'A'),
-    ('6ème Année', 'Littéraire',                'A'),
-    ('6ème Année', 'Commerciale et Gestion',    'A'),
-    ('4ème Année', 'Scientifique',              'A'),
-    ('3ème Année', 'Scientifique',              'A'),
+    ('7ème', 'Scientifique', 'A'),
+    ('7ème', 'Scientifique', 'B'),
+    ('7ème', 'Commerciale et Gestion', 'A'),
+    ('8ème', 'Scientifique', 'A'),
+    ('8ème', 'Littéraire', 'A'),
+    ('8ème', 'Commerciale et Gestion', 'A'),
+    ('1ère', 'Scientifique', 'A'),
+    ('1ère', 'Littéraire', 'A'),
+    ('2ème', 'Scientifique', 'A'),
+    ('2ème', 'Commerciale et Gestion', 'A'),
+    ('3ème', 'Scientifique', 'A'),
+    ('3ème', 'Littéraire', 'A'),
+    ('4ème', 'Scientifique', 'A'),
+    ('4ème', 'Commerciale et Gestion', 'A'),
 ]
 
 # (nom_matiere, maxima)
 MATIERES = [
-    ('Français',                  60),
-    ('Mathématique',              60),
-    ('Sciences Naturelles',       30),
-    ('Physique',                  30),
-    ('Histoire',                  30),
-    ('Géographie',                30),
-    ('Anglais',                   20),
-    ('Informatique',              20),
-    ('Éducation Physique',        20),
-    ('Religion',                  20),
-    ('Éducation Civique',         20),
-    ('Dessin',                    20),
+    ('Français', 60),
+    ('Mathématiques', 60),
+    ('Physique-Chimie', 30),
+    ('Biologie', 30),
+    ('Histoire-Géographie', 30),
+    ('Anglais', 20),
+    ('Informatique', 20),
+    ('Éducation Physique', 20),
+    ('Religion', 20),
+    ('Éducation Civique', 20),
+    ('Économie', 20),
+    ('Arts Plastiques', 20),
+    ('Philosophie', 20),
+    ('Sciences de la vie', 20),
 ]
 
 # (prenom, postnom, nom, genre, email_suffix)
 ENSEIGNANTS_SUP = [
-    ('Marie',   'Nzeba',    'Kabila',   'F', 'mkabila'),
-    ('Jean',    'Mulumba',  'Tshombe',  'M', 'jtshombe'),
-    ('Pierre',  'Luyeye',   'Matongo',  'M', 'pmatongo'),
+    ('Marie', 'Nzeba', 'Kabila', 'F', 'mkabila'),
+    ('Jean', 'Mulumba', 'Tshombe', 'M', 'jtshombe'),
+    ('Pierre', 'Luyeye', 'Matongo', 'M', 'pmatongo'),
+    ('Grace', 'Kabamba', 'Mputu', 'F', 'gputu'),
+    ('David', 'Mbuyi', 'Lukusa', 'M', 'dlukusa'),
+    ('Esther', 'Ngoy', 'Kalonji', 'F', 'ekalonji'),
+    ('Joel', 'Banza', 'Mwanza', 'M', 'jmwanza'),
+    ('Cynthia', 'Kashala', 'Mafuta', 'F', 'cmafuta'),
+    ('Thierry', 'Kalonji', 'Mumbwa', 'M', 'tmumbwa'),
+    ('Mireille', 'Mukulu', 'Tshibangu', 'F', 'mtshibangu'),
+    ('Patrick', 'Wamimbi', 'Banza', 'M', 'pbanza'),
+    ('Léonie', 'Mundele', 'Bashala', 'F', 'lbashala'),
+    ('Alain', 'Kibonge', 'Ndaya', 'M', 'andaya'),
+    ('Ruth', 'Muteba', 'Nsimba', 'F', 'rnsimba'),
+    ('Prosper', 'Lupitshi', 'Kakana', 'M', 'pkakana'),
 ]
 
 # (nom, postnom, prenom, sexe, date_naissance, lieu_naissance, nom_classe_ref)
 # nom_classe_ref = (niveau, section, nom) tuple correspondant à CLASSES
 ELEVES = [
-    # 5ème Scientifique A
-    ('Mukendi',  'Kabeya',   'Pascal',    'M', '2010-03-15', 'Kinshasa',  ('5ème Année', 'Scientifique',           'A')),
-    ('Nzambi',   'Lukusa',   'Grâce',     'F', '2010-07-22', 'Lubumbashi',('5ème Année', 'Scientifique',           'A')),
-    ('Kabongo',  'Mwamba',   'Daniel',    'M', '2009-11-05', 'Mbuji-Mayi',('5ème Année', 'Scientifique',           'A')),
-    ('Tshilombo','Kayumba',  'Espérance', 'F', '2010-01-30', 'Kananga',   ('5ème Année', 'Scientifique',           'A')),
-    ('Ilunga',   'Mulumba',  'David',     'M', '2010-09-18', 'Kolwezi',   ('5ème Année', 'Scientifique',           'A')),
-    # 5ème Scientifique B
-    ('Muteba',   'Ngandu',   'Joël',      'M', '2010-04-12', 'Kinshasa',  ('5ème Année', 'Scientifique',           'B')),
-    ('Kasongo',  'Banza',    'Naomi',     'F', '2010-08-25', 'Bukavu',    ('5ème Année', 'Scientifique',           'B')),
-    ('Lufwa',    'Kazadi',   'Samuel',    'M', '2009-12-03', 'Kinshasa',  ('5ème Année', 'Scientifique',           'B')),
-    # 5ème Commerciale A
-    ('Nguesso',  'Dibaya',   'Rachelle',  'F', '2010-06-14', 'Matadi',    ('5ème Année', 'Commerciale et Gestion', 'A')),
-    ('Bisimwa',  'Mirenge',  'Adrien',    'M', '2010-02-28', 'Goma',      ('5ème Année', 'Commerciale et Gestion', 'A')),
-    # 6ème Scientifique A
-    ('Mwana',    'Kitenge',  'Béatrice',  'F', '2009-05-09', 'Kinshasa',  ('6ème Année', 'Scientifique',           'A')),
-    ('Tshibola', 'Kabamba',  'Franck',    'M', '2008-10-17', 'Tshikapa',  ('6ème Année', 'Scientifique',           'A')),
-    ('Kalunga',  'Balume',   'Serge',     'M', '2009-03-22', 'Kinshasa',  ('6ème Année', 'Scientifique',           'A')),
-    # 6ème Littéraire A
-    ('Ngomba',   'Ntumba',   'Carine',    'F', '2009-07-11', 'Kananga',   ('6ème Année', 'Littéraire',             'A')),
-    ('Kapinga',  'Tshiama',  'Michel',    'M', '2009-01-25', 'Lubumbashi',('6ème Année', 'Littéraire',             'A')),
-    # 6ème Commerciale A
-    ('Ndaye',    'Mbombo',   'Gloria',    'F', '2009-09-04', 'Kinshasa',  ('6ème Année', 'Commerciale et Gestion', 'A')),
-    ('Kalala',   'Mujinga',  'Hervé',     'M', '2008-11-30', 'Mbuji-Mayi',('6ème Année', 'Commerciale et Gestion', 'A')),
-    # 4ème Scientifique A
-    ('Banza',    'Musonda',  'Lydia',     'F', '2011-04-18', 'Kinshasa',  ('4ème Année', 'Scientifique',           'A')),
-    ('Mpiana',   'Lenge',    'Christophe','M', '2011-08-07', 'Kinshasa',  ('4ème Année', 'Scientifique',           'A')),
-    # 3ème Scientifique A
-    ('Kanyama',  'Mubaya',   'Yvette',    'F', '2012-02-14', 'Kindu',     ('3ème Année', 'Scientifique',           'A')),
+    ('ALBATY', 'RAMAZANI', 'Prince', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('ALPHONSE', 'ROGER', 'Manara', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('BAKARI', 'SOMWE', 'Gustave', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('BANZA', 'BANZA', 'Jenovic', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('BEYA', 'MUTOMBO', 'Mike', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('BISIMWA', 'CIBALONZA', 'Jenny', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('BUNANA', 'KAUNDA', 'Samuel', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('CELESTIN', 'NDOLE', 'Silva', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('CHELUBALA', 'BAHATI', 'Blaise', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('FAIDA', 'NKUBIRHI', 'Mugoli', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('FEZA', 'MBUNGU', 'Jemima', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('FUNDA', 'KAMANA', 'Marie', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('ILUNGA', 'AKADIAT', 'Emmanuel', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('ILUNGA', 'MULAJA', 'Emmanuel', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('ILUNGA', 'NGOIE', 'Armand', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('ILUNGA', 'YAN', 'Yan', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('JONAS', 'KATAMBWA', 'Katambwa', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('JUMA', 'MWANSA', 'Vianney', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KABEMBA', 'RUSUMBA', 'Elkana', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KABILA', 'ILUNGA', 'Loick', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KABULO', 'NGOY', 'Israel', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KADIATOU', 'CONDE', 'Kadidja', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KALAU', 'TUTE', 'Daniel', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KALENGA', 'LAILAI', 'Moise', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KALENGA', 'MBUYA', 'Aristote', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KALOBA', 'KILAKA', 'Pierette', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KAMANGO', 'BALIKUMI', 'Adolphe', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KAPOYA', 'MABANZA', 'Eben', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KASONGO', 'KANT', 'Gaston', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KAYALA', 'WA KALUNDA', 'Jacques', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KAYOWA', 'KATANGA', 'Ursule', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KIBALA', 'WA KIBALI', 'Aaron', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('KYAMBWE', 'KAKUNI', 'Emmanuel', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('LOMBE', 'NYEMBO', 'Grace', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('LUKENGE', 'KAPWIBWE', 'Thea', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('LUMBWE', 'KIDIATA', 'Jacob', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MACHING', 'KAVOT', 'Daniel', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MATANDA', 'MATANDA', 'Idriss', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MBAYA', 'KOLELA', 'Patrick', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MBIYA', 'BANZA', 'Josue', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MBOMBO', 'KALALA', 'Henock', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MONGA', 'NUMBI', 'Chrinovic', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MPOYO', 'BINNDALA', 'Pascal', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MUGANZA', 'SHABANI', 'Josue', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MUKAZ', 'YAV', 'Alpha', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MUKAZO', 'MAZANGA', 'Don', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MUMBA', 'KISALA', 'John', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MUNAN', 'MUKAZ', 'Nathan', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('MUSONDA', 'MBUYA', 'Medalie', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('NDASENGA', 'BWAMINGOY', 'Cedric', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('NGOIE', 'KALUME', 'Kevine', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('NGOY', 'BAHATI KAYOYO', 'Landry', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('NGOY', 'TSHIBANGU', 'Chris', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('NYEMBA', 'TSHIMBALANGA', 'Deviane', 'F', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('NYEMBO', 'KAMWANGA', 'Michel', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('OKENGE', 'BIGOMOKERO', 'Ben', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('RUMB', 'PASCAL', 'Sam', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('SAIDI', 'ISAAC', 'Alain', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('SUMPI', 'MUSABUKA', 'Othniel', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('SUMUNYI', 'KALEBO', 'Eric', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('TCHUNGU', 'LWAMBA', 'Patrice', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('TSHOKWE', 'MUKE', 'Christian', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+    ('VUNDULA', 'KASEYA', 'Bertin', 'M', '2009-01-01', 'Lubumbashi', ('5ème Année', 'Scientifique', 'A')),
+]
+
+# Tuteurs de démonstration : certains regroupent 1, 2 ou 4 enfants.
+# Format : (nom, postnom, prenom, nombre_enfants)
+TUTEURS = [
+    ('KABILA', 'MUTOMBO', 'Jean', 4),
+    ('MALU', 'KABILA', 'Marie', 4),
+    ('TSHIBANGU', 'BOLANDA', 'Paul', 4),
+    ('MUSONDA', 'KASONGO', 'Ruth', 4),
+    ('MULUMBA', 'MUBI', 'Grace', 4),
+    ('KALONJI', 'BANDI', 'Simon', 4),
+    ('MBUYI', 'LUMBU', 'Claire', 4),
+    ('NGOY', 'MALU', 'Ange', 4),
+    ('MUKAZ', 'MUNAN', 'Dieudonné', 2),
+    ('KAPINGA', 'MALUKI', 'Flora', 2),
+    ('TSHIYEMBE', 'KAWAYA', 'Serge', 2),
+    ('LUMBU', 'MALONGA', 'Céline', 2),
+    ('MULENGA', 'NKULU', 'Alain', 2),
+    ('KASONGO', 'MUSHI', 'Patricia', 2),
+    ('NDALA', 'MBUYA', 'Elias', 1),
+    ('MUTOMBO', 'KABILA', 'Esther', 4),
+    ('KATUMBA', 'MPAY', 'Bruno', 4),
+    ('MULENGA', 'WAMBALI', 'Nadine', 4),
+    ('LUBUNGA', 'KALONJI', 'Désiré', 2),
+]
+
+LIEUX_NAISSANCE = [
+    'Lubumbashi', 'Kolwezi', 'Likasi', 'Kinshasa', 'Goma', 'Bukavu',
+    'Kisangani', 'Mbuji-Mayi', 'Kananga', 'Kikwit', 'Boma', 'Kasumbalesa',
+    'Kalemie', 'Moba', 'Bandundu', 'Isiro', 'Butembo', 'Uvira',
+]
+
+PRENOMS_SUP = [
+    'Alicia', 'Benoit', 'Christelle', 'Darius', 'Elise', 'Fabrice', 'Grace',
+    'Henoc', 'Inès', 'Jules', 'Khadija', 'Léon', 'Mireille', 'Nicolas', 'Odette',
+    'Patrice', 'Rachel', 'Stéphane', 'Tania', 'Urbain', 'Vera', 'Wivine', 'Xavier',
+    'Yannick', 'Zoé', 'Amani', 'Belise', 'Célestin', 'Dorcas', 'Elias', 'Farah',
+    'Gisèle', 'Hervé', 'Ibrahim', 'Judith', 'Kevin', 'Lina', 'Micha', 'Noé', 'Olive',
+    'Pascal', 'Quentin', 'Romy', 'Sacha', 'Théo', 'Ulrich', 'Vicky', 'Willy', 'Ximena', 'Yolande'
+]
+
+NOMS_SUP = [
+    'KABILA', 'MULUMBA', 'LUBUNGA', 'MWANZA', 'KASONGO', 'MUKE', 'CHIBAMBA',
+    'MUNYEMBO', 'NGOIE', 'TSHIBANDA', 'NDJILA', 'KAPEND', 'MPOYO', 'BANDI',
+    'LUMBU', 'NSIMBA', 'MALU', 'KALALA', 'MUTABAZI', 'TSHIYEMBE', 'MUKEND',
+    'KANYI', 'KASEYA', 'DIBWE', 'MANYA', 'YAMBA', 'BAKARI', 'MUBI', 'MABALA',
+    'KITENGE', 'MULENGA', 'KAPINGA', 'MBUYI', 'TUMBA', 'MALONGA', 'MUKAZ',
+    'BULA', 'BWELE', 'KALUNGA', 'KISALA', 'TCHIBAMBA', 'WAMBI', 'LUKUSA',
+    'MUBWE', 'MAYI', 'KASENDA', 'BILUNGA', 'MAKENGA', 'MABWE', 'NGOY'
+]
+
+POSTNOMS_SUP = [
+    'MUTOMBO', 'KALONJI', 'MULENGA', 'TAMBWE', 'KALALA', 'NSELE', 'MUSIYI',
+    'KABAMBA', 'KAPYA', 'MWANZA', 'KAHENDA', 'KAPINGA', 'MPOYO', 'KABUYE',
+    'KASONGO', 'MUBI', 'MAYO', 'LUBUNGA', 'MBOKA', 'NDOLO', 'BILUNGA',
+    'KABULA', 'WABULUNGU', 'MBUYU', 'KALONGA', 'SEKETE', 'BANDI', 'TSHIYEMBE',
+    'MULONGA', 'KITENGE', 'MUSHI', 'TUMBA', 'MALONGA', 'KIBWANA', 'MANGU',
+    'KAHENGA', 'BASHI', 'ILUNGA', 'MULUME', 'KATEMBO', 'LUSAMBA', 'MUNYI',
+    'MINE', 'MABWE', 'MUKIZI', 'KABALA', 'NDAHILA', 'MALU', 'KABILA'
 ]
 
 # Matières affectées à chaque classe (par nom_classe_ref)
 # Format : {classe_ref: [matiere_nom, ...]}
 AFFECTATIONS = {
-    ('5ème Année', 'Scientifique', 'A'): [
-        'Français', 'Mathématique', 'Sciences Naturelles', 'Physique',
-        'Histoire', 'Géographie', 'Anglais', 'Informatique',
-        'Éducation Physique', 'Religion',
+    ('7ème', 'Scientifique', 'A'): [
+        'Français', 'Mathématiques', 'Physique-Chimie', 'Biologie',
+        'Histoire-Géographie', 'Anglais', 'Informatique', 'Éducation Physique',
+        'Religion', 'Éducation Civique',
     ],
-    ('5ème Année', 'Scientifique', 'B'): [
-        'Français', 'Mathématique', 'Sciences Naturelles', 'Physique',
-        'Histoire', 'Géographie', 'Anglais', 'Éducation Physique', 'Religion',
+    ('7ème', 'Scientifique', 'B'): [
+        'Français', 'Mathématiques', 'Biologie', 'Histoire-Géographie',
+        'Anglais', 'Informatique', 'Éducation Physique', 'Religion', 'Économie',
     ],
-    ('5ème Année', 'Commerciale et Gestion', 'A'): [
-        'Français', 'Mathématique', 'Histoire', 'Géographie',
-        'Anglais', 'Informatique', 'Éducation Physique', 'Religion',
+    ('7ème', 'Commerciale et Gestion', 'A'): [
+        'Français', 'Mathématiques', 'Histoire-Géographie', 'Anglais',
+        'Informatique', 'Économie', 'Éducation Physique', 'Religion', 'Éducation Civique',
     ],
-    ('6ème Année', 'Scientifique', 'A'): [
-        'Français', 'Mathématique', 'Sciences Naturelles', 'Physique',
-        'Histoire', 'Géographie', 'Anglais', 'Informatique',
-        'Éducation Physique', 'Religion', 'Éducation Civique',
+    ('8ème', 'Scientifique', 'A'): [
+        'Français', 'Mathématiques', 'Physique-Chimie', 'Biologie',
+        'Histoire-Géographie', 'Anglais', 'Informatique', 'Éducation Physique',
+        'Philosophie', 'Éducation Civique',
     ],
-    ('6ème Année', 'Littéraire', 'A'): [
-        'Français', 'Mathématique', 'Histoire', 'Géographie',
-        'Anglais', 'Religion', 'Éducation Civique', 'Dessin',
+    ('8ème', 'Littéraire', 'A'): [
+        'Français', 'Mathématiques', 'Histoire-Géographie', 'Anglais',
+        'Religion', 'Éducation Civique', 'Arts Plastiques', 'Philosophie',
     ],
-    ('6ème Année', 'Commerciale et Gestion', 'A'): [
-        'Français', 'Mathématique', 'Histoire', 'Géographie',
-        'Anglais', 'Informatique', 'Religion', 'Éducation Civique',
+    ('8ème', 'Commerciale et Gestion', 'A'): [
+        'Français', 'Mathématiques', 'Histoire-Géographie', 'Anglais',
+        'Informatique', 'Économie', 'Éducation Physique', 'Religion',
     ],
-    ('4ème Année', 'Scientifique', 'A'): [
-        'Français', 'Mathématique', 'Sciences Naturelles', 'Physique',
-        'Histoire', 'Géographie', 'Anglais', 'Éducation Physique',
+    ('1ère', 'Scientifique', 'A'): [
+        'Français', 'Mathématiques', 'Physique-Chimie', 'Biologie',
+        'Histoire-Géographie', 'Anglais', 'Informatique', 'Philosophie', 'Éducation Civique',
     ],
-    ('3ème Année', 'Scientifique', 'A'): [
-        'Français', 'Mathématique', 'Sciences Naturelles',
-        'Histoire', 'Géographie', 'Anglais', 'Éducation Physique',
+    ('1ère', 'Littéraire', 'A'): [
+        'Français', 'Mathématiques', 'Histoire-Géographie', 'Anglais',
+        'Philosophie', 'Arts Plastiques', 'Religion', 'Éducation Civique',
+    ],
+    ('2ème', 'Scientifique', 'A'): [
+        'Français', 'Mathématiques', 'Physique-Chimie', 'Biologie',
+        'Histoire-Géographie', 'Anglais', 'Informatique', 'Économie', 'Éducation Civique',
+    ],
+    ('2ème', 'Commerciale et Gestion', 'A'): [
+        'Français', 'Mathématiques', 'Histoire-Géographie', 'Anglais',
+        'Informatique', 'Économie', 'Religion', 'Éducation Civique',
+    ],
+    ('3ème', 'Scientifique', 'A'): [
+        'Français', 'Mathématiques', 'Physique-Chimie', 'Biologie',
+        'Histoire-Géographie', 'Anglais', 'Informatique', 'Philosophie', 'Éducation Civique',
+    ],
+    ('3ème', 'Littéraire', 'A'): [
+        'Français', 'Mathématiques', 'Histoire-Géographie', 'Anglais',
+        'Philosophie', 'Arts Plastiques', 'Religion', 'Éducation Civique',
+    ],
+    ('4ème', 'Scientifique', 'A'): [
+        'Français', 'Mathématiques', 'Physique-Chimie', 'Biologie',
+        'Histoire-Géographie', 'Anglais', 'Informatique', 'Économie', 'Éducation Civique',
+    ],
+    ('4ème', 'Commerciale et Gestion', 'A'): [
+        'Français', 'Mathématiques', 'Histoire-Géographie', 'Anglais',
+        'Informatique', 'Économie', 'Philosophie', 'Éducation Civique',
     ],
 }
 
 # Notes de démonstration : (nom_eleve_key, matiere, periode, valeur)
 # Valeurs par note = fraction du maxima pour rester réalistes
 # On génère des notes pour 1P et 2P uniquement
+
+
+def _normalize_classe_ref(classe_ref):
+    """Convertit les anciennes références de classe vers le nouveau système."""
+    if not isinstance(classe_ref, tuple) or len(classe_ref) != 3:
+        return None
+
+    niveau_nom, section_nom, cls_nom = classe_ref
+    if niveau_nom == '5ème Année':
+        niveau_nom = '7ème'
+    elif niveau_nom == '6ème Année':
+        niveau_nom = '8ème'
+
+    return (niveau_nom, section_nom, cls_nom)
+
+
+def _build_seed_students(base_entries, extra_count=500):
+    """Ajoute des élèves supplémentaires avec des noms, lieux et classes variés."""
+    records = list(base_entries)
+    class_pool = [
+        ('7ème', 'Scientifique', 'A'),
+        ('7ème', 'Scientifique', 'B'),
+        ('8ème', 'Scientifique', 'A'),
+        ('8ème', 'Littéraire', 'A'),
+        ('1ère', 'Scientifique', 'A'),
+        ('1ère', 'Littéraire', 'A'),
+        ('2ème', 'Scientifique', 'A'),
+        ('2ème', 'Commerciale et Gestion', 'A'),
+        ('3ème', 'Scientifique', 'A'),
+        ('3ème', 'Littéraire', 'A'),
+        ('4ème', 'Scientifique', 'A'),
+        ('4ème', 'Commerciale et Gestion', 'A'),
+    ]
+    for idx in range(extra_count):
+        prenom = PRENOMS_SUP[idx % len(PRENOMS_SUP)]
+        postnom = POSTNOMS_SUP[idx % len(POSTNOMS_SUP)]
+        nom = NOMS_SUP[idx % len(NOMS_SUP)]
+        sexe = 'F' if idx % 2 else 'M'
+        annee = 2008 + (idx % 4)
+        mois = 1 + (idx % 12)
+        jour = 1 + (idx % 28)
+        birth = f"{annee:04d}-{mois:02d}-{jour:02d}"
+        lieu = LIEUX_NAISSANCE[idx % len(LIEUX_NAISSANCE)]
+        niveau_nom, section_nom, cls_nom = class_pool[idx % len(class_pool)]
+        records.append((nom.upper(), postnom.upper(), prenom, sexe, birth, lieu, (niveau_nom, section_nom, cls_nom)))
+    return records
+
+
+def _subjects_for_class(niveau_nom, section_nom):
+    """Retourne une liste de matières adaptée au niveau et à l'option."""
+    subjects = [
+        'Français',
+        'Mathématiques',
+        'Histoire-Géographie',
+        'Anglais',
+        'Éducation Physique',
+        'Religion',
+        'Éducation Civique',
+    ]
+
+    if section_nom == 'Scientifique':
+        subjects.extend(['Physique-Chimie', 'Biologie'])
+    elif section_nom == 'Littéraire':
+        subjects.extend(['Arts Plastiques', 'Philosophie'])
+    elif section_nom == 'Commerciale et Gestion':
+        subjects.extend(['Économie', 'Informatique'])
+
+    if niveau_nom in {'1ère', '2ème', '3ème', '4ème'}:
+        subjects.append('Philosophie')
+
+    if niveau_nom in {'3ème', '4ème'}:
+        subjects.append('Sciences de la vie')
+
+    return list(dict.fromkeys(subjects))
 
 
 class Command(BaseCommand):
@@ -234,7 +446,7 @@ class Command(BaseCommand):
             self._step("11/%d" % total_steps, "Planning hebdomadaire")
             self._seed_planning(ecole)
 
-        self._print_summary(options['no_data'])
+        self._print_summary(options['no_data'], ecole)
 
         if not options['no_verify']:
             self.stdout.write('')
@@ -532,15 +744,14 @@ class Command(BaseCommand):
             main_teacher, _ = Teacher.objects.get_or_create(user=ens_user)
 
         aff_count = 0
-        for classe_ref, matieres_list in AFFECTATIONS.items():
-            classe = classe_map.get(classe_ref)
-            if not classe:
-                continue
+        for (niveau_nom, section_nom, nom), classe in classe_map.items():
+            matieres_list = AFFECTATIONS.get((niveau_nom, section_nom, nom), None)
+            if not matieres_list:
+                matieres_list = _subjects_for_class(niveau_nom, section_nom)
             for idx, mat_nom in enumerate(matieres_list):
                 mat = matiere_map.get(mat_nom)
                 if not mat:
                     continue
-                # Rotation des enseignants disponibles
                 enseignants = [main_teacher] + ens_sup_users
                 teacher = enseignants[idx % len(enseignants)] if enseignants else None
                 _, c = MatiereClasse.objects.get_or_create(
@@ -591,11 +802,14 @@ class Command(BaseCommand):
 
             # ── Types de frais globaux (tous élèves) ────────────────────
             FRAIS_GLOBAUX = [
-                ('Minerval annuel',    150),
-                ('Frais d\'examen',     30),
-                ('Tenue scolaire',      25),
-                ('Frais bibliothèque',  10),
-                ('Cotisation APEEP',    15),
+                ('Minerval annuel', 150),
+                ('Frais d\'examen', 30),
+                ('Tenue scolaire', 25),
+                ('Frais bibliothèque', 10),
+                ('Cotisation APEEP', 15),
+                ('Frais de laboratoire', 18),
+                ('Assurance scolaire', 12),
+                ('Frais informatique', 20),
             ]
 
             types_crees = 0
@@ -709,33 +923,43 @@ class Command(BaseCommand):
 
             # ── Créneaux horaires lundi–vendredi ───────────────────────
             CRENEAUX = [
-                (1, time(7, 30),  time(8, 30),  'cours'),
-                (1, time(8, 30),  time(9, 30),  'cours'),
-                (1, time(9, 30),  time(10, 0),  'recreation'),
-                (1, time(10, 0),  time(11, 0),  'cours'),
-                (1, time(11, 0),  time(12, 0),  'cours'),
-                (2, time(7, 30),  time(8, 30),  'cours'),
-                (2, time(8, 30),  time(9, 30),  'cours'),
-                (2, time(9, 30),  time(10, 0),  'recreation'),
-                (2, time(10, 0),  time(11, 0),  'cours'),
-                (2, time(11, 0),  time(12, 0),  'cours'),
-                (3, time(7, 30),  time(8, 30),  'cours'),
-                (3, time(8, 30),  time(9, 30),  'cours'),
-                (3, time(9, 30),  time(10, 0),  'recreation'),
-                (3, time(10, 0),  time(11, 0),  'cours'),
-                (4, time(7, 30),  time(8, 30),  'cours'),
-                (4, time(8, 30),  time(9, 30),  'cours'),
-                (4, time(9, 30),  time(10, 0),  'recreation'),
-                (4, time(10, 0),  time(11, 0),  'cours'),
-                (4, time(11, 0),  time(12, 0),  'cours'),
-                (5, time(7, 30),  time(8, 30),  'cours'),
-                (5, time(8, 30),  time(9, 30),  'cours'),
-                (5, time(9, 30),  time(10, 0),  'recreation'),
-                (5, time(10, 0),  time(11, 0),  'cours'),
-                (6, time(7, 30),  time(8, 30),  'cours'),
-                (6, time(8, 30),  time(9, 30),  'cours'),
-                (6, time(9, 30),  time(10, 0),  'priere'),
-                (6, time(10, 0),  time(11, 0),  'cours'),
+                (1, time(7, 0),  time(7, 45),  'cours'),
+                (1, time(7, 45), time(8, 30),  'cours'),
+                (1, time(8, 30), time(9, 15),  'cours'),
+                (1, time(9, 15), time(9, 29),  'recreation'),
+                (1, time(9, 29), time(10, 14), 'cours'),
+                (1, time(10, 14), time(10, 59), 'cours'),
+                (1, time(10, 59), time(11, 44), 'cours'),
+                (2, time(7, 0),  time(7, 45),  'cours'),
+                (2, time(7, 45), time(8, 30),  'cours'),
+                (2, time(8, 30), time(9, 15),  'cours'),
+                (2, time(9, 15), time(9, 29),  'recreation'),
+                (2, time(9, 29), time(10, 14), 'cours'),
+                (2, time(10, 14), time(10, 59), 'cours'),
+                (2, time(10, 59), time(11, 44), 'cours'),
+                (3, time(7, 0),  time(7, 45),  'cours'),
+                (3, time(7, 45), time(8, 30),  'cours'),
+                (3, time(8, 30), time(9, 15),  'cours'),
+                (3, time(9, 15), time(9, 29),  'recreation'),
+                (3, time(9, 29), time(10, 14), 'cours'),
+                (3, time(10, 14), time(10, 59), 'cours'),
+                (3, time(10, 59), time(11, 44), 'cours'),
+                (4, time(7, 0),  time(7, 45),  'cours'),
+                (4, time(7, 45), time(8, 30),  'cours'),
+                (4, time(8, 30), time(9, 15),  'cours'),
+                (4, time(9, 15), time(9, 29),  'recreation'),
+                (4, time(9, 29), time(10, 14), 'cours'),
+                (4, time(10, 14), time(10, 59), 'cours'),
+                (4, time(10, 59), time(11, 44), 'cours'),
+                (5, time(7, 0),  time(7, 45),  'cours'),
+                (5, time(7, 45), time(8, 30),  'cours'),
+                (5, time(8, 30), time(9, 15),  'cours'),
+                (5, time(9, 15), time(9, 29),  'recreation'),
+                (5, time(9, 29), time(10, 14), 'cours'),
+                (5, time(10, 14), time(10, 59), 'cours'),
+                (6, time(7, 0),  time(7, 45),  'cours'),
+                (6, time(7, 45), time(8, 30),  'cours'),
+                (6, time(8, 30), time(9, 15),  'cours'),
             ]
             creneau_count = 0
             creneaux_obj  = []
@@ -758,21 +982,21 @@ class Command(BaseCommand):
 
             salle_list = list(Salle.objects.all())
             cours_creneaux = [c for c in creneaux_obj if c.type_creneau == 'cours']
-            mc_qs = list(MatiereClasse.objects.select_related('matiere', 'classe').all()[:20])
+            mc_qs = list(MatiereClasse.objects.select_related('matiere', 'classe').all())
             seance_count = 0
             used = set()  # (creneau_id, classe_id) pour éviter les conflits
+            used_teachers = set()  # (creneau_id, teacher_id) pour éviter les conflits d'enseignant
 
-            import random as _rand
-            rng2 = _rand.Random(77)
-
-            for mc in mc_qs:
-                # Affecter 2 créneaux par matière-classe
+            for idx, mc in enumerate(mc_qs):
                 disponibles = [c for c in cours_creneaux if (c.pk, mc.classe_id) not in used]
                 if len(disponibles) < 1:
                     continue
-                choix = rng2.sample(disponibles, min(2, len(disponibles)))
-                salle = rng2.choice(salle_list) if salle_list else None
-                for cren in choix:
+                choix = disponibles[:min(3, len(disponibles))]
+                for slot_idx, cren in enumerate(choix):
+                    teacher_id = mc.enseignant_id
+                    if teacher_id and (cren.pk, teacher_id) in used_teachers:
+                        continue
+                    salle = salle_list[(idx + slot_idx) % len(salle_list)] if salle_list else None
                     try:
                         _, c = SeanceHoraire.objects.get_or_create(
                             annee_scolaire=annee,
@@ -783,6 +1007,8 @@ class Command(BaseCommand):
                         if c:
                             seance_count += 1
                         used.add((cren.pk, mc.classe_id))
+                        if teacher_id:
+                            used_teachers.add((cren.pk, teacher_id))
                     except Exception:
                         pass
 
@@ -793,13 +1019,37 @@ class Command(BaseCommand):
         finally:
             connection.set_schema_to_public()
 
+    def _get_or_create_tuteur(self, nom, postnom, prenom, adresse=''):
+        from students.models import Tuteur
+
+        tuteur, created = Tuteur.objects.get_or_create(
+            nom=nom,
+            postnom=postnom,
+            prenom=prenom,
+            defaults={
+                'adresse': adresse,
+                'notes': 'Tuteur créé automatiquement par le seed_test_school.',
+            },
+        )
+        if not created:
+            update_fields = []
+            if tuteur.adresse != adresse:
+                tuteur.adresse = adresse
+                update_fields.append('adresse')
+            if tuteur.notes != 'Tuteur créé automatiquement par le seed_test_school.':
+                tuteur.notes = 'Tuteur créé automatiquement par le seed_test_school.'
+                update_fields.append('notes')
+            if update_fields:
+                tuteur.save(update_fields=update_fields)
+        return tuteur, created
+
     def _seed_eleves_notes(self, ecole):
-        """Élèves de démonstration et notes pour 1P et 2P."""
+        """Élèves de démonstration, tuteurs et notes pour 1P et 2P."""
         import decimal, random
         connection.set_tenant(ecole)
 
         from classes.models import AnneeScolaire, Section, Niveau, Classe
-        from students.models import Student
+        from students.models import Student, Tuteur
         from grades.models import Note
         from subjects.models import MatiereClasse
 
@@ -811,13 +1061,44 @@ class Command(BaseCommand):
 
         eleve_count = 0
         note_count  = 0
+        tuteur_count = 0
+
+        # Supprimer les anciens élèves du tenant avant de recharger la liste fournie.
+        deleted_students = Student.objects.count()
+        Note.objects.all().delete()
+        Student.objects.all().delete()
+        Tuteur.objects.all().delete()
 
         # Seed déterministe
         rng = random.Random(42)
 
-        for data in ELEVES:
+        # Créer une liste de slots de tuteurs pour répartir les enfants selon les groupes définis.
+        tutor_slots = []
+        for nom, postnom, prenom, max_enfants in TUTEURS:
+            tutor_slots.extend([(nom, postnom, prenom)] * max_enfants)
+
+        students_seed = _build_seed_students(ELEVES, extra_count=500)
+
+        for idx, data in enumerate(students_seed):
             nom, postnom, prenom, sexe, dob, lieu, classe_ref = data
-            niveau_nom, section_nom, cls_nom = classe_ref
+            class_pool = [
+                ('7ème', 'Scientifique', 'A'),
+                ('7ème', 'Scientifique', 'B'),
+                ('8ème', 'Scientifique', 'A'),
+                ('8ème', 'Littéraire', 'A'),
+                ('1ère', 'Scientifique', 'A'),
+                ('1ère', 'Littéraire', 'A'),
+                ('2ème', 'Scientifique', 'A'),
+                ('2ème', 'Commerciale et Gestion', 'A'),
+                ('3ème', 'Scientifique', 'A'),
+                ('3ème', 'Littéraire', 'A'),
+                ('4ème', 'Scientifique', 'A'),
+                ('4ème', 'Commerciale et Gestion', 'A'),
+            ]
+            if isinstance(classe_ref, tuple) and len(classe_ref) == 3:
+                niveau_nom, section_nom, cls_nom = classe_ref
+            else:
+                niveau_nom, section_nom, cls_nom = class_pool[idx % len(class_pool)]
 
             niveau  = Niveau.objects.filter(nom=niveau_nom).first()
             section = Section.objects.filter(nom=section_nom).first()
@@ -842,25 +1123,31 @@ class Command(BaseCommand):
                 matricule = '%s%d' % (base_mat, suffix_idx)
                 suffix_idx += 1
 
-            eleve, created = Student.objects.get_or_create(
+            # Chaque élève hérite du tuteur défini dans le slot correspondant.
+            slot_idx = idx % len(tutor_slots) if tutor_slots else 0
+            tuteur_nom, tuteur_postnom, tuteur_prenom = tutor_slots[slot_idx]
+            tuteur, created_tuteur = self._get_or_create_tuteur(
+                tuteur_nom,
+                tuteur_postnom,
+                tuteur_prenom,
+                f"{lieu}, République démocratique du Congo",
+            )
+            if created_tuteur:
+                tuteur_count += 1
+
+            eleve = Student.objects.create(
                 nom=nom,
                 postnom=postnom,
                 prenom=prenom,
-                defaults={
-                    'sexe': sexe,
-                    'date_naissance': dob,
-                    'lieu_naissance': lieu,
-                    'classe': classe,
-                    'matricule': matricule,
-                },
+                sexe=sexe,
+                date_naissance=dob,
+                lieu_naissance=lieu,
+                classe=classe,
+                matricule=matricule,
+                nom_parent=tuteur.nom_complet,
+                tuteur=tuteur,
             )
-            if not created:
-                # Mettre à jour la classe si l'élève existait déjà
-                if eleve.classe != classe:
-                    eleve.classe = classe
-                    eleve.save(update_fields=['classe'])
-            else:
-                eleve_count += 1
+            eleve_count += 1
 
             # Notes 1P et 2P pour les matières de sa classe
             mc_qs = MatiereClasse.objects.filter(classe=classe).select_related('matiere')
@@ -877,7 +1164,8 @@ class Command(BaseCommand):
                     if c:
                         note_count += 1
 
-        self._ok("%d élèves créés" % eleve_count)
+        self._ok("%d élèves remplacés (%d supprimés avant rechargement)" % (eleve_count, deleted_students))
+        self._ok("%d tuteurs créés/associés" % tuteur_count)
         self._ok("%d notes (1P + 2P) générées" % note_count)
 
         connection.set_schema_to_public()
@@ -971,7 +1259,7 @@ class Command(BaseCommand):
 
     # ── Résumé ────────────────────────────────────────────────────────────────
 
-    def _print_summary(self, no_data=False):
+    def _print_summary(self, no_data=False, ecole=None):
         self.stdout.write('')
         self.stdout.write(self.style.MIGRATE_HEADING(
             "─" * 62
@@ -991,8 +1279,19 @@ class Command(BaseCommand):
             self.stdout.write("  %-14s  %-36s  %s" % (role, email, pwd))
         self.stdout.write('')
         if not no_data:
+            class_count = len(CLASSES)
+            student_count = len(ELEVES) + 500
+            if ecole:
+                connection.set_tenant(ecole)
+                try:
+                    from classes.models import Classe
+                    from students.models import Student
+                    class_count = Classe.objects.count()
+                    student_count = Student.objects.count()
+                finally:
+                    connection.set_schema_to_public()
             self.stdout.write("  Année scolaire : %s" % ANNEE_SCOLAIRE)
-            self.stdout.write("  Classes        : %d    Eleves : %d" % (len(CLASSES), len(ELEVES)))
+            self.stdout.write("  Classes        : %d    Eleves : %d" % (class_count, student_count))
         self.stdout.write(self.style.MIGRATE_HEADING("─" * 62))
         self.stdout.write('')
 
