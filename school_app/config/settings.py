@@ -27,13 +27,13 @@ SECRET_KEY = _raw_secret
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True').strip().lower() in ('true', '1', 'yes')
 
 # En production, restreindre les hôtes autorisés
-_site_url = os.environ.get('DJANGO_SITE_URL', '').strip()
+_site_url = os.environ.get('DJANGO_SITE_URL', os.environ.get('VERCEL_URL', '')).strip()
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
     ALLOWED_HOSTS = [
         'localhost', '127.0.0.1',
-        '.replit.dev', '.replit.app', '.pythonanywhere.com',
+        '.replit.dev', '.replit.app', '.pythonanywhere.com', '.vercel.app',
     ]
     if _site_url:
         from urllib.parse import urlparse as _up
@@ -46,6 +46,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.spock.replit.dev',
     'https://*.replit.app',
     'https://*.pythonanywhere.com',
+    'https://*.vercel.app',
     'http://localhost:8000',
     'http://localhost:8008',
 ]
@@ -240,6 +241,9 @@ STATIC_URL  = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+if os.environ.get('VERCEL'):
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
