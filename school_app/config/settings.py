@@ -309,8 +309,10 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 # ─────────────────────────────────────────────────────────────────────────────
 # LOGGING
 # ─────────────────────────────────────────────────────────────────────────────
-import os as _os
-_os.makedirs(BASE_DIR / 'logs', exist_ok=True)
+IS_SERVERLESS = bool(os.environ.get('VERCEL'))
+
+if not IS_SERVERLESS:
+    os.makedirs(BASE_DIR / 'logs', exist_ok=True)
 
 LOGGING = {
     'version': 1,
@@ -321,29 +323,35 @@ LOGGING = {
     },
     'handlers': {
         'console': {'class': 'logging.StreamHandler', 'formatter': 'simple', 'level': 'WARNING'},
-        'file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': str(BASE_DIR / 'logs' / 'sgn.log'),
-            'maxBytes': 5 * 1024 * 1024,
-            'backupCount': 3,
-            'formatter': 'verbose',
-            'level': 'INFO',
-            'encoding': 'utf-8',
-        },
-        'security_file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': str(BASE_DIR / 'logs' / 'sgn_security.log'),
-            'maxBytes': 2 * 1024 * 1024,
-            'backupCount': 5,
-            'formatter': 'verbose',
-            'level': 'INFO',
-            'encoding': 'utf-8',
-        },
     },
     'loggers': {
-        'django.request':  {'handlers': ['console', 'file'],          'level': 'WARNING', 'propagate': False},
-        'django.security': {'handlers': ['file', 'security_file'],    'level': 'WARNING', 'propagate': False},
-        'sgn':             {'handlers': ['console', 'file'],          'level': 'INFO',    'propagate': False},
-        'sgn.security':    {'handlers': ['console', 'security_file'], 'level': 'INFO',    'propagate': False},
+        'django.request':  {'handlers': ['console'], 'level': 'WARNING', 'propagate': False},
+        'django.security': {'handlers': ['console'], 'level': 'WARNING', 'propagate': False},
+        'sgn':             {'handlers': ['console'], 'level': 'INFO',    'propagate': False},
+        'sgn.security':    {'handlers': ['console'], 'level': 'INFO',    'propagate': False},
     },
 }
+
+if not IS_SERVERLESS:
+    LOGGING['handlers']['file'] = {
+        'class': 'logging.handlers.RotatingFileHandler',
+        'filename': str(BASE_DIR / 'logs' / 'sgn.log'),
+        'maxBytes': 5 * 1024 * 1024,
+        'backupCount': 3,
+        'formatter': 'verbose',
+        'level': 'INFO',
+        'encoding': 'utf-8',
+    }
+    LOGGING['handlers']['security_file'] = {
+        'class': 'logging.handlers.RotatingFileHandler',
+        'filename': str(BASE_DIR / 'logs' / 'sgn_security.log'),
+        'maxBytes': 2 * 1024 * 1024,
+        'backupCount': 5,
+        'formatter': 'verbose',
+        'level': 'INFO',
+        'encoding': 'utf-8',
+    }
+    LOGGING['loggers']['django.request']['handlers'].append('file')
+    LOGGING['loggers']['django.security']['handlers'].append('security_file')
+    LOGGING['loggers']['sgn']['handlers'].append('file')
+    LOGGING['loggers']['sgn.security']['handlers'].append('security_file')
