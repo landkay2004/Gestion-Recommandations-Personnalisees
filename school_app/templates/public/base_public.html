@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ platform_settings.site_name|default:"EducNet" }}{% endblock %}</title>
+  {% block meta_description %}{% endblock %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      /* Marque (inchangé, utilisé ailleurs dans l'app) */
+      --primary: #4d44b5;
+      --primary-dark: #322b7a;
+      --primary-soft: #efedff;
+      --primary-mid: #6b64cc;
+
+      /* Accent premium — sceau / cachet officiel */
+      --gold: #c8973f;
+      --gold-dark: #a97c2e;
+      --gold-soft: #f6ecd8;
+
+      --ink: #0f172a;
+      --ink-mid: #334155;
+      --muted: #64748b;
+      --muted-light: #94a3b8;
+      --border: #e5e1d8;
+      --bg: #f8fafc;
+      --paper: #faf8f4;
+      --card: #ffffff;
+      --success: #16a34a;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .font-display { font-family: 'Fraunces', Georgia, serif; }
+
+    /* ── NAVBAR (partagée) ─────────────────────────────────── */
+    .nav-wrap {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.90);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1140px; margin: 0 auto;
+      padding: 14px 24px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: var(--ink);
+    }
+    .nav-logo-mark {
+      width: 46px; height: 46px; border-radius: 12px;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.35rem;
+      box-shadow: 0 4px 14px rgba(77,68,181,.32);
+      flex-shrink: 0;
+    }
+    .nav-brand-text .nav-name { font-family: 'Fraunces', Georgia, serif; font-size: 1.15rem; font-weight: 600; line-height: 1.2; letter-spacing: -.01em; }
+    .nav-brand-text .nav-tag  { font-size: .68rem; color: var(--muted); letter-spacing: .01em; }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 6px;
+      list-style: none;
+    }
+    .nav-links a {
+      padding: 6px 14px; border-radius: 8px;
+      font-size: .82rem; font-weight: 500; color: var(--ink-mid);
+      text-decoration: none; transition: background .15s, color .15s;
+    }
+    .nav-links a:hover { background: var(--primary-soft); color: var(--primary); }
+
+    .nav-cta {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .btn-login {
+      padding: 7px 16px; border-radius: 8px;
+      font-size: .82rem; font-weight: 600; color: var(--primary);
+      text-decoration: none; border: 1.5px solid var(--border);
+      background: #fff; transition: all .15s;
+    }
+    .btn-login:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .btn-nav-cta {
+      padding: 7px 18px; border-radius: 8px;
+      font-size: .82rem; font-weight: 700; color: #fff;
+      background: var(--primary); text-decoration: none;
+      box-shadow: 0 2px 8px rgba(77,68,181,.28);
+      transition: background .15s, transform .1s;
+    }
+    .btn-nav-cta:hover { background: var(--primary-dark); color: #fff; transform: translateY(-1px); }
+
+    /* Bouton hamburger (mobile uniquement) */
+    .nav-toggle {
+      display: none;
+      align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 9px;
+      background: #fff; border: 1.5px solid var(--border);
+      color: var(--ink); font-size: 1.15rem; cursor: pointer;
+      flex-shrink: 0;
+    }
+    .nav-toggle:hover { border-color: var(--primary); color: var(--primary); }
+
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      .nav-cta .btn-login { display: none; }
+      .nav-cta .btn-nav-cta { padding: 7px 14px; font-size: .78rem; }
+    }
+
+    /* Panneau mobile (overlay plein écran) */
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(15,23,42,.55);
+      opacity: 0; visibility: hidden;
+      transition: opacity .25s ease;
+    }
+    .mobile-menu.open { opacity: 1; visibility: visible; }
+    .mobile-menu-panel {
+      position: absolute; top: 0; right: 0; bottom: 0;
+      width: min(320px, 84vw);
+      background: #fff;
+      box-shadow: -12px 0 40px rgba(15,23,42,.25);
+      padding: 20px 22px 28px;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+    }
+    .mobile-menu.open .mobile-menu-panel { transform: translateX(0); }
+    .mobile-menu-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu-head .mm-brand { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1.05rem; color: var(--ink); }
+    .mobile-menu-close {
+      width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border);
+      background: #fff; color: var(--ink); font-size: 1rem;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .mobile-menu-links { list-style: none; display: flex; flex-direction: column; gap: 2px; margin-top: 8px; }
+    .mobile-menu-links a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 13px 10px; border-radius: 10px;
+      font-size: .95rem; font-weight: 600; color: var(--ink-mid);
+      text-decoration: none; transition: background .15s, color .15s;
+    }
+    .mobile-menu-links a i { color: var(--gold-dark); font-size: 1rem; width: 18px; text-align: center; }
+    .mobile-menu-links a:hover, .mobile-menu-links a:active { background: var(--primary-soft); color: var(--primary); }
+    .mobile-menu-actions { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+    .mobile-menu-actions .btn-login,
+    .mobile-menu-actions .btn-nav-cta { width: 100%; text-align: center; padding: 12px; font-size: .88rem; }
+
+    /* ── SECTION wrapper (utilisé par les pages enfants) ──────── */
+    .section { padding: 88px 24px; }
+    .section-inner { max-width: 1140px; margin: 0 auto; }
+    .section-kicker {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--gold-dark); margin-bottom: 12px;
+    }
+    .section-kicker::before {
+      content: ''; width: 18px; height: 1.5px; background: var(--gold);
+    }
+    .section-title { font-family: 'Fraunces', Georgia, serif; font-size: 2.1rem; font-weight: 700; color: var(--ink); letter-spacing: -.02em; line-height: 1.15; margin-bottom: 14px; }
+    .section-sub { font-size: .95rem; color: var(--muted); line-height: 1.7; max-width: 540px; }
+    .section-center { text-align: center; }
+    .section-center .section-sub { margin: 0 auto; }
+    .section-center .section-kicker::before { display: none; }
+
+    /* ── FOOTER (partagé) ─────────────────────────────────────── */
+    .footer {
+      background: var(--ink);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .footer p { font-size: .78rem; color: rgba(255,255,255,.35); }
+    .footer a  { color: rgba(255,255,255,.55); text-decoration: none; }
+    .footer a:hover { color: #fff; }
+
+    {% block extra_style %}{% endblock %}
+  </style>
+</head>
+<body>
+
+<!-- ══════════ NAVBAR ══════════ -->
+<div class="nav-wrap">
+  <nav class="navbar">
+    <a href="{% url 'rejoindre_educnet' %}" class="nav-brand">
+      {% if platform_settings.site_logo %}
+      <img src="{{ platform_settings.site_logo.url }}" alt="Logo {{ platform_settings.site_name|default:'EducNet' }}" style="width:38px;height:38px;object-fit:cover;border-radius:10px;">
+      {% else %}
+      <div class="nav-logo-mark"><i class="bi bi-mortarboard-fill"></i></div>
+      {% endif %}
+      <div class="nav-brand-text">
+        <div class="nav-name">{{ platform_settings.site_name|default:"EducNet" }}</div>
+        <div class="nav-tag">{{ platform_settings.site_slogan|default:"School Governance Network" }}</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="{% url 'rejoindre_educnet' %}#fonctionnalites">Fonctionnalités</a></li>
+      <li><a href="{% url 'rejoindre_educnet' %}#comment">Comment ça marche</a></li>
+      <li><a href="{% url 'rejoindre_educnet' %}#tarifs">Tarifs</a></li>
+      <li><a href="{% url 'rejoindre_educnet_form' %}">Inscription</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="/login/" class="btn-login">Connexion</a>
+      <a href="{% url 'rejoindre_educnet_form' %}" class="btn-nav-cta">Commencer</a>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<!-- ══════════ MENU MOBILE (overlay) ══════════ -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-panel">
+    <div class="mobile-menu-head">
+      <span class="mm-brand">{{ platform_settings.site_name|default:"EducNet" }}</span>
+      <button type="button" class="mobile-menu-close" id="mobileMenuClose" aria-label="Fermer le menu">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <ul class="mobile-menu-links">
+      <li><a href="{% url 'rejoindre_educnet' %}#fonctionnalites"><i class="bi bi-grid-fill"></i>Fonctionnalités</a></li>
+      <li><a href="{% url 'rejoindre_educnet' %}#comment"><i class="bi bi-signpost-2-fill"></i>Comment ça marche</a></li>
+      <li><a href="{% url 'rejoindre_educnet' %}#tarifs"><i class="bi bi-tag-fill"></i>Tarifs</a></li>
+      <li><a href="{% url 'rejoindre_educnet_form' %}"><i class="bi bi-pencil-square"></i>Inscription</a></li>
+    </ul>
+    <div class="mobile-menu-actions">
+      <a href="/login/" class="btn-login">Connexion</a>
+      <a href="{% url 'rejoindre_educnet_form' %}" class="btn-nav-cta">Commencer</a>
+    </div>
+  </div>
+</div>
+
+{% block content %}{% endblock %}
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <p>© 2026 <a href="{% url 'rejoindre_educnet' %}">{{ platform_settings.site_name|default:"EducNet" }}</a> — {{ platform_settings.site_slogan|default:"Plateforme de gestion scolaire pour la RDC" }} &nbsp;·&nbsp; <a href="/login/">Connexion établissement</a> &nbsp;·&nbsp; <a href="/super-admin/login/">Super-Admin</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Menu mobile
+(function () {
+  const toggle = document.getElementById('navToggle');
+  const closeBtn = document.getElementById('mobileMenuClose');
+  const menu = document.getElementById('mobileMenu');
+  if (!toggle || !menu) return;
+
+  function openMenu() {
+    menu.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    menu.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  toggle.addEventListener('click', openMenu);
+  closeBtn?.addEventListener('click', closeMenu);
+  menu.addEventListener('click', function (e) { if (e.target === menu) closeMenu(); });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+})();
+
+document.querySelectorAll('a[href*="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const url = new URL(this.href, window.location.origin);
+    if (url.pathname !== window.location.pathname) return; // laisser naviguer vers l'autre page
+    const id = url.hash.slice(1);
+    const el = document.getElementById(id);
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+{% block extra_script %}{% endblock %}
+</script>
+</body>
+</html>

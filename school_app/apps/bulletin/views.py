@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Sum, Q, Value, DecimalField
+from django.core.paginator import Paginator
 from django.db.models.functions import Coalesce
 from .models import ModeleBulletin, ModeleBulletinMatiere
 from accounts.views import prefet_required
@@ -18,7 +19,13 @@ def bulletin_list(request):
     bulletins = ModeleBulletin.objects.select_related(
         'classe', 'classe__section', 'annee_scolaire'
     ).order_by('annee_scolaire', 'classe__nom')
-    return render(request, 'bulletin/bulletin_list.html', {'bulletins': bulletins})
+    paginator = Paginator(bulletins, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'bulletin/bulletin_list.html', {
+        'bulletins': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+    })
 
 
 @login_required

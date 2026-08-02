@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
 from django.db import transaction
+from django.core.paginator import Paginator
 from django.db.models import Count
 from django.utils import timezone
 from django.views.decorators.http import require_POST
@@ -138,8 +139,14 @@ def _verifier_cloture(annee):
 @login_required
 @prefet_required
 def annee_list(request):
-    annees = AnneeScolaire.objects.annotate(nb_classes=Count('classes')).all()
-    return render(request, 'classes/annee_list.html', {'annees': annees})
+    annees = AnneeScolaire.objects.annotate(nb_classes=Count('classes')).all().order_by('-annee')
+    paginator = Paginator(annees, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'classes/annee_list.html', {
+        'annees': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+    })
 
 
 @login_required
@@ -385,11 +392,16 @@ def journal_operations(request):
     operations = JournalOperation.objects.select_related('annee_scolaire', 'utilisateur').all()
     if annee_id:
         operations = operations.filter(annee_scolaire_id=annee_id)
+    operations = operations.order_by('-date_operation')
     annees = AnneeScolaire.objects.all()
+    paginator = Paginator(operations, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'classes/journal_operations.html', {
-        'operations': operations,
+        'operations': page_obj.object_list,
+        'page_obj': page_obj,
         'annees': annees,
         'annee_id': annee_id,
+        'total': paginator.count,
     })
 
 
@@ -552,8 +564,14 @@ def reconduire_annee(request, pk):
 @login_required
 @prefet_or_secretariat_required
 def niveau_list(request):
-    niveaux = Niveau.objects.annotate(nb_classes=Count('classes')).all()
-    return render(request, 'classes/niveau_list.html', {'niveaux': niveaux})
+    niveaux = Niveau.objects.annotate(nb_classes=Count('classes')).all().order_by('ordre', 'nom')
+    paginator = Paginator(niveaux, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'classes/niveau_list.html', {
+        'niveaux': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+    })
 
 
 @login_required
@@ -595,8 +613,14 @@ def niveau_delete(request, pk):
 @login_required
 @prefet_or_secretariat_required
 def section_list(request):
-    sections = Section.objects.all()
-    return render(request, 'classes/section_list.html', {'sections': sections})
+    sections = Section.objects.all().order_by('nom')
+    paginator = Paginator(sections, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'classes/section_list.html', {
+        'sections': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+    })
 
 
 @login_required
@@ -642,9 +666,16 @@ def classe_list(request):
     classes  = Classe.objects.select_related('section', 'annee_scolaire', 'niveau')
     if annee_id:
         classes = classes.filter(annee_scolaire_id=annee_id)
+    classes = classes.order_by('annee_scolaire__annee', 'niveau__ordre', 'nom', 'section__nom')
     annees = AnneeScolaire.objects.all()
+    paginator = Paginator(classes, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'classes/classe_list.html', {
-        'classes': classes, 'annees': annees, 'annee_id': str(annee_id) if annee_id else ''
+        'classes': page_obj.object_list,
+        'page_obj': page_obj,
+        'annees': annees,
+        'annee_id': str(annee_id) if annee_id else '',
+        'total': paginator.count,
     })
 
 

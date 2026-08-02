@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
@@ -43,7 +44,9 @@ def _build_maxima_colors_map():
 @login_required
 @prefet_or_secretariat_required
 def maxima_list(request):
-    maxima = Maxima.objects.all()
+    maxima = Maxima.objects.all().order_by('valeur')
+    paginator = Paginator(maxima, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
     form = MaximaForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         valeur = form.cleaned_data['valeur']
@@ -53,7 +56,12 @@ def maxima_list(request):
         else:
             messages.warning(request, f"MAXIMA {valeur} existe déjà.")
         return redirect('maxima_list')
-    return render(request, 'subjects/maxima_list.html', {'maxima': maxima, 'form': form})
+    return render(request, 'subjects/maxima_list.html', {
+        'maxima': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+        'form': form,
+    })
 
 
 @login_required

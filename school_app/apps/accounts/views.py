@@ -5,6 +5,7 @@ from django.contrib.auth import login, logout, update_session_auth_hash, authent
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.core.paginator import Paginator
 
 from .models import CustomUser, generate_temp_password
 from .forms import (
@@ -242,7 +243,14 @@ def comptable_required(view_func):
 @prefet_required
 def user_list(request):
     users = CustomUser.objects.all().order_by('last_name', 'first_name')
-    return render(request, 'accounts/user_list.html', {'users': users})
+    paginator = Paginator(users, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'accounts/user_list.html', {
+        'users': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+        'q': request.GET.get('q', ''),
+    })
 
 
 @login_required

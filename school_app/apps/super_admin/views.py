@@ -5,12 +5,14 @@ from datetime import timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
+from django.core.paginator import Paginator
 from django.utils.text import slugify
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
 import os
 from email.mime.image import MIMEImage
 from django.core.mail import EmailMultiAlternatives
+
 
 from tenants.models import (
     Ecole, PlanAbonnement, AdminEcole, AnnuaireUtilisateur, ModeMaintenance,
@@ -243,9 +245,14 @@ def ecole_list(request):
         ecoles = ecoles.filter(statut=statut_filter)
     if search:
         ecoles = ecoles.filter(nom__icontains=search)
+    ecoles = ecoles.order_by('-created_at')
+    paginator = Paginator(ecoles, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'super_admin/ecole_list.html', {
-        'ecoles': ecoles.order_by('-created_at'),
+        'ecoles': page_obj.object_list,
+        'page_obj': page_obj,
         'statut_filter': statut_filter, 'search': search,
+        'total': paginator.count,
     })
 
 
@@ -467,7 +474,13 @@ def plan_list(request):
     if _needs_2fa_verification(request):
         return redirect('super_admin:verify_2fa')
     plans = PlanAbonnement.objects.all().order_by('ordre_affichage', 'prix_mensuel')
-    return render(request, 'super_admin/plan_list.html', {'plans': plans})
+    paginator = Paginator(plans, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'super_admin/plan_list.html', {
+        'plans': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+    })
 
 
 @super_admin_required
@@ -543,18 +556,20 @@ def quotas_view(request):
     if _needs_2fa_verification(request):
         return redirect('super_admin:verify_2fa')
 
-    # Seuil d'alerte : écoles dont le plan a des quotas
     ecoles = (
         Ecole.objects.filter(is_deleted=False, statut='active')
         .select_related('plan')
         .order_by('nom')
     )
 
-    # On filtre uniquement les écoles avec un plan actif
     ecoles_avec_plan = [e for e in ecoles if e.plan]
+    paginator = Paginator(ecoles_avec_plan, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
 
     return render(request, 'super_admin/quotas.html', {
-        'ecoles': ecoles_avec_plan,
+        'ecoles': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
     })
 
 
@@ -673,7 +688,13 @@ def maintenance_list(request):
     if _needs_2fa_verification(request):
         return redirect('super_admin:verify_2fa')
     modes = ModeMaintenance.objects.select_related('ecole').order_by('-created_at')
-    return render(request, 'super_admin/maintenance_list.html', {'modes': modes})
+    paginator = Paginator(modes, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'super_admin/maintenance_list.html', {
+        'modes': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+    })
 
 
 @super_admin_required
@@ -903,7 +924,13 @@ def corbeille_list(request):
     if _needs_2fa_verification(request):
         return redirect('super_admin:verify_2fa')
     ecoles = Ecole.objects.filter(statut='corbeille').order_by('-deleted_at')
-    return render(request, 'super_admin/corbeille.html', {'ecoles': ecoles})
+    paginator = Paginator(ecoles, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'super_admin/corbeille.html', {
+        'ecoles': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+    })
 
 
 @super_admin_required
@@ -1109,10 +1136,14 @@ def demandes_abonnement(request):
 
     nb_en_attente = DemandeAbonnement.objects.filter(statut='en_attente').count()
 
+    paginator = Paginator(qs, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     return render(request, 'super_admin/demandes_abonnement.html', {
-        'demandes':      qs,
+        'demandes':      page_obj.object_list,
+        'page_obj':      page_obj,
         'filtre_statut': filtre_statut,
-        'total':         qs.count(),
+        'total':         paginator.count,
         'nb_en_attente': nb_en_attente,
     })
 
@@ -1328,12 +1359,24 @@ def demandes_inscription(request):
     if statut:
         qs = qs.filter(statut=statut)
     nb_attente = DemandeInscription.objects.filter(statut='en_attente').count()
+    paginator = Paginator(qs, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     return render(request, 'super_admin/demandes_inscription.html', {
-        'demandes': qs,
+        'demandes': page_obj.object_list,
+        'page_obj': page_obj,
         'statut': statut,
         'nb_attente': nb_attente,
-        'total': DemandeInscription.objects.count(),
+        'total': paginator.count,
     })
+
+
+@super_admin_required
+def demande_inscription_detail(request, pk):
+    """Vue détaillée d'une demande d'inscription avec historique de traitement."""
+    from tenants.models import DemandeInscription
+    demande = get_object_or_404(DemandeInscription, pk=pk)
+    return render(request, 'super_admin/demande_inscription_detail.html', {'demande': demande})
 
 
 @super_admin_required
@@ -1350,25 +1393,24 @@ def demande_inscription_traiter(request, pk):
             demande.traite_par = traite_par
             demande.traite_le = timezone.now()
             demande.save(update_fields=['statut', 'traite_par', 'traite_le', 'updated_at'])
+            logger.info('DEMANDE_INSCRIPTION_APPRouvee pk=%s ecole=%s par=%s', pk, demande.nom_ecole, traite_par)
             messages.success(request, f"Demande de « {demande.nom_ecole} » approuvée.")
         elif action == 'rejeter':
             demande.statut = 'rejetee'
             demande.traite_par = traite_par
             demande.traite_le = timezone.now()
             demande.save(update_fields=['statut', 'traite_par', 'traite_le', 'updated_at'])
+            logger.info('DEMANDE_INSCRIPTION_REJETEE pk=%s ecole=%s par=%s', pk, demande.nom_ecole, traite_par)
             messages.warning(request, f"Demande de « {demande.nom_ecole} » rejetée.")
     return redirect('super_admin:demandes_inscription')
 
 
 # ── Formulaire public (sans authentification) ─────────────────────────────────
 
-def rejoindre_educnet(request):
-    """Formulaire public de demande d'inscription à la plateforme."""
+def _build_public_inscription_form():
     from django import forms as dj_forms
-    from tenants.models import DemandeInscription, PlanAbonnement
-
-    # Plans publics actifs pour la section tarification
-    plans_publics = list(PlanAbonnement.objects.filter(is_actif=True, est_public=True).order_by('ordre_affichage', 'prix_mensuel'))
+    from tenants.models import PlanAbonnement
+    from tenants.models import PlanAbonnement, DemandeInscription
 
     class DemandeInscriptionForm(dj_forms.ModelForm):
         plan_souhaite = dj_forms.ModelChoiceField(
@@ -1392,9 +1434,44 @@ def rejoindre_educnet(request):
                 'message':         dj_forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': "Nombre d'élèves, besoins spécifiques, questions..."}),
             }
 
+    return DemandeInscriptionForm
+
+
+def rejoindre_educnet(request):
+    """Landing page publique de présentation et d'inscription à la plateforme."""
+    from tenants.models import PlanAbonnement
+    from super_admin.models import PlatformSettings
+
+    platform_settings = PlatformSettings.get_settings()
+    plans_publics = list(PlanAbonnement.objects.filter(is_actif=True, est_public=True).order_by('ordre_affichage', 'prix_mensuel'))
+
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+
+
+def rejoindre_educnet_form(request):
+    """Page dédiée au formulaire public d'inscription."""
+    from super_admin.models import PlatformSettings
+    from tenants.models import DemandeInscription
+
+    platform_settings = PlatformSettings.get_settings()
+    DemandeInscriptionForm = _build_public_inscription_form()
+
     success = False
     nom_ecole = ''
     email_contact = ''
+    initial_data = {}
+
+    selected_plan_id = request.GET.get('plan')
+    if selected_plan_id:
+        from tenants.models import PlanAbonnement
+        try:
+            plan = PlanAbonnement.objects.get(pk=selected_plan_id, is_actif=True, est_public=True)
+            initial_data['plan_souhaite'] = plan.pk
+        except (PlanAbonnement.DoesNotExist, ValueError):
+            initial_data = {}
 
     if request.method == 'POST':
         form = DemandeInscriptionForm(request.POST)
@@ -1408,12 +1485,12 @@ def rejoindre_educnet(request):
             email_contact = demande.email
             form = DemandeInscriptionForm()
     else:
-        form = DemandeInscriptionForm()
+        form = DemandeInscriptionForm(initial=initial_data)
 
-    return render(request, 'public/rejoindre.html', {
+    return render(request, 'public/rejoindre_form.html', {
         'form': form,
         'success': success,
         'nom_ecole': nom_ecole,
         'email': email_contact,
-        'plans': plans_publics,
+        'platform_settings': platform_settings,
     })

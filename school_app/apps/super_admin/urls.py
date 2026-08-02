@@ -67,5 +67,6 @@ urlpatterns = [
 
     # Demandes d'inscription (formulaire public)
     path('demandes-inscription/',             views.demandes_inscription,          name='demandes_inscription'),
-    path('demandes-inscription/<int:pk>/',    views.demande_inscription_traiter,   name='demande_inscription_traiter'),
+    path('demandes-inscription/<int:pk>/',    views.demande_inscription_detail,    name='demande_inscription_detail'),
+    path('demandes-inscription/<int:pk>/traiter/', views.demande_inscription_traiter, name='demande_inscription_traiter'),
 ]

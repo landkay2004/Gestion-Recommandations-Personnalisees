@@ -43,6 +43,10 @@
 
 {% if demandes %}
 <div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>{{ total }} demande{{ total|pluralize }}</span>
+    {% if page_obj.paginator.num_pages > 1 %}<small class="text-muted">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</small>{% endif %}
+  </div>
   <div class="list-group list-group-flush">
     {% for d in demandes %}
     <div class="list-group-item px-4 py-3">
@@ -57,7 +61,9 @@
           {% endif %}
         </div>
         <div class="flex-grow-1">
-          <div class="fw-bold">{{ d.nom_ecole }}</div>
+          <div class="fw-bold">
+            <a href="{% url 'super_admin:demande_inscription_detail' d.pk %}" class="text-decoration-none text-dark">{{ d.nom_ecole }}</a>
+          </div>
           <div class="text-muted small">
             {{ d.get_type_ecole_display|default:"" }}{% if d.ville %} · {{ d.ville }}{% endif %}{% if d.province %}, {{ d.province }}{% endif %}
           </div>
@@ -77,6 +83,9 @@
           {% endif %}
         </div>
         <div class="flex-shrink-0 d-flex flex-column gap-1">
+          <a href="{% url 'super_admin:demande_inscription_detail' d.pk %}" class="btn btn-sm btn-outline-secondary" title="Voir le détail">
+            <i class="bi bi-eye"></i>
+          </a>
           {% if d.statut == 'en_attente' %}
           <form method="post" action="{% url 'super_admin:demande_inscription_traiter' d.pk %}">
             {% csrf_token %}
@@ -104,6 +113,17 @@
     </div>
     {% endfor %}
   </div>
+  </div>
+  {% if page_obj.paginator.num_pages > 1 %}
+  <div class="card-footer d-flex justify-content-between align-items-center py-2">
+    <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+    <nav><ul class="pagination pagination-sm mb-0">
+      {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?{% if statut %}statut={{ statut }}&{% endif %}page={{ page_obj.previous_page_number }}">«</a></li>{% else %}<li class="page-item disabled"><span class="page-link">«</span></li>{% endif %}
+      {% for num in page_obj.paginator.page_range %}{% if num == page_obj.number %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}<li class="page-item"><a class="page-link" href="?{% if statut %}statut={{ statut }}&{% endif %}page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}
+      {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?{% if statut %}statut={{ statut }}&{% endif %}page={{ page_obj.next_page_number }}">»</a></li>{% else %}<li class="page-item disabled"><span class="page-link">»</span></li>{% endif %}
+    </ul></nav>
+  </div>
+  {% endif %}
 </div>
 {% else %}
 <div class="card text-center py-5">

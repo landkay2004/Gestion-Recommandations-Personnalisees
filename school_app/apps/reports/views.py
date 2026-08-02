@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, Q
+from django.core.paginator import Paginator
 from students.models import Student
 from teachers.models import Teacher
 from bulletin.models import ModeleBulletin
@@ -8,6 +9,8 @@ from grades.models import Note
 from classes.models import Classe, AnneeScolaire
 from accounts.views import prefet_required
 from decimal import Decimal
+
+PER_PAGE = 20
 
 
 @login_required
@@ -19,9 +22,17 @@ def rapport_eleves(request):
     if classe_id:
         students = students.filter(classe_id=classe_id)
     classes   = Classe.objects.filter(annee_scolaire=annee).select_related('section') if annee else []
+
+    paginator = Paginator(students, PER_PAGE)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     return render(request, 'reports/rapport_eleves.html', {
-        'students': students, 'classes': classes,
-        'classe_id': classe_id, 'annee': annee,
+        'students': page_obj.object_list,
+        'page_obj': page_obj,
+        'classes': classes,
+        'classe_id': classe_id,
+        'annee': annee,
+        'total': paginator.count,
     })
 
 
@@ -34,7 +45,15 @@ def rapport_enseignants(request):
         'matieres_enseignees__classe',
         'matieres_enseignees__classe__section',
     ).order_by('user__last_name', 'user__first_name')
-    return render(request, 'reports/rapport_enseignants.html', {'teachers': teachers})
+
+    paginator = Paginator(teachers, PER_PAGE)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    return render(request, 'reports/rapport_enseignants.html', {
+        'teachers': page_obj.object_list,
+        'page_obj': page_obj,
+        'total': paginator.count,
+    })
 
 
 @login_required

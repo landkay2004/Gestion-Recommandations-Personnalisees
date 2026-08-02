@@ -10,7 +10,10 @@
   </div>
 </div>
 <div class="card">
-  <div class="card-header">{{ teachers.count }} enseignant{{ teachers.count|pluralize }}</div>
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>{{ total }} enseignant{{ total|pluralize }}</span>
+    {% if page_obj.paginator.num_pages > 1 %}<small class="text-muted">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</small>{% endif %}
+  </div>
   <div class="card-body p-0">
     <table class="table table-hover">
       <thead><tr><th>#</th><th>Nom complet</th><th>Email</th><th>Téléphone</th><th>Matières assignées</th></tr></thead>
@@ -33,5 +36,34 @@
       </tbody>
     </table>
   </div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="card-footer d-flex justify-content-between align-items-center py-2">
+  <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+  <nav>
+    <ul class="pagination pagination-sm mb-0">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">«</a></li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">«</span></li>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">»</a></li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">»</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endif %}
 </div>
 {% endblock %}
