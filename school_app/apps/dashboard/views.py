@@ -94,7 +94,8 @@ def dashboard(request):
         taux_saisie = round(mc_avec_notes / mc_total * 100) if mc_total > 0 else 0
 
         dernieres_classes_qs = classes_annee.annotate(
-            nb_eleves=Count('eleves')
+            nb_eleves=Count('eleves'),
+            nb_matieres=Count('matieres')
         )[:8]
 
         # Données graphiques
@@ -102,6 +103,10 @@ def dashboard(request):
         chart_classes = json.dumps({
             'labels': [c.nom for c in classes_list],
             'data':   [c.nb_eleves for c in classes_list],
+        })
+        chart_matieres = json.dumps({
+            'labels': [c.nom for c in classes_list],
+            'data':   [c.nb_matieres for c in classes_list],
         })
         chart_notes = json.dumps({
             'labels': ['Notes saisies', 'Restant'],
@@ -124,6 +129,7 @@ def dashboard(request):
             'derniers_eleves': Student.objects.select_related('classe', 'classe__section').order_by('-date_inscription')[:6],
             'enseignants_sans_matiere': Teacher.objects.filter(matieres_enseignees__isnull=True)[:5],
             'chart_classes': chart_classes,
+            'chart_matieres': chart_matieres,
             'chart_notes': chart_notes,
         }
         return render(request, 'dashboard/index_prefet.html', context)

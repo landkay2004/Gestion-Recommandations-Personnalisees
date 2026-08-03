@@ -144,10 +144,10 @@
   </div>
 </div>
 
-<div class="row g-4">
+<div class="row g-4 mb-5">
 
   <!-- Derniers élèves -->
-  <div class="col-lg-7 col-xl-6">
+  <div class="col-lg-7 col-xl-7">
     <div class="card h-100">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span><i class="bi bi-people-fill text-primary me-2"></i>Derniers élèves inscrits</span>
@@ -181,7 +181,7 @@
   </div>
 
   <!-- Classes -->
-  <div class="col-lg-5 col-xl-4">
+  <div class="col-lg-5 col-xl-5">
     <div class="card h-100">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span><i class="bi bi-building-fill text-primary me-2"></i>Classes — année en cours</span>
@@ -206,33 +206,39 @@
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Horloge + Calendrier -->
-  <div class="col-sm-6 col-lg-5 col-xl-2">
-    <!-- Horloge -->
-    <div class="card mb-3">
-      <div class="card-body py-3">
-        <div class="clock-widget">
-          <div class="cw-time" id="dash-time">--:--</div>
-          <div class="cw-date" id="dash-date"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
+<div class="row gx-3 gy-5 mb-5">
   <!-- Mini calendrier -->
-  <div class="col-sm-6 col-lg-7 col-xl-4">
-    <div class="card">
+  <div class="col-12 col-lg-7 col-xl-7">
+    <div class="card h-100">
       <div class="card-header">
         <i class="bi bi-calendar3 text-primary me-2"></i>Calendrier
       </div>
-      <div class="card-body px-3 py-3">
+      <div class="card-body px-4 py-4">
         <div class="mini-calendar" id="mini-cal"></div>
       </div>
     </div>
   </div>
 
-  {% if enseignants_sans_matiere %}
+  <!-- Graphique matières par classe -->
+  <div class="col-12 col-lg-5 col-xl-5">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-graph-up text-primary me-2"></i>Matières par classe</span>
+        <span class="badge bg-light text-dark">Top {{ dernieres_classes|length }}</span>
+      </div>
+      <div class="card-body px-4 py-4">
+        <div style="position:relative;height:280px;">
+          <canvas id="classesMiniChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if enseignants_sans_matiere %}
+<div class="row g-4 mb-4">
   <div class="col-12">
     <div class="alert alert-warning d-flex align-items-center gap-2 mb-0">
       <i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0"></i>
@@ -243,9 +249,8 @@
       </span>
     </div>
   </div>
-  {% endif %}
-
 </div>
+  {% endif %}
 
 <!-- Actions rapides -->
 <div class="card mt-4">
@@ -323,6 +328,39 @@
     ctx2d.fillText('Aucune classe pour cette année', ctxBar.width/2, ctxBar.height/2);
   }
 
+  // ── Mini line chart : Matières par classe ───────────────────────
+  const rawMatieres = {{ chart_matieres|safe }};
+  const ctxClassesMini = document.getElementById('classesMiniChart');
+  if (ctxClassesMini && rawMatieres.labels.length > 0) {
+    new Chart(ctxClassesMini, {
+      type: 'line',
+      data: {
+        labels: rawMatieres.labels,
+        datasets: [{
+          label: 'Matières',
+          data: rawMatieres.data,
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(59,130,246,0.18)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: '#1d4ed8',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}` } } },
+        scales: {
+          x: { grid: { display: false }, border: { display: false }, ticks: { maxRotation: 30, minRotation: 0 } },
+          y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#f1f5f9' }, border: { display: false } }
+        }
+      }
+    });
+  }
+
   // ── Donut : Avancement saisie notes ─────────────────────────────
   const rawNotes = {{ chart_notes|safe }};
   const ctxDonut = document.getElementById('notesDonutChart');
@@ -346,25 +384,6 @@
       }
     });
   }
-})();
-
-// ── Horloge dashboard préfet ──
-(function() {
-  const JOURS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-  const MOIS  = ['janvier','février','mars','avril','mai','juin',
-                 'juillet','août','septembre','octobre','novembre','décembre'];
-  const elT = document.getElementById('dash-time');
-  const elD = document.getElementById('dash-date');
-  if (!elT) return;
-  function tick() {
-    const now = new Date();
-    const hh  = String(now.getHours()).padStart(2,'0');
-    const mm  = String(now.getMinutes()).padStart(2,'0');
-    const ss  = String(now.getSeconds()).padStart(2,'0');
-    elT.innerHTML = `${hh}:${mm}<span class="cw-seconds">:${ss}</span>`;
-    if (elD) elD.textContent = `${JOURS[now.getDay()]} ${now.getDate()} ${MOIS[now.getMonth()]} ${now.getFullYear()}`;
-  }
-  tick(); setInterval(tick, 1000);
 })();
 
 // ── Mini-calendrier ──
