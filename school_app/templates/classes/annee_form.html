@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'annee_list' %}">Années scolaires</a></li>
+<li class="breadcrumb-item active">{{ titre }}</li>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">{{ titre }}</h1>
+  <a href="{% url 'annee_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Retour</a>
+</div>
+<div class="card" style="max-width:450px">
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Année scolaire *</label>
+        {{ form.annee }}
+        <div class="form-text">Format: 2024-2025</div>
+      </div>
+      <div class="mb-4 form-check">
+        {{ form.active }}
+        <label class="form-check-label">Année active (en cours)</label>
+      </div>
+      <button type="submit" class="btn btn-primary me-2"><i class="bi bi-save me-1"></i>Enregistrer</button>
+      <a href="{% url 'annee_list' %}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

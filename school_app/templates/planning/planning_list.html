@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load planning_tags %}
+{% block title %}Planning horaire{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Planning</li>{% endblock %}
+{% block extra_css %}
+<style>
+/* ── Grille planning ── */
+.tbl-planning { border-collapse: collapse; min-width: 760px; width: 100%; }
+.tbl-planning th { background: #1e293b; color: #fff; font-size: .78rem; font-weight: 600;
+  text-align: center; padding: 8px 6px; white-space: nowrap; position: sticky; top: 0; z-index: 2; }
+.tbl-planning td { border: 1px solid #e2e8f0; vertical-align: top; padding: 4px; }
+.col-time { background: #f8fafc; font-size: .72rem; color: #64748b; white-space: nowrap;
+  width: 82px; text-align: center; font-weight: 600; border-right: 2px solid #cbd5e1 !important; }
+.cell-repos { background: repeating-linear-gradient(45deg,#f1f5f9,#f1f5f9 4px,#e9f0f8 4px,#e9f0f8 8px);
+  text-align: center; min-height: 40px; }
+.cell-repos span { font-size: .68rem; color: #94a3b8; }
+.cell-cours { min-height: 44px; }
+.seance-chip { background: #eff6ff; border-left: 3px solid #2563eb; border-radius: 4px;
+  padding: 4px 6px; margin-bottom: 3px; font-size: .76rem; position: relative; }
+.seance-chip .s-mat { font-weight: 700; color: #1e40af; display: block; line-height: 1.2; }
+.seance-chip .s-meta { color: #64748b; font-size: .68rem; }
+.seance-chip .s-act { display: none; position: absolute; top: 3px; right: 3px; gap: 2px; }
+.seance-chip:hover .s-act { display: flex; }
+.btn-add-cell { width: 100%; border: 1px dashed #cbd5e1; border-radius: 4px; font-size: .7rem;
+  color: #94a3b8; background: transparent; padding: 3px; cursor: pointer; text-decoration: none;
+  display: block; text-align: center; margin-top: 2px; }
+.btn-add-cell:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+.planning-wrap { overflow-x: auto; }
+/* Couleurs par type de créneau */
+.type-repos    { background: #f1f5f9 !important; }
+.type-recreation { background: #f0fdf4 !important; }
+.type-priere   { background: #fefce8 !important; }
+.type-repas    { background: #fff7ed !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-calendar-week-fill text-primary me-2"></i>Planning horaire</h1>
+    <p class="text-muted small mb-0">Grille hebdomadaire — {{ nb_seances }} séance{{ nb_seances|pluralize }}</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'creneau_list' %}" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-clock me-1"></i>Créneaux
+    </a>
+    <a href="{% url 'salle_list' %}" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-door-open me-1"></i>Salles
+    </a>
+    <a href="{% url 'seance_create' %}{% if classe_id %}?classe={{ classe_id }}{% endif %}{% if annee_id and not classe_id %}?annee={{ annee_id }}{% elif annee_id and classe_id %}&annee={{ annee_id }}{% endif %}" class="btn btn-primary btn-sm">
+      <i class="bi bi-plus-lg me-1"></i>Ajouter une séance{% if classe_id %} à cette classe{% endif %}
+    </a>
+  </div>
+</div>
+
+<!-- Filtres -->
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <form method="get" class="row g-2 align-items-end" id="filter-form">
+      <div class="col-md-3">
+        <label class="form-label small mb-1">Année scolaire</label>
+        <select name="annee" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="">— Sélectionner —</option>
+          {% for a in annees %}
+          <option value="{{ a.pk }}" {% if annee_id == a.pk|stringformat:"s" %}selected{% endif %}>{{ a }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small mb-1">Filtrer par classe</label>
+        <select name="classe" class="form-select form-select-sm">
+          <option value="">Toutes les classes</option>
+          {% for c in classes %}
+          <option value="{{ c.pk }}" {% if classe_id == c.pk|stringformat:"s" %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small mb-1">Filtrer par enseignant</label>
+        <select name="enseignant" class="form-select form-select-sm">
+          <option value="">Tous les enseignants</option>
+          {% for e in enseignants %}
+          <option value="{{ e.pk }}" {% if enseignant_id == e.pk|stringformat:"s" %}selected{% endif %}>{{ e }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary btn-sm">Filtrer</button>
+        <a href="{% url 'planning_list' %}{% if annee_id %}?annee={{ annee_id }}{% endif %}"
+           class="btn btn-outline-secondary btn-sm ms-1">Réinitialiser</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if not annee_id %}
+<div class="card">
+  <div class="card-body text-center text-muted py-5">
+    <i class="bi bi-calendar3 fs-2 d-block mb-2 opacity-50"></i>
+    Sélectionnez une année scolaire pour afficher le planning.
+  </div>
+</div>
+
+{% elif not grille_table %}
+<div class="card">
+  <div class="card-body text-center text-muted py-5">
+    <i class="bi bi-clock-history fs-2 d-block mb-2 opacity-50"></i>
+    <strong class="d-block mb-1">Aucun créneau horaire configuré</strong>
+    <p class="small">Commencez par créer les tranches horaires de la semaine (ex : 7h–8h, 8h–9h…)<br>
+       puis assignez les cours à chaque créneau.</p>
+    <div class="d-flex gap-2 justify-content-center mt-3">
+      <a href="{% url 'creneau_list' %}" class="btn btn-primary btn-sm">
+        <i class="bi bi-plus-circle me-1"></i>Créer des créneaux
+      </a>
+    </div>
+  </div>
+</div>
+
+{% else %}
+<!-- Grille hebdomadaire -->
+<div class="card">
+  <div class="card-body p-2">
+    <div class="planning-wrap">
+      <table class="tbl-planning">
+        <thead>
+          <tr>
+            <th style="width:82px">Horaire</th>
+            {% for j in jours %}
+            <th>{{ JOURS_LABELS|dict_get:j }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in grille_table %}
+          <tr>
+            <!-- Créneau horaire (heure) -->
+            <td class="col-time">
+              <div>{{ row.libelle }}</div>
+              {% if row.is_repos %}
+              <span class="badge bg-light text-secondary border mt-1" style="font-size:.6rem;">
+                {{ row.type_creneau }}
+              </span>
+              {% endif %}
+            </td>
+
+            {% for j in jours %}
+            {% with cell=row.cells|dict_get:j %}
+            {% if cell %}
+
+              {% if cell.is_repos %}
+              <!-- Créneau de repos / récréation -->
+              <td class="cell-repos type-{{ cell.creneau.type_creneau|default:'repos' }}">
+                <span>
+                  <i class="bi bi-{% if cell.creneau.type_creneau == 'recreation' %}emoji-smile{% elif cell.creneau.type_creneau == 'priere' %}star{% elif cell.creneau.type_creneau == 'repas' %}egg-fried{% else %}pause-circle{% endif %} me-1"></i>
+                  {{ cell.type_display }}
+                </span>
+              </td>
+
+              {% else %}
+              <!-- Créneau de cours -->
+              <td class="cell-cours">
+                {% for seance in cell.seances %}
+                <div class="seance-chip">
+                  <span class="s-mat">{{ seance.matiere_classe.matiere }}</span>
+                  <span class="s-meta">
+                    <i class="bi bi-diagram-3 me-1"></i>{{ seance.matiere_classe.classe }}
+                    {% if seance.matiere_classe.enseignant %}
+                    · <i class="bi bi-person me-1"></i>{{ seance.matiere_classe.enseignant }}
+                    {% endif %}
+                    {% if seance.salle %} · <i class="bi bi-door-open me-1"></i>{{ seance.salle }}{% endif %}
+                  </span>
+                  <div class="s-act">
+                    <a href="{% url 'seance_update' seance.pk %}" class="btn btn-outline-primary"
+                       style="font-size:.65rem;padding:1px 5px;" title="Modifier">
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <a href="{% url 'seance_delete' seance.pk %}" class="btn btn-outline-danger"
+                       style="font-size:.65rem;padding:1px 5px;" title="Supprimer">
+                      <i class="bi bi-trash"></i>
+                    </a>
+                  </div>
+                </div>
+                {% endfor %}
+                {% if annee_id %}
+                <a class="btn-add-cell" href="{% url 'seance_create' %}?annee={{ annee_id }}{% if classe_id %}&classe={{ classe_id }}{% endif %}{% if cell.creneau_pk %}&creneau={{ cell.creneau_pk }}{% endif %}">
+                  <i class="bi bi-plus"></i>
+                </a>
+                {% endif %}
+              </td>
+              {% endif %}
+
+            {% else %}
+            <!-- Pas de créneau configuré pour ce jour/heure -->
+            <td style="background:#fafafa;min-height:40px;"></td>
+            {% endif %}
+            {% endwith %}
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% if nb_seances == 0 %}
+<div class="alert alert-info mt-3 small">
+  <i class="bi bi-info-circle me-2"></i>
+  Les créneaux sont configurés mais aucun cours n'a encore été affecté.
+  Cliquez sur <strong>+</strong> dans une cellule pour ajouter un cours, ou utilisez
+  <a href="{% url 'seance_create' %}" class="alert-link">Ajouter une séance</a>.
+</div>
+{% endif %}
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('select[name="classe"], select[name="enseignant"]').forEach(el => {
+  el.addEventListener('change', () => el.closest('form').submit());
+});
+</script>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'portail/base_portail.html' %}
+{% block portail_content %}
+<div class="text-center mb-3">
+  {% if school.logo %}
+  <img src="{{ school.logo.url }}" alt="Logo" class="mb-2" style="max-height:50px">
+  {% endif %}
+  <h5 class="fw-bold text-primary mb-0">{{ annee }} — Archive</h5>
+  <p class="text-muted mb-0 small">{{ eleve.nom_complet }} — {{ classe }}</p>
+</div>
+
+<a href="{% url 'portail_archives' token=acces.token %}" class="btn btn-outline-secondary btn-sm w-100 mb-3">
+  <i class="bi bi-arrow-left me-1"></i>Retour à l'historique
+</a>
+
+{% if resultat_annuel %}
+<div class="card border-success mb-3">
+  <div class="card-header bg-success text-white fw-bold text-center small">Résultat annuel</div>
+  <div class="card-body text-center py-2">
+    <div class="fs-4 fw-bold text-success">{{ resultat_annuel.total }} / {{ resultat_annuel.max }}</div>
+    <div class="text-muted small">{{ resultat_annuel.pourcentage }}% — Rang {{ resultat_annuel.rang }}/{{ nb_eleves }}</div>
+  </div>
+</div>
+{% endif %}
+
+{% if resume_s1 %}
+<div class="card mb-2">
+  <div class="card-header fw-bold small py-2">Semestre 1</div>
+  <div class="card-body text-center py-2">
+    <div class="fw-bold">{{ resume_s1.total }} / {{ resume_s1.max }}</div>
+    <div class="text-muted small">{{ resume_s1.pourcentage }}% — Rang {{ resume_s1.rang }}</div>
+  </div>
+</div>
+{% endif %}
+
+{% if resume_s2 %}
+<div class="card mb-3">
+  <div class="card-header fw-bold small py-2">Semestre 2</div>
+  <div class="card-body text-center py-2">
+    <div class="fw-bold">{{ resume_s2.total }} / {{ resume_s2.max }}</div>
+    <div class="text-muted small">{{ resume_s2.pourcentage }}% — Rang {{ resume_s2.rang }}</div>
+  </div>
+</div>
+{% endif %}
+
+{% for periode, data in resultats.items %}
+<div class="card mb-3">
+  <div class="card-header d-flex justify-content-between align-items-center py-2">
+    <span class="fw-bold small">{{ data.label }}</span>
+    <span class="badge bg-primary rounded-pill">{{ data.total_obtenu }} / {{ data.total_max }} ({{ data.pourcentage }}%)</span>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-sm mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Matière</th>
+          <th class="text-center">Max</th>
+          <th class="text-end">Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for n in data.notes %}
+        <tr>
+          <td class="small">{{ n.matiere }}</td>
+          <td class="text-center text-muted small">{{ n.maxima }}</td>
+          <td class="text-end fw-bold {% if n.note == None %}text-muted{% endif %}">
+            {{ n.note|default:"—" }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

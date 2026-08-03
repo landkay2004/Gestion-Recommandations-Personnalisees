@@ -1,0 +1,85 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Ecoles{% endblock %}
+{% block page_title %}<i class="bi bi-building-fill me-2 text-primary"></i>Ecoles{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <form class="d-flex gap-2" method="get">
+    <input name="q" class="form-control form-control-sm" style="width:220px" placeholder="Rechercher une ecole..." value="{{ search }}">
+    <select name="statut" class="form-select form-select-sm" style="width:150px" onchange="this.form.submit()">
+      <option value="">Tous les statuts</option>
+      <option value="active" {% if statut_filter == 'active' %}selected{% endif %}>Actives</option>
+      <option value="suspendue" {% if statut_filter == 'suspendue' %}selected{% endif %}>Suspendues</option>
+      <option value="expiree" {% if statut_filter == 'expiree' %}selected{% endif %}>Expirees</option>
+      <option value="corbeille" {% if statut_filter == 'corbeille' %}selected{% endif %}>Corbeille</option>
+    </select>
+    <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-search"></i></button>
+  </form>
+  <a href="{% url 'super_admin:ecole_creer' %}" class="btn btn-sa-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Nouvelle ecole</a>
+</div>
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="d-flex justify-content-between align-items-center mt-3">
+  <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+  <nav><ul class="pagination pagination-sm mb-0">
+    {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?{% if statut_filter %}statut={{ statut_filter }}&{% endif %}{% if search %}q={{ search }}&{% endif %}page={{ page_obj.previous_page_number }}">«</a></li>{% else %}<li class="page-item disabled"><span class="page-link">«</span></li>{% endif %}
+    {% for num in page_obj.paginator.page_range %}{% if num == page_obj.number %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}<li class="page-item"><a class="page-link" href="?{% if statut_filter %}statut={{ statut_filter }}&{% endif %}{% if search %}q={{ search }}&{% endif %}page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}
+    {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?{% if statut_filter %}statut={{ statut_filter }}&{% endif %}{% if search %}q={{ search }}&{% endif %}page={{ page_obj.next_page_number }}">»</a></li>{% else %}<li class="page-item disabled"><span class="page-link">»</span></li>{% endif %}
+  </ul></nav>
+</div>
+{% endif %}
+<div class="kpi-card p-0">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr>
+        <th style="width:35%">Ecole</th>
+        <th>Contact</th>
+        <th>Plan</th>
+        <th>Statut</th>
+        <th>Fin abo.</th>
+        <th>Onboarding</th>
+        <th></th>
+      </tr></thead>
+      <tbody>
+        {% for e in ecoles %}
+        <tr>
+          <td>
+            <div class="fw-semibold">{{ e.nom }}</div>
+            <small class="text-muted"><code>{{ e.schema_name }}</code></small>
+          </td>
+          <td>
+            <div>{{ e.contact_nom }}</div>
+            <small class="text-muted">{{ e.contact_email }}</small>
+          </td>
+          <td>{% if e.plan %}<span class="badge bg-secondary">{{ e.plan.nom }}</span>{% else %}<span class="text-muted">—</span>{% endif %}</td>
+          <td><span class="badge badge-statut-{{ e.statut }} px-2 py-1">{{ e.get_statut_display }}</span></td>
+          <td>
+            {% if e.date_fin_abonnement %}
+              <small {% if e.acces_lecture_seule %}class="text-danger fw-semibold"{% elif e.en_grace %}class="text-warning fw-semibold"{% else %}class="text-muted"{% endif %}>
+                {{ e.date_fin_abonnement|date:"d/m/Y" }}
+              </small>
+            {% else %}<span class="text-muted">—</span>{% endif %}
+          </td>
+          <td>
+            {% if e.onboarding_complete %}
+              <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>OK</span>
+            {% else %}
+              <span class="badge bg-warning text-dark"><i class="bi bi-hourglass me-1"></i>En cours</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="d-flex gap-1">
+              <a href="{% url 'super_admin:ecole_detail' e.pk %}" class="btn btn-sm btn-outline-secondary" title="Detail"><i class="bi bi-eye"></i></a>
+              <a href="{% url 'super_admin:ecole_modifier' e.pk %}" class="btn btn-sm btn-outline-primary" title="Modifier"><i class="bi bi-pencil"></i></a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center text-muted py-5">
+          <i class="bi bi-building fs-2 d-block mb-2 opacity-25"></i>
+          Aucune ecole ne correspond a votre recherche.
+        </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Élèves — {{ modele.classe }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'bulletin_list' %}">Bulletins</a></li>
+<li class="breadcrumb-item active">{{ modele.classe }}</li>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-people-fill text-primary me-2"></i>Bulletins — {{ modele.classe }}</h1>
+  <div class="d-flex gap-2">
+    {% if modele.publie %}
+    <span class="badge badge-publie fs-6"><i class="bi bi-check-circle me-1"></i>Résultats publiés</span>
+    {% else %}
+    <span class="badge badge-brouillon fs-6">Brouillon</span>
+    {% endif %}
+    <a href="{% url 'bulletin_list' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Retour</a>
+  </div>
+</div>
+
+<!-- Recherche live -->
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <div class="input-group input-group-sm" style="max-width:380px">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="form-control" placeholder="Nom, matricule…"
+             data-live-search="tbl-eleves-bulletin" autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">{{ eleves.count }} élève{{ eleves.count|pluralize }} — {{ modele.annee_scolaire }}</div>
+  <div class="card-body p-0">
+    <table class="table table-hover" id="tbl-eleves-bulletin">
+      <thead><tr><th>#</th><th>Élève</th><th>Matricule</th><th class="text-end">Bulletin</th></tr></thead>
+      <tbody>
+        {% for e in eleves %}
+        <tr>
+          <td class="text-muted">{{ forloop.counter }}</td>
+          <td class="fw-medium">{{ e.nom_complet }}</td>
+          <td><code class="small">{{ e.matricule }}</code></td>
+          <td class="text-end">
+            <a href="{% url 'bulletin_eleve' modele.pk e.pk %}" class="btn btn-sm btn-primary">
+              <i class="bi bi-file-earmark-person me-1"></i>Voir le bulletin
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr data-empty><td colspan="4" class="text-center text-muted py-4">Aucun élève dans cette classe</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

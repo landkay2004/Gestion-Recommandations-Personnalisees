@@ -1,0 +1,40 @@
+{% extends 'portail/base_portail.html' %}
+{% block title %}Connexion — {{ config.nom_portail }}{% endblock %}
+{% block content %}
+<div class="portail-card">
+  <div class="text-center mb-4">
+    <div class="portail-icon"><i class="bi bi-shield-lock-fill"></i></div>
+    <h2 class="h5 fw-bold mt-2">Accès sécurisé</h2>
+    <div class="badge rounded-pill fs-6 px-3 py-2 mb-2" style="background:var(--p-primary)">
+      {{ acces.eleve.nom_complet }}
+    </div>
+    {% if acces.eleve.classe %}
+      <p class="text-muted small mb-0">{{ acces.eleve.classe }}</p>
+    {% endif %}
+  </div>
+  <hr>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        <label class="form-label fw-medium">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <div class="d-grid mt-2">
+      <button type="submit" class="btn btn-portail btn-lg">
+        <i class="bi bi-eye me-2"></i>Consulter les résultats
+      </button>
+    </div>
+  </form>
+  {% if acces.tentatives_echec > 0 %}
+    <div class="alert alert-warning mt-3 small">
+      <i class="bi bi-exclamation-triangle me-1"></i>
+      {{ acces.tentatives_echec }} tentative(s) échouée(s). Après 5 tentatives, l'accès est bloqué 15 minutes.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

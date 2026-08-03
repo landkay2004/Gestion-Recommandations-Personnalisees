@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% block title %}Rapport des résultats{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Rapport des résultats</li>{% endblock %}
+{% block content %}
+<div class="page-header no-print">
+  <h1 class="page-title"><i class="bi bi-trophy-fill text-primary me-2"></i>Rapport des résultats</h1>
+  <div class="d-flex gap-2">
+    {% if resultats %}
+    <button onclick="window.print()" class="btn btn-outline-secondary btn-sm"><i class="bi bi-printer me-1"></i>Imprimer</button>
+    {% endif %}
+    <a href="{% url 'rapport_eleves' %}" class="btn btn-outline-primary btn-sm">Rapport élèves</a>
+    <a href="{% url 'rapport_enseignants' %}" class="btn btn-outline-success btn-sm">Rapport enseignants</a>
+  </div>
+</div>
+
+<!-- Sélecteur de modèle -->
+<div class="card mb-3 no-print">
+  <div class="card-body py-2">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label small mb-1">Sélectionner un modèle de bulletin</label>
+        <select name="modele" class="form-select form-select-sm">
+          <option value="">-- Choisir --</option>
+          {% for b in bulletins %}
+          <option value="{{ b.pk }}" {% if modele_id == b.pk|stringformat:"s" %}selected{% endif %}>
+            {{ b.classe }} — {{ b.annee_scolaire }}{% if b.publie %} ✓{% endif %}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-bar-chart me-1"></i>Afficher</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if resultats %}
+
+<!-- Statistiques de classe -->
+<div class="row g-3 mb-3 no-print">
+  <div class="col-md-2">
+    <div class="card text-center py-2 border-primary">
+      <div class="fw-bold text-primary" style="font-size:1.6rem">{{ stats.nb }}</div>
+      <div class="small text-muted">Élèves</div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card text-center py-2 border-success">
+      <div class="fw-bold text-success" style="font-size:1.6rem">{{ stats.nb_admis }}</div>
+      <div class="small text-muted">Admis</div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card text-center py-2 border-danger">
+      <div class="fw-bold text-danger" style="font-size:1.6rem">{{ stats.nb_echec }}</div>
+      <div class="small text-muted">Échec</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center py-2">
+      <div class="fw-bold" style="font-size:1.6rem">{{ stats.pct_reuss }}%</div>
+      <div class="small text-muted">Taux de réussite</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center py-2">
+      <div class="fw-bold" style="font-size:1.6rem">{{ stats.moy_classe }}%</div>
+      <div class="small text-muted">Moyenne de classe</div>
+    </div>
+  </div>
+</div>
+
+<!-- Mentions -->
+{% if stats.mentions %}
+<div class="card mb-3 no-print">
+  <div class="card-body py-2 d-flex flex-wrap gap-2 align-items-center">
+    <span class="fw-bold small me-2">Répartition des mentions :</span>
+    {% for mention, nb in stats.mentions.items %}
+    <span class="badge {% if mention == 'Grande distinction' %}bg-success{% elif mention == 'Distinction' %}bg-info text-dark{% elif mention == 'Satisfaction' %}bg-primary{% elif mention == 'Réussite' %}bg-warning text-dark{% else %}bg-danger{% endif %} px-3 py-2">
+      {{ mention }} : {{ nb }}
+    </span>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- Tableau des résultats -->
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><strong>{{ modele.classe }}</strong> — {{ modele.annee_scolaire }}</span>
+    <span class="badge bg-primary">{{ resultats|length }} élève(s)</span>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-hover table-sm mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th class="text-center" style="width:50px">Rang</th>
+          <th>Élève</th>
+          <th class="text-center">Total obtenu</th>
+          <th class="text-center">Total max.</th>
+          <th class="text-center">Pourcentage</th>
+          <th class="text-center">Mention</th>
+          <th class="text-end no-print">Bulletin</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in resultats %}
+        <tr class="{% if r.admis %}table-success{% else %}table-danger{% endif %} bg-opacity-10">
+          <td class="text-center">
+            {% if r.rang == 1 %}🥇
+            {% elif r.rang == 2 %}🥈
+            {% elif r.rang == 3 %}🥉
+            {% else %}<strong>#{{ r.rang }}</strong>{% endif %}
+          </td>
+          <td class="fw-medium">{{ r.eleve.nom_complet }}</td>
+          <td class="text-center fw-bold">{{ r.total|floatformat:"-1" }}</td>
+          <td class="text-center text-muted">{{ r.max|floatformat:"-1" }}</td>
+          <td class="text-center">
+            <span class="badge {% if r.pourcentage >= 80 %}bg-success{% elif r.pourcentage >= 70 %}bg-info text-dark{% elif r.pourcentage >= 60 %}bg-primary{% elif r.pourcentage >= 50 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+              {{ r.pourcentage }}%
+            </span>
+          </td>
+          <td class="text-center">
+            <span class="badge {% if r.mention == 'Grande distinction' %}bg-success{% elif r.mention == 'Distinction' %}bg-info text-dark{% elif r.mention == 'Satisfaction' %}bg-primary{% elif r.mention == 'Réussite' %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+              {{ r.mention }}
+            </span>
+          </td>
+          <td class="text-end no-print">
+            <a href="{% url 'bulletin_eleve' modele.pk r.eleve.pk %}" class="btn btn-xs btn-outline-primary me-1" style="font-size:0.72rem">
+              <i class="bi bi-eye"></i>
+            </a>
+            <a href="{% url 'bulletin_eleve_pdf' modele.pk r.eleve.pk %}" target="_blank" class="btn btn-xs btn-outline-danger" style="font-size:0.72rem">
+              <i class="bi bi-file-earmark-pdf"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% elif modele_id %}
+<div class="alert alert-warning">
+  <i class="bi bi-exclamation-triangle me-2"></i>
+  Aucune donnée trouvée. Les notes n'ont peut-être pas encore été saisies pour cette classe.
+</div>
+{% else %}
+<div class="card">
+  <div class="card-body text-center text-muted py-5">
+    <i class="bi bi-trophy fs-1 d-block mb-3 text-primary opacity-40"></i>
+    <h5>Sélectionnez un modèle de bulletin</h5>
+    <p class="small">Le rapport classe les élèves par score total et calcule les mentions selon le barème RDC.</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

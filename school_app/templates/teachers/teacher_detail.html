@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}{{ teacher.nom_complet }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'teacher_list' %}">Enseignants</a></li>
+<li class="breadcrumb-item active">{{ teacher.nom_complet }}</li>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Fiche enseignant</h1>
+  <div class="d-flex gap-2">
+    <a href="{% url 'teacher_update' teacher.pk %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil me-1"></i>Modifier</a>
+    <a href="{% url 'teacher_list' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Retour</a>
+  </div>
+</div>
+<div class="row g-4">
+  <!-- Carte profil -->
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-body text-center">
+        {% if teacher.user.photo_profil %}
+          <img src="{{ teacher.user.photo_profil.url }}" alt="{{ teacher.nom_complet }}"
+               class="rounded-circle mb-3 border" style="width:90px;height:90px;object-fit:cover;">
+        {% else %}
+          <div class="rounded-circle bg-success d-inline-flex align-items-center justify-content-center text-white mb-3"
+               style="width:90px;height:90px;font-size:2rem;font-weight:700;">
+            {{ teacher.nom_complet|first|upper }}
+          </div>
+        {% endif %}
+        <div class="fw-bold fs-5">{{ teacher.nom_complet }}</div>
+        {% if teacher.genre %}
+          <div class="mt-1">
+            {% if teacher.genre == 'M' %}
+              <span class="badge bg-info">Masculin</span>
+            {% else %}
+              <span class="badge" style="background:#d63384;">Féminin</span>
+            {% endif %}
+          </div>
+        {% endif %}
+        <div class="text-muted small mt-1">{{ teacher.email|default:"" }}</div>
+        <div class="text-muted small">{{ teacher.telephone|default:"" }}</div>
+        <span class="badge bg-success mt-2">Enseignant</span>
+      </div>
+      <div class="card-footer bg-transparent">
+        <div class="row g-2 text-center">
+          <div class="col-6 border-end">
+            <div class="fw-semibold text-primary">{{ teacher.classes_enseignees.count }}</div>
+            <div class="text-muted" style="font-size:.75rem;">Affectations</div>
+          </div>
+          <div class="col-6">
+            <div class="fw-semibold text-primary">{{ teacher.user.username }}</div>
+            <div class="text-muted" style="font-size:.75rem;">Identifiant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lien vers le compte utilisateur -->
+    <div class="card mt-3">
+      <div class="card-header"><i class="bi bi-person-lock me-2 text-primary"></i>Compte utilisateur</div>
+      <div class="card-body">
+        <p class="text-muted small mb-2">Gérer les accès, le mot de passe et les paramètres du compte lié à cet enseignant.</p>
+        <a href="{% url 'user_update' teacher.user.pk %}" class="btn btn-outline-primary btn-sm w-100">
+          <i class="bi bi-person-gear me-1"></i>Accéder au compte
+        </a>
+        <a href="{% url 'reset_user_password' teacher.user.pk %}" class="btn btn-outline-warning btn-sm w-100 mt-2">
+          <i class="bi bi-key me-1"></i>Réinitialiser le mot de passe
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Matières et classes -->
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">Matières et classes assignées</div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead><tr><th>Matière</th><th>Maxima</th><th>Classe</th></tr></thead>
+          <tbody>
+            {% for mc in teacher.classes_enseignees %}
+            <tr>
+              <td class="fw-medium">{{ mc.matiere }}</td>
+              <td><span class="badge bg-secondary">{{ mc.matiere.maxima }}</span></td>
+              <td>{{ mc.classe }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-muted py-3">Aucune affectation</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

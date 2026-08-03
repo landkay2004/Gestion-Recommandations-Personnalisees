@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'niveau_list' %}">Niveaux</a></li>
+<li class="breadcrumb-item active">{{ titre }}</li>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">{{ titre }}</h1>
+  <a href="{% url 'niveau_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Retour</a>
+</div>
+<div class="card" style="max-width:500px">
+  <div class="card-body">
+    <form method="post">{% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label fw-medium">Nom du niveau *</label>
+        {{ form.nom }}
+        <div class="form-text">Ex: 7ème, 8ème, 1ère Secondaire, 2ème Secondaire…</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Ordre de promotion *</label>
+        {{ form.ordre }}
+        <div class="form-text">Numéro croissant pour la progression : 7ème=1, 8ème=2, 1ère=3… Le système propose automatiquement le niveau suivant lors de la promotion.</div>
+      </div>
+      <div class="mb-4">
+        <label class="form-label fw-medium">Cycle <span class="text-muted">(optionnel)</span></label>
+        {{ form.cycle }}
+        <div class="form-text">Ex: Primaire, Secondaire, etc.</div>
+      </div>
+      <button type="submit" class="btn btn-primary me-2"><i class="bi bi-save me-1"></i>Enregistrer</button>
+      <a href="{% url 'niveau_list' %}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block auth_content %}
+
+<style>
+  /* ── Fond plein écran : slideshow photo + dégradé sombre ────────── */
+  .login-fullbg {
+    position: fixed; inset: 0; z-index: 0;
+    min-height: 100vh; overflow: hidden;
+    background: #0d0b2e;
+  }
+  .login-fullbg-slide {
+    position: absolute; inset: 0;
+    background-image: var(--slide-img);
+    background-size: cover;
+    background-position: center 30%;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+  }
+  .login-fullbg-slide.active { opacity: 1; }
+  /* Overlay sombre — assure la lisibilité de la carte quelle que soit la photo */
+  .login-fullbg-overlay {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      radial-gradient(circle at 50% 35%, rgba(13,11,46,.35) 0%, rgba(13,11,46,.72) 60%, rgba(13,11,46,.88) 100%),
+      linear-gradient(180deg, rgba(13,11,46,.55) 0%, rgba(13,11,46,.4) 30%, rgba(13,11,46,.75) 100%);
+  }
+
+  /* Dots de navigation du slideshow */
+  .login-fullbg-dots {
+    position: absolute; z-index: 2; bottom: 26px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 7px;
+  }
+  .login-fullbg-dots .dot {
+    width: 24px; height: 3px; border-radius: 2px;
+    background: rgba(255,255,255,.3);
+    cursor: pointer;
+    transition: background .3s ease;
+  }
+  .login-fullbg-dots .dot.active { background: var(--gold, #c8973f); }
+
+  /* ── Contenu centré (logo + carte + tagline) ─────────────────────── */
+  .login-center-wrap {
+    position: relative; z-index: 2;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px 20px 80px;
+  }
+
+  .login-center-brand {
+    text-align: center; margin-bottom: 26px;
+  }
+  .login-center-brand-mark {
+    width: 60px; height: 60px; border-radius: 16px;
+    background: var(--primary, #4d44b5); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; margin: 0 auto 14px;
+    box-shadow: 0 10px 28px rgba(77,68,181,.5);
+  }
+  .login-center-brand-mark img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+  .login-center-brand-name {
+    font-family: 'Fraunces', Georgia, serif; font-size: 1.5rem; font-weight: 600;
+    color: #fff; letter-spacing: -.01em;
+  }
+  .login-center-brand-sub {
+    font-size: .8rem; color: rgba(255,255,255,.55); margin-top: 2px;
+  }
+
+  /* Carte glassmorphism */
+  .login-glass-card {
+    width: 100%; max-width: 420px;
+    background: rgba(255,255,255,.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,.6);
+    border-radius: 20px;
+    padding: 34px 32px;
+    box-shadow: 0 30px 70px rgba(5,3,30,.5);
+  }
+
+  .login-tagline {
+    position: relative; z-index: 2;
+    text-align: center; margin-top: 30px;
+    font-size: .82rem; color: rgba(255,255,255,.6);
+    max-width: 380px;
+  }
+  .login-tagline strong { color: #fff; }
+
+  @media (max-width: 480px) {
+    .login-glass-card { padding: 28px 22px; border-radius: 16px; }
+    .login-center-brand-mark { width: 52px; height: 52px; font-size: 1.35rem; }
+    .login-center-brand-name { font-size: 1.3rem; }
+  }
+</style>
+
+<!-- ══ Fond plein écran : slideshow ══ -->
+<div class="login-fullbg">
+  <div class="login-fullbg-slide active" style="--slide-img:url('{% static "public/img/hero-ecole.jpg" %}')"></div>
+  <div class="login-fullbg-slide" style="--slide-img:url('{% static "public/img/hero-ecole-2.jpg" %}')"></div>
+  <div class="login-fullbg-slide" style="--slide-img:url('{% static "public/img/hero-ecole-3.jpg" %}')"></div>
+  <div class="login-fullbg-overlay"></div>
+  <div class="login-fullbg-dots" id="loginDots"></div>
+</div>
+
+<!-- ══ Contenu centré ══ -->
+<div class="login-center-wrap">
+
+  <div class="login-center-brand">
+    <div class="login-center-brand-mark">
+      {% if school_info.logo %}
+        <img src="{{ school_info.logo.url }}" alt="{{ school_info.nom }}">
+      {% else %}
+        <i class="bi bi-mortarboard-fill"></i>
+      {% endif %}
+    </div>
+    <div class="login-center-brand-name">{{ school_info.pwa_nom|default:"EducNet" }}</div>
+    {% if school_info.nom %}
+    <div class="login-center-brand-sub">{{ school_info.nom }}</div>
+    {% endif %}
+  </div>
+
+  <div class="login-glass-card">
+    <div class="login-form-heading text-center">Connexion</div>
+    <div class="login-form-sub text-center mb-3">Réservé au personnel autorisé</div>
+
+    {% if form.errors %}
+    <div class="alert alert-danger d-flex align-items-center gap-2 py-2 mb-3" style="border-radius:10px;font-size:.82rem;">
+      <i class="bi bi-exclamation-circle-fill flex-shrink-0"></i>Identifiants incorrects. Veuillez réessayer.
+    </div>
+    {% endif %}
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning d-flex align-items-center gap-2 py-2 mb-3" style="border-radius:10px;font-size:.82rem;">
+      <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>{{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="post" id="loginForm">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold" style="font-size:.8rem;color:#0f172a;">Adresse e-mail <span style="color:#ef4444;">*</span></label>
+        <div class="login-field-wrap">
+          {{ form.username }}
+          <i class="bi bi-person login-field-icon"></i>
+        </div>
+      </div>
+
+      <div class="mb-1">
+        <label class="form-label fw-semibold" style="font-size:.8rem;color:#0f172a;">Mot de passe <span style="color:#ef4444;">*</span></label>
+        <div class="login-field-wrap">
+          {{ form.password }}
+          <button type="button" class="login-field-eye" onclick="togglePwd(this)" aria-label="Afficher/masquer">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="login-btn" id="loginBtn">
+        <i class="bi bi-box-arrow-in-right"></i>Se connecter
+      </button>
+    </form>
+
+    <div class="login-bottom-link">
+      <i class="bi bi-shield-lock me-1"></i>Accès réservé — personnel autorisé uniquement
+    </div>
+  </div>
+
+  <p class="login-tagline">
+    <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong> — Notes, bulletins officiels, élèves, parents et comptabilité, tout depuis un seul espace sécurisé.
+  </p>
+
+</div>
+
+<script>
+function togglePwd(btn) {
+  const wrap = btn.closest('.login-field-wrap');
+  const inp  = wrap && wrap.querySelector('input');
+  const eye  = btn.querySelector('i');
+  if (!inp) return;
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  eye.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+}
+document.getElementById('loginForm')?.addEventListener('submit', function() {
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm" style="width:14px;height:14px;"></span> Connexion…';
+});
+</script>
+<script>
+// ── Slideshow plein écran ────────────────────────────────────────────
+(function () {
+  const SLIDE_DURATION = 6000; // ← durée en ms entre chaque image (modifiable)
+  const slidesWrap = document.querySelector('.login-fullbg');
+  const dotsWrap = document.getElementById('loginDots');
+  if (!slidesWrap || !dotsWrap) return;
+
+  const slides = Array.from(slidesWrap.querySelectorAll('.login-fullbg-slide'));
+  if (slides.length <= 1) return; // rien à faire avec une seule image
+
+  let current = 0;
+  let timer = null;
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(d);
+  });
+  const dots = Array.from(dotsWrap.querySelectorAll('.dot'));
+
+  function goTo(i) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = i;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    resetTimer();
+  }
+
+  function next() { goTo((current + 1) % slides.length); }
+
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(next, SLIDE_DURATION);
+  }
+
+  resetTimer();
+})();
+</script>
+{% endblock %}

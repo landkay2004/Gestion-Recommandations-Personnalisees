@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Journal des opérations{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'annee_list' %}">Années scolaires</a></li>
+<li class="breadcrumb-item active">Journal</li>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-journal-text text-primary me-2"></i>Journal des opérations</h1>
+</div>
+
+<!-- Filtre par année -->
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label small mb-1">Filtrer par année</label>
+        <select name="annee" class="form-select form-select-sm">
+          <option value="">Toutes les années</option>
+          {% for a in annees %}
+          <option value="{{ a.pk }}" {% if annee_id == a.pk|stringformat:"s" %}selected{% endif %}>{{ a }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary btn-sm">Filtrer</button>
+        {% if annee_id %}<a href="{% url 'journal_operations' %}" class="btn btn-outline-secondary btn-sm ms-1">Réinitialiser</a>{% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th style="width:160px">Date / Heure</th>
+          <th>Opération</th>
+          <th>Année scolaire</th>
+          <th>Utilisateur</th>
+          <th>Détails</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for op in operations %}
+        <tr>
+          <td class="small text-muted">{{ op.date_operation|date:"d/m/Y H:i" }}</td>
+          <td>
+            {% if op.type_operation == 'CLOTURE_ANNEE' %}
+              <span class="badge bg-danger"><i class="bi bi-lock-fill me-1"></i>{{ op.get_type_operation_display }}</span>
+            {% elif op.type_operation == 'CREATION_ANNEE' %}
+              <span class="badge bg-success"><i class="bi bi-plus-circle-fill me-1"></i>{{ op.get_type_operation_display }}</span>
+            {% elif op.type_operation == 'ACTIVATION_ANNEE' %}
+              <span class="badge bg-primary"><i class="bi bi-toggle-on me-1"></i>{{ op.get_type_operation_display }}</span>
+            {% elif op.type_operation == 'MIGRATION' %}
+              <span class="badge bg-warning text-dark"><i class="bi bi-arrow-repeat me-1"></i>{{ op.get_type_operation_display }}</span>
+            {% elif op.type_operation == 'PROMOTION' %}
+              <span class="badge bg-info text-dark"><i class="bi bi-arrow-up-circle-fill me-1"></i>{{ op.get_type_operation_display }}</span>
+            {% else %}
+              <span class="badge bg-secondary">{{ op.get_type_operation_display }}</span>
+            {% endif %}
+          </td>
+          <td>{{ op.annee_scolaire|default:"—" }}</td>
+          <td>{{ op.utilisateur.get_full_name|default:op.utilisateur.username|default:"Système" }}</td>
+          <td class="small text-muted">
+            {% if op.details %}
+              {% for k, v in op.details.items %}
+                <span class="badge bg-light text-dark border me-1">{{ k }}: {{ v }}</span>
+              {% endfor %}
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center text-muted py-5">
+            <i class="bi bi-journal fs-2 d-block mb-2 opacity-40"></i>
+            Aucune opération enregistrée{% if annee_id %} pour cette année{% endif %}.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="d-flex justify-content-between align-items-center mt-3">
+  <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+  <nav><ul class="pagination pagination-sm mb-0">
+    {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?annee={{ annee_id }}&page={{ page_obj.previous_page_number }}">«</a></li>{% else %}<li class="page-item disabled"><span class="page-link">«</span></li>{% endif %}
+    {% for num in page_obj.paginator.page_range %}{% if num == page_obj.number %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}<li class="page-item"><a class="page-link" href="?annee={{ annee_id }}&page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}
+    {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?annee={{ annee_id }}&page={{ page_obj.next_page_number }}">»</a></li>{% else %}<li class="page-item disabled"><span class="page-link">»</span></li>{% endif %}
+  </ul></nav>
+</div>
+{% endif %}
+{% endblock %}

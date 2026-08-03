@@ -1,0 +1,41 @@
+{% extends 'portail/base_portail.html' %}
+{% block title %}Activation — {{ config.nom_portail }}{% endblock %}
+{% block content %}
+<div class="portail-card">
+  <div class="text-center mb-4">
+    <div class="portail-icon"><i class="bi bi-person-check-fill"></i></div>
+    <h2 class="h5 fw-bold mt-2">Bienvenue !</h2>
+    <p class="text-muted">Première utilisation détectée pour</p>
+    <div class="badge rounded-pill fs-6 px-3 py-2" style="background:var(--p-primary)">
+      {{ acces.eleve.nom_complet }}
+    </div>
+    <p class="text-muted mt-3 small">{{ config.texte_accueil }}</p>
+  </div>
+  <hr>
+  <p class="fw-semibold text-center mb-3">Créez votre code d'accès personnel</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        <label class="form-label fw-medium">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors.0 }}</div>
+    {% endif %}
+    <div class="alert alert-info small">
+      <i class="bi bi-info-circle me-1"></i>
+      Ce code est personnel. Il vous sera demandé à chaque consultation. Mémorisez-le bien.
+    </div>
+    <div class="d-grid mt-3">
+      <button type="submit" class="btn btn-portail btn-lg">
+        <i class="bi bi-check-circle me-2"></i>Activer mon accès
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

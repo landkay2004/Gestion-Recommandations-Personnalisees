@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Demande de changement de plan{% endblock %}
+
+{% block content %}
+<div class="container py-3" style="max-width:800px">
+
+  <div class="mb-4">
+    <a href="{% url 'abonnement:mon_abonnement' %}" class="text-muted small">
+      <i class="bi bi-arrow-left me-1"></i>Retour
+    </a>
+    <h4 class="fw-bold mt-2 mb-0"><i class="bi bi-arrow-up-circle me-2 text-primary"></i>Demande de changement de plan</h4>
+    <p class="text-muted">Sélectionnez le plan souhaité et soumettez votre demande.</p>
+  </div>
+
+  {% if messages %}
+  {% for msg in messages %}
+  <div class="alert alert-{% if msg.tags == 'error' %}danger{% elif msg.tags == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show">
+    {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      <!-- Plan actuel -->
+      {% if ecole.plan %}
+      <div class="alert alert-light border mb-4">
+        <div class="small text-muted mb-1">Plan actuel</div>
+        <div class="fw-bold">{{ ecole.plan.nom }} — {{ ecole.plan.prix_mensuel|floatformat:0 }} USD/mois</div>
+      </div>
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+
+        <!-- Sélection du plan -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Plan souhaité <span class="text-danger">*</span></label>
+          <div class="row g-3">
+            {% for plan in plans %}
+            <div class="col-12 col-md-6">
+              <label class="p-3 border rounded d-block cursor-pointer {% if request.GET.plan == plan.pk|stringformat:'s' %}border-primary{% endif %}"
+                     style="cursor:pointer">
+                <div class="d-flex align-items-start gap-2">
+                  <input type="radio" name="plan_id" value="{{ plan.pk }}" class="form-check-input mt-1"
+                         {% if request.GET.plan == plan.pk|stringformat:'s' %}checked{% endif %}
+                         {% if ecole.plan and ecole.plan.pk == plan.pk and not request.GET.plan %}checked{% endif %}
+                         required>
+                  <div>
+                    <div class="fw-bold">{{ plan.nom }}</div>
+                    <div class="text-primary">{{ plan.prix_mensuel|floatformat:0 }} USD/mois</div>
+                    {% if plan.prix_annuel_effectif %}
+                    <div class="text-muted small">ou {{ plan.prix_annuel_effectif|floatformat:0 }} USD/an</div>
+                    {% endif %}
+                    {% if plan.description %}
+                    <div class="text-muted small mt-1">{{ plan.description|truncatechars:80 }}</div>
+                    {% endif %}
+                    <div class="text-muted small mt-1">
+                      {{ plan.max_eleves }} élèves · {{ plan.max_enseignants }} ens. · {{ plan.max_classes }} classes
+                    </div>
+                  </div>
+                </div>
+              </label>
+            </div>
+            {% empty %}
+            <div class="col-12">
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>Aucun plan disponible. Contactez votre administrateur directement.
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Message libre -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Message (facultatif)</label>
+          <textarea name="message" class="form-control" rows="3"
+                    placeholder="Précisez vos besoins particuliers, questions sur la tarification, etc."></textarea>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex gap-2">
+          <a href="{% url 'abonnement:mon_abonnement' %}" class="btn btn-outline-secondary">Annuler</a>
+          {% if plans %}
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-send me-1"></i>Envoyer la demande
+          </button>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

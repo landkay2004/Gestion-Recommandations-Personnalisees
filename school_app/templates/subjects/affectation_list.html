@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load subject_tags %}
+{% block title %}Affectations — Matières par classe{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'matiere_list' %}">Matières</a></li>
+<li class="breadcrumb-item active">Affectations par classe</li>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-link-45deg text-primary me-2"></i>Matières par classe</h1>
+  <div class="d-flex gap-2">
+    <a href="{% url 'matiere_create' %}" class="btn btn-outline-warning btn-sm"><i class="bi bi-book-fill me-1"></i>Nouvelle matière globale</a>
+    <a href="{% url 'affectation_create' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus me-1"></i>Affecter une matière</a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Panneau sélection classe -->
+  <div class="col-lg-3">
+    <div class="card">
+      <div class="card-header fw-bold"><i class="bi bi-building-fill me-1"></i>Classes{% if annee %} — {{ annee }}{% endif %}</div>
+      <div class="list-group list-group-flush">
+        {% for c in classes %}
+        <a href="?classe={{ c.pk }}"
+           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2
+                  {% if classe_id == c.pk|stringformat:'s' %}active{% endif %}">
+          <span>
+            <strong>{{ c.nom }}</strong>
+            <small class="d-block text-{% if classe_id == c.pk|stringformat:'s' %}white-50{% else %}muted{% endif %}">{{ c.section }}</small>
+          </span>
+          <span class="badge {% if classe_id == c.pk|stringformat:'s' %}bg-white text-primary{% else %}bg-primary{% endif %} rounded-pill">
+            {{ c.matieres.count }}
+          </span>
+        </a>
+        {% empty %}
+        <div class="list-group-item text-muted small py-3 text-center">
+          Aucune classe. <a href="{% url 'classe_create' %}">Créer une classe</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Panneau matières de la classe -->
+  <div class="col-lg-9">
+    {% if selected_classe %}
+
+    <!-- En-tête classe -->
+    <div class="card mb-3">
+      <div class="card-body py-2 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="mb-0">{{ selected_classe }}</h5>
+          <small class="text-muted">{{ selected_classe.section }} — {{ selected_classe.annee_scolaire }}</small>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="{% url 'affectation_create' %}?classe={{ selected_classe.pk }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus me-1"></i>Affecter une matière
+          </a>
+          <a href="{% url 'bulletin_create' %}?classe={{ selected_classe.pk }}" class="btn btn-outline-info btn-sm">
+            <i class="bi bi-file-earmark-plus me-1"></i>Créer le bulletin
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matières affectées -->
+    {% if affectations %}
+    <div class="card mb-3">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-check-circle-fill text-success me-2"></i>Matières affectées ({{ affectations.count }})</span>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr><th>Matière</th><th>Maxima</th><th>Enseignant</th><th class="text-end">Actions</th></tr>
+          </thead>
+          <tbody>
+            {% for aff in affectations %}
+            <tr>
+              <td class="fw-medium">{{ aff.matiere.nom }}</td>
+              <td>
+                <span class="badge {{ maxima_colors|dict_get:aff.matiere.maxima }}">
+                  MAXIMA {{ aff.matiere.maxima }}
+                </span>
+              </td>
+              <td>
+                {% if aff.enseignant %}
+                  <span class="fw-medium">{{ aff.enseignant.user.get_full_name }}</span>
+                {% else %}
+                  <span class="text-muted small"><i class="bi bi-person-dash me-1"></i>Non assigné</span>
+                {% endif %}
+              </td>
+              <td class="text-end">
+                <a href="{% url 'affectation_update' aff.pk %}" class="btn btn-sm btn-outline-primary me-1" title="Modifier">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{% url 'affectation_delete' aff.pk %}" class="btn btn-sm btn-outline-danger" title="Retirer">
+                  <i class="bi bi-trash"></i>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      Aucune matière n'est encore affectée à cette classe.
+    </div>
+    {% endif %}
+
+    <!-- Matières disponibles à ajouter -->
+    {% if matieres_disponibles %}
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-plus-circle text-success me-2"></i>Ajouter des matières
+      </div>
+      <div class="card-body">
+        <form method="post" action="{% url 'affectation_rapide' %}">
+          {% csrf_token %}
+          <input type="hidden" name="classe_id" value="{{ selected_classe.pk }}">
+          <div class="row g-3">
+            {% for grp in matieres_disponibles %}
+            <div class="col-md-4">
+              <h6 class="fw-bold" style="color:{{ grp.color.text }}">MAXIMA {{ grp.valeur }}</h6>
+              {% for m in grp.matieres %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="matieres" value="{{ m.pk }}" id="nadd_{{ m.pk }}">
+                <label class="form-check-label small" for="nadd_{{ m.pk }}">{{ m.nom }}</label>
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </div>
+          <button type="submit" class="btn btn-success mt-3 btn-sm">
+            <i class="bi bi-plus-circle me-1"></i>Ajouter les matières cochées
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- Aucune classe sélectionnée -->
+    <div class="card">
+      <div class="card-body text-center text-muted py-5">
+        <i class="bi bi-building fs-1 d-block mb-3 text-primary opacity-40"></i>
+        <h5>Sélectionnez une classe</h5>
+        <p class="small">Choisissez une classe à gauche pour gérer ses matières et ses enseignants.</p>
+        {% if not classes %}
+        <a href="{% url 'classe_create' %}" class="btn btn-primary btn-sm">
+          <i class="bi bi-building me-1"></i>Créer la première classe
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

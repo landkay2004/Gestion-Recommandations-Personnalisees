@@ -1,0 +1,78 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Maintenance{% endblock %}
+{% block page_title %}<i class="bi bi-tools me-2 text-primary"></i>Gestion de la maintenance{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{% url 'super_admin:maintenance_creer' %}" class="btn btn-sa-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Planifier une maintenance</a>
+</div>
+
+<div class="alert alert-info d-flex gap-2 align-items-start mb-4">
+  <i class="bi bi-info-circle-fill mt-1"></i>
+  <div>
+    <strong>Regles de maintenance</strong><br>
+    Toute maintenance doit etre planifiee hors heures de service (nuit, week-end) sauf urgence reelle.
+    Marquez <strong>Urgence</strong> uniquement pour faille de securite ou panne critique.
+    Le dashboard super-admin reste toujours accessible.
+  </div>
+</div>
+
+<div class="kpi-card p-0">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr>
+        <th>Perimetre</th>
+        <th>Module</th>
+        <th>Statut</th>
+        <th>Planifie</th>
+        <th>Duree</th>
+        <th>Urgence</th>
+        <th></th>
+      </tr></thead>
+      <tbody>
+        {% for mode in modes %}
+        <tr>
+          <td>
+            {% if mode.ecole %}<span class="fw-semibold">{{ mode.ecole.nom }}</span>
+            {% else %}<span class="badge bg-danger">GLOBALE — toute la plateforme</span>{% endif %}
+          </td>
+          <td>{% if mode.module %}<code>{{ mode.module }}</code>{% else %}<span class="text-muted">Tous</span>{% endif %}</td>
+          <td>
+            {% if mode.is_active %}
+              <span class="badge bg-danger"><i class="bi bi-tools me-1"></i>Actif</span>
+            {% else %}
+              <span class="badge bg-secondary">Inactif</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if mode.debut_prevu %}<small>{{ mode.debut_prevu|date:"d/m H:i" }}</small>{% else %}—{% endif %}
+            {% if mode.fin_prevue %}&rarr; <small>{{ mode.fin_prevue|date:"d/m H:i" }}</small>{% endif %}
+          </td>
+          <td><small>{{ mode.duree_estimee_minutes }} min</small></td>
+          <td>{% if mode.is_urgence %}<span class="badge bg-danger">&#9888; Urgence</span>{% else %}—{% endif %}</td>
+          <td>
+            <form method="post" action="{% url 'super_admin:maintenance_toggle' mode.pk %}" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm {% if mode.is_active %}btn-outline-success{% else %}btn-outline-danger{% endif %}">
+                {% if mode.is_active %}<i class="bi bi-toggle-on me-1"></i>Desactiver{% else %}<i class="bi bi-toggle-off me-1"></i>Activer{% endif %}
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center text-muted py-5">Aucune maintenance planifiee.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="d-flex justify-content-between align-items-center mt-3">
+  <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+  <nav><ul class="pagination pagination-sm mb-0">
+    {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">«</a></li>{% else %}<li class="page-item disabled"><span class="page-link">«</span></li>{% endif %}
+    {% for num in page_obj.paginator.page_range %}{% if num == page_obj.number %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}
+    {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">»</a></li>{% else %}<li class="page-item disabled"><span class="page-link">»</span></li>{% endif %}
+  </ul></nav>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Importer des notes{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Import Excel</li>{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-file-earmark-arrow-up text-success me-2"></i>Importer des notes (Excel)</h1>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header fw-bold"><i class="bi bi-upload me-2"></i>Sélectionner le fichier Excel</div>
+      <div class="card-body">
+        <div class="alert alert-info small mb-3">
+          <i class="bi bi-info-circle me-1"></i>
+          Importez uniquement les fichiers <strong>exportés depuis ce système</strong>.
+          Ne renommez pas les colonnes et ne supprimez pas de lignes.
+        </div>
+        <form method="post" enctype="multipart/form-data" action="{% url 'import_notes_excel' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label fw-bold">Fichier Excel (.xlsx)</label>
+            <input type="file" name="fichier_excel" accept=".xlsx" class="form-control" required>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+              <i class="bi bi-eye me-1"></i>Aperçu avant import
+            </button>
+            <a href="{% url 'saisie_notes' %}" class="btn btn-outline-secondary">Annuler</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header fw-bold"><i class="bi bi-question-circle me-2"></i>Comment ça marche ?</div>
+      <div class="card-body small">
+        <ol class="mb-0">
+          <li class="mb-1"><strong>Exporter</strong> le fichier depuis la page "Saisie des notes" → bouton <span class="badge bg-success">Exporter Excel</span></li>
+          <li class="mb-1"><strong>Remplir</strong> les notes dans Excel (les limites sont automatiquement contrôlées)</li>
+          <li class="mb-1"><strong>Importer</strong> le fichier ici</li>
+          <li class="mb-1"><strong>Vérifier</strong> l'aperçu des changements (Avant → Après)</li>
+          <li><strong>Confirmer</strong> pour enregistrer toutes les notes</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

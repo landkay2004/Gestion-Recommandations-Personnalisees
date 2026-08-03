@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'user_list' %}">Utilisateurs</a></li>
+<li class="breadcrumb-item active">{{ titre }}</li>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">{{ titre }}</h1>
+  <a href="{% url 'user_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Retour</a>
+</div>
+
+<div style="max-width:560px">
+  <div class="card mb-3">
+    <div class="card-body">
+      {% if not obj %}
+      <div class="alert alert-info small mb-4">
+        <i class="bi bi-info-circle me-1"></i>
+        Un mot de passe temporaire fort sera généré automatiquement.
+        L'utilisateur devra le changer à sa première connexion.
+      </div>
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label fw-medium">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+          {{ field }}
+          {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+          {% for e in field.errors %}<div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ e }}</div>{% endfor %}
+        </div>
+        {% endfor %}
+        {% for e in form.non_field_errors %}
+        <div class="alert alert-danger small py-2">{{ e }}</div>
+        {% endfor %}
+
+        <div class="d-flex gap-2 mt-4">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save me-1"></i>{% if obj %}Enregistrer{% else %}Créer le compte{% endif %}
+          </button>
+          <a href="{% url 'user_list' %}" class="btn btn-outline-secondary">Annuler</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if obj %}
+  <!-- Section réinitialisation du mot de passe -->
+  <div class="card border-warning">
+    <div class="card-header bg-warning bg-opacity-10 fw-medium text-warning-emphasis">
+      <i class="bi bi-key-fill me-2"></i>Réinitialisation du mot de passe
+    </div>
+    <div class="card-body">
+      <p class="small text-muted mb-3">
+        Génère un nouveau mot de passe temporaire sécurisé pour
+        <strong>{{ obj.get_full_name|default:obj.email }}</strong>.
+        L'utilisateur devra le changer à sa prochaine connexion.
+      </p>
+
+      <!-- Étape 1 : bouton de déclenchement -->
+      <div id="reset-step-init">
+        <button type="button" class="btn btn-warning btn-sm" id="btn-show-confirm">
+          <i class="bi bi-arrow-repeat me-1"></i>Réinitialiser le mot de passe
+        </button>
+      </div>
+
+      <!-- Étape 2 : confirmation -->
+      <div id="reset-step-confirm" style="display:none">
+        <div class="alert alert-warning py-2 small mb-3">
+          <i class="bi bi-exclamation-triangle-fill me-1"></i>
+          Confirmez-vous la réinitialisation du mot de passe de <strong>{{ obj.get_full_name|default:obj.email }}</strong> ?
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-warning btn-sm" id="btn-reset-confirm">
+            <i class="bi bi-arrow-repeat me-1"></i>Confirmer
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-reset-cancel">Annuler</button>
+        </div>
+      </div>
+
+      <!-- Étape 3 : résultat -->
+      <div id="reset-step-result" style="display:none">
+        <div class="alert alert-success py-2 small mb-2">
+          <i class="bi bi-check-circle-fill me-1"></i>
+          Mot de passe réinitialisé avec succès.
+        </div>
+        <div class="p-2 bg-light rounded border d-flex align-items-center justify-content-between mb-2">
+          <span class="small fw-medium">Nouveau mot de passe temporaire :</span>
+          <span class="fw-bold font-monospace" id="reset-pwd-display"></span>
+          <button type="button" class="btn btn-sm btn-outline-secondary ms-2" id="btn-copy-pwd" title="Copier">
+            <i class="bi bi-clipboard"></i>
+          </button>
+        </div>
+        <div class="small text-muted">Communiquez ce mot de passe à l'utilisateur de façon sécurisée.</div>
+      </div>
+
+      <!-- Étape 4 : erreur -->
+      <div id="reset-step-error" style="display:none">
+        <div class="alert alert-danger py-2 small mb-2">
+          <i class="bi bi-exclamation-circle-fill me-1"></i>
+          <span id="reset-error-msg">Une erreur est survenue.</span>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-reset-retry">Réessayer</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="hidden" id="reset-csrf" value="{{ csrf_token }}">
+  <input type="hidden" id="reset-url" value="{% url 'reset_user_password' obj.pk %}">
+
+  <script>
+  (function () {
+    var init    = document.getElementById('reset-step-init');
+    var confirm = document.getElementById('reset-step-confirm');
+    var result  = document.getElementById('reset-step-result');
+    var error   = document.getElementById('reset-step-error');
+
+    function show(el) {
+      [init, confirm, result, error].forEach(function (e) { e.style.display = 'none'; });
+      el.style.display = '';
+    }
+
+    document.getElementById('btn-show-confirm').addEventListener('click', function () { show(confirm); });
+    document.getElementById('btn-reset-cancel').addEventListener('click', function () { show(init); });
+
+    var btnConfirm = document.getElementById('btn-reset-confirm');
+    btnConfirm.addEventListener('click', function () {
+      btnConfirm.disabled = true;
+      btnConfirm.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>En cours…';
+      var url  = document.getElementById('reset-url').value;
+      var csrf = document.getElementById('reset-csrf').value;
+      fetch(url, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': csrf, 'X-Requested-With': 'XMLHttpRequest' },
+        credentials: 'same-origin',
+      })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Erreur serveur HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        if (data.success) {
+          document.getElementById('reset-pwd-display').textContent = data.temp_password;
+          show(result);
+        } else {
+          throw new Error('Réponse inattendue du serveur.');
+        }
+      })
+      .catch(function (err) {
+        document.getElementById('reset-error-msg').textContent = err.message || 'Une erreur est survenue.';
+        show(error);
+      });
+    });
+
+    document.getElementById('btn-reset-retry').addEventListener('click', function () {
+      btnConfirm.disabled = false;
+      btnConfirm.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>Confirmer';
+      show(init);
+    });
+
+    var copyBtn = document.getElementById('btn-copy-pwd');
+    copyBtn.addEventListener('click', function () {
+      var pwd = document.getElementById('reset-pwd-display').textContent;
+      navigator.clipboard.writeText(pwd).then(function () {
+        var icon = copyBtn.querySelector('i');
+        icon.className = 'bi bi-check2 text-success';
+        setTimeout(function () { icon.className = 'bi bi-clipboard'; }, 2000);
+      });
+    });
+  })();
+  </script>
+  {% endif %}
+
+</div>
+{% endblock %}

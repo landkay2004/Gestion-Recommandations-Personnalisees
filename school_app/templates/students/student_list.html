@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title %}Élèves{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Élèves</li>{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-people-fill text-primary me-2"></i>Élèves</h1>
+  {% if user.is_prefet %}
+  <a href="{% url 'student_create' %}" class="btn btn-primary">
+    <i class="bi bi-person-plus me-1"></i>Ajouter un élève
+  </a>
+  {% endif %}
+</div>
+
+<!-- Filtres -->
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label small mb-1">Rechercher</label>
+        <div class="input-group input-group-sm">
+          <span class="input-group-text"><i class="bi bi-search"></i></span>
+          <input type="text" name="q" class="form-control"
+                 placeholder="Nom, postnom, matricule..."
+                 value="{{ q }}"
+                 data-live-search="tbl-students"
+                 autocomplete="off">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small mb-1">Classe</label>
+        <select name="classe" class="form-select form-select-sm"
+                data-live-filter="tbl-students" data-live-col="3">
+          <option value="">Toutes les classes</option>
+          {% for c in classes %}
+          <option value="{{ c.pk }}" {% if classe_id == c.pk|stringformat:"s" %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary btn-sm">Filtrer</button>
+        <a href="{% url 'student_list' %}" class="btn btn-outline-secondary btn-sm ms-1">Réinitialiser</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>{{ total }} élève{{ total|pluralize }}</span>
+    {% if page_obj.paginator.num_pages > 1 %}
+    <small class="text-muted">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</small>
+    {% endif %}
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover" id="tbl-students">
+        <thead>
+          <tr>
+            <th>Matricule</th>
+            <th>Nom complet</th>
+            <th>Sexe</th>
+            <th>Classe</th>
+            <th>Parent/Tuteur</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in students %}
+          <tr>
+            <td><code class="small">{{ s.matricule }}</code></td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                {% if s.photo %}
+                <img src="{{ s.photo.url }}" class="rounded-circle" width="32" height="32" style="object-fit:cover">
+                {% else %}
+                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width:32px;height:32px;font-size:0.75rem;font-weight:700">
+                  {{ s.nom|first|upper }}
+                </div>
+                {% endif %}
+                <a href="{% url 'student_detail' s.pk %}" class="text-decoration-none fw-medium">{{ s.nom_complet }}</a>
+              </div>
+            </td>
+            <td>{{ s.get_sexe_display }}</td>
+            <td>{% if s.classe %}<span class="badge bg-light text-dark border">{{ s.classe }}</span>{% else %}<span class="text-muted">—</span>{% endif %}</td>
+            <td class="text-muted">{{ s.nom_parent|default:"—" }}</td>
+            <td class="text-end">
+              <a href="{% url 'student_detail' s.pk %}" class="btn btn-sm btn-outline-secondary me-1" title="Détail"><i class="bi bi-eye"></i></a>
+              {% if user.is_prefet %}
+              <a href="{% url 'student_update' s.pk %}" class="btn btn-sm btn-outline-primary me-1" title="Modifier"><i class="bi bi-pencil"></i></a>
+              <a href="{% url 'student_delete' s.pk %}" class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></a>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr data-empty><td colspan="6" class="text-center text-muted py-4">Aucun élève trouvé</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  {% if page_obj.paginator.num_pages > 1 %}
+  <div class="card-footer d-flex justify-content-between align-items-center py-2">
+    <small class="text-muted">
+      Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}
+    </small>
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?{% if q %}q={{ q }}&{% endif %}{% if classe_id %}classe={{ classe_id }}&{% endif %}page={{ page_obj.previous_page_number }}">
+              <i class="bi bi-chevron-left"></i>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-left"></i></span></li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+          {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+            <li class="page-item">
+              <a class="page-link" href="?{% if q %}q={{ q }}&{% endif %}{% if classe_id %}classe={{ classe_id }}&{% endif %}page={{ num }}">{{ num }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?{% if q %}q={{ q }}&{% endif %}{% if classe_id %}classe={{ classe_id }}&{% endif %}page={{ page_obj.next_page_number }}">
+              <i class="bi bi-chevron-right"></i>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-right"></i></span></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

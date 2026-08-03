@@ -1,0 +1,48 @@
+{% extends 'portail/base_portail.html' %}
+{% block portail_content %}
+<div class="text-center mb-4">
+  {% if school.logo %}
+  <img src="{{ school.logo.url }}" alt="Logo" class="mb-3" style="max-height:60px">
+  {% endif %}
+  <h5 class="fw-bold text-primary mb-0">Historique scolaire</h5>
+  <p class="text-muted mb-0">{{ eleve.nom_complet }}</p>
+</div>
+
+<a href="{% url 'portail_resultats' token=acces.token %}" class="btn btn-outline-primary btn-sm w-100 mb-4">
+  <i class="bi bi-arrow-left me-1"></i>Retour aux résultats actuels
+</a>
+
+{% if archives %}
+<h6 class="fw-bold mb-3"><i class="bi bi-clock-history me-2 text-muted"></i>Années précédentes</h6>
+
+{% for arch in archives %}
+<div class="card mb-3">
+  <div class="card-body d-flex justify-content-between align-items-center">
+    <div>
+      <div class="fw-bold">{{ arch.annee }}</div>
+      <div class="small text-muted">
+        {{ arch.classe }}
+        {% if arch.cloturee %}<span class="badge bg-secondary ms-2">Archivée</span>{% endif %}
+      </div>
+      <div class="small text-muted mt-1">
+        {% for p in arch.periodes_publiees %}
+        <span class="badge bg-light text-dark border me-1">{{ p }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    <a href="{% url 'portail_archives_annee' token=acces.token annee_id=arch.annee.pk %}"
+       class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-eye me-1"></i>Consulter
+    </a>
+  </div>
+</div>
+{% endfor %}
+
+{% else %}
+<div class="text-center text-muted py-5">
+  <i class="bi bi-clock-history fs-1 opacity-30 d-block mb-3"></i>
+  <p>Aucun historique disponible pour le moment.</p>
+  <p class="small">Les résultats des années précédentes apparaîtront ici une fois publiés.</p>
+</div>
+{% endif %}
+{% endblock %}

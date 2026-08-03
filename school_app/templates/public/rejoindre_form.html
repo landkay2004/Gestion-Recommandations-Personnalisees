@@ -1,0 +1,270 @@
+{% extends "public/base_public.html" %}
+{% load static %}
+
+{% block title %}{{ platform_settings.site_name|default:"EducNet" }} — Formulaire d'inscription{% endblock %}
+
+{% block extra_style %}
+    /* ── Bande de continuité avec le hero de la landing ────────── */
+    .form-hero-strip {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #0d0b2e 0%, #1c1854 55%, #241f6b 100%);
+      padding: 44px 24px 88px;
+      text-align: center;
+    }
+    .form-hero-photo {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(160deg, rgba(13,11,46,.93) 0%, rgba(28,24,84,.88) 45%, rgba(36,31,107,.82) 100%),
+        url('{% static "public/img/hero-ecole.jpg" %}');
+      background-size: cover;
+      background-position: center 35%;
+      opacity: .4;
+    }
+    .form-hero-strip::before {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: radial-gradient(circle at 30% 20%, rgba(200,151,63,.16) 0%, transparent 50%);
+    }
+    .form-hero-strip .fh-kicker {
+      position: relative; z-index: 2;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 999px;
+      background: rgba(200,151,63,.14); border: 1px solid rgba(200,151,63,.4);
+      color: var(--gold); font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase; margin-bottom: 18px;
+    }
+    .form-hero-strip h1 {
+      position: relative; z-index: 2;
+      font-family: 'Fraunces', Georgia, serif; font-weight: 600;
+      font-size: 2.1rem; color: #fff; letter-spacing: -.01em; margin-bottom: 10px;
+    }
+    .form-hero-strip .fh-sub {
+      position: relative; z-index: 2;
+      color: rgba(255,255,255,.55); font-size: .88rem; max-width: 440px; margin: 0 auto 26px;
+    }
+    .fh-trust-row {
+      position: relative; z-index: 2;
+      display: flex; align-items: center; justify-content: center; gap: 22px; flex-wrap: wrap;
+    }
+    .fh-trust-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: .76rem; color: rgba(255,255,255,.7); font-weight: 500;
+    }
+    .fh-trust-item i { color: var(--gold); font-size: .85rem; }
+
+    .page-shell { max-width: 1080px; margin: -56px auto 0; padding: 0 20px 60px; position: relative; z-index: 2; }
+    .card { border: 1px solid var(--border); border-radius: 22px; box-shadow: 0 24px 60px rgba(15,23,42,.14); overflow: hidden; background: var(--card); }
+    .card-body { padding: 0; }
+
+    /* Panneau latéral illustré */
+    .info-panel {
+      background: var(--paper);
+      border-right: 1px solid var(--border);
+      padding: 40px 32px;
+      height: 100%;
+    }
+    .info-panel .ip-kicker {
+      font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em;
+      color: var(--gold-dark); margin-bottom: 14px;
+    }
+    .info-panel h2 {
+      font-family: 'Fraunces', Georgia, serif; font-weight: 600;
+      font-size: 1.5rem; color: var(--ink); margin-bottom: 10px; line-height: 1.2;
+    }
+    .info-panel .ip-sub { color: var(--muted); font-size: .86rem; line-height: 1.65; margin-bottom: 28px; }
+
+    .ip-bullets { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .ip-bullets li { display: flex; align-items: flex-start; gap: 13px; }
+    .ip-bullets .ib-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      background: #fff; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--primary); font-size: 1rem;
+    }
+    .ip-bullets .ib-text strong { display: block; font-size: .84rem; color: var(--ink); font-weight: 700; margin-bottom: 2px; }
+    .ip-bullets .ib-text span { font-size: .77rem; color: var(--muted); line-height: 1.5; }
+
+    .ip-badge {
+      margin-top: 30px; padding: 14px 16px; border-radius: 12px;
+      background: var(--gold-soft); border: 1px solid rgba(200,151,63,.25);
+      display: flex; align-items: center; gap: 10px;
+      font-size: .78rem; color: var(--gold-dark); font-weight: 600;
+    }
+
+    .form-col { padding: 40px 36px; }
+    .form-label { font-weight: 600; font-size: .84rem; color: var(--ink); margin-bottom: 6px; }
+    .form-control, .form-select, textarea { border-radius: 10px; border: 1px solid var(--border); padding: 10px 13px; font-size: .88rem; }
+    .form-control:focus, .form-select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(77,68,181,.12); }
+    .btn-submit {
+      border: 0; border-radius: 10px; padding: 13px 22px; width: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-mid));
+      color: #fff; font-weight: 700; font-size: .9rem; margin-top: 20px;
+      box-shadow: 0 8px 22px rgba(77,68,181,.28);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(77,68,181,.36); color: #fff; }
+    .muted { color: var(--muted); }
+    .success-box { border-radius: 18px; padding: 28px; background: #ebfdf1; border: 1px solid #bbf7d0; color: #166534; }
+
+    .section-title-form {
+      font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em;
+      color: var(--muted); margin: 22px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    .section-title-form:first-of-type { margin-top: 0; }
+
+    @media (max-width: 900px) {
+      .page-shell { margin-top: -32px; }
+      .info-panel { border-right: none; border-bottom: 1px solid var(--border); }
+      .form-hero-strip { padding: 36px 20px 60px; }
+      .form-hero-strip h1 { font-size: 1.6rem; }
+    }
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ Bande de continuité visuelle avec la landing ══ -->
+<section class="form-hero-strip">
+  <div class="form-hero-photo"></div>
+  <div class="fh-kicker"><i class="bi bi-mortarboard-fill"></i> Inscription publique</div>
+  <h1>Démarrons votre espace école</h1>
+  <p class="fh-sub">Trois minutes suffisent. Notre équipe s'occupe du reste.</p>
+  <div class="fh-trust-row">
+    <div class="fh-trust-item"><i class="bi bi-shield-check"></i>Données confidentielles</div>
+    <div class="fh-trust-item"><i class="bi bi-clock-history"></i>Réponse sous 48h</div>
+    <div class="fh-trust-item"><i class="bi bi-award-fill"></i>Conforme MEPSP</div>
+  </div>
+</section>
+
+<div class="page-shell">
+  <div class="card">
+    <div class="card-body">
+      <div class="row g-0">
+        <div class="col-lg-4">
+          <div class="info-panel">
+            <div class="ip-kicker">Ce qui vous attend</div>
+            <h2>Un accompagnement complet</h2>
+            <p class="ip-sub">Remplissez ce formulaire pour demander votre accès à {{ platform_settings.site_name|default:"EducNet" }}. Notre équipe vous recontacte sous 48 heures.</p>
+
+            <ul class="ip-bullets">
+              <li>
+                <div class="ib-icon"><i class="bi bi-gear-fill"></i></div>
+                <div class="ib-text">
+                  <strong>Configuration initiale incluse</strong>
+                  <span>Votre espace est préparé et prêt à l'emploi dès l'activation.</span>
+                </div>
+              </li>
+              <li>
+                <div class="ib-icon"><i class="bi bi-shield-lock-fill"></i></div>
+                <div class="ib-text">
+                  <strong>Accès sécurisé et isolé</strong>
+                  <span>Chaque établissement dispose de son propre espace, indépendant des autres.</span>
+                </div>
+              </li>
+              <li>
+                <div class="ib-icon"><i class="bi bi-life-preserver"></i></div>
+                <div class="ib-text">
+                  <strong>Support et formation fournis</strong>
+                  <span>Notre équipe vous accompagne dans la prise en main de la plateforme.</span>
+                </div>
+              </li>
+            </ul>
+
+            <div class="ip-badge">
+              <i class="bi bi-clock-history"></i>
+              Réponse sous 48h ouvrées
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div class="form-col">
+            {% if success %}
+              <div class="success-box">
+                <h2 class="h4 mb-2">Demande envoyée avec succès</h2>
+                <p class="mb-3">Votre demande pour <strong>{{ nom_ecole }}</strong> a bien été reçue. Nous vous contacterons bientôt à <strong>{{ email }}</strong>.</p>
+                <a href="{% url 'rejoindre_educnet_form' %}" class="btn btn-outline-success">Soumettre une autre demande</a>
+              </div>
+            {% else %}
+              {% if form.errors %}
+                <div class="alert alert-danger" role="alert">Veuillez corriger les erreurs ci-dessous.</div>
+              {% endif %}
+              <form method="post" id="joinForm">
+                {% csrf_token %}
+
+                <div class="section-title-form">Établissement</div>
+                <div class="row g-3 mb-2">
+                  <div class="col-12">
+                    <label class="form-label">Nom de l'établissement <span class="text-danger">*</span></label>
+                    {{ form.nom_ecole }}
+                    {% if form.nom_ecole.errors %}<div class="text-danger small mt-1">{{ form.nom_ecole.errors.0 }}</div>{% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">Type</label>
+                    {{ form.type_ecole }}
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">Province</label>
+                    {{ form.province }}
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Ville</label>
+                    {{ form.ville }}
+                  </div>
+                </div>
+
+                <div class="section-title-form">Contact du responsable</div>
+                <div class="row g-3 mb-2">
+                  <div class="col-12">
+                    <label class="form-label">Nom complet <span class="text-danger">*</span></label>
+                    {{ form.nom_responsable }}
+                    {% if form.nom_responsable.errors %}<div class="text-danger small mt-1">{{ form.nom_responsable.errors.0 }}</div>{% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">Téléphone <span class="text-danger">*</span></label>
+                    {{ form.telephone }}
+                    {% if form.telephone.errors %}<div class="text-danger small mt-1">{{ form.telephone.errors.0 }}</div>{% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">E-mail <span class="text-danger">*</span></label>
+                    {{ form.email }}
+                    {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>{% endif %}
+                  </div>
+                </div>
+
+                <div class="section-title-form">Plan &amp; message</div>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label">Plan souhaité</label>
+                    {{ form.plan_souhaite }}
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Message (optionnel)</label>
+                    {{ form.message }}
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                  <i class="bi bi-send-fill me-2"></i>Envoyer la demande
+                </button>
+                <p class="small muted mt-3 mb-0 text-center">
+                  <i class="bi bi-shield-lock me-1"></i>Informations confidentielles — jamais partagées avec des tiers.
+                </p>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+document.getElementById('joinForm')?.addEventListener('submit', function() {
+  const btn = this.querySelector('.btn-submit');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="width:14px;height:14px;"></span>Envoi en cours…';
+  }
+});
+{% endblock %}

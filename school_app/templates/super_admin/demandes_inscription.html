@@ -1,0 +1,140 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Demandes d'inscription{% endblock %}
+{% block page_title %}<i class="bi bi-building-add me-2 text-primary"></i>Demandes d'inscription{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <p class="text-muted small mb-0">
+      Établissements ayant soumis une demande via le formulaire public.
+      <a href="/rejoindre/" target="_blank" class="ms-2">
+        <i class="bi bi-box-arrow-up-right me-1"></i>Voir le formulaire public
+      </a>
+    </p>
+  </div>
+  <div class="d-flex gap-2">
+    <span class="badge bg-warning text-dark">{{ nb_attente }} en attente</span>
+  </div>
+</div>
+
+{% if messages %}
+{% for msg in messages %}
+<div class="alert alert-{% if msg.tags == 'error' %}danger{% elif msg.tags == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show" style="border-radius:12px;">
+  {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endfor %}
+{% endif %}
+
+<!-- Filters -->
+<div class="d-flex gap-2 mb-4 flex-wrap">
+  <a href="?statut=" class="btn btn-sm {% if not statut %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+    Toutes <span class="badge bg-white text-dark ms-1">{{ total }}</span>
+  </a>
+  <a href="?statut=en_attente" class="btn btn-sm {% if statut == 'en_attente' %}btn-warning text-dark{% else %}btn-outline-secondary{% endif %}">
+    En attente <span class="badge {% if statut == 'en_attente' %}bg-white text-dark{% else %}bg-warning text-dark{% endif %} ms-1">{{ nb_attente }}</span>
+  </a>
+  <a href="?statut=approuvee" class="btn btn-sm {% if statut == 'approuvee' %}btn-success{% else %}btn-outline-secondary{% endif %}">
+    Approuvées
+  </a>
+  <a href="?statut=rejetee" class="btn btn-sm {% if statut == 'rejetee' %}btn-danger{% else %}btn-outline-secondary{% endif %}">
+    Rejetées
+  </a>
+</div>
+
+{% if demandes %}
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>{{ total }} demande{{ total|pluralize }}</span>
+    {% if page_obj.paginator.num_pages > 1 %}<small class="text-muted">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</small>{% endif %}
+  </div>
+  <div class="list-group list-group-flush">
+    {% for d in demandes %}
+    <div class="list-group-item px-4 py-3">
+      <div class="d-flex gap-3 align-items-start">
+        <div class="flex-shrink-0 mt-1">
+          {% if d.statut == 'en_attente' %}
+          <span class="badge bg-warning text-dark">En attente</span>
+          {% elif d.statut == 'approuvee' %}
+          <span class="badge bg-success">Approuvée</span>
+          {% else %}
+          <span class="badge bg-danger">Rejetée</span>
+          {% endif %}
+        </div>
+        <div class="flex-grow-1">
+          <div class="fw-bold">
+            <a href="{% url 'super_admin:demande_inscription_detail' d.pk %}" class="text-decoration-none text-dark">{{ d.nom_ecole }}</a>
+          </div>
+          <div class="text-muted small">
+            {{ d.get_type_ecole_display|default:"" }}{% if d.ville %} · {{ d.ville }}{% endif %}{% if d.province %}, {{ d.province }}{% endif %}
+          </div>
+          <div class="small mt-1">
+            <i class="bi bi-person me-1 text-muted"></i>{{ d.nom_responsable }} ·
+            <i class="bi bi-telephone me-1 text-muted ms-1"></i>{{ d.telephone }} ·
+            <i class="bi bi-envelope me-1 text-muted ms-1"></i>{{ d.email }}
+          </div>
+          {% if d.message %}
+          <div class="text-muted small mt-1 fst-italic">{{ d.message|truncatechars:120 }}</div>
+          {% endif %}
+        </div>
+        <div class="text-muted small flex-shrink-0 text-end">
+          {{ d.created_at|date:"d/m/Y H:i" }}
+          {% if d.traite_par %}
+          <div class="mt-1">Par : {{ d.traite_par }}</div>
+          {% endif %}
+        </div>
+        <div class="flex-shrink-0 d-flex flex-column gap-1">
+          <a href="{% url 'super_admin:demande_inscription_detail' d.pk %}" class="btn btn-sm btn-outline-secondary" title="Voir le détail">
+            <i class="bi bi-eye"></i>
+          </a>
+          {% if d.statut == 'en_attente' %}
+          <form method="post" action="{% url 'super_admin:demande_inscription_traiter' d.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="approuver">
+            <button type="submit" class="btn btn-sm btn-success" title="Approuver">
+              <i class="bi bi-check2"></i>
+            </button>
+          </form>
+          <form method="post" action="{% url 'super_admin:demande_inscription_traiter' d.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="rejeter">
+            <button type="submit" class="btn btn-sm btn-danger" title="Rejeter">
+              <i class="bi bi-x"></i>
+            </button>
+          </form>
+          {% endif %}
+          {% if d.statut == 'approuvee' %}
+          <a href="{% url 'super_admin:ecole_creer' %}?nom={{ d.nom_ecole|urlencode }}&email={{ d.email|urlencode }}"
+             class="btn btn-sm btn-primary" title="Créer l'école">
+            <i class="bi bi-building-add"></i>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  </div>
+  {% if page_obj.paginator.num_pages > 1 %}
+  <div class="card-footer d-flex justify-content-between align-items-center py-2">
+    <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+    <nav><ul class="pagination pagination-sm mb-0">
+      {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?{% if statut %}statut={{ statut }}&{% endif %}page={{ page_obj.previous_page_number }}">«</a></li>{% else %}<li class="page-item disabled"><span class="page-link">«</span></li>{% endif %}
+      {% for num in page_obj.paginator.page_range %}{% if num == page_obj.number %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}<li class="page-item"><a class="page-link" href="?{% if statut %}statut={{ statut }}&{% endif %}page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}
+      {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?{% if statut %}statut={{ statut }}&{% endif %}page={{ page_obj.next_page_number }}">»</a></li>{% else %}<li class="page-item disabled"><span class="page-link">»</span></li>{% endif %}
+    </ul></nav>
+  </div>
+  {% endif %}
+</div>
+{% else %}
+<div class="card text-center py-5">
+  <div class="card-body text-muted">
+    <i class="bi bi-building-x fs-1 d-block mb-3 opacity-50"></i>
+    <h5>Aucune demande{% if statut %} {{ statut }}{% endif %}</h5>
+    <p class="small">Les demandes soumises via le formulaire public apparaîtront ici.</p>
+    <a href="/rejoindre/" target="_blank" class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-box-arrow-up-right me-1"></i>Voir le formulaire public
+    </a>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

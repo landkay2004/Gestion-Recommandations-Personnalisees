@@ -1,0 +1,60 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Ecole creee{% endblock %}
+{% block page_title %}<i class="bi bi-check-circle-fill text-success me-2"></i>{% if regeneration %}Mot de passe regenere{% else %}Ecole creee{% endif %}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-lg-7">
+    <div class="card mb-4">
+      <div class="card-body text-center">
+        <div style="font-size:3rem" class="mb-3">&#127963;</div>
+        <h4 class="fw-bold">{{ ecole.nom }}</h4>
+        <p class="text-muted">Schema : <code>{{ ecole.schema_name }}</code></p>
+        {% if email_sent %}
+        <div class="alert alert-success d-inline-flex align-items-center gap-2 mt-2">
+          <i class="bi bi-envelope-check-fill"></i>
+          Email envoye a <strong>{{ admin.email }}</strong>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="card-body border-top">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="bi bi-key-fill text-warning fs-5"></i>
+      
+        </div>
+        <table class="table table-borderless mb-0">
+          <tr>
+            <th class="text-muted fw-normal" style="width:200px">Email de connexion</th>
+            <td><code class="fs-6">{{ admin.email }}</code></td>
+          </tr>
+          <tr>
+            <th class="text-muted fw-normal">Mot de passe temporaire</th>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <code class="fs-5 fw-bold bg-warning-subtle px-2 py-1 rounded" id="temp-pwd">{{ temp_pwd }}</code>
+                <button class="btn btn-sm btn-outline-secondary" onclick="navigator.clipboard.writeText('{{ temp_pwd }}');this.textContent='Copié!'">
+                  <i class="bi bi-clipboard"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th class="text-muted fw-normal">Expiration</th>
+            <td class="text-muted">7 jours</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card-body border-top text-center">
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+          <a href="{% url 'super_admin:ecole_detail' ecole.pk %}" class="btn btn-sa-primary"><i class="bi bi-eye me-1"></i>Voir l'école</a>
+          <a href="{% url 'super_admin:ecole_list' %}" class="btn btn-outline-secondary">Toutes les écoles</a>
+          {% if not regeneration %}
+          <a href="{% url 'super_admin:ecole_creer' %}" class="btn btn-outline-primary"><i class="bi bi-plus-circle me-1"></i>Nouvelle école</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

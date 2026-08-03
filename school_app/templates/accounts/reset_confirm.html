@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Réinitialiser le mot de passe{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Réinitialiser le mot de passe</h1>
+</div>
+<div class="card" style="max-width:480px;">
+  <div class="card-body">
+    <p>Réinitialiser le mot de passe de <strong>{{ obj.get_full_name|default:obj.email }}</strong> ?</p>
+    <p class="text-muted small">Un nouveau mot de passe temporaire sera généré. L'utilisateur devra le changer à sa prochaine connexion.</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-warning me-2"><i class="bi bi-arrow-repeat me-1"></i>Réinitialiser</button>
+      <a href="{% url 'user_list' %}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

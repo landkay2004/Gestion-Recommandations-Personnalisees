@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}Cartes d'élèves{% endblock %}
+{% block content %}
+
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+  <div>
+    <h1 class="page-title"><i class="bi bi-credit-card-2-front-fill me-2"></i>Cartes d'élèves</h1>
+    <p class="page-subtitle">
+      Générez et imprimez les cartes d'identité scolaires{% if annee %} — {{ annee }}{% endif %}
+      <span class="badge ms-2" style="background:rgba(var(--primary-rgb),.12);color:var(--primary);font-size:.72rem;font-weight:600;padding:.25rem .6rem;border-radius:6px;">
+        Modèle&nbsp;: {{ config.get_modele_display }}
+      </span>
+    </p>
+  </div>
+  <a href="{% url 'carte_config' %}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+    <i class="bi bi-sliders"></i> Personnaliser les cartes
+  </a>
+</div>
+
+{% if messages %}
+  {% for msg in messages %}
+    <div class="alert alert-{{ msg.tags }} alert-dismissible fade show" role="alert">
+      {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- Filtres + impression de classe -->
+<div class="card mb-3">
+  <div class="card-body d-flex flex-wrap gap-3 align-items-center">
+    <form method="get" class="d-flex gap-2 align-items-center flex-grow-1">
+      <label class="text-muted small me-1 mb-0 text-nowrap">Filtrer par classe :</label>
+      <select name="classe" class="form-select form-select-sm" style="max-width:240px" onchange="this.form.submit()">
+        <option value="">Toutes les classes</option>
+        {% for c in classes %}
+          <option value="{{ c.pk }}" {% if c.pk|stringformat:"s" == classe_id %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </form>
+    {% for c in classes %}
+      {% if c.pk|stringformat:"s" == classe_id %}
+        <a href="{% url 'cartes_classe' c.pk %}" target="_blank"
+           class="btn btn-primary btn-sm d-flex align-items-center gap-2">
+          <i class="bi bi-printer"></i>Imprimer toute la classe ({{ c.nom }})
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Tableau des élèves -->
+<div class="card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th style="width:50px">Photo</th>
+            <th>Nom complet</th>
+            <th>Matricule</th>
+            <th>Classe</th>
+            <th class="text-center" style="width:70px">QR Code</th>
+            <th class="text-end" style="width:120px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for eleve in eleves %}
+          <tr>
+            <td>
+              {% if eleve.photo %}
+                <img src="{{ eleve.photo.url }}"
+                     style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0;">
+              {% else %}
+                <div style="width:36px;height:36px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;color:#94a3b8;">
+                  <i class="bi bi-person-fill"></i>
+                </div>
+              {% endif %}
+            </td>
+            <td class="fw-semibold">{{ eleve.nom_complet }}</td>
+            <td class="text-muted small"><code>{{ eleve.matricule }}</code></td>
+            <td class="small">
+              {% if eleve.classe %}
+                <span class="badge bg-light text-dark border">{{ eleve.classe }}</span>
+              {% else %}—{% endif %}
+            </td>
+            <td class="text-center">
+              <a href="{% url 'qr_code_image' eleve.pk %}" target="_blank">
+                <img src="{% url 'qr_code_image' eleve.pk %}"
+                     style="width:40px;height:40px;border:1px solid #e2e8f0;border-radius:4px;">
+              </a>
+            </td>
+            <td class="text-end">
+              <a href="{% url 'carte_preview' eleve.pk %}" target="_blank"
+                 class="btn btn-outline-primary btn-sm" title="Aperçu et impression de la carte">
+                <i class="bi bi-credit-card-2-front me-1"></i>Carte
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="text-center text-muted py-5">
+              <i class="bi bi-people display-6 d-block mb-2 opacity-25"></i>
+              Aucun élève trouvé.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

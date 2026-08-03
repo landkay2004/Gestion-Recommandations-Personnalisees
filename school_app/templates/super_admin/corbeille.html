@@ -1,0 +1,141 @@
+{% extends 'super_admin/base.html' %}
+{% block title %}Corbeille{% endblock %}
+{% block page_title %}
+  <i class="bi bi-trash2-fill text-danger me-2"></i>Corbeille
+{% endblock %}
+
+{% block content %}
+<div class="alert alert-warning d-flex gap-2 align-items-start">
+  <i class="bi bi-exclamation-triangle-fill fs-5 mt-1 flex-shrink-0"></i>
+  <div>
+    <strong>Zone de suppression définitive.</strong> Les écoles ici ont été placées en corbeille.
+    Vous pouvez les <strong>restaurer</strong> (statut → Suspendue) ou les
+    <strong>supprimer définitivement</strong> — cette action est <em>irréversible</em> et efface toutes les données.
+  </div>
+</div>
+
+{% if not ecoles %}
+<div class="card">
+  <div class="card-body text-center text-muted py-5">
+    <i class="bi bi-trash2" style="font-size:3rem;opacity:.3;"></i>
+    <div class="mt-3 fw-semibold">La corbeille est vide</div>
+    <div class="small mt-1">Les écoles supprimées apparaissent ici avant suppression définitive.</div>
+    <a href="{% url 'super_admin:ecole_list' %}" class="btn btn-outline-primary btn-sm mt-3">
+      <i class="bi bi-arrow-left me-1"></i>Retour aux écoles
+    </a>
+  </div>
+</div>
+{% else %}
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span class="fw-semibold">
+      <i class="bi bi-buildings-fill text-danger me-2"></i>
+      {{ ecoles|length }} école{{ ecoles|length|pluralize }} en corbeille
+    </span>
+    <a href="{% url 'super_admin:ecole_list' %}" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-arrow-left me-1"></i>Liste des écoles
+    </a>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>École</th>
+          <th>Supprimée le</th>
+          <th>Contact</th>
+          <th>Plan</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ecole in ecoles %}
+        <tr>
+          <td>
+            <div class="fw-semibold">{{ ecole.nom }}</div>
+            <div class="text-muted small">{{ ecole.ville }}{% if ecole.pays %} · {{ ecole.pays }}{% endif %}</div>
+          </td>
+          <td>
+            {% if ecole.deleted_at %}
+            <span class="text-muted small">{{ ecole.deleted_at|date:"d/m/Y H:i" }}</span>
+            {% else %}—{% endif %}
+          </td>
+          <td>
+            <div class="small">{{ ecole.contact_email }}</div>
+            {% if ecole.contact_nom %}<div class="text-muted small">{{ ecole.contact_nom }}</div>{% endif %}
+          </td>
+          <td><span class="badge bg-light text-dark border">{{ ecole.plan.nom|default:"—" }}</span></td>
+          <td class="text-end">
+            <!-- Restaurer -->
+            <form method="post" action="{% url 'super_admin:ecole_restaurer' ecole.pk %}" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-success"
+                      onclick="return confirm('Restaurer l\'école « {{ ecole.nom }} » ?')">
+                <i class="bi bi-arrow-counterclockwise me-1"></i>Restaurer
+              </button>
+            </form>
+            <button type="button" class="btn btn-sm btn-danger ms-1"
+                    data-bs-toggle="collapse" data-bs-target="#confirm-del-{{ ecole.pk }}"
+                    aria-expanded="false" aria-controls="confirm-del-{{ ecole.pk }}">
+              <i class="bi bi-trash3-fill me-1"></i>Supprimer définitivement
+            </button>
+          </td>
+        </tr>
+        <tr class="collapse" id="confirm-del-{{ ecole.pk }}">
+          <td colspan="5" class="bg-light">
+            <div class="p-3 border rounded">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+                <div class="text-muted">
+                  <strong>Confirmation requise</strong><br>
+                  Tapez le nom exact de l'école <strong>« {{ ecole.nom }} »</strong> pour valider la suppression.
+                </div>
+                <form method="post" action="{% url 'super_admin:ecole_supprimer_definitif' ecole.pk %}" class="w-100">
+                  {% csrf_token %}
+                  <div class="row gx-2 gy-2 align-items-end">
+                    <div class="col-md">
+                      <input type="text" name="confirmation" class="form-control form-control-sm"
+                             placeholder="{{ ecole.nom }}" autocomplete="off">
+                    </div>
+                    <div class="col-md-auto d-grid">
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash3-fill me-1"></i>Supprimer définitivement
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="d-flex justify-content-between align-items-center mt-3">
+  <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+  <nav><ul class="pagination pagination-sm mb-0">
+    {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">«</a></li>{% else %}<li class="page-item disabled"><span class="page-link">«</span></li>{% endif %}
+    {% for num in page_obj.paginator.page_range %}{% if num == page_obj.number %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}
+    {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">»</a></li>{% else %}<li class="page-item disabled"><span class="page-link">»</span></li>{% endif %}
+  </ul></nav>
+</div>
+{% endif %}
+{% endif %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof bootstrap === 'undefined') return;
+    document.querySelectorAll('[data-bs-toggle="collapse"][data-bs-target^="#confirm-del-"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('tr.collapse.show').forEach(function (openRow) {
+          if (openRow.id !== btn.dataset.bsTarget.slice(1)) {
+            const collapse = bootstrap.Collapse.getInstance(openRow) || new bootstrap.Collapse(openRow, {toggle:false});
+            collapse.hide();
+          }
+        });
+      });
+    });
+  });
+</script>
+{% endblock %}

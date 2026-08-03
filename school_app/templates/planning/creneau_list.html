@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% block title %}Créneaux horaires — Planning semaine{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'planning_list' %}">Planning</a></li>
+<li class="breadcrumb-item active">Créneaux horaires</li>
+{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+  <div>
+    <h1 class="page-title mb-0"><i class="bi bi-calendar-week-fill text-primary me-2"></i>Créneaux horaires</h1>
+    <p class="text-muted small mb-0 mt-1">Définissez les plages horaires de chaque jour de la semaine : cours, récréation, pause, repas, etc.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'planning_list' %}" class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-grid-3x3-gap-fill me-1"></i>Voir le planning complet
+    </a>
+  </div>
+</div>
+
+<!-- Légende types -->
+<div class="d-flex gap-2 flex-wrap mb-4">
+  <span class="badge rounded-pill px-3 py-2" style="background:#2563EB;font-size:.75rem"><i class="bi bi-book-fill me-1"></i>Cours</span>
+  <span class="badge rounded-pill px-3 py-2" style="background:#6B7280;font-size:.75rem"><i class="bi bi-moon-fill me-1"></i>Repos / Pause</span>
+  <span class="badge rounded-pill px-3 py-2" style="background:#10B981;font-size:.75rem"><i class="bi bi-emoji-smile-fill me-1"></i>Récréation</span>
+  <span class="badge rounded-pill px-3 py-2" style="background:#7C3AED;font-size:.75rem"><i class="bi bi-brightness-high-fill me-1"></i>Prière</span>
+  <span class="badge rounded-pill px-3 py-2" style="background:#F59E0B;color:#1f2937;font-size:.75rem"><i class="bi bi-cup-hot-fill me-1"></i>Repas</span>
+</div>
+
+<div class="row g-4">
+
+  <!-- ── Grille hebdomadaire ───────────────────────────────────────────────── -->
+  <div class="col-xl-8 col-lg-7">
+    <div class="card">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <span class="fw-semibold"><i class="bi bi-calendar3 me-2 text-primary"></i>Programme de la semaine</span>
+        <span class="badge bg-primary rounded-pill">{{ creneaux|length }} créneau{{ creneaux|length|pluralize:"x" }}</span>
+      </div>
+      <div class="card-body p-0">
+        {% if not creneaux %}
+        <div class="text-center text-muted py-5">
+          <i class="bi bi-calendar-x fs-1 opacity-25 d-block mb-3"></i>
+          <p class="fw-semibold mb-1">Aucun créneau défini</p>
+          <p class="small">Utilisez le formulaire ci-contre pour ajouter les plages horaires de votre établissement.</p>
+        </div>
+        {% else %}
+
+        {% regroup creneaux by jour as creneaux_par_jour %}
+        <div class="row g-0">
+          {% for group in creneaux_par_jour %}
+          {% with jour_num=group.grouper %}
+          <div class="col-12 border-bottom">
+            <div class="d-flex align-items-stretch">
+              <!-- Label jour -->
+              <div class="flex-shrink-0 d-flex flex-column align-items-center justify-content-center px-3 py-3 border-end"
+                   style="min-width:80px;background:var(--color-primary,#2563EB);color:#fff;border-radius:0">
+                <span class="fw-bold" style="font-size:.8rem;letter-spacing:.05em">
+                  {% if jour_num == 1 %}LUN{% elif jour_num == 2 %}MAR{% elif jour_num == 3 %}MER
+                  {% elif jour_num == 4 %}JEU{% elif jour_num == 5 %}VEN{% else %}SAM{% endif %}
+                </span>
+                <span class="opacity-75" style="font-size:.65rem">
+                  {% if jour_num == 1 %}Lundi{% elif jour_num == 2 %}Mardi{% elif jour_num == 3 %}Mercredi
+                  {% elif jour_num == 4 %}Jeudi{% elif jour_num == 5 %}Vendredi{% else %}Samedi{% endif %}
+                </span>
+              </div>
+              <!-- Créneaux du jour -->
+              <div class="flex-grow-1 d-flex flex-wrap gap-2 align-items-center p-3">
+                {% for c in group.list %}
+                  {% if c.type_creneau == 'cours' %}
+                    {% with bg="#EFF6FF" border="#2563EB" color="#1D4ED8" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
+                  {% elif c.type_creneau == 'repos' %}
+                    {% with bg="#F3F4F6" border="#6B7280" color="#374151" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
+                  {% elif c.type_creneau == 'recreation' %}
+                    {% with bg="#ECFDF5" border="#10B981" color="#065F46" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
+                  {% elif c.type_creneau == 'priere' %}
+                    {% with bg="#F5F3FF" border="#7C3AED" color="#4C1D95" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
+                  {% else %}
+                    {% with bg="#FFFBEB" border="#F59E0B" color="#92400E" %}
+                      <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border"
+                           style="background:{{ bg }};border-color:{{ border }}!important;font-size:.78rem">
+                        <span style="color:{{ color }};font-weight:600">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</span>
+                        <span class="text-muted" style="font-size:.7rem">{{ c.get_type_creneau_display }}</span>
+                        <form method="post" action="{% url 'creneau_delete' c.pk %}" class="d-inline m-0"
+                              onsubmit="return confirm('Supprimer ce créneau ?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link text-danger p-0 border-0" style="line-height:1;font-size:.75rem" title="Supprimer">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          {% endwith %}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Aperçu horaire vertical (si creneaux existent) -->
+    {% if creneaux %}
+    <div class="card mt-4">
+      <div class="card-header fw-semibold"><i class="bi bi-clock me-2 text-primary"></i>Vue timeline</div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0 align-middle">
+            <thead class="table-light sticky-top">
+              <tr>
+                <th style="width:110px">Heure</th>
+                <th>Lundi</th><th>Mardi</th><th>Mercredi</th><th>Jeudi</th><th>Vendredi</th><th>Samedi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in creneaux %}
+              <tr>
+                <td class="text-muted small fw-semibold">{{ c.heure_debut|time:"H\hi" }}–{{ c.heure_fin|time:"H\hi" }}</td>
+                {% for j in "123456" %}
+                  {% with jn=j|add:"0" %}
+                  <td>
+                    {% for cc in creneaux %}{% if cc.jour|stringformat:"s" == j %}
+                      {% if cc.heure_debut == c.heure_debut and cc.heure_fin == c.heure_fin %}
+                        <span class="badge {% if cc.type_creneau == 'cours' %}bg-primary{% elif cc.type_creneau == 'repos' %}bg-secondary{% elif cc.type_creneau == 'recreation' %}bg-success{% elif cc.type_creneau == 'priere' %}bg-info{% else %}bg-warning text-dark{% endif %}" style="font-size:.68rem">
+                          {{ cc.get_type_creneau_display }}
+                        </span>
+                      {% endif %}
+                    {% endif %}{% endfor %}
+                  </td>
+                  {% endwith %}
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ── Formulaire d'ajout ───────────────────────────────────────────────── -->
+  <div class="col-xl-4 col-lg-5">
+    <div class="card sticky-top" style="top:80px">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i class="bi bi-plus-circle-fill text-primary"></i>
+        <span class="fw-semibold">Ajouter un créneau</span>
+      </div>
+      <div class="card-body">
+        <form method="post" id="form-creneau">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger small py-2">{{ form.non_field_errors|join:' ' }}</div>
+          {% endif %}
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">{{ form.jour.label }} <span class="text-danger">*</span></label>
+            {{ form.jour }}
+            {% if form.jour.errors %}<div class="text-danger small mt-1">{{ form.jour.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">{{ form.type_creneau.label }}</label>
+            {{ form.type_creneau }}
+            <div class="form-text">« Repos / Pause » bloque le créneau sans permettre d'y affecter un cours.</div>
+            {% if form.type_creneau.errors %}<div class="text-danger small mt-1">{{ form.type_creneau.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-semibold">{{ form.heure_debut.label }} <span class="text-danger">*</span></label>
+              {{ form.heure_debut }}
+              {% if form.heure_debut.errors %}<div class="text-danger small mt-1">{{ form.heure_debut.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-semibold">{{ form.heure_fin.label }} <span class="text-danger">*</span></label>
+              {{ form.heure_fin }}
+              {% if form.heure_fin.errors %}<div class="text-danger small mt-1">{{ form.heure_fin.errors.0 }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label small fw-semibold">{{ form.libelle.label }}</label>
+            {{ form.libelle }}
+            <div class="form-text">Laissez vide pour générer automatiquement (ex : 08h00–09h00).</div>
+            {% if form.libelle.errors %}<div class="text-danger small mt-1">{{ form.libelle.errors.0 }}</div>{% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-plus-lg me-1"></i>Ajouter ce créneau
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Raccourcis horaires typiques -->
+    <div class="card mt-3">
+      <div class="card-header fw-semibold small"><i class="bi bi-lightning-fill text-warning me-2"></i>Plages typiques RDC</div>
+      <div class="card-body p-0">
+        <div class="list-group list-group-flush">
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="07:30" data-fin="08:30" data-type="cours">
+            <i class="bi bi-book me-2 text-primary"></i>07h30 – 08h30 · Cours (1h)
+          </button>
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="08:30" data-fin="09:30" data-type="cours">
+            <i class="bi bi-book me-2 text-primary"></i>08h30 – 09h30 · Cours (1h)
+          </button>
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="09:30" data-fin="10:00" data-type="recreation">
+            <i class="bi bi-emoji-smile me-2 text-success"></i>09h30 – 10h00 · Récréation (30min)
+          </button>
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="10:00" data-fin="11:00" data-type="cours">
+            <i class="bi bi-book me-2 text-primary"></i>10h00 – 11h00 · Cours (1h)
+          </button>
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="11:00" data-fin="12:00" data-type="cours">
+            <i class="bi bi-book me-2 text-primary"></i>11h00 – 12h00 · Cours (1h)
+          </button>
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="12:00" data-fin="13:00" data-type="repas">
+            <i class="bi bi-cup-hot me-2 text-warning"></i>12h00 – 13h00 · Repas (1h)
+          </button>
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="13:00" data-fin="14:00" data-type="cours">
+            <i class="bi bi-book me-2 text-primary"></i>13h00 – 14h00 · Cours (1h)
+          </button>
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="14:00" data-fin="15:00" data-type="cours">
+            <i class="bi bi-book me-2 text-primary"></i>14h00 – 15h00 · Cours (1h)
+          </button>
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="15:00" data-fin="15:15" data-type="repos">
+            <i class="bi bi-moon me-2 text-secondary"></i>15h00 – 15h15 · Pause (15min)
+          </button>
+          <button class="list-group-item list-group-item-action small py-2 quick-slot"
+                  data-debut="15:15" data-fin="16:15" data-type="cours">
+            <i class="bi bi-book me-2 text-primary"></i>15h15 – 16h15 · Cours (1h)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Remplissage rapide du formulaire via raccourcis
+document.querySelectorAll('.quick-slot').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const f = document.getElementById('form-creneau');
+    f.querySelector('[name="heure_debut"]').value = btn.dataset.debut;
+    f.querySelector('[name="heure_fin"]').value   = btn.dataset.fin;
+    const typeSelect = f.querySelector('[name="type_creneau"]');
+    if (typeSelect) typeSelect.value = btn.dataset.type;
+    f.scrollIntoView({behavior:'smooth', block:'start'});
+    f.querySelector('[name="heure_debut"]').focus();
+  });
+});
+</script>
+{% endblock %}

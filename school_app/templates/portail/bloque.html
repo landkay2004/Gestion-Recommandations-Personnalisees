@@ -1,0 +1,20 @@
+{% extends 'portail/base_portail.html' %}
+{% block title %}Accès bloqué — {{ config.nom_portail }}{% endblock %}
+{% block content %}
+<div class="portail-card text-center">
+  <div style="font-size:3.5rem;color:#dc2626"><i class="bi bi-shield-x-fill"></i></div>
+  <h2 class="h5 fw-bold mt-3 text-danger">Accès temporairement bloqué</h2>
+  <p class="text-muted mt-2">
+    Trop de tentatives incorrectes ont été détectées.<br>
+    L'accès est bloqué pendant <strong>15 minutes</strong>.
+  </p>
+  <p class="text-muted small">
+    Si vous avez oublié votre code, contactez l'administration de l'école pour une réinitialisation.
+  </p>
+  <div class="mt-3">
+    <span class="badge bg-danger fs-6 px-3 py-2">
+      <i class="bi bi-clock me-1"></i>Réessayez dans quelques minutes
+    </span>
+  </div>
+</div>
+{% endblock %}

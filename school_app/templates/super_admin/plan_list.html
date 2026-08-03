@@ -1,0 +1,128 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Plans d'abonnement{% endblock %}
+{% block page_title %}<i class="bi bi-stars me-2 text-primary"></i>Plans d'abonnement{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <p class="text-muted mb-0">{{ plans|length }} plan(s) configuré(s)</p>
+  <div class="d-flex gap-2">
+    <a href="{% url 'super_admin:quotas' %}" class="btn btn-sm btn-outline-warning">
+      <i class="bi bi-speedometer2 me-1"></i>Quotas
+    </a>
+    <a href="{% url 'super_admin:plan_creer' %}" class="btn btn-sa-primary btn-sm">
+      <i class="bi bi-plus-lg me-1"></i>Nouveau plan
+    </a>
+  </div>
+</div>
+
+<div class="row g-3">
+  {% for plan in plans %}
+  <div class="col-12 col-md-6 col-xl-4">
+    <div class="kpi-card h-100 position-relative {% if not plan.is_actif %}opacity-60{% endif %}">
+      <!-- Badges statut -->
+      <div class="position-absolute top-0 end-0 mt-2 me-2 d-flex gap-1">
+        {% if not plan.is_actif %}
+          <span class="badge bg-secondary">Inactif</span>
+        {% endif %}
+        {% if not plan.est_public %}
+          <span class="badge bg-info">Privé</span>
+        {% endif %}
+        {% if plan.essai_gratuit_jours > 0 %}
+          <span class="badge bg-success">{{ plan.essai_gratuit_jours }}j essai</span>
+        {% endif %}
+      </div>
+
+      <!-- En-tête -->
+      <div class="mb-3">
+        <h6 class="fw-bold mb-0">{{ plan.nom }}</h6>
+        <div class="mt-1">
+          <span class="fw-bold fs-5 text-primary">{{ plan.prix_mensuel|floatformat:0 }}</span>
+          <small class="text-muted">USD/mois</small>
+          {% if plan.prix_annuel_effectif %}
+          <span class="ms-2 text-muted small">/ {{ plan.prix_annuel_effectif|floatformat:0 }} USD/an</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Description -->
+      {% if plan.description %}
+      <p class="text-muted small mb-3" style="line-height:1.4">{{ plan.description|truncatechars:90 }}</p>
+      {% endif %}
+
+      <!-- Quotas -->
+      <div class="row text-center mb-3 p-2 bg-light rounded g-0">
+        <div class="col-3 border-end">
+          <div class="fw-bold text-dark">{{ plan.max_eleves }}</div>
+          <div class="text-muted" style="font-size:.65rem">Élèves</div>
+        </div>
+        <div class="col-3 border-end">
+          <div class="fw-bold text-dark">{{ plan.max_enseignants }}</div>
+          <div class="text-muted" style="font-size:.65rem">Ens.</div>
+        </div>
+        <div class="col-3 border-end">
+          <div class="fw-bold text-dark">{{ plan.max_classes }}</div>
+          <div class="text-muted" style="font-size:.65rem">Classes</div>
+        </div>
+        <div class="col-3">
+          <div class="fw-bold text-dark">{{ plan.max_utilisateurs }}</div>
+          <div class="text-muted" style="font-size:.65rem">Users</div>
+        </div>
+      </div>
+
+      <!-- Modules inclus (aperçu) -->
+      {% if plan.modules_inclus %}
+      <div class="mb-3 d-flex flex-wrap gap-1">
+        {% for label in plan.get_modules_labels %}
+          <span class="badge bg-primary bg-opacity-10 text-primary" style="font-size:.65rem">{{ label|truncatechars:20 }}</span>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-muted small mb-3"><i class="bi bi-check-all me-1"></i>Tous les modules inclus</p>
+      {% endif %}
+
+      <!-- Actions -->
+      <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+        <small class="text-muted">
+          <i class="bi bi-buildings me-1"></i>{{ plan.ecoles.count }} école(s)
+        </small>
+        <div class="d-flex gap-1">
+          <!-- Toggle actif -->
+          <form method="post" action="{% url 'super_admin:plan_toggle_actif' plan.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm {% if plan.is_actif %}btn-outline-secondary{% else %}btn-outline-success{% endif %}"
+                    title="{% if plan.is_actif %}Désactiver{% else %}Activer{% endif %}">
+              <i class="bi bi-{% if plan.is_actif %}pause{% else %}play{% endif %}"></i>
+            </button>
+          </form>
+          <a href="{% url 'super_admin:plan_modifier' plan.pk %}" class="btn btn-sm btn-outline-primary" title="Modifier">
+            <i class="bi bi-pencil"></i>
+          </a>
+          {% if plan.ecoles.count == 0 %}
+          <a href="{% url 'super_admin:plan_supprimer' plan.pk %}" class="btn btn-sm btn-outline-danger" title="Supprimer">
+            <i class="bi bi-trash"></i>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <div class="kpi-card text-center py-5">
+      <i class="bi bi-stars fs-2 d-block mb-2 opacity-25"></i>
+      <p class="text-muted">Aucun plan configuré. Créez votre premier plan.</p>
+      <a href="{% url 'super_admin:plan_creer' %}" class="btn btn-sa-primary btn-sm">Créer un plan</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="d-flex justify-content-between align-items-center mt-4">
+  <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+  <nav><ul class="pagination pagination-sm mb-0">
+    {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">«</a></li>{% else %}<li class="page-item disabled"><span class="page-link">«</span></li>{% endif %}
+    {% for num in page_obj.paginator.page_range %}{% if num == page_obj.number %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}
+    {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">»</a></li>{% else %}<li class="page-item disabled"><span class="page-link">»</span></li>{% endif %}
+  </ul></nav>
+</div>
+{% endif %}
+{% endblock %}

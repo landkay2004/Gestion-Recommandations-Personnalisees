@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Classes{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Classes</li>{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-building-fill text-primary me-2"></i>Classes</h1>
+  <div class="d-flex gap-2">
+    <a href="{% url 'annee_list' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-calendar3 me-1"></i>Années</a>
+    <a href="{% url 'niveau_list' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-layers me-1"></i>Niveaux</a>
+    <a href="{% url 'section_list' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-diagram-3 me-1"></i>Sections</a>
+    {% if user.is_prefet %}
+    <a href="{% url 'classe_create' %}" class="btn btn-primary"><i class="bi bi-plus me-1"></i>Nouvelle classe</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label small mb-1">Année scolaire</label>
+        <select name="annee" class="form-select form-select-sm">
+          {% for a in annees %}
+          <option value="{{ a.pk }}" {% if annee_id == a.pk|stringformat:"s" %}selected{% endif %}>
+            {{ a }}{% if a.cloturee %} (archivée){% endif %}{% if a.active %} ✓{% endif %}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary btn-sm">Filtrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Recherche live -->
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <div class="input-group input-group-sm" style="max-width:380px">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="form-control" placeholder="Classe, section, niveau…"
+             data-live-search="tbl-classes" autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><span data-live-count>{{ classes.count }}</span> classe{{ classes.count|pluralize }}</span>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-hover" id="tbl-classes">
+      <thead><tr><th>Niveau</th><th>Section</th><th>Classe</th><th>Année</th><th>Élèves</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for c in classes %}
+        <tr>
+          <td>{% if c.niveau %}<span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle">{{ c.niveau }}</span>{% else %}<span class="text-muted small">—</span>{% endif %}</td>
+          <td>{{ c.section }}</td>
+          <td class="fw-bold">{{ c.nom }}</td>
+          <td class="text-muted small">{{ c.annee_scolaire }}{% if c.annee_scolaire.cloturee %} <i class="bi bi-lock-fill text-secondary" title="Année clôturée"></i>{% endif %}</td>
+          <td><span class="badge bg-primary rounded-pill">{{ c.eleves.count }}</span></td>
+          <td class="text-end">
+            {% if user.is_prefet and c.est_modifiable %}
+            <a href="{% url 'classe_update' c.pk %}" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+            <a href="{% url 'classe_delete' c.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+            {% elif user.is_prefet %}
+            <span class="text-muted small"><i class="bi bi-lock"></i></span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr data-empty><td colspan="6" class="text-center text-muted py-4">Aucune classe pour cette année</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="d-flex justify-content-between align-items-center mt-3">
+  <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+  <nav><ul class="pagination pagination-sm mb-0">
+    {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?annee={{ annee_id }}&page={{ page_obj.previous_page_number }}">«</a></li>{% else %}<li class="page-item disabled"><span class="page-link">«</span></li>{% endif %}
+    {% for num in page_obj.paginator.page_range %}{% if num == page_obj.number %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}<li class="page-item"><a class="page-link" href="?annee={{ annee_id }}&page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}
+    {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?annee={{ annee_id }}&page={{ page_obj.next_page_number }}">»</a></li>{% else %}<li class="page-item disabled"><span class="page-link">»</span></li>{% endif %}
+  </ul></nav>
+</div>
+{% endif %}
+{% endblock %}

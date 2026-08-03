@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% comment %}
+  Ce template redirige vers le bon dashboard selon le rôle.
+  La vue dashboard/views.py rend directement index_prefet.html ou index_enseignant.html,
+  donc ce fichier n'est plus utilisé. Gardé pour compatibilité.
+{% endcomment %}
+{% block content %}
+<div class="text-center py-5">
+  <div class="spinner-border text-primary" role="status"></div>
+  <script>window.location.replace("{% url 'dashboard' %}");</script>
+</div>
+{% endblock %}

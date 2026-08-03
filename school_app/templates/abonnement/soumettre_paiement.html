@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block title %}Soumettre un paiement d'abonnement{% endblock %}
+
+{% block content %}
+<div class="container py-3" style="max-width:700px">
+
+  <div class="mb-4">
+    <a href="{% url 'abonnement:mon_abonnement' %}" class="text-muted small">
+      <i class="bi bi-arrow-left me-1"></i>Retour à mon abonnement
+    </a>
+    <h4 class="fw-bold mt-2 mb-0">
+      <i class="bi bi-phone me-2 text-primary"></i>Soumettre un paiement d'abonnement
+    </h4>
+    <p class="text-muted small">
+      Partagez votre preuve de paiement (Mobile Money, virement…). 
+      Le super-administrateur la validera et activera votre abonnement.
+    </p>
+  </div>
+
+  {% if messages %}
+  {% for msg in messages %}
+  <div class="alert alert-{% if msg.tags == 'error' %}danger{% elif msg.tags == 'success' %}success{% elif msg.tags == 'warning' %}warning{% else %}info{% endif %} alert-dismissible fade show">
+    {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <!-- Infos école -->
+  {% if ecole.plan %}
+  <div class="alert alert-light border mb-4">
+    <div class="row g-0">
+      <div class="col-sm-6">
+        <div class="small text-muted">Plan actuel</div>
+        <div class="fw-bold">{{ ecole.plan.nom }}</div>
+        <div class="text-muted small">{{ ecole.plan.prix_mensuel|floatformat:0 }} USD/mois</div>
+      </div>
+      {% if ecole.abonnement_detail %}
+      <div class="col-sm-6 mt-2 mt-sm-0">
+        <div class="small text-muted">Expiration</div>
+        <div class="fw-bold">
+          {% if ecole.abonnement_detail.date_fin %}
+            {{ ecole.abonnement_detail.date_fin|date:"d/m/Y" }}
+          {% else %}
+            —
+          {% endif %}
+        </div>
+        {% if ecole.abonnement_detail.jours_restants is not None %}
+        <div class="small {% if ecole.abonnement_detail.jours_restants <= 7 %}text-danger{% elif ecole.abonnement_detail.jours_restants <= 30 %}text-warning{% else %}text-success{% endif %}">
+          {{ ecole.abonnement_detail.jours_restants }} jour{{ ecole.abonnement_detail.jours_restants|pluralize }} restant{{ ecole.abonnement_detail.jours_restants|pluralize }}
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Coordonnées de paiement -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-primary text-white fw-semibold">
+      <i class="bi bi-info-circle me-2"></i>Coordonnées de paiement EducNet
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-sm-6">
+          <div class="d-flex gap-3 align-items-start">
+            <div class="rounded-circle bg-success-subtle d-flex align-items-center justify-content-center flex-shrink-0" style="width:40px;height:40px">
+              <i class="bi bi-phone-fill text-success"></i>
+            </div>
+            <div>
+              <div class="fw-semibold">M-Pesa / Airtel Money</div>
+              <div class="text-muted small">+243 XXX XXX XXX</div>
+              <div class="text-muted small">Nom : SGN PLATFORM</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="d-flex gap-3 align-items-start">
+            <div class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0" style="width:40px;height:40px">
+              <i class="bi bi-bank text-primary"></i>
+            </div>
+            <div>
+              <div class="fw-semibold">Virement bancaire</div>
+              <div class="text-muted small">Banque : — Compte : —</div>
+              <div class="text-muted small">Réf. : votre nom d'école</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-warning mt-3 mb-0 py-2 small">
+        <i class="bi bi-exclamation-triangle me-1"></i>
+        Après avoir effectué le paiement, remplissez le formulaire ci-dessous 
+        et joignez la capture d'écran ou le reçu.
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulaire -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <!-- Montant -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="{{ form.montant.id_for_label }}">
+            {{ form.montant.label }} <span class="text-danger">*</span>
+          </label>
+          {{ form.montant }}
+          {% if form.montant.errors %}
+          <div class="text-danger small mt-1">{{ form.montant.errors }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Mode -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="{{ form.mode.id_for_label }}">
+            {{ form.mode.label }} <span class="text-danger">*</span>
+          </label>
+          {{ form.mode }}
+          {% if form.mode.errors %}
+          <div class="text-danger small mt-1">{{ form.mode.errors }}</div>
+          {% endif %}
+        </div>
+
+        <!-- N° Transaction -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="{{ form.numero_transaction.id_for_label }}">
+            {{ form.numero_transaction.label }}
+          </label>
+          {{ form.numero_transaction }}
+          {% if form.numero_transaction.errors %}
+          <div class="text-danger small mt-1">{{ form.numero_transaction.errors }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Preuve -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="{{ form.preuve.id_for_label }}">
+            <i class="bi bi-paperclip me-1"></i>{{ form.preuve.label }}
+          </label>
+          {{ form.preuve }}
+          <div class="form-text">{{ form.preuve.help_text }}</div>
+          {% if form.preuve.errors %}
+          <div class="text-danger small mt-1">{{ form.preuve.errors }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Notes -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold" for="{{ form.notes.id_for_label }}">
+            {{ form.notes.label }}
+          </label>
+          {{ form.notes }}
+          {% if form.notes.errors %}
+          <div class="text-danger small mt-1">{{ form.notes.errors }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Sécurité notice -->
+        <div class="alert alert-light border py-2 small mb-4">
+          <i class="bi bi-shield-lock me-1 text-primary"></i>
+          Votre soumission est sécurisée et enregistrée avec votre adresse IP.
+          Toute fraude est passible de suspension immédiate.
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-send me-1"></i>Soumettre le paiement
+          </button>
+          <a href="{% url 'abonnement:mon_abonnement' %}" class="btn btn-outline-secondary">
+            Annuler
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

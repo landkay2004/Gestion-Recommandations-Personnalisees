@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block title %}Notifications{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Notifications</li>{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+  <h1 class="page-title">
+    <i class="bi bi-bell-fill text-primary me-2"></i>Notifications
+    {% if nb_non_lues %}
+    <span class="badge bg-danger ms-2">{{ nb_non_lues }} non lue{{ nb_non_lues|pluralize }}</span>
+    {% endif %}
+  </h1>
+  {% if nb_non_lues %}
+  <form method="post" action="{% url 'notif_tout_lire' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-check2-all me-1"></i>Tout marquer comme lu
+    </button>
+  </form>
+  {% endif %}
+</div>
+
+<div class="row g-4">
+  <!-- ─── Filtres ─── -->
+  <div class="col-lg-3">
+    <div class="card sticky-top" style="top:80px">
+      <div class="card-header fw-bold small"><i class="bi bi-funnel me-1"></i>Filtres</div>
+      <div class="card-body p-3">
+        <form method="get" id="filter-form">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Recherche</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Titre, message…">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Statut</label>
+            <select name="statut" class="form-select form-select-sm" onchange="this.form.submit()">
+              <option value="" {% if not statut %}selected{% endif %}>Toutes</option>
+              <option value="non_lue" {% if statut == 'non_lue' %}selected{% endif %}>Non lues</option>
+              <option value="lue"     {% if statut == 'lue' %}selected{% endif %}>Lues</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Catégorie</label>
+            <select name="categorie" class="form-select form-select-sm" onchange="this.form.submit()">
+              <option value="">Toutes</option>
+              {% for code, label in CATEGORIE_CHOICES %}
+              <option value="{{ code }}" {% if categorie == code %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Priorité</label>
+            <select name="priorite" class="form-select form-select-sm" onchange="this.form.submit()">
+              <option value="">Toutes</option>
+              {% for code, label in PRIORITE_CHOICES %}
+              <option value="{{ code }}" {% if priorite == code %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-sm w-100">
+            <i class="bi bi-search me-1"></i>Filtrer
+          </button>
+          {% if q or categorie or priorite or statut %}
+          <a href="{% url 'notification_list' %}" class="btn btn-outline-secondary btn-sm w-100 mt-2">
+            <i class="bi bi-x-circle me-1"></i>Effacer les filtres
+          </a>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Liste ─── -->
+  <div class="col-lg-9">
+    {% if notifications %}
+    <div class="card">
+      <div class="list-group list-group-flush" id="notif-list">
+        {% for n in notifications %}
+        <div class="list-group-item list-group-item-action px-4 py-3 notif-row {% if not n.lue %}notif-row-unread{% endif %}" id="notif-row-{{ n.pk }}">
+          <div class="d-flex gap-3 align-items-start">
+            <!-- Icône priorité -->
+            <div class="notif-icon-circle bg-{{ n.couleur }}-soft flex-shrink-0">
+              <i class="bi {{ n.icone }} text-{{ n.couleur }}"></i>
+            </div>
+            <!-- Contenu -->
+            <div class="flex-grow-1 min-w-0">
+              <div class="d-flex justify-content-between align-items-start gap-2">
+                <div class="fw-semibold notif-titre {% if not n.lue %}text-dark{% else %}text-muted{% endif %}">
+                  {{ n.titre }}
+                  {% if not n.lue %}<span class="badge bg-primary ms-1" style="font-size:.65rem">Nouveau</span>{% endif %}
+                </div>
+                <div class="text-muted flex-shrink-0" style="font-size:.72rem">
+                  {{ n.date_creation|date:"d/m/Y" }} à {{ n.date_creation|time:"H:i" }}
+                </div>
+              </div>
+              {% if n.description %}
+              <div class="text-muted small mt-1">{{ n.description }}</div>
+              {% endif %}
+              <div class="d-flex align-items-center gap-2 mt-2 flex-wrap">
+                <span class="badge bg-{{ n.couleur }}-soft text-{{ n.couleur }} border border-{{ n.couleur }}-subtle" style="font-size:.68rem">
+                  {{ n.get_priorite_display }}
+                </span>
+                <span class="badge bg-light text-muted border" style="font-size:.68rem">
+                  {{ n.get_categorie_display }}
+                </span>
+                {% if n.annee_scolaire %}
+                <span class="badge bg-light text-muted border" style="font-size:.68rem">
+                  {{ n.annee_scolaire }}
+                </span>
+                {% endif %}
+                {% if n.lue %}
+                <span class="text-muted" style="font-size:.68rem">
+                  <i class="bi bi-check2 me-1"></i>Lu {{ n.date_lecture|date:"d/m/Y à H:i" }}
+                </span>
+                {% endif %}
+              </div>
+            </div>
+            <!-- Actions -->
+            <div class="d-flex flex-column gap-1 flex-shrink-0">
+              {% if n.lien %}
+              <a href="{{ n.lien }}" class="btn btn-sm btn-outline-primary" style="font-size:.72rem">
+                <i class="bi bi-arrow-right-circle me-1"></i>Voir
+              </a>
+              {% endif %}
+              {% if not n.lue %}
+              <button class="btn btn-sm btn-outline-secondary notif-mark-read" data-pk="{{ n.pk }}" style="font-size:.72rem">
+                <i class="bi bi-check2"></i>
+              </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    {% if notifications.has_other_pages %}
+    <nav class="mt-3">
+      <ul class="pagination pagination-sm justify-content-center">
+        {% if notifications.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ notifications.previous_page_number }}&q={{ q }}&categorie={{ categorie }}&priorite={{ priorite }}&statut={{ statut }}">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        </li>
+        {% endif %}
+        {% for num in notifications.paginator.page_range %}
+        {% if notifications.number == num %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num > notifications.number|add:'-3' and num < notifications.number|add:'3' %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ num }}&q={{ q }}&categorie={{ categorie }}&priorite={{ priorite }}&statut={{ statut }}">{{ num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% if notifications.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ notifications.next_page_number }}&q={{ q }}&categorie={{ categorie }}&priorite={{ priorite }}&statut={{ statut }}">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <div class="card text-center py-5">
+      <div class="card-body text-muted">
+        <i class="bi bi-bell-slash fs-1 d-block mb-3 opacity-50"></i>
+        <h5>Aucune notification</h5>
+        <p class="small">
+          {% if q or categorie or priorite or statut %}
+          Aucun résultat pour ces filtres.
+          {% else %}
+          Toutes les notifications importantes apparaîtront ici.
+          {% endif %}
+        </p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const CSRF = "{{ csrf_token }}";
+
+// Marquer une notification comme lue (bouton individuel)
+document.querySelectorAll('.notif-mark-read').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const pk = btn.dataset.pk;
+    try {
+      await fetch(`/notifications/${pk}/lire/`, {
+        method: 'POST',
+        headers: {'X-CSRFToken': CSRF, 'X-Requested-With': 'XMLHttpRequest'}
+      });
+      const row = document.getElementById('notif-row-' + pk);
+      if (row) {
+        row.classList.remove('notif-row-unread');
+        btn.remove();
+        const badge = row.querySelector('.badge.bg-primary');
+        if (badge) badge.remove();
+      }
+    } catch(e) {}
+  });
+});
+</script>
+{% endblock %}

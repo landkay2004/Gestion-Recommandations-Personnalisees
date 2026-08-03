@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Bulletins{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Bulletins</li>{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-file-earmark-text-fill text-primary me-2"></i>Modèles de bulletins</h1>
+  {% if user.is_prefet %}
+  <a href="{% url 'bulletin_create' %}" class="btn btn-primary"><i class="bi bi-plus me-1"></i>Nouveau modèle</a>
+  {% endif %}
+</div>
+<!-- Recherche live -->
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <div class="input-group input-group-sm" style="max-width:380px">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="form-control" placeholder="Classe, année…"
+             data-live-search="tbl-bulletins" autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>{{ total }} modèle{{ total|pluralize }}</span>
+    {% if page_obj.paginator.num_pages > 1 %}<small class="text-muted">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</small>{% endif %}
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-hover" id="tbl-bulletins">
+      <thead>
+        <tr><th>Classe</th><th>Année scolaire</th><th>Matières</th><th>Statut</th><th class="text-end">Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for b in bulletins %}
+        <tr>
+          <td class="fw-bold">{{ b.classe }}</td>
+          <td class="text-muted">{{ b.annee_scolaire }}</td>
+          <td><span class="badge bg-secondary rounded-pill">{{ b.matieres.count }}</span></td>
+          <td>
+            {% if b.publie %}
+            <span class="badge badge-publie"><i class="bi bi-check-circle me-1"></i>Publié</span>
+            {% else %}
+            <span class="badge badge-brouillon"><i class="bi bi-clock me-1"></i>Brouillon</span>
+            {% endif %}
+          </td>
+          <td class="text-end">
+            <a href="{% url 'bulletin_classe' b.pk %}" class="btn btn-sm btn-outline-info me-1" title="Liste des élèves">
+              <i class="bi bi-people"></i>
+            </a>
+            {% if user.is_prefet %}
+            <a href="{% url 'bulletin_update' b.pk %}" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+            {% if not b.publie %}
+            <form method="post" action="{% url 'bulletin_publish' b.pk %}" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-success me-1" title="Publier" onclick="return confirm('Publier les résultats de {{ b.classe }} ?')">
+                <i class="bi bi-send"></i>
+              </button>
+            </form>
+            {% endif %}
+            <a href="{% url 'bulletin_delete' b.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr data-empty><td colspan="5" class="text-center text-muted py-4">Aucun modèle de bulletin</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="card-footer d-flex justify-content-between align-items-center py-2">
+  <small class="text-muted">Affichage {{ page_obj.start_index }}–{{ page_obj.end_index }} sur {{ total }}</small>
+  <nav>
+    <ul class="pagination pagination-sm mb-0">
+      {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">«</a></li>{% else %}<li class="page-item disabled"><span class="page-link">«</span></li>{% endif %}
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">»</a></li>{% else %}<li class="page-item disabled"><span class="page-link">»</span></li>{% endif %}
+    </ul>
+  </nav>
+</div>
+{% endif %}
+</div>
+{% endblock %}

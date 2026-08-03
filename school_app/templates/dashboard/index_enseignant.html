@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% block title %}Mon tableau de bord{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Mon tableau de bord</li>{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">
+      <i class="bi bi-person-badge-fill text-success me-2"></i>
+      Bonjour, {{ request.user.get_full_name|default:request.user.username }}
+    </h1>
+    <p class="text-muted small mb-0">Bienvenue dans votre espace enseignant</p>
+  </div>
+  {% if annee_active %}
+  <span class="badge bg-success fs-6 px-3 py-2">
+    <i class="bi bi-calendar3 me-1"></i>{{ annee_active }}
+  </span>
+  {% endif %}
+</div>
+
+<!-- Mes statistiques -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-4">
+    <div class="stat-card">
+      <div class="stat-icon teal"><i class="bi bi-building-fill"></i></div>
+      <div>
+        <div class="stat-value">{{ nb_mes_classes }}</div>
+        <div class="stat-label">Mes classes</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-4">
+    <div class="stat-card">
+      <div class="stat-icon orange"><i class="bi bi-book-fill"></i></div>
+      <div>
+        <div class="stat-value">{{ nb_mes_matieres }}</div>
+        <div class="stat-label">Mes matières</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-4">
+    <div class="stat-card">
+      <div class="stat-icon blue"><i class="bi bi-people-fill"></i></div>
+      <div>
+        <div class="stat-value">{{ nb_mes_eleves }}</div>
+        <div class="stat-label">Mes élèves</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if not teacher %}
+<div class="alert alert-warning d-flex gap-2">
+  <i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0"></i>
+  <div>Votre profil enseignant n'est pas encore configuré. Contactez le Préfet des études.</div>
+</div>
+{% else %}
+
+<div class="row g-4">
+
+  <!-- Avancement saisie -->
+  <div class="col-lg-7">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-pencil-square text-primary me-2"></i>Avancement de ma saisie</span>
+        <a href="{% url 'saisie_notes' %}" class="btn btn-sm btn-primary">
+          <i class="bi bi-pencil me-1"></i>Saisir des notes
+        </a>
+      </div>
+      <div class="card-body">
+        {% for item in avancement %}
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="small fw-semibold">{{ item.affectation.matiere }} — {{ item.affectation.classe }}</span>
+            <span class="small text-muted">{{ item.notes_saisies }} / {{ item.attendues }}</span>
+          </div>
+          <div class="progress mb-1" style="height:8px;border-radius:6px">
+            <div class="progress-bar
+              {% if item.pct == 100 %}bg-success
+              {% elif item.pct > 50 %}bg-primary
+              {% else %}bg-warning{% endif %}"
+              style="width:{{ item.pct }}%;border-radius:6px">
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted" style="font-size:0.7rem">
+              <i class="bi bi-people me-1"></i>{{ item.nb_eleves }} élève{{ item.nb_eleves|pluralize }}
+            </span>
+            <span class="fw-semibold" style="font-size:0.75rem;color:{% if item.pct == 100 %}var(--color-success){% elif item.pct > 50 %}var(--color-primary){% else %}var(--color-warning){% endif %}">
+              {{ item.pct }}%
+            </span>
+          </div>
+        </div>
+        {% empty %}
+        <div class="text-center text-muted py-4">
+          <i class="bi bi-exclamation-circle fs-2 d-block mb-2 opacity-50"></i>
+          Aucune matière affectée. Contactez le Préfet.
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Colonne droite : Calendrier + Horloge -->
+  <div class="col-lg-5">
+    <!-- Widget Horloge + Date -->
+    <div class="card mb-3">
+      <div class="card-body py-3 px-4">
+        <div class="clock-widget">
+          <div class="cw-time" id="dash-time">--:--:--</div>
+          <div class="cw-date" id="dash-date"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Calendrier -->
+    <div class="card mb-3">
+      <div class="card-header">
+        <i class="bi bi-calendar3 text-primary me-2"></i>Calendrier
+      </div>
+      <div class="card-body px-3 py-3">
+        <div class="mini-calendar" id="mini-cal"></div>
+      </div>
+    </div>
+
+    <!-- Mes matières rapides -->
+    <div class="card">
+      <div class="card-header"><i class="bi bi-book-fill text-warning me-2"></i>Mes matières</div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0 small">
+          <thead><tr><th>Matière</th><th>Classe</th><th class="text-center">Max</th></tr></thead>
+          <tbody>
+            {% for aff in mes_affectations %}
+            <tr>
+              <td class="fw-medium">{{ aff.matiere.nom }}</td>
+              <td>{{ aff.classe }}</td>
+              <td class="text-center">
+                <span class="badge bg-secondary">{{ aff.matiere.maxima }}</span>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-muted py-3">Aucune affectation</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Mes classes -->
+<div class="card mt-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="bi bi-building-fill text-success me-2"></i>Mes classes</span>
+    <span class="badge bg-light text-dark border">{{ nb_mes_classes }} classe{{ nb_mes_classes|pluralize }}</span>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0 small">
+      <thead><tr><th>Classe</th><th>Section</th><th class="text-center">Élèves</th><th></th></tr></thead>
+      <tbody>
+        {% for c in mes_classes %}
+        <tr>
+          <td class="fw-medium">{{ c.nom }}</td>
+          <td>{{ c.section }}</td>
+          <td class="text-center"><span class="badge bg-primary rounded-pill">{{ c.eleves.count }}</span></td>
+          <td>
+            <a href="{% url 'saisie_notes' %}?classe={{ c.pk }}" class="btn btn-xs btn-outline-primary"
+               style="font-size:0.72rem;padding:2px 8px;border-radius:5px">
+              <i class="bi bi-pencil me-1"></i>Saisir
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center text-muted py-3">Aucune classe assignée</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if mes_notes_recentes %}
+<div class="card mt-4">
+  <div class="card-header"><i class="bi bi-clock-history text-muted me-2"></i>Dernières notes saisies</div>
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0 small">
+      <thead>
+        <tr><th>Élève</th><th>Matière</th><th>Classe</th><th>Période</th><th class="text-center">Note</th></tr>
+      </thead>
+      <tbody>
+        {% for n in mes_notes_recentes %}
+        <tr>
+          <td class="fw-medium">{{ n.eleve.nom_complet }}</td>
+          <td>{{ n.matiere_classe.matiere }}</td>
+          <td>{{ n.matiere_classe.classe }}</td>
+          <td><span class="badge bg-light text-dark border">{{ n.periode }}</span></td>
+          <td class="text-center fw-bold text-primary">{{ n.valeur }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Horloge dashboard ──
+(function() {
+  const JOURS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const MOIS  = ['janvier','février','mars','avril','mai','juin',
+                 'juillet','août','septembre','octobre','novembre','décembre'];
+  const elT = document.getElementById('dash-time');
+  const elD = document.getElementById('dash-date');
+  if (!elT) return;
+  function tick() {
+    const now = new Date();
+    const hh  = String(now.getHours()).padStart(2,'0');
+    const mm  = String(now.getMinutes()).padStart(2,'0');
+    const ss  = String(now.getSeconds()).padStart(2,'0');
+    elT.textContent = `${hh}:${mm}`;
+    elT.innerHTML = `${hh}:${mm}<span class="cw-seconds">:${ss}</span>`;
+    if (elD) elD.textContent = `${JOURS[now.getDay()]} ${now.getDate()} ${MOIS[now.getMonth()]} ${now.getFullYear()}`;
+  }
+  tick(); setInterval(tick, 1000);
+})();
+
+// ── Mini-calendrier ──
+(function() {
+  const JOURS = ['Lu','Ma','Me','Je','Ve','Sa','Di'];
+  const MOIS  = ['Janvier','Février','Mars','Avril','Mai','Juin',
+                 'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  let current = new Date();
+  let viewYear = current.getFullYear();
+  let viewMonth = current.getMonth();
+
+  function render() {
+    const today = new Date();
+    const firstDay = new Date(viewYear, viewMonth, 1);
+    // 0=Sun→6; we want Mon=0
+    let startDow = (firstDay.getDay() + 6) % 7;
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    const daysInPrev  = new Date(viewYear, viewMonth, 0).getDate();
+
+    let html = `
+      <div class="cal-nav">
+        <button class="cal-nav-btn" id="cal-prev"><i class="bi bi-chevron-left"></i></button>
+        <span class="cal-month-label">${MOIS[viewMonth]} ${viewYear}</span>
+        <button class="cal-nav-btn" id="cal-next"><i class="bi bi-chevron-right"></i></button>
+      </div>
+      <div class="cal-grid">
+        ${JOURS.map(j => `<div class="cal-day-name">${j}</div>`).join('')}
+    `;
+
+    // Previous month trailing days
+    for (let i = startDow - 1; i >= 0; i--) {
+      html += `<div class="cal-day other-month">${daysInPrev - i}</div>`;
+    }
+    // Current month
+    for (let d = 1; d <= daysInMonth; d++) {
+      const isToday = (d === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear());
+      html += `<div class="cal-day ${isToday ? 'today' : ''}">${d}</div>`;
+    }
+    // Next month padding
+    const total = startDow + daysInMonth;
+    const remainder = total % 7 === 0 ? 0 : 7 - (total % 7);
+    for (let d = 1; d <= remainder; d++) {
+      html += `<div class="cal-day other-month">${d}</div>`;
+    }
+    html += '</div>';
+
+    const cal = document.getElementById('mini-cal');
+    if (cal) {
+      cal.innerHTML = html;
+      document.getElementById('cal-prev').addEventListener('click', () => {
+        viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } render();
+      });
+      document.getElementById('cal-next').addEventListener('click', () => {
+        viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } render();
+      });
+    }
+  }
+  render();
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Confirmer{% endblock %}
+{% block page_title %}{{ titre }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-6">
+    <div class="kpi-card text-center">
+      <i class="bi bi-{% if couleur == 'warning' %}pause-circle{% elif couleur == 'success' %}play-circle{% elif couleur == 'danger' %}x-octagon{% else %}question-circle{% endif %}-fill text-{{ couleur }} mb-3" style="font-size:3rem"></i>
+      <h5 class="fw-bold mb-2">{{ titre }}</h5>
+      <p class="text-muted mb-4">{{ message }}</p>
+      <div class="d-flex gap-2 justify-content-center">
+        <a href="{% url 'super_admin:ecole_detail' ecole.pk %}" class="btn btn-outline-secondary">Annuler</a>
+        <form method="post" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-{{ couleur }}">Confirmer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

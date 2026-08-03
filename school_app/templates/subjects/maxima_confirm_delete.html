@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Supprimer MAXIMA {{ obj.valeur }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title text-danger"><i class="bi bi-trash me-2"></i>Supprimer MAXIMA {{ obj.valeur }}</h1>
+  <a href="{% url 'maxima_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Retour</a>
+</div>
+<div class="card" style="max-width:480px">
+  <div class="card-body">
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      Êtes-vous sûr de vouloir supprimer <strong>MAXIMA {{ obj.valeur }}</strong> ?
+      <br><small class="mt-1 d-block">Cette action est irréversible. Si des matières utilisent ce maxima, la suppression sera refusée.</small>
+    </div>
+    <form method="post" class="d-flex gap-2">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i>Supprimer</button>
+      <a href="{% url 'maxima_list' %}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

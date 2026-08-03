@@ -1,0 +1,31 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Supprimer {{ ecole.nom }}{% endblock %}
+{% block page_title %}<i class="bi bi-trash text-danger me-2"></i>Supprimer une ecole{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-6">
+    <div class="kpi-card">
+      <div class="alert alert-danger">
+        <i class="bi bi-shield-exclamation me-1"></i>
+        <strong>Action irreversible (differee)</strong> — L'ecole sera placee en <strong>corbeille</strong>.
+        Les donnees sont conservees indefiniment. La suppression definitive necessite une action manuelle de base de donnees.
+      </div>
+      <h5 class="fw-bold mb-1">{{ ecole.nom }}</h5>
+      <p class="text-muted small mb-4">Schema : <code>{{ ecole.schema_name }}</code></p>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-4">
+          <label class="form-label fw-semibold">{{ form.confirmation_nom.label }}</label>
+          {{ form.confirmation_nom }}
+          {% if form.confirmation_nom.errors %}<div class="text-danger small mt-1">{{ form.confirmation_nom.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="d-flex gap-2 justify-content-end">
+          <a href="{% url 'super_admin:ecole_detail' ecole.pk %}" class="btn btn-outline-secondary">Annuler</a>
+          <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i>Placer en corbeille</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

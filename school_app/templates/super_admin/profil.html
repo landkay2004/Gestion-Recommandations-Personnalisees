@@ -1,0 +1,52 @@
+{% extends "super_admin/base.html" %}
+{% block title %}Mon profil{% endblock %}
+{% block page_title %}<i class="bi bi-person-gear me-2 text-primary"></i>Mon profil{% endblock %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-12 col-md-6">
+    <div class="kpi-card">
+      <h6 class="fw-bold mb-3"><i class="bi bi-person me-1 text-primary"></i>Informations</h6>
+      <table class="table table-borderless table-sm">
+        <tr><th class="text-muted fw-normal">Email</th><td>{{ sa.email }}</td></tr>
+        <tr><th class="text-muted fw-normal">Nom</th><td>{{ sa.get_full_name }}</td></tr>
+        <tr><th class="text-muted fw-normal">Compte cree</th><td>{{ sa.created_at|date:"d/m/Y" }}</td></tr>
+        <tr><th class="text-muted fw-normal">Derniere connexion</th><td>{{ sa.last_login|date:"d/m/Y H:i"|default:"—" }}</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="col-12 col-md-6">
+    <div class="kpi-card">
+      <h6 class="fw-bold mb-3"><i class="bi bi-shield-lock me-1 text-primary"></i>Double authentification (2FA)</h6>
+      {% if sa.totp_enabled %}
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="badge bg-success fs-6"><i class="bi bi-shield-check me-1"></i>2FA active</span>
+        </div>
+        <p class="text-muted small">Il vous reste {{ sa.remaining_recovery_codes }} code(s) de recuperation.</p>
+        <a href="{% url 'super_admin:disable_2fa' %}" class="btn btn-sm btn-outline-danger">Desactiver le 2FA</a>
+      {% else %}
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="badge bg-danger fs-6"><i class="bi bi-shield-exclamation me-1"></i>2FA non active</span>
+        </div>
+        <p class="text-muted small">La double authentification est obligatoire pour les comptes super-admin.</p>
+        <a href="{% url 'super_admin:setup_2fa' %}" class="btn btn-primary btn-sm"><i class="bi bi-shield-plus me-1"></i>Activer le 2FA maintenant</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-12 col-md-6">
+    <div class="kpi-card">
+      <h6 class="fw-bold mb-3"><i class="bi bi-key me-1 text-primary"></i>Changer le mot de passe</h6>
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form_pwd %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold small">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors.0 }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-outline-primary btn-sm"><i class="bi bi-check-circle me-1"></i>Changer</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

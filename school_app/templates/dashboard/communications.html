@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Communications — EducNet{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Communications</li>{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <span class="eyebrow"><i class="bi bi-megaphone-fill me-1"></i>Centre d'information</span>
+    <h1 class="page-title">Communications</h1>
+    <p class="text-muted small mb-0">Les informations officielles de la plateforme EducNet.</p>
+  </div>
+</div>
+
+{% if annonces %}
+  <div class="row g-3">
+    {% for annonce in annonces %}
+    <div class="col-12">
+      <article class="card border-0 shadow-sm communication-card communication-{{ annonce.type_annonce }}">
+        <div class="card-body p-4">
+          <div class="d-flex gap-3">
+            <div class="communication-icon">
+              {% if annonce.type_annonce == 'urgent' %}<i class="bi bi-exclamation-triangle-fill"></i>
+              {% elif annonce.type_annonce == 'warning' %}<i class="bi bi-info-circle-fill"></i>
+              {% elif annonce.type_annonce == 'success' %}<i class="bi bi-check-circle-fill"></i>
+              {% else %}<i class="bi bi-megaphone-fill"></i>{% endif %}
+            </div>
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between gap-3 flex-wrap">
+                <div>
+                  <span class="badge communication-badge mb-2">{{ annonce.get_type_annonce_display }}</span>
+                  <h2 class="h5 fw-bold mb-1">{{ annonce.titre }}</h2>
+                </div>
+                <small class="text-muted">{{ annonce.date_publication|date:"d/m/Y à H:i" }}</small>
+              </div>
+              <div class="text-secondary communication-message">{{ annonce.message|linebreaksbr }}</div>
+              <div class="small text-muted mt-3">
+                <i class="bi bi-shield-check me-1"></i>
+                Publié par l'équipe EducNet{% if annonce.auteur_nom %} · {{ annonce.auteur_nom }}{% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card border-0 shadow-sm">
+    <div class="card-body empty-state py-5 text-center">
+      <div class="empty-state-icon"><i class="bi bi-megaphone"></i></div>
+      <h2 class="h5 fw-bold mt-3">Aucune communication</h2>
+      <p class="text-muted mb-0">Les annonces importantes de la plateforme apparaîtront ici.</p>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
+{% block extra_css %}
+<style>
+  .eyebrow { color:#4D44B5; font-size:.72rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+  .communication-card { border-left:4px solid #4D44B5 !important; }
+  .communication-urgent { border-left-color:#dc2626 !important; }
+  .communication-warning { border-left-color:#d97706 !important; }
+  .communication-success { border-left-color:#16a34a !important; }
+  .communication-icon { width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#EEF2FF;color:#4D44B5;flex:0 0 auto; }
+  .communication-urgent .communication-icon { background:#FEF2F2;color:#dc2626; }
+  .communication-warning .communication-icon { background:#FFFBEB;color:#d97706; }
+  .communication-success .communication-icon { background:#F0FDF4;color:#16a34a; }
+  .communication-badge { background:#EEF2FF;color:#4338CA; }
+  .communication-urgent .communication-badge { background:#FEF2F2;color:#b91c1c; }
+  .communication-warning .communication-badge { background:#FFFBEB;color:#92400e; }
+  .communication-success .communication-badge { background:#F0FDF4;color:#166534; }
+  .communication-message { line-height:1.75; white-space:normal; }
+  .empty-state-icon { width:64px;height:64px;margin:auto;display:grid;place-items:center;border-radius:20px;background:#EEF2FF;color:#4D44B5;font-size:1.7rem; }
+</style>
+{% endblock %}

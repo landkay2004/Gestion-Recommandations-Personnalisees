@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'bulletin_list' %}">Bulletins</a></li>
+<li class="breadcrumb-item active">{{ titre }}</li>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">{{ titre }}</h1>
+  <a href="{% url 'bulletin_list' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Retour</a>
+</div>
+
+<div class="row g-4">
+  <!-- Panneau gauche : Sélection classe + matières -->
+  <div class="col-lg-5">
+
+    <!-- Étape 1 : Sélection classe -->
+    {% if not obj %}
+    <div class="card mb-3">
+      <div class="card-header fw-bold"><span class="badge bg-primary me-2">1</span>Choisir une classe</div>
+      <div class="card-body">
+        <form method="get" id="classe-select-form">
+          <select name="classe" class="form-select" id="classe-select" onchange="this.form.submit()" required>
+            <option value="">-- Sélectionner une classe --</option>
+            {% for c in classes %}
+            <option value="{{ c.pk }}" {% if selected_classe and c.pk == selected_classe.pk %}selected{% endif %}>
+              {{ c }} — {{ c.section }}
+            </option>
+            {% endfor %}
+          </select>
+          {% if not classes %}
+          <div class="alert alert-warning mt-2 py-2 small">
+            <i class="bi bi-exclamation-triangle me-1"></i>
+            Aucune classe pour l'année active. <a href="{% url 'classe_create' %}">Créer une classe</a>
+          </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Étape 2 : Matières de la classe (filtrées) -->
+    {% if selected_classe %}
+    <div class="card">
+      <div class="card-header fw-bold">
+        {% if not obj %}<span class="badge bg-primary me-2">2</span>{% endif %}
+        Matières de <strong>{{ selected_classe }}</strong>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="classe" value="{{ selected_classe.pk }}">
+
+          {% if not obj %}
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Année scolaire</label>
+            <select name="annee_scolaire" class="form-select form-select-sm" required>
+              {% for a in annees %}
+              <option value="{{ a.pk }}" {% if annee and a.pk == annee.pk %}selected{% endif %}>{{ a }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% else %}
+          <div class="alert alert-info py-2 small mb-3">
+            <i class="bi bi-info-circle me-1"></i>
+            <strong>{{ obj.classe }}</strong> — {{ obj.annee_scolaire }}
+          </div>
+          {% endif %}
+
+          {% if not matieres_20 and not matieres_30 and not matieres_60 %}
+          <div class="alert alert-warning py-2 small">
+            <i class="bi bi-exclamation-triangle me-1"></i>
+            Aucune matière affectée à {{ selected_classe }}.
+            <a href="{% url 'affectation_list' %}?classe={{ selected_classe.pk }}">Affecter des matières →</a>
+          </div>
+          {% else %}
+
+          <!-- MAXIMA 20 -->
+          {% if matieres_20 %}
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h6 class="fw-bold mb-0" style="color:#D97706">● MAXIMA 20 <small class="fw-normal text-muted">(TG max 160)</small></h6>
+              <button type="button" class="btn btn-link btn-sm p-0 text-muted" onclick="toggleAll('mx20', true)">Tout cocher</button>
+            </div>
+            <div id="mx20">
+            {% for m in matieres_20 %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="mat_{{ m.pk }}" id="mat_{{ m.pk }}" value="1"
+                {% if m.pk in selected_ids or not obj %}checked{% endif %}>
+              <label class="form-check-label small" for="mat_{{ m.pk }}">{{ m.nom }}</label>
+            </div>
+            {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- MAXIMA 30 -->
+          {% if matieres_30 %}
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h6 class="fw-bold mb-0" style="color:#0891B2">● MAXIMA 30 <small class="fw-normal text-muted">(TG max 240)</small></h6>
+              <button type="button" class="btn btn-link btn-sm p-0 text-muted" onclick="toggleAll('mx30', true)">Tout cocher</button>
+            </div>
+            <div id="mx30">
+            {% for m in matieres_30 %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="mat_{{ m.pk }}" id="mat_{{ m.pk }}" value="1"
+                {% if m.pk in selected_ids or not obj %}checked{% endif %}>
+              <label class="form-check-label small" for="mat_{{ m.pk }}">{{ m.nom }}</label>
+            </div>
+            {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- MAXIMA 60 -->
+          {% if matieres_60 %}
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h6 class="fw-bold mb-0" style="color:#DC2626">● MAXIMA 60 <small class="fw-normal text-muted">(TG max 480)</small></h6>
+              <button type="button" class="btn btn-link btn-sm p-0 text-muted" onclick="toggleAll('mx60', true)">Tout cocher</button>
+            </div>
+            <div id="mx60">
+            {% for m in matieres_60 %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="mat_{{ m.pk }}" id="mat_{{ m.pk }}" value="1"
+                {% if m.pk in selected_ids or not obj %}checked{% endif %}>
+              <label class="form-check-label small" for="mat_{{ m.pk }}">{{ m.nom }}</label>
+            </div>
+            {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <div class="d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Enregistrer</button>
+            <a href="{% url 'bulletin_list' %}" class="btn btn-outline-secondary">Annuler</a>
+          </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+    {% else %}
+    <!-- Aucune classe sélectionnée -->
+    <div class="card">
+      <div class="card-body text-center text-muted py-5">
+        <i class="bi bi-building fs-1 d-block mb-2 text-primary opacity-50"></i>
+        <p>Sélectionnez d'abord une classe pour voir ses matières.</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Aperçu bulletin officiel RDC -->
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header fw-bold"><i class="bi bi-eye me-1"></i>Aperçu — Bulletin officiel RDC (IGE/P.S/005)</div>
+      <div class="card-body p-2" style="overflow-x:auto">
+        <div class="bulletin-container">
+          <div class="bulletin-header" style="padding:6px;text-align:center">
+            <div style="font-weight:bold;font-size:0.85rem">REPUBLIQUE DEMOCRATIQUE DU CONGO</div>
+            <div style="font-size:0.75rem">MINISTERE DE L'ENSEIGNEMENT PRIMAIRE, SECONDAIRE ET PROFESSIONNEL</div>
+          </div>
+          <table class="bulletin-table">
+            <thead>
+              <tr>
+                <th rowspan="3" style="text-align:left;width:30%">BRANCHES</th>
+                <th colspan="4">PREMIER SEMESTRE</th>
+                <th colspan="4">SECOND SEMESTRE</th>
+                <th rowspan="3">T.G.</th>
+                <th colspan="2">EXAMEN DE REPÊCHAGE</th>
+              </tr>
+              <tr>
+                <th colspan="2">TR. JOURNAL.</th><th rowspan="2">EXAM</th><th rowspan="2">TOT.</th>
+                <th colspan="2">TR. JOURNAL.</th><th rowspan="2">EXAM</th><th rowspan="2">TOT.</th>
+                <th rowspan="2">%</th><th rowspan="2">SIGN. PROF</th>
+              </tr>
+              <tr><th>1ère P</th><th>2ème P</th><th>3ème P</th><th>4ème P</th></tr>
+            </thead>
+            <tbody>
+              {% if matieres_20 %}
+              <tr class="maxima-row">
+                <td class="branche-cell">MAXIMA</td>
+                <td>20</td><td>20</td><td>40</td><td>80</td>
+                <td>20</td><td>20</td><td>40</td><td>80</td>
+                <td><strong>160</strong></td><td></td><td></td>
+              </tr>
+              {% for m in matieres_20 %}
+              <tr><td class="branche-cell">{{ m.nom }}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              {% endfor %}
+              {% endif %}
+              {% if matieres_30 %}
+              <tr class="maxima-row">
+                <td class="branche-cell">MAXIMA</td>
+                <td>30</td><td>30</td><td>60</td><td>120</td>
+                <td>30</td><td>30</td><td>60</td><td>120</td>
+                <td><strong>240</strong></td><td></td><td></td>
+              </tr>
+              {% for m in matieres_30 %}
+              <tr><td class="branche-cell">{{ m.nom }}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              {% endfor %}
+              {% endif %}
+              {% if matieres_60 %}
+              <tr class="maxima-row">
+                <td class="branche-cell">MAXIMA</td>
+                <td>60</td><td>60</td><td>120</td><td>240</td>
+                <td>60</td><td>60</td><td>120</td><td>240</td>
+                <td><strong>480</strong></td><td></td><td></td>
+              </tr>
+              {% for m in matieres_60 %}
+              <tr><td class="branche-cell">{{ m.nom }}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              {% endfor %}
+              {% endif %}
+              {% if not matieres_20 and not matieres_30 and not matieres_60 %}
+              <tr><td colspan="12" class="text-center text-muted py-3" style="font-size:0.75rem">
+                Sélectionnez une classe pour voir les matières
+              </td></tr>
+              {% endif %}
+              <tr class="maxima-row"><td class="branche-cell fw-bold" colspan="12">MAXIMA GÉNÉRAUX</td></tr>
+              <tr><td class="branche-cell">TOTAUX</td><td colspan="11"></td></tr>
+              <tr><td class="branche-cell">POURCENTAGE</td><td colspan="11"></td></tr>
+              <tr><td class="branche-cell">PLACE/NBRE ÉLÈVES</td><td>/</td><td>/</td><td>/</td><td>/</td><td>/</td><td>/</td><td>/</td><td>/</td><td>/</td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleAll(containerId, check) {
+  document.querySelectorAll('#' + containerId + ' input[type=checkbox]')
+    .forEach(cb => cb.checked = check);
+}
+</script>
+{% endblock %}

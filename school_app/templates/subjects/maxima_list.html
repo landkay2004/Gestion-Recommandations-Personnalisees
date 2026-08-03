@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block title %}Gestion des Maxima{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'matiere_list' %}">Matières</a></li>
+<li class="breadcrumb-item active">Maxima</li>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-123 text-primary me-2"></i>Gestion des Maxima</h1>
+  <a href="{% url 'matiere_list' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left me-1"></i>Retour aux matières
+  </a>
+</div>
+
+<div class="alert alert-info small mb-4">
+  <i class="bi bi-info-circle me-1"></i>
+  Les maxima définissent les barèmes disponibles pour les matières (ex : 20, 30, 60).
+  Ils sont triés automatiquement du plus petit au plus grand.
+  <strong>Un maxima utilisé par des matières ne peut pas être supprimé.</strong>
+</div>
+
+<div class="row g-4">
+  <!-- Liste des maxima existants -->
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-list-ol me-2"></i>Maxima configurés</span>
+        <span class="badge bg-primary rounded-pill">{{ total }}</span>
+      </div>
+      <div class="card-body p-0">
+        {% if maxima %}
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Valeur</th>
+              <th>Matières associées</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for mx in maxima %}
+            <tr>
+              <td>
+                <span class="fw-bold fs-5">MAXIMA {{ mx.valeur }}</span>
+              </td>
+              <td>
+                {% with nb=mx.valeur %}
+                {% with count=mx.valeur %}
+                  {# Compter les matières via un filtre de template n'est pas dispo, on affiche un lien #}
+                  <a href="{% url 'matiere_list' %}" class="text-muted small">
+                    <i class="bi bi-book me-1"></i>Voir les matières
+                  </a>
+                {% endwith %}
+                {% endwith %}
+              </td>
+              <td class="text-end">
+                <form method="post" action="{% url 'maxima_delete' mx.pk %}"
+                      onsubmit="return confirm('Supprimer MAXIMA {{ mx.valeur }} ? Cette action est irréversible.')">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="text-center text-muted py-5">
+          <i class="bi bi-123 fs-1 opacity-25 d-block mb-2"></i>
+          <p class="mb-0">Aucun maxima configuré. Ajoutez-en un ci-contre.</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulaire d'ajout -->
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header fw-bold">
+        <i class="bi bi-plus-circle me-2 text-success"></i>Ajouter un maxima
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label fw-medium">Valeur du maxima *</label>
+            {{ form.valeur }}
+            {% for e in form.valeur.errors %}
+            <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ e }}</div>
+            {% endfor %}
+            <div class="form-text">Entrez un nombre entier positif (ex : 10, 20, 30, 50, 60, 100…)</div>
+          </div>
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-plus me-1"></i>Ajouter ce maxima
+          </button>
+        </form>
+
+        <hr class="my-4">
+        <div class="small text-muted">
+          <strong>Valeurs courantes dans les établissements RDC :</strong>
+          <div class="mt-2 d-flex flex-wrap gap-2">
+            <span class="badge bg-light text-dark border">10</span>
+            <span class="badge bg-light text-dark border">20</span>
+            <span class="badge bg-light text-dark border">30</span>
+            <span class="badge bg-light text-dark border">40</span>
+            <span class="badge bg-light text-dark border">50</span>
+            <span class="badge bg-light text-dark border">60</span>
+            <span class="badge bg-light text-dark border">80</span>
+            <span class="badge bg-light text-dark border">100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

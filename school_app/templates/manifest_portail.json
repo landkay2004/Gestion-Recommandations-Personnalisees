@@ -1,0 +1,35 @@
+{% load static %}{% spaceless %}{
+  "name": "{{ info.portail_pwa_nom|default:'Portail Parent' }}",
+  "short_name": "{{ info.portail_pwa_nom_court|default:'Parent' }}",
+  "description": "{{ info.portail_pwa_description|default:'Consultation des résultats scolaires, bulletins et informations des élèves.' }}",
+  "start_url": "/portail/",
+  "scope": "/portail/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "{{ info.theme_color|default:'#2563EB' }}",
+  "background_color": "{{ info.background_color|default:'#0f172a' }}",
+  "lang": "fr",
+  "icons": [
+    {% if icons_generated %}
+    { "src": "{{ icons_base_url }}/icon-72.png",  "sizes": "72x72",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "{{ icons_base_url }}/icon-96.png",  "sizes": "96x96",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "{{ icons_base_url }}/icon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{{ icons_base_url }}/icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{{ icons_base_url }}/icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{{ icons_base_url }}/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{{ icons_base_url }}/icon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{{ icons_base_url }}/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {% else %}
+    {% if info.logo %}{ "src": "{{ info.logo.url }}", "sizes": "any", "type": "image/png", "purpose": "any maskable" },{% endif %}
+    { "src": "{% static 'icons/icon-72.png' %}",  "sizes": "72x72",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "{% static 'icons/icon-96.png' %}",  "sizes": "96x96",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "{% static 'icons/icon-128.png' %}", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{% static 'icons/icon-144.png' %}", "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{% static 'icons/icon-152.png' %}", "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{% static 'icons/icon-192.png' %}", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{% static 'icons/icon-384.png' %}", "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+    { "src": "{% static 'icons/icon-512.png' %}", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {% endif %}
+  ],
+  "categories": ["education"]
+}{% endspaceless %}
