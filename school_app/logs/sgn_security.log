@@ -1,0 +1,19 @@
+2026-08-01 10:06:27,233 [INFO] sgn.security: CONNEXION user email=prefet@ecoletest.local schema=ecole_test role=prefet
+2026-08-01 10:06:27,241 [INFO] sgn.security: CONNEXION user=prefet role=prefet ip=127.0.0.1
+2026-08-01 10:13:14,678 [INFO] sgn.security: CONNEXION super_admin email=superadmin@test.local
+2026-08-01 10:15:42,894 [INFO] sgn.security: CONNEXION user email=prefet@ecoletest.local schema=ecole_test role=prefet
+2026-08-01 10:15:42,903 [INFO] sgn.security: CONNEXION user=prefet role=prefet ip=127.0.0.1
+2026-08-01 17:01:01,305 [INFO] sgn.security: CONNEXION user email=prefet@ecoletest.local schema=ecole_test role=prefet
+2026-08-01 17:01:01,324 [INFO] sgn.security: CONNEXION user=prefet role=prefet ip=127.0.0.1
+2026-08-01 17:05:15,707 [INFO] sgn.security: DECONNEXION user=prefet
+2026-08-01 17:05:34,244 [INFO] sgn.security: CONNEXION user email=jocelyne@gmail.com schema=ecole_test role=comptable
+2026-08-01 17:05:34,260 [INFO] sgn.security: CONNEXION user=jocelyne role=comptable ip=127.0.0.1
+2026-08-01 17:09:32,407 [INFO] sgn.security: EMAIL_SENT count=1 recipients=[['noreply@educnet.local']]
+2026-08-01 17:11:08,093 [INFO] sgn.security: EMAIL_SENT count=1 recipients=[['noreply@educnet.local']]
+2026-08-01 17:19:51,159 [INFO] sgn.security: CONNEXION user email=secretariat@ecoletest.local schema=ecole_test role=secretariat
+2026-08-01 17:19:51,183 [INFO] sgn.security: CONNEXION user=secretariat role=secretariat ip=127.0.0.1
+2026-08-01 17:27:19,765 [INFO] sgn.security: EMAIL_SENT count=1 recipients=[['landkay2004@gmail.com']]
+2026-08-01 17:28:26,123 [INFO] sgn.security: CONNEXION admin_ecole email=landkay2004@gmail.com ecole=complexe_scolaire_klass
+2026-08-01 17:36:54,513 [WARNING] django.security.csrf: Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /notifications/tout-lire/
+2026-08-02 08:02:21,189 [INFO] sgn.security: CONNEXION super_admin email=superadmin@test.local
+2026-08-02 08:02:35,410 [INFO] sgn.security: DECONNEXION super_admin email=superadmin@test.local

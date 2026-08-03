@@ -1,0 +1,1864 @@
+2026-08-01 10:06:00,857 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:06:27,503 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:06:27,525 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:06:37,414 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:06:39,004 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:06:39,809 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:06:46,598 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:06:49,572 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:06:55,824 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:07:06,262 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:07:11,567 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:07:13,630 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:07:19,581 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:07:39,049 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:08:28,438 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:09:12,277 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:09:15,721 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:11:03,707 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:11:24,127 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:15:30,605 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:15:33,030 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:15:33,034 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 10:15:43,182 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:15:43,268 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:15:47,753 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:16:16,088 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:16:16,163 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:16:17,786 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:16:23,344 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:16:25,558 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:17:05,620 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:17:11,266 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:17:18,488 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:17:18,515 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:19:39,488 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:20:20,151 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:20:28,831 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:20:28,925 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:20:32,298 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:20:32,315 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:20:47,578 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:20:47,662 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:20:48,832 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:20:48,855 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:21:41,332 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:21:41,442 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:21:47,575 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:21:47,671 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:21:56,290 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:21:56,400 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:01,168 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:01,339 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:25,610 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:27,327 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:27,363 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:30,708 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:30,740 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:50,908 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:53,672 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 10:22:53,700 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 16:50:26,116 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 16:51:29,210 [WARNING] django.request: Not Found: /media/t\xe9l\xe9chargement.jpg
+2026-08-01 16:55:34,294 [INFO] sgn: PLAN_MODIFIE slug=test sa=superadmin@test.local
+2026-08-01 16:55:58,160 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 16:55:58,205 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:02,208 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:27,079 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:31,318 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:31,383 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:36,574 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:36,647 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:40,363 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:43,651 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:43,715 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:50,902 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:01:50,959 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:04,373 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:04,421 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:07,395 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:13,581 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:16,373 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:16,495 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:28,398 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:28,442 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:31,537 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:31,676 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:35,628 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:37,143 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:38,871 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:38,940 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:39,924 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:02:40,021 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:03:02,157 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:03:02,199 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:03:18,201 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:03:37,334 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:03:42,448 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:03:42,504 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:03:49,018 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:03:49,095 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:04:03,820 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:04:03,880 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:04:52,238 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:04:52,320 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:05:04,509 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:05:04,630 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:05:15,917 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:05:16,047 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 17:05:34,516 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:05:34,753 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:05:58,548 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:05:58,723 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:06:07,620 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:06:18,482 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:06:41,458 [INFO] sgn: PAIEMENT_ENREGISTRE ref=5227FAF90D eleve=DIBWE KALONGA Yannick frais=Assurance scolaire montant=10 comptable=jocelyne
+2026-08-01 17:06:41,678 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:06:41,873 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:07:42,353 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:07:42,553 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:07:52,484 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:07:52,518 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:07:56,312 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:07:56,365 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:00,361 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:00,451 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:03,158 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:03,309 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:11,935 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:12,114 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:13,241 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:17,087 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:18,145 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:18,201 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:39,323 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:39,739 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:54,390 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:54,498 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:58,773 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:08:58,866 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:09:17,313 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:09:17,363 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:09:32,383 [INFO] sgn: DEMANDE_ABONNEMENT ecole=École Primaire Saint-Gabriel plan=Test
+2026-08-01 17:09:32,658 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:09:43,166 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:10:43,782 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:10:53,009 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:11:08,089 [INFO] sgn: DEMANDE_ABONNEMENT ecole=École Primaire Saint-Gabriel plan=Démonstration
+2026-08-01 17:11:08,397 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:11:53,747 [INFO] sgn: DEMANDE_APPROUVEE pk=2 ecole=École Primaire Saint-Gabriel plan=Démonstration par=superadmin@test.local
+2026-08-01 17:12:00,693 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:12:00,733 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:12:02,347 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:12:12,145 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:12:13,601 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:12:34,699 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:12:56,492 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:13:10,187 [INFO] sgn: DEMANDE_APPROUVEE pk=1 ecole=École Primaire Saint-Gabriel plan=Test par=superadmin@test.local
+2026-08-01 17:13:22,008 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:15:35,649 [INFO] sgn: PLAN_CREE slug=standard sa=superadmin@test.local
+2026-08-01 17:15:44,301 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:16:06,800 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:16:06,842 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:16:18,175 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:16:18,206 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:18:15,881 [INFO] sgn: PLAN_CREE slug=premium sa=superadmin@test.local
+2026-08-01 17:18:26,253 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:18:50,983 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:19:10,301 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 17:19:10,545 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:19:51,553 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:19:51,612 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:20:02,603 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:20:15,395 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:20:15,550 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:20:32,400 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:20:58,233 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:20:58,311 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:04,836 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:09,264 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:11,620 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:13,703 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:15,810 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:15,859 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:19,142 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:19,199 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:25,099 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:34,344 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:42,212 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:44,058 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:59,785 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:21:59,877 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:22:00,953 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:22:24,411 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:24:17,912 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:24:31,128 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:24:31,173 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:24:49,452 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:25:27,080 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:25:28,414 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:25:35,682 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:25:35,729 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:27:19,765 [INFO] sgn: CREDENTIALS_EMAIL_SENT to=landkay2004@gmail.com via=console
+2026-08-01 17:27:19,765 [INFO] sgn: ECOLE_CREEE schema=complexe_scolaire_klass par superadmin@test.local
+2026-08-01 17:27:40,866 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 17:27:41,117 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:28:03,372 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 17:28:03,538 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:29:13,048 [INFO] sgn: ONBOARDING_STEP1_DONE admin=landkay2004@gmail.com
+2026-08-01 17:33:03,667 [INFO] sgn: ONBOARDING_TERMINE admin=landkay2004@gmail.com ecole=complexe_scolaire_klass
+2026-08-01 17:33:36,846 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:33:39,673 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:33:39,756 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:33:54,700 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:33:55,576 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:33:56,401 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:33:57,276 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:33:58,195 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:33:59,151 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:34:02,487 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:34:09,298 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:34:09,335 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:34:13,381 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:34:15,092 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:34:15,142 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:34:19,527 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:34:21,349 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:34:26,197 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:36:38,969 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:36:54,513 [WARNING] django.security.csrf: Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /notifications/tout-lire/
+2026-08-01 17:36:57,078 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:36:58,046 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:36:58,907 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:36:59,859 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:37:01,073 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:37:01,791 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:37:02,779 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:37:05,272 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:37:06,970 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:38:49,727 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:38:51,358 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 17:58:45,301 [WARNING] django.request: Not Found: /media/lerox.jpg
+2026-08-01 18:17:46,601 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:17:53,261 [ERROR] django.request: Internal Server Error: /media/school/images.jpg
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\middleware.py", line 30, in __call__
+    request.user.is_authenticated
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 251, in inner
+    self._setup()
+    ~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 40, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 20, in get_user
+    request._cached_user = auth.get_user(request)
+                           ~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 328, in get_user
+    user = backend.get_user(user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\backends.py", line 232, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+2026-08-01 18:17:53,462 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:17:56,045 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:18:01,915 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:18:03,431 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:18:05,608 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:18:08,552 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:18:12,106 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:18:16,227 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:18:44,087 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:18:51,074 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:18:51,077 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 18:20:11,993 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:21:17,354 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:21:17,371 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:22:10,192 [WARNING] django.request: Not Found: /media/ChatGPT Image 12 juil. 2026, 00_21_25.png
+2026-08-01 18:22:50,086 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:23:00,064 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:23:01,040 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:26:14,700 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:45:14,349 [WARNING] django.request: Not Found: /media/lerox.jpg
+2026-08-01 18:45:28,894 [WARNING] django.request: Not Found: /media/lerox.jpg
+2026-08-01 18:45:48,634 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:45:48,794 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:45:51,712 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:45:51,815 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:46:16,925 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:49:35,580 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:49:36,985 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:49:38,108 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:49:54,404 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:00,749 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:01,859 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:02,088 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:02,349 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:02,602 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:02,848 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:03,087 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:03,296 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:03,550 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:04,360 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:16,841 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:50:20,241 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:51:45,686 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:51:47,866 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:51:49,122 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:51:49,142 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:51:57,372 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:52:57,316 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:52:58,350 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:52:58,389 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:55:57,530 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 18:55:57,758 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:57:23,895 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:57:29,884 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:57:41,000 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:57:44,132 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:57:51,818 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:57:54,134 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:58:50,995 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:58:55,966 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:58:58,298 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:59:01,420 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 18:59:12,435 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:00:20,273 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:00:24,660 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:00:51,854 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:07:52,839 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:07:59,684 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:08:00,882 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:08:00,909 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:08:13,473 [ERROR] django.request: Internal Server Error: /media/school/images.jpg
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\middleware.py", line 30, in __call__
+    request.user.is_authenticated
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 251, in inner
+    self._setup()
+    ~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 40, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 20, in get_user
+    request._cached_user = auth.get_user(request)
+                           ~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 328, in get_user
+    user = backend.get_user(user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\backends.py", line 232, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+2026-08-01 19:08:13,713 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:08:24,249 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:08:29,346 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:10:45,634 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:10:46,956 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:10:51,947 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:10:55,429 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:10:56,222 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:13:37,343 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:13:45,491 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:15:41,432 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:17:56,047 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:19:12,458 [ERROR] django.request: Internal Server Error: /login/utilisateurs/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 184, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 245, in user_list
+    paginator = Paginator(users, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:19:52,657 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:19:55,978 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:19:58,211 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:20:08,173 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:34:27,812 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:34:28,304 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:34:29,173 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:34:30,003 [ERROR] django.request: Internal Server Error: /classes/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\classes\views.py", line 670, in classe_list
+    paginator = Paginator(classes, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:34:35,016 [ERROR] django.request: Internal Server Error: /classes/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\classes\views.py", line 670, in classe_list
+    paginator = Paginator(classes, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:34:50,520 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:34:51,899 [ERROR] django.request: Internal Server Error: /classes/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\classes\views.py", line 670, in classe_list
+    paginator = Paginator(classes, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:34:55,679 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:34:57,191 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:34:58,557 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:00,269 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:01,594 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:02,221 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:02,390 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:03,427 [ERROR] django.request: Internal Server Error: /classes/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\classes\views.py", line 670, in classe_list
+    paginator = Paginator(classes, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:35:04,746 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:06,965 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:08,575 [ERROR] django.request: Internal Server Error: /classes/annees/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\views.py", line 185, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\classes\views.py", line 142, in annee_list
+    paginator = Paginator(annees, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:35:17,548 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:23,550 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:26,201 [ERROR] django.request: Internal Server Error: /classes/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\classes\views.py", line 670, in classe_list
+    paginator = Paginator(classes, 20)
+                ^^^^^^^^^
+NameError: name 'Paginator' is not defined
+2026-08-01 19:35:51,069 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:53,936 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:54,962 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:57,476 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:35:59,355 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:36:26,426 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:36:28,513 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:36:39,702 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:42:21,475 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:43:12,852 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:43:15,851 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:44:17,149 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:44:22,546 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:50:13,597 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:50:19,906 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 19:50:47,821 [WARNING] django.request: Not Found: /portal
+2026-08-01 19:51:00,352 [ERROR] django.request: Internal Server Error: /portail/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « portail_portailconfig » n'existe pas
+LINE 1: ..."portail_portailconfig"."couleur_secondaire" FROM "portail_p...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\portail\views.py", line 119, in portail_accueil
+    config = PortailConfig.get_config()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\portail\models.py", line 31, in get_config
+    obj, _ = cls.objects.get_or_create(pk=1)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 987, in get_or_create
+    return self.get(**kwargs), False
+           ~~~~~~~~^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « portail_portailconfig » n'existe pas
+LINE 1: ..."portail_portailconfig"."couleur_secondaire" FROM "portail_p...
+                                                             ^
+
+2026-08-01 19:51:16,987 [ERROR] django.request: Internal Server Error: /portail/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « portail_portailconfig » n'existe pas
+LINE 1: ..."portail_portailconfig"."couleur_secondaire" FROM "portail_p...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\portail\views.py", line 119, in portail_accueil
+    config = PortailConfig.get_config()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\portail\models.py", line 31, in get_config
+    obj, _ = cls.objects.get_or_create(pk=1)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 987, in get_or_create
+    return self.get(**kwargs), False
+           ~~~~~~~~^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « portail_portailconfig » n'existe pas
+LINE 1: ..."portail_portailconfig"."couleur_secondaire" FROM "portail_p...
+                                                             ^
+
+2026-08-01 20:12:54,973 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 20:13:09,353 [WARNING] django.request: Not Found: /public
+2026-08-01 20:14:23,438 [ERROR] django.request: Internal Server Error: /rejoindre/formulaire/
+Traceback (most recent call last):
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1457, in rejoindre_educnet_form
+    platform_settings = PlatformSettings.get_settings()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\models.py", line 154, in get_settings
+    obj, _ = cls.objects.get_or_create(pk=1)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 987, in get_or_create
+    return self.get(**kwargs), False
+           ~~~~~~~~^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1622, in execute_sql
+    cursor = self.connection.cursor()
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\testcases.py", line 192, in __call__
+    raise DatabaseOperationForbidden(self.message)
+django.test.testcases.DatabaseOperationForbidden: Database queries to 'default' are not allowed in SimpleTestCase subclasses. Either subclass TestCase or TransactionTestCase to ensure proper test isolation or add 'default' to apps.super_admin.tests.PublicInscriptionPageTests.databases to silence this failure.
+2026-08-01 20:14:47,453 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 20:17:26,437 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 20:17:38,745 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 20:18:07,698 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 20:18:10,775 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-01 20:18:13,026 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 20:23:17,902 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 20:29:59,589 [WARNING] django.request: Not Found: /sw.js
+2026-08-01 20:30:00,043 [WARNING] django.request: Not Found: /portail/manifest.json
+2026-08-01 20:30:24,128 [WARNING] django.request: Not Found: /sw.js
+2026-08-01 20:30:24,134 [WARNING] django.request: Not Found: /portail/manifest.json
+2026-08-01 20:30:24,159 [WARNING] django.request: Not Found: /portail/manifest.json
+2026-08-01 20:30:41,899 [ERROR] django.request: Internal Server Error: /rejoindre/formulaire/
+Traceback (most recent call last):
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1457, in rejoindre_educnet_form
+    platform_settings = PlatformSettings.get_settings()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\models.py", line 154, in get_settings
+    obj, _ = cls.objects.get_or_create(pk=1)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 987, in get_or_create
+    return self.get(**kwargs), False
+           ~~~~~~~~^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1622, in execute_sql
+    cursor = self.connection.cursor()
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\testcases.py", line 192, in __call__
+    raise DatabaseOperationForbidden(self.message)
+django.test.testcases.DatabaseOperationForbidden: Database queries to 'default' are not allowed in SimpleTestCase subclasses. Either subclass TestCase or TransactionTestCase to ensure proper test isolation or add 'default' to apps.super_admin.tests.PublicInscriptionPageTests.databases to silence this failure.
+2026-08-01 20:30:41,919 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1443, in rejoindre_educnet
+    platform_settings = PlatformSettings.get_settings()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\models.py", line 154, in get_settings
+    obj, _ = cls.objects.get_or_create(pk=1)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 987, in get_or_create
+    return self.get(**kwargs), False
+           ~~~~~~~~^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1622, in execute_sql
+    cursor = self.connection.cursor()
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\testcases.py", line 192, in __call__
+    raise DatabaseOperationForbidden(self.message)
+django.test.testcases.DatabaseOperationForbidden: Database queries to 'default' are not allowed in SimpleTestCase subclasses. Either subclass TestCase or TransactionTestCase to ensure proper test isolation or add 'default' to apps.super_admin.tests.PublicInscriptionPageTests.databases to silence this failure.
+2026-08-01 20:33:37,527 [ERROR] django.request: Internal Server Error: /rejoindre/formulaire/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1458, in rejoindre_educnet_form
+    DemandeInscriptionForm = _build_public_inscription_form()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1413, in _build_public_inscription_form
+    class DemandeInscriptionForm(dj_forms.ModelForm):
+    ...<19 lines>...
+            }
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1421, in DemandeInscriptionForm
+    class Meta:
+    ...<11 lines>...
+        }
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1422, in Meta
+    model = DemandeInscription
+            ^^^^^^^^^^^^^^^^^^
+NameError: name 'DemandeInscription' is not defined. Did you mean: 'demandes_inscription'?
+2026-08-01 20:33:56,642 [ERROR] django.request: Internal Server Error: /rejoindre/formulaire/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1458, in rejoindre_educnet_form
+    DemandeInscriptionForm = _build_public_inscription_form()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1413, in _build_public_inscription_form
+    class DemandeInscriptionForm(dj_forms.ModelForm):
+    ...<19 lines>...
+            }
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1421, in DemandeInscriptionForm
+    class Meta:
+    ...<11 lines>...
+        }
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1422, in Meta
+    model = DemandeInscription
+            ^^^^^^^^^^^^^^^^^^
+NameError: name 'DemandeInscription' is not defined. Did you mean: 'demandes_inscription'?
+2026-08-01 20:34:18,889 [ERROR] django.request: Internal Server Error: /rejoindre/formulaire/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1458, in rejoindre_educnet_form
+    DemandeInscriptionForm = _build_public_inscription_form()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1413, in _build_public_inscription_form
+    class DemandeInscriptionForm(dj_forms.ModelForm):
+    ...<19 lines>...
+            }
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1421, in DemandeInscriptionForm
+    class Meta:
+    ...<11 lines>...
+        }
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1422, in Meta
+    model = DemandeInscription
+            ^^^^^^^^^^^^^^^^^^
+NameError: name 'DemandeInscription' is not defined. Did you mean: 'demandes_inscription'?
+2026-08-01 20:49:09,917 [INFO] sgn: DEMANDE_INSCRIPTION_APPRouvee pk=4 ecole=Complexe Scolaire Tegra par=superadmin@test.local
+2026-08-01 20:52:56,722 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 20:53:13,274 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 20:53:39,730 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 21:00:58,593 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:03:46,449 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:06:24,873 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:06:25,877 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:06:59,618 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:07:00,333 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:07:00,546 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:07:01,265 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:07:18,074 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 21:07:21,528 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:09:12,173 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:09:13,156 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:09:49,031 [ERROR] django.request: Internal Server Error: /rejoindre/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1448, in rejoindre_educnet
+    return render(request, 'public/rejoindre.html', {
+        'plans': plans_publics,
+        'platform_settings': platform_settings,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 634, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\LAND\Desktop\APPS\EducNet\school_app\templates\public\rejoindre.html, Invalid block tag on line 17: 'static', expected 'endblock'. Did you forget to register or load this tag?
+2026-08-01 21:19:17,235 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 21:19:38,084 [WARNING] django.request: Not Found: /manifest.json
+2026-08-01 21:20:14,139 [INFO] sgn: PLAN_CREE slug=normal sa=superadmin@test.local
+2026-08-02 07:24:42,714 [WARNING] django.request: Not Found: /manifest.json
+2026-08-02 07:25:22,488 [WARNING] django.request: Not Found: /rejoinre
+2026-08-02 07:29:49,064 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-02 07:43:08,178 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-02 07:43:08,362 [WARNING] django.request: Not Found: /manifest.json
+2026-08-02 07:48:50,804 [WARNING] django.request: Not Found: /manifest.json
+2026-08-02 07:50:33,975 [WARNING] django.request: Not Found: /manifest.json
+2026-08-02 07:53:48,729 [WARNING] django.request: Not Found: /manifest.json
+2026-08-02 07:59:44,199 [WARNING] django.request: Not Found: /manifest.json
+2026-08-02 08:01:40,420 [WARNING] django.request: Not Found: /manifest.json
+2026-08-02 08:02:05,266 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 06:53:20,264 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-03 06:53:20,610 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 06:53:34,911 [WARNING] django.request: Not Found: /login/rejoindre
+2026-08-03 06:53:48,268 [WARNING] django.request: Not Found: /login/rejoindre
