@@ -146,12 +146,20 @@
     <a href="{% url 'abonnement:mon_abonnement' %}" class="nav-link {% if request.resolver_match.url_name == 'mon_abonnement' %}active{% endif %}">
       <i class="bi bi-stars"></i><span>Mon abonnement</span>
     </a>
+
+    <div class="nav-section-label">Configuration</div>
+    <a href="{% url 'settings_view' %}" class="nav-link {% if request.resolver_match.url_name == 'settings_view' %}active{% endif %}">
+      <i class="bi bi-gear-fill"></i><span>Paramètres école</span>
+    </a>
+    <a href="{% url 'matricule_config' %}" class="nav-link {% if request.resolver_match.url_name == 'matricule_config' %}active{% endif %}">
+      <i class="bi bi-hash"></i><span>Format matricule</span>
+    </a>
   </nav>
 
   <div class="sidebar-footer">
     <!-- User card -->
     <div class="sidebar-user-card">
-      <div class="suc-avatar">
+      <div class="suc-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
         {% if user.photo_profil %}
           <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
         {% else %}
@@ -237,7 +245,7 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-user-card">
-      <div class="suc-avatar">
+      <div class="suc-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
         {% if user.photo_profil %}
           <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
         {% else %}
@@ -298,7 +306,7 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-user-card">
-      <div class="suc-avatar">
+      <div class="suc-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
         {% if user.photo_profil %}
           <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
         {% else %}
@@ -370,7 +378,7 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-user-card">
-      <div class="suc-avatar">
+      <div class="suc-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
         {% if user.photo_profil %}
           <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
         {% else %}
@@ -471,7 +479,7 @@
       <!-- User dropdown -->
       <div class="topbar-user-wrap">
         <button class="topbar-user-btn" id="user-dropdown-toggle" aria-expanded="false">
-          <div class="tu-avatar">
+          <div class="tu-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
             {% if user.photo_profil %}
               <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
             {% else %}
@@ -488,7 +496,7 @@
         <!-- Dropdown -->
         <div class="topbar-dropdown" id="user-dropdown">
           <div class="topbar-dropdown-header">
-            <div class="dd-avatar">
+            <div class="dd-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
               {% if user.photo_profil %}
                 <img src="{{ user.photo_profil.url }}" alt="">
               {% else %}
@@ -501,8 +509,9 @@
             </div>
           </div>
           <a href="{% url 'profile_view' %}"><i class="bi bi-person-circle"></i>Mon profil</a>
-          {% if user.is_prefet %}
-          <a href="{% url 'settings_view' %}"><i class="bi bi-gear-fill"></i>Paramètres</a>
+          {% if user.is_prefet or user.role == 'admin_ecole' %}
+          <a href="{% url 'settings_view' %}"><i class="bi bi-gear-fill"></i>Paramètres école</a>
+          <a href="{% url 'matricule_config' %}"><i class="bi bi-hash"></i>Format matricule</a>
           {% endif %}
           <div class="topbar-dropdown-divider"></div>
           <a href="{% url 'logout' %}" class="text-danger"><i class="bi bi-box-arrow-right"></i>Déconnexion</a>

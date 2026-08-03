@@ -92,16 +92,50 @@
     .login-center-brand-mark { width: 52px; height: 52px; font-size: 1.35rem; }
     .login-center-brand-name { font-size: 1.3rem; }
   }
+
+  /* ── Fallback dégradé animé (aucune image configurée) ─────────── */
+  .login-fullbg-gradient {
+    background: linear-gradient(135deg,
+      #0d0b2e 0%, #1c1854 25%, #2a1f72 50%, #1a1050 75%, #0d0b2e 100%);
+    background-size: 400% 400%;
+    animation: loginBgShift 18s ease infinite;
+  }
+  @keyframes loginBgShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .login-particle {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(77,68,181,.35) 0%, rgba(77,68,181,0) 70%);
+    animation: floatParticle 20s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes floatParticle {
+    0%,100% { transform: translateY(0) scale(1); }
+    33%      { transform: translateY(-30px) scale(1.08); }
+    66%      { transform: translateY(20px) scale(.94); }
+  }
 </style>
 
-<!-- ══ Fond plein écran : slideshow ══ -->
+<!-- ══ Fond plein écran : slideshow ou dégradé animé ══ -->
+{% if platform_settings.login_bg_1 %}
 <div class="login-fullbg">
-  <div class="login-fullbg-slide active" style="--slide-img:url('{% static "public/img/hero-ecole.jpg" %}')"></div>
-  <div class="login-fullbg-slide" style="--slide-img:url('{% static "public/img/hero-ecole-2.jpg" %}')"></div>
-  <div class="login-fullbg-slide" style="--slide-img:url('{% static "public/img/hero-ecole-3.jpg" %}')"></div>
+  <div class="login-fullbg-slide active" style="--slide-img:url('{{ platform_settings.login_bg_1.url }}')"></div>
+  {% if platform_settings.login_bg_2 %}<div class="login-fullbg-slide" style="--slide-img:url('{{ platform_settings.login_bg_2.url }}')"></div>{% endif %}
+  {% if platform_settings.login_bg_3 %}<div class="login-fullbg-slide" style="--slide-img:url('{{ platform_settings.login_bg_3.url }}')"></div>{% endif %}
   <div class="login-fullbg-overlay"></div>
   <div class="login-fullbg-dots" id="loginDots"></div>
 </div>
+{% else %}
+<div class="login-fullbg login-fullbg-gradient">
+  <!-- Particules décoratives -->
+  <div class="login-particle" style="width:320px;height:320px;top:-80px;left:-80px;animation-delay:0s;"></div>
+  <div class="login-particle" style="width:200px;height:200px;bottom:60px;right:-60px;animation-delay:-4s;"></div>
+  <div class="login-particle" style="width:140px;height:140px;top:55%;left:35%;animation-delay:-8s;opacity:.12;"></div>
+  <div class="login-fullbg-overlay"></div>
+</div>
+{% endif %}
 
 <!-- ══ Contenu centré ══ -->
 <div class="login-center-wrap">

@@ -1,0 +1,265 @@
+{% extends "public/base_public.html" %}
+{% block title %}Contact — {{ platform_settings.site_name|default:"EducNet" }}{% endblock %}
+{% block extra_style %}
+.contact-hero {
+  background: linear-gradient(135deg, #0d0b2e 0%, #1c1854 40%, #2a1f72 100%);
+  color: #fff;
+  padding: 100px 24px 72px;
+  text-align: center;
+}
+.contact-hero-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .14em; color: #c5b85e; margin-bottom: 16px;
+}
+.contact-hero-kicker::before { content: ''; width: 18px; height: 1.5px; background: #c5b85e; }
+.contact-hero h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700; line-height: 1.12;
+  letter-spacing: -.03em; margin-bottom: 16px;
+}
+.contact-hero p { font-size: .98rem; color: rgba(255,255,255,.72); max-width: 540px; margin: 0 auto; line-height: 1.7; }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 40px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+@media (max-width: 720px) { .contact-grid { grid-template-columns: 1fr; } }
+
+.contact-info h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.5rem; font-weight: 700; color: #0f172a;
+  margin-bottom: 20px;
+}
+.contact-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 0; border-bottom: 1px solid #f0edf8;
+}
+.contact-item:last-child { border-bottom: none; }
+.contact-item-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: #eef0ff; color: #4d44b5;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+.contact-item-label { font-size: .72rem; color: #94a3b8; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 3px; }
+.contact-item-value { font-size: .92rem; font-weight: 600; color: #0f172a; word-break: break-word; }
+.contact-item-value a { color: #4d44b5; text-decoration: none; }
+.contact-item-value a:hover { text-decoration: underline; }
+
+.contact-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(77,68,181,.10);
+  border: 1px solid #e8e3ff;
+  padding: 36px 32px;
+}
+.contact-card h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.4rem; font-weight: 700; color: #0f172a;
+  margin-bottom: 8px;
+}
+.contact-card .card-sub { font-size: .88rem; color: #64748b; margin-bottom: 24px; line-height: 1.5; }
+.contact-form .form-label { font-size: .8rem; font-weight: 600; color: #374151; margin-bottom: 5px; }
+.contact-form .form-control, .contact-form .form-select {
+  border-radius: 10px; border: 1.5px solid #e2ddf5;
+  padding: 10px 14px; font-size: .88rem; background: #fafaff;
+  transition: border-color .15s, box-shadow .15s;
+}
+.contact-form .form-control:focus, .contact-form .form-select:focus {
+  border-color: #4d44b5; box-shadow: 0 0 0 3px rgba(77,68,181,.10); background: #fff;
+}
+.contact-form textarea { resize: vertical; min-height: 100px; }
+.contact-submit {
+  width: 100%; padding: 12px; border-radius: 10px;
+  background: linear-gradient(135deg,#4d44b5,#6c5fc7);
+  color: #fff; font-weight: 700; font-size: .9rem;
+  border: none; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(77,68,181,.26);
+  transition: opacity .15s, transform .1s;
+}
+.contact-submit:hover { opacity: .9; transform: translateY(-1px); }
+
+.map-band { background: #f8f5ff; padding: 60px 24px; border-top: 1px solid #e8e3ff; }
+.map-band-inner { max-width: 960px; margin: 0 auto; }
+.map-band h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 14px; }
+.address-box {
+  background: #fff; border: 1.5px solid #e2ddf5; border-radius: 14px;
+  padding: 20px 22px; font-size: .9rem; color: #374151; line-height: 1.8;
+  max-width: 420px;
+}
+{% endblock %}
+{% block content %}
+
+<!-- Hero -->
+<div class="contact-hero">
+  <div class="contact-hero-kicker">Contact</div>
+  <h1>Nous contacter</h1>
+  <p>Notre équipe est disponible pour répondre à toutes vos questions sur la plateforme EducNet.</p>
+</div>
+
+<!-- Contenu principal -->
+<div class="section" style="padding-top:64px;padding-bottom:64px;background:#fafaf8;">
+  <div class="contact-grid">
+
+    <!-- Infos de contact -->
+    <div class="contact-info">
+      <h2>Coordonnées</h2>
+
+      {% if platform_settings.contact_email %}
+      <div class="contact-item">
+        <div class="contact-item-icon"><i class="bi bi-envelope-fill"></i></div>
+        <div>
+          <div class="contact-item-label">Adresse e-mail</div>
+          <div class="contact-item-value"><a href="mailto:{{ platform_settings.contact_email }}">{{ platform_settings.contact_email }}</a></div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if platform_settings.contact_telephone %}
+      <div class="contact-item">
+        <div class="contact-item-icon"><i class="bi bi-telephone-fill"></i></div>
+        <div>
+          <div class="contact-item-label">Téléphone</div>
+          <div class="contact-item-value"><a href="tel:{{ platform_settings.contact_telephone }}">{{ platform_settings.contact_telephone }}</a></div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if platform_settings.contact_whatsapp %}
+      <div class="contact-item">
+        <div class="contact-item-icon" style="background:#dcfce7;color:#16a34a;"><i class="bi bi-whatsapp"></i></div>
+        <div>
+          <div class="contact-item-label">WhatsApp</div>
+          <div class="contact-item-value">
+            <a href="https://wa.me/{{ platform_settings.contact_whatsapp|cut:'+' }}" target="_blank" rel="noopener">
+              {{ platform_settings.contact_whatsapp }}
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if platform_settings.contact_adresse %}
+      <div class="contact-item">
+        <div class="contact-item-icon"><i class="bi bi-geo-alt-fill"></i></div>
+        <div>
+          <div class="contact-item-label">Adresse</div>
+          <div class="contact-item-value">{{ platform_settings.contact_adresse|linebreaksbr }}</div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if not platform_settings.contact_email and not platform_settings.contact_telephone %}
+      <div class="contact-item">
+        <div class="contact-item-icon"><i class="bi bi-envelope-fill"></i></div>
+        <div>
+          <div class="contact-item-label">Adresse e-mail</div>
+          <div class="contact-item-value"><a href="mailto:contact@educnet.cd">contact@educnet.cd</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon" style="background:#dcfce7;color:#16a34a;"><i class="bi bi-whatsapp"></i></div>
+        <div>
+          <div class="contact-item-label">WhatsApp</div>
+          <div class="contact-item-value"><a href="https://wa.me/243000000000" target="_blank">+243 000 000 000</a></div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Réseaux sociaux -->
+      <div style="margin-top:28px;">
+        <div class="contact-item-label" style="margin-bottom:12px;">Retrouvez-nous sur</div>
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.78rem;">
+            <i class="bi bi-facebook me-1"></i>Facebook
+          </a>
+          <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.78rem;">
+            <i class="bi bi-twitter-x me-1"></i>Twitter / X
+          </a>
+          <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.78rem;">
+            <i class="bi bi-linkedin me-1"></i>LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire de contact rapide -->
+    <div class="contact-card">
+      <h2>Envoyer un message</h2>
+      <p class="card-sub">Remplissez ce formulaire et nous vous répondrons dans les plus brefs délais.</p>
+      <form class="contact-form" onsubmit="handleContactForm(event)">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">Votre nom complet *</label>
+          <input type="text" class="form-control" name="nom" placeholder="Prénom et nom" required>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-sm-6">
+            <label class="form-label">E-mail *</label>
+            <input type="email" class="form-control" name="email" placeholder="vous@example.com" required>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label">Téléphone</label>
+            <input type="tel" class="form-control" name="telephone" placeholder="+243 …">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Sujet *</label>
+          <select class="form-select" name="sujet" required>
+            <option value="">— Choisir un sujet —</option>
+            <option>Demande d'information sur la plateforme</option>
+            <option>Problème technique</option>
+            <option>Partenariat / collaboration</option>
+            <option>Facturation et abonnement</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Message *</label>
+          <textarea class="form-control" name="message" placeholder="Décrivez votre demande…" required></textarea>
+        </div>
+        <button type="submit" class="contact-submit">
+          <i class="bi bi-send-fill me-2"></i>Envoyer le message
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Adresse physique -->
+{% if platform_settings.contact_adresse %}
+<div class="map-band">
+  <div class="map-band-inner">
+    <h3><i class="bi bi-geo-alt-fill me-2 text-primary"></i>Nous trouver</h3>
+    <div class="address-box">
+      <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong><br>
+      {{ platform_settings.contact_adresse|linebreaksbr }}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<script>
+function handleContactForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Envoi…';
+  setTimeout(() => {
+    btn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Message envoyé !';
+    btn.style.background = 'linear-gradient(135deg,#16a34a,#22c55e)';
+    e.target.reset();
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.style.background = '';
+      btn.innerHTML = '<i class="bi bi-send-fill me-2"></i>Envoyer le message';
+    }, 3000);
+  }, 800);
+}
+</script>
+{% endblock %}

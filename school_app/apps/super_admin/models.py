@@ -12,6 +12,8 @@ class SuperAdmin(models.Model):
     password = models.CharField("Mot de passe (hache)", max_length=255)
     nom = models.CharField("Nom", max_length=100, blank=True)
     prenom = models.CharField("Prenom", max_length=100, blank=True)
+    telephone = models.CharField("Téléphone", max_length=50, blank=True, default='')
+    photo_profil = models.ImageField("Photo de profil", upload_to='platform/admins/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     # 2FA
@@ -141,6 +143,27 @@ class PlatformSettings(models.Model):
             "Laissez vide pour le message par défaut."
         )
     )
+
+    # ── Images de fond — page de connexion ────────────────────────────────────
+    login_bg_1 = models.ImageField(
+        "Image fond login 1", upload_to='platform/login/', null=True, blank=True,
+        help_text="Première image de fond du diaporama sur la page de connexion."
+    )
+    login_bg_2 = models.ImageField(
+        "Image fond login 2", upload_to='platform/login/', null=True, blank=True,
+        help_text="Deuxième image de fond (optionnel)."
+    )
+    login_bg_3 = models.ImageField(
+        "Image fond login 3", upload_to='platform/login/', null=True, blank=True,
+        help_text="Troisième image de fond (optionnel)."
+    )
+
+    # ── Page À propos ─────────────────────────────────────────────────────────
+    about_titre       = models.CharField("Titre — À propos", max_length=200, blank=True, default='À propos de nous')
+    about_description = models.TextField("Description générale", blank=True, default='')
+    about_mission     = models.TextField("Notre mission", blank=True, default='')
+    about_vision      = models.TextField("Notre vision", blank=True, default='')
+    about_valeurs     = models.TextField("Nos valeurs (1 par ligne)", blank=True, default='')
 
     class Meta:
         app_label = 'super_admin'

@@ -258,6 +258,11 @@ class PlatformSettingsForm(forms.ModelForm):
         fields = [
             'site_name', 'site_slogan', 'site_devise', 'site_logo',
             'adresse', 'email_contact', 'telephone', 'site_web', 'couleur_principale',
+            # Images de fond login
+            'login_bg_1', 'login_bg_2', 'login_bg_3',
+            # À propos
+            'about_titre', 'about_description', 'about_mission', 'about_vision', 'about_valeurs',
+            # SMTP
             'smtp_actif', 'smtp_host', 'smtp_port', 'smtp_use_tls',
             'smtp_user', 'smtp_password', 'smtp_from_email',
             # Alertes quota
@@ -274,6 +279,16 @@ class PlatformSettingsForm(forms.ModelForm):
             'telephone':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}),
             'site_web':    forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://…'}),
             'couleur_principale': forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
+            # Login BG
+            'login_bg_1':  forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'login_bg_2':  forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'login_bg_3':  forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            # À propos
+            'about_titre':       forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'À propos de nous'}),
+            'about_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Présentation générale de la plateforme…'}),
+            'about_mission':     forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Notre mission…'}),
+            'about_vision':      forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Notre vision…'}),
+            'about_valeurs':     forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Excellence\nIntégrité\nInnovation\n(une valeur par ligne)'}),
             # SMTP
             'smtp_actif':      forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch'}),
             'smtp_host':       forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'smtp.gmail.com'}),
@@ -311,6 +326,14 @@ class PlatformSettingsForm(forms.ModelForm):
             'telephone':         'Téléphone',
             'site_web':          'Site web',
             'couleur_principale':'Couleur principale',
+            'login_bg_1':        'Image de fond 1',
+            'login_bg_2':        'Image de fond 2',
+            'login_bg_3':        'Image de fond 3',
+            'about_titre':       'Titre de la page',
+            'about_description': 'Description générale',
+            'about_mission':     'Notre mission',
+            'about_vision':      'Notre vision',
+            'about_valeurs':     'Nos valeurs (1 par ligne)',
             'smtp_actif':        'Activer l\'envoi SMTP réel',
             'smtp_host':         'Serveur SMTP (host)',
             'smtp_port':         'Port',
@@ -324,6 +347,36 @@ class PlatformSettingsForm(forms.ModelForm):
             'alerte_quota_message_email':   'Message e-mail personnalisé',
             'alerte_quota_message_app':     'Message in-app personnalisé',
         }
+
+
+class SuperAdminProfileForm(forms.Form):
+    """Formulaire d'édition du profil super-administrateur."""
+    prenom      = forms.CharField(label="Prénom",    max_length=100, required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
+    nom         = forms.CharField(label="Nom",       max_length=100, required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email       = forms.EmailField(label="E-mail",
+                                   widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    telephone   = forms.CharField(label="Téléphone", max_length=50, required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}))
+    photo_profil = forms.ImageField(label="Photo de profil", required=False,
+                                    widget=forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}))
+    supprimer_photo = forms.BooleanField(label="Supprimer la photo actuelle", required=False,
+                                         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+
+    def clean_email(self):
+        from super_admin.models import SuperAdmin
+        email = self.cleaned_data['email'].lower().strip()
+        qs = SuperAdmin.objects.filter(email__iexact=email)
+        if self._sa_pk:
+            qs = qs.exclude(pk=self._sa_pk)
+        if qs.exists():
+            raise forms.ValidationError("Cet e-mail est déjà utilisé par un autre super-administrateur.")
+        return email
+
+    def __init__(self, *args, sa_pk=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._sa_pk = sa_pk
 
 
 class AnnoncePlateformeForm(forms.ModelForm):

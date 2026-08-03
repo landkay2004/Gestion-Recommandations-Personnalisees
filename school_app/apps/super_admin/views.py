@@ -734,16 +734,53 @@ def maintenance_toggle(request, pk):
 @super_admin_required
 def profil(request):
     sa = request.super_admin
-    form_pwd = ChangePasswordSuperAdminForm(request.POST or None)
-    if request.method == 'POST' and form_pwd.is_valid():
-        if sa.check_password(form_pwd.cleaned_data['ancien_mdp']):
-            sa.set_password(form_pwd.cleaned_data['nouveau_mdp'])
-            sa.save(update_fields=['password'])
-            messages.success(request, "Mot de passe mis a jour.")
+    from super_admin.forms import SuperAdminProfileForm
+
+    action = request.POST.get('_action', '') if request.method == 'POST' else ''
+
+    form_info = SuperAdminProfileForm(
+        request.POST if action == 'profile' else None,
+        request.FILES if action == 'profile' else None,
+        sa_pk=sa.pk,
+        initial={
+            'prenom': sa.prenom, 'nom': sa.nom,
+            'email': sa.email, 'telephone': getattr(sa, 'telephone', ''),
+        }
+    )
+    form_pwd = ChangePasswordSuperAdminForm(
+        request.POST if action == 'password' else None
+    )
+
+    if request.method == 'POST':
+        if action == 'profile' and form_info.is_valid():
+            sa.prenom    = form_info.cleaned_data.get('prenom', '')
+            sa.nom       = form_info.cleaned_data.get('nom', '')
+            sa.email     = form_info.cleaned_data['email']
+            sa.telephone = form_info.cleaned_data.get('telephone', '')
+            if form_info.cleaned_data.get('supprimer_photo') and sa.photo_profil:
+                try:
+                    sa.photo_profil.delete(save=False)
+                except Exception:
+                    pass
+                sa.photo_profil = None
+            elif form_info.cleaned_data.get('photo_profil'):
+                sa.photo_profil = form_info.cleaned_data['photo_profil']
+            sa.save(update_fields=['prenom', 'nom', 'email', 'telephone', 'photo_profil'])
+            messages.success(request, "Profil mis à jour avec succès.")
             return redirect('super_admin:profil')
-        else:
-            messages.error(request, "Mot de passe actuel incorrect.")
-    return render(request, 'super_admin/profil.html', {'sa': sa, 'form_pwd': form_pwd})
+
+        elif action == 'password' and form_pwd.is_valid():
+            if sa.check_password(form_pwd.cleaned_data['ancien_mdp']):
+                sa.set_password(form_pwd.cleaned_data['nouveau_mdp'])
+                sa.save(update_fields=['password'])
+                messages.success(request, "Mot de passe mis à jour.")
+                return redirect('super_admin:profil')
+            else:
+                messages.error(request, "Mot de passe actuel incorrect.")
+
+    return render(request, 'super_admin/profil.html', {
+        'sa': sa, 'form_pwd': form_pwd, 'form_info': form_info,
+    })
 
 
 @super_admin_required
@@ -1448,6 +1485,26 @@ def rejoindre_educnet(request):
     return render(request, 'public/rejoindre.html', {
         'plans': plans_publics,
         'platform_settings': platform_settings,
+    })
+
+
+def about_view(request):
+    """Page publique À propos."""
+    from super_admin.models import PlatformSettings
+    ps = PlatformSettings.get_settings()
+    valeurs = [v.strip() for v in (ps.about_valeurs or '').splitlines() if v.strip()]
+    return render(request, 'public/apropos.html', {
+        'platform_settings': ps,
+        'valeurs': valeurs,
+    })
+
+
+def contact_view(request):
+    """Page publique Contact."""
+    from super_admin.models import PlatformSettings
+    ps = PlatformSettings.get_settings()
+    return render(request, 'public/contact.html', {
+        'platform_settings': ps,
     })
 
 

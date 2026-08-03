@@ -1,0 +1,161 @@
+{% extends "public/base_public.html" %}
+{% block title %}À propos — {{ platform_settings.site_name|default:"EducNet" }}{% endblock %}
+{% block extra_style %}
+/* ── À propos ─────────────────────────────────── */
+.apropos-hero {
+  background: linear-gradient(135deg, #0d0b2e 0%, #1c1854 40%, #2a1f72 100%);
+  color: #fff;
+  padding: 100px 24px 72px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.apropos-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 70% 40%, rgba(120,110,255,.18) 0%, transparent 60%);
+}
+.apropos-hero-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .14em; color: #c5b85e; margin-bottom: 16px;
+}
+.apropos-hero-kicker::before { content: ''; width: 18px; height: 1.5px; background: #c5b85e; }
+.apropos-hero h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700; line-height: 1.12;
+  letter-spacing: -.03em; margin-bottom: 20px;
+}
+.apropos-hero p {
+  font-size: 1.05rem; color: rgba(255,255,255,.75);
+  max-width: 640px; margin: 0 auto; line-height: 1.7;
+}
+
+.mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 0; }
+@media (max-width: 640px) { .mv-grid { grid-template-columns: 1fr; } }
+.mv-card {
+  border-radius: 18px; padding: 32px;
+  position: relative; overflow: hidden;
+}
+.mv-card-mission { background: linear-gradient(135deg,#f8f4ff,#eef1ff); border: 1px solid #ddd8ff; }
+.mv-card-vision  { background: linear-gradient(135deg,#fff8f0,#fff0e0); border: 1px solid #ffe4b5; }
+.mv-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 16px;
+}
+.mv-card-mission .mv-icon { background: #ede8ff; color: #5b50d6; }
+.mv-card-vision  .mv-icon { background: #ffe4b5; color: #b45309; }
+.mv-card h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: #0f172a; }
+.mv-card p  { font-size: .9rem; color: #475569; line-height: 1.7; margin: 0; }
+
+.valeurs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.valeur-chip {
+  background: #fff; border: 1.5px solid #e8e3ff;
+  border-radius: 14px; padding: 20px;
+  display: flex; align-items: flex-start; gap: 12px;
+  transition: box-shadow .2s, transform .2s;
+}
+.valeur-chip:hover { box-shadow: 0 6px 20px rgba(77,68,181,.12); transform: translateY(-2px); }
+.valeur-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); margin-top: 5px; flex-shrink: 0; }
+.valeur-text { font-size: .88rem; font-weight: 600; color: #0f172a; line-height: 1.4; }
+
+.stat-band {
+  background: linear-gradient(135deg,#4d44b5,#3b3a9e);
+  padding: 56px 24px;
+}
+.stat-band-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; text-align: center; }
+@media (max-width: 600px) { .stat-band-inner { grid-template-columns: 1fr; gap: 28px; } }
+.stat-num { font-family: 'Fraunces', Georgia, serif; font-size: 2.4rem; font-weight: 700; color: #fff; line-height: 1; }
+.stat-label { font-size: .8rem; color: rgba(255,255,255,.65); margin-top: 6px; text-transform: uppercase; letter-spacing: .06em; }
+
+.cta-band {
+  background: #fafaf8;
+  border-top: 1px solid #e8e3f0;
+  padding: 72px 24px;
+  text-align: center;
+}
+.cta-band h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.9rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+.cta-band p  { color: #64748b; font-size: .95rem; margin-bottom: 28px; }
+{% endblock %}
+{% block content %}
+
+<!-- Hero -->
+<div class="apropos-hero">
+  <div class="apropos-hero-kicker">À propos</div>
+  <h1>{{ platform_settings.about_titre|default:"La plateforme scolaire pensée pour l'Afrique" }}</h1>
+  <p>{{ platform_settings.about_description|default:"EducNet accompagne les établissements scolaires dans leur transformation numérique, en proposant des outils simples, robustes et adaptés aux réalités locales." }}</p>
+</div>
+
+<!-- Mission & Vision -->
+{% if platform_settings.about_mission or platform_settings.about_vision %}
+<div class="section" style="background:#fafaf8;padding-top:72px;padding-bottom:72px;">
+  <div class="section-inner">
+    <div class="mv-grid">
+      {% if platform_settings.about_mission %}
+      <div class="mv-card mv-card-mission">
+        <div class="mv-icon"><i class="bi bi-bullseye"></i></div>
+        <h3>Notre mission</h3>
+        <p>{{ platform_settings.about_mission }}</p>
+      </div>
+      {% endif %}
+      {% if platform_settings.about_vision %}
+      <div class="mv-card mv-card-vision">
+        <div class="mv-icon"><i class="bi bi-eye-fill"></i></div>
+        <h3>Notre vision</h3>
+        <p>{{ platform_settings.about_vision }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Stats -->
+<div class="stat-band">
+  <div class="stat-band-inner">
+    <div>
+      <div class="stat-num">500+</div>
+      <div class="stat-label">Établissements actifs</div>
+    </div>
+    <div>
+      <div class="stat-num">50 000+</div>
+      <div class="stat-label">Élèves gérés</div>
+    </div>
+    <div>
+      <div class="stat-num">26</div>
+      <div class="stat-label">Provinces couvertes</div>
+    </div>
+  </div>
+</div>
+
+<!-- Valeurs -->
+{% if valeurs %}
+<div class="section" style="padding-top:72px;padding-bottom:72px;">
+  <div class="section-inner">
+    <div class="section-center" style="margin-bottom:40px;">
+      <div class="section-kicker">Nos engagements</div>
+      <h2 class="section-title">Valeurs qui nous guident</h2>
+    </div>
+    <div class="valeurs-grid">
+      {% for v in valeurs %}
+      <div class="valeur-chip">
+        <div class="valeur-dot"></div>
+        <div class="valeur-text">{{ v }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- CTA -->
+<div class="cta-band">
+  <h2>Prêt à rejoindre EducNet ?</h2>
+  <p>Inscrivez votre établissement et commencez votre période d'essai dès aujourd'hui.</p>
+  <a href="{% url 'rejoindre_educnet_form' %}" class="btn-nav-cta" style="display:inline-block;padding:13px 32px;font-size:.92rem;border-radius:10px;">
+    <i class="bi bi-send-fill me-2"></i>Faire une demande d'inscription
+  </a>
+</div>
+{% endblock %}

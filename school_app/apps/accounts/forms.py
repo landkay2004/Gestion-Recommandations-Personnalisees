@@ -141,12 +141,13 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model  = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'telephone', 'bio', 'photo_profil']
+        fields = ['first_name', 'last_name', 'email', 'telephone', 'sexe', 'bio', 'photo_profil']
         widgets = {
             'first_name':   forms.TextInput(attrs={'class': 'form-control'}),
             'last_name':    forms.TextInput(attrs={'class': 'form-control'}),
             'email':        forms.EmailInput(attrs={'class': 'form-control'}),
             'telephone':    forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}),
+            'sexe':         forms.Select(attrs={'class': 'form-select'}),
             'bio':          forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Quelques mots sur vous…'}),
             'photo_profil': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*', 'id': 'id_photo_profil'}),
         }
@@ -155,6 +156,7 @@ class ProfileForm(forms.ModelForm):
             'last_name':    'Nom',
             'email':        'Adresse e-mail',
             'telephone':    'Téléphone',
+            'sexe':         'Genre',
             'bio':          'Biographie / Note',
             'photo_profil': 'Photo de profil',
         }

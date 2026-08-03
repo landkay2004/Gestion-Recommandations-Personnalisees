@@ -45,9 +45,14 @@ class CustomUser(AbstractUser):
         ('secretariat',  'Secrétariat'),
         ('comptable',    'Comptable'),
     ]
+    SEXE_CHOICES = [
+        ('M', 'Masculin'),
+        ('F', 'Féminin'),
+    ]
     role = models.CharField(
         max_length=20, choices=ROLE_CHOICES, default='enseignant', db_index=True
     )
+    sexe = models.CharField("Sexe", max_length=1, choices=SEXE_CHOICES, blank=True, default='')
     telephone = models.CharField("Telephone", max_length=20, blank=True)
     must_change_password = models.BooleanField(
         "Doit changer le mot de passe", default=False,

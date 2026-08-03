@@ -3,40 +3,144 @@
 {% block page_title %}<i class="bi bi-person-gear me-2 text-primary"></i>Mon profil{% endblock %}
 {% block content %}
 <div class="row g-3">
-  <div class="col-12 col-md-6">
+
+  <!-- ── Photo & infos identité ── -->
+  <div class="col-12">
     <div class="kpi-card">
-      <h6 class="fw-bold mb-3"><i class="bi bi-person me-1 text-primary"></i>Informations</h6>
+      <h6 class="fw-bold mb-4"><i class="bi bi-person-circle me-1 text-primary"></i>Identité &amp; photo de profil</h6>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="_action" value="profile">
+        <div class="row g-4 align-items-start">
+
+          <!-- Colonne photo -->
+          <div class="col-md-auto text-center">
+            <div id="photo-preview-wrap" style="position:relative;display:inline-block;">
+              {% if sa.photo_profil %}
+              <img id="photo-preview"
+                   src="{{ sa.photo_profil.url }}"
+                   style="width:110px;height:110px;border-radius:50%;object-fit:cover;
+                          border:3px solid var(--primary-soft,#e8e3ff);
+                          box-shadow:0 4px 18px rgba(77,68,181,.18);">
+              {% else %}
+              <div id="photo-preview"
+                   style="width:110px;height:110px;border-radius:50%;
+                          background:linear-gradient(135deg,#3b5bdb,#4c6ef5);
+                          display:flex;align-items:center;justify-content:center;
+                          color:#fff;font-size:2.2rem;font-weight:700;
+                          border:3px solid #e8e3ff;
+                          box-shadow:0 4px 18px rgba(77,68,181,.18);">
+                {{ sa.prenom|first|upper }}{{ sa.nom|first|upper }}
+              </div>
+              {% endif %}
+              <label for="{{ form_info.photo_profil.id_for_label }}"
+                     title="Changer la photo"
+                     style="position:absolute;bottom:4px;right:4px;
+                            width:30px;height:30px;border-radius:50%;
+                            background:#4d44b5;color:#fff;
+                            display:flex;align-items:center;justify-content:center;
+                            cursor:pointer;box-shadow:0 2px 8px rgba(77,68,181,.4);
+                            font-size:.85rem;">
+                <i class="bi bi-camera-fill"></i>
+              </label>
+            </div>
+            <!-- Input hidden, déclenché par le label -->
+            <div style="display:none;">{{ form_info.photo_profil }}</div>
+            {% if sa.photo_profil %}
+            <div class="mt-2">
+              <div class="form-check form-check-inline justify-content-center">
+                <input class="form-check-input" type="checkbox" id="id_supprimer_photo" name="supprimer_photo">
+                <label class="form-check-label small text-danger" for="id_supprimer_photo">Supprimer la photo</label>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Colonnes champs -->
+          <div class="col">
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold small">{{ form_info.prenom.label }}</label>
+                {{ form_info.prenom }}
+                {% if form_info.prenom.errors %}<div class="text-danger small mt-1">{{ form_info.prenom.errors.0 }}</div>{% endif %}
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold small">{{ form_info.nom.label }}</label>
+                {{ form_info.nom }}
+                {% if form_info.nom.errors %}<div class="text-danger small mt-1">{{ form_info.nom.errors.0 }}</div>{% endif %}
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold small">{{ form_info.email.label }}</label>
+                {{ form_info.email }}
+                {% if form_info.email.errors %}<div class="text-danger small mt-1">{{ form_info.email.errors.0 }}</div>{% endif %}
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold small">{{ form_info.telephone.label }}</label>
+                {{ form_info.telephone }}
+                {% if form_info.telephone.errors %}<div class="text-danger small mt-1">{{ form_info.telephone.errors.0 }}</div>{% endif %}
+              </div>
+            </div>
+            <div class="mt-3">
+              <button type="submit" class="btn btn-primary btn-sm">
+                <i class="bi bi-check-circle me-1"></i>Enregistrer les modifications
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Infos en lecture seule ── -->
+  <div class="col-12 col-md-6">
+    <div class="kpi-card h-100">
+      <h6 class="fw-bold mb-3"><i class="bi bi-info-circle me-1 text-primary"></i>Informations du compte</h6>
       <table class="table table-borderless table-sm">
-        <tr><th class="text-muted fw-normal">Email</th><td>{{ sa.email }}</td></tr>
-        <tr><th class="text-muted fw-normal">Nom</th><td>{{ sa.get_full_name }}</td></tr>
-        <tr><th class="text-muted fw-normal">Compte cree</th><td>{{ sa.created_at|date:"d/m/Y" }}</td></tr>
-        <tr><th class="text-muted fw-normal">Derniere connexion</th><td>{{ sa.last_login|date:"d/m/Y H:i"|default:"—" }}</td></tr>
+        <tr><th class="text-muted fw-normal" style="width:40%">Compte créé</th><td>{{ sa.created_at|date:"d/m/Y" }}</td></tr>
+        <tr><th class="text-muted fw-normal">Dernière connexion</th><td>{{ sa.last_login|date:"d/m/Y H:i"|default:"—" }}</td></tr>
+        <tr>
+          <th class="text-muted fw-normal">Statut 2FA</th>
+          <td>
+            {% if sa.totp_enabled %}
+              <span class="badge bg-success-subtle text-success border border-success-subtle">
+                <i class="bi bi-shield-check me-1"></i>Activée
+              </span>
+            {% else %}
+              <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                <i class="bi bi-shield-exclamation me-1"></i>Non activée
+              </span>
+            {% endif %}
+          </td>
+        </tr>
       </table>
     </div>
   </div>
+
+  <!-- ── 2FA ── -->
   <div class="col-12 col-md-6">
-    <div class="kpi-card">
+    <div class="kpi-card h-100">
       <h6 class="fw-bold mb-3"><i class="bi bi-shield-lock me-1 text-primary"></i>Double authentification (2FA)</h6>
       {% if sa.totp_enabled %}
-        <div class="d-flex align-items-center gap-2 mb-3">
-          <span class="badge bg-success fs-6"><i class="bi bi-shield-check me-1"></i>2FA active</span>
-        </div>
-        <p class="text-muted small">Il vous reste {{ sa.remaining_recovery_codes }} code(s) de recuperation.</p>
-        <a href="{% url 'super_admin:disable_2fa' %}" class="btn btn-sm btn-outline-danger">Desactiver le 2FA</a>
+        <p class="text-muted small mb-3">Il vous reste <strong>{{ sa.remaining_recovery_codes }}</strong> code(s) de récupération.</p>
+        <a href="{% url 'super_admin:disable_2fa' %}" class="btn btn-sm btn-outline-danger">
+          <i class="bi bi-shield-slash me-1"></i>Désactiver le 2FA
+        </a>
       {% else %}
-        <div class="d-flex align-items-center gap-2 mb-3">
-          <span class="badge bg-danger fs-6"><i class="bi bi-shield-exclamation me-1"></i>2FA non active</span>
-        </div>
-        <p class="text-muted small">La double authentification est obligatoire pour les comptes super-admin.</p>
-        <a href="{% url 'super_admin:setup_2fa' %}" class="btn btn-primary btn-sm"><i class="bi bi-shield-plus me-1"></i>Activer le 2FA maintenant</a>
+        <p class="text-muted small mb-3">La double authentification est fortement recommandée pour les comptes super-admin.</p>
+        <a href="{% url 'super_admin:setup_2fa' %}" class="btn btn-primary btn-sm">
+          <i class="bi bi-shield-plus me-1"></i>Activer le 2FA maintenant
+        </a>
       {% endif %}
     </div>
   </div>
+
+  <!-- ── Mot de passe ── -->
   <div class="col-12 col-md-6">
     <div class="kpi-card">
       <h6 class="fw-bold mb-3"><i class="bi bi-key me-1 text-primary"></i>Changer le mot de passe</h6>
       <form method="post">
         {% csrf_token %}
+        <input type="hidden" name="_action" value="password">
         {% for field in form_pwd %}
         <div class="mb-3">
           <label class="form-label fw-semibold small">{{ field.label }}</label>
@@ -44,9 +148,41 @@
           {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors.0 }}</div>{% endif %}
         </div>
         {% endfor %}
-        <button type="submit" class="btn btn-outline-primary btn-sm"><i class="bi bi-check-circle me-1"></i>Changer</button>
+        <button type="submit" class="btn btn-outline-primary btn-sm">
+          <i class="bi bi-check-circle me-1"></i>Changer le mot de passe
+        </button>
       </form>
     </div>
   </div>
+
 </div>
+
+<script>
+// Aperçu de l'image avant upload
+(function () {
+  const inp = document.getElementById('{{ form_info.photo_profil.id_for_label }}');
+  if (!inp) return;
+  inp.addEventListener('change', function () {
+    const file = this.files && this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const wrap = document.getElementById('photo-preview');
+      if (wrap.tagName === 'IMG') {
+        wrap.src = e.target.result;
+      } else {
+        // Remplacement du div initiales par un img
+        const img = document.createElement('img');
+        img.id = 'photo-preview';
+        img.src = e.target.result;
+        img.style.cssText = wrap.style.cssText;
+        img.style.borderRadius = '50%';
+        img.style.objectFit = 'cover';
+        wrap.parentNode.replaceChild(img, wrap);
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}());
+</script>
 {% endblock %}
