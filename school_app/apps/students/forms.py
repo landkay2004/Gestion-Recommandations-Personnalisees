@@ -58,18 +58,33 @@ class StudentForm(forms.ModelForm):
         })
 
     def clean_matricule(self):
-        """Génère un matricule si le champ est laissé vide."""
+        """
+        Gestion du matricule selon le contexte :
+
+        - Nouvel élève (pas de pk) + champ vide  → génération atomique via
+          MatriculeConfig.generer_matricule() (incrémente le compteur).
+        - Nouvel élève + valeur soumise manuellement → conserver (saisie volontaire).
+        - Élève existant + champ vide → garder le matricule d'origine.
+        - Élève existant + valeur soumise → utiliser la nouvelle valeur.
+
+        NB : le champ JS envoie une valeur VIDE pour les nouveaux élèves
+        (la pré-visualisation est effacée avant soumission) afin que la
+        génération atomique soit toujours utilisée en création.
+        """
         value = self.cleaned_data.get('matricule', '').strip()
+        is_new = not (self.instance and self.instance.pk)
+
         if not value:
-            # Instance existante : conserver le matricule actuel
-            if self.instance and self.instance.pk and self.instance.matricule:
-                return self.instance.matricule
-            # Nouvel élève : générer via MatriculeConfig
-            try:
-                from school_settings.models import MatriculeConfig
-                config = MatriculeConfig.get_config()
-                value = config.generer_matricule()
-            except Exception:
-                import uuid
-                value = f"EL{str(uuid.uuid4().int)[:8].upper()}"
+            if is_new:
+                # Générer atomiquement — garanti sans doublon
+                try:
+                    from school_settings.models import MatriculeConfig
+                    config = MatriculeConfig.get_config()
+                    return config.generer_matricule()
+                except Exception:
+                    import uuid
+                    return f"EL{str(uuid.uuid4().int)[:8].upper()}"
+            else:
+                # Édition sans changement : garder l'existant
+                return self.instance.matricule or value
         return value

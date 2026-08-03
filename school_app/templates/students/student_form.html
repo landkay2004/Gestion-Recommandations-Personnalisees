@@ -566,31 +566,47 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     AUTO-MATRICULE — pré-remplit le champ matricule pour un nouvel élève
+     AUTO-MATRICULE — aperçu pour un nouvel élève (prévisualisation seule)
+     Le champ est effacé avant soumission : le serveur génère toujours le
+     matricule réel de façon atomique via MatriculeConfig.generer_matricule().
   ══════════════════════════════════════════════════════════════ */
   (function () {
     const isNew = {% if obj %}false{% else %}true{% endif %};
     if (!isNew) return;
     const matriculeInput = document.getElementById('{{ form.matricule.id_for_label }}');
-    if (!matriculeInput || matriculeInput.value) return;
+    if (!matriculeInput) return;
 
-    // Indicateur visuel pendant le chargement
+    // Marquer le champ comme "aperçu auto" et le rendre lecture seule
+    matriculeInput.readOnly = true;
     matriculeInput.placeholder = 'Génération en cours…';
-    matriculeInput.disabled = true;
+    matriculeInput.style.fontStyle = 'italic';
+    matriculeInput.title = 'Aperçu — le matricule définitif sera généré automatiquement à l\'enregistrement';
 
     fetch('{% url "next_matricule_json" %}')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data.ok && data.matricule) {
           matriculeInput.value = data.matricule;
-          matriculeInput.title = 'Matricule généré automatiquement — modifiable si besoin';
+          matriculeInput.setAttribute('data-auto-preview', 'true');
         }
       })
       .catch(function () {})
       .finally(function () {
-        matriculeInput.disabled = false;
-        matriculeInput.placeholder = 'Laissez vide pour générer automatiquement';
+        matriculeInput.placeholder = 'Généré automatiquement à l\'enregistrement';
+        matriculeInput.style.fontStyle = '';
       });
+
+    // Avant soumission : vider la pré-visualisation so que le serveur
+    // génère le matricule réel de façon atomique (sans doublon possible).
+    const sf = document.getElementById('student-form');
+    if (sf) {
+      sf.addEventListener('submit', function () {
+        if (matriculeInput.getAttribute('data-auto-preview') === 'true') {
+          matriculeInput.readOnly = false;   // autoriser l'envoi de la valeur vide
+          matriculeInput.value = '';
+        }
+      }, { once: true });
+    }
   })();
 
 })();
