@@ -17,12 +17,21 @@
     }
     .hero-photo {
       position: absolute; inset: 0;
+      {% if platform_settings.public_bg_image_rejoindre %}
       background-image:
         linear-gradient(115deg, rgba(13,11,46,.94) 0%, rgba(28,24,84,.86) 38%, rgba(28,24,84,.55) 62%, rgba(13,11,46,.35) 100%),
-        url('{% static "public/img/hero-ecole.jpg" %}');
+        url('{{ platform_settings.public_bg_image_rejoindre.url }}');
+      {% elif platform_settings.public_bg_image %}
+      background-image:
+        linear-gradient(115deg, rgba(13,11,46,.94) 0%, rgba(28,24,84,.86) 38%, rgba(28,24,84,.55) 62%, rgba(13,11,46,.35) 100%),
+        url('{{ platform_settings.public_bg_image.url }}');
+      {% endif %}
       background-size: cover;
       background-position: center 30%;
       opacity: .55;
+      {% if not platform_settings.public_bg_image_rejoindre and not platform_settings.public_bg_image %}
+      background: {{ platform_settings.public_page_bg_color|default:'#0a1326' }};
+      {% endif %}
     }
     .hero-grain {
       position: absolute; inset: 0; pointer-events: none; z-index: 1;

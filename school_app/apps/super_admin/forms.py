@@ -219,6 +219,43 @@ class SupprimerEcoleForm(forms.Form):
         return val
 
 
+class PublicContactForm(forms.Form):
+    nom = forms.CharField(
+        label="Nom complet",
+        max_length=200,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Prénom et nom'})
+    )
+    email = forms.EmailField(
+        label="Adresse e-mail",
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'vous@example.com'})
+    )
+    telephone = forms.CharField(
+        label="Téléphone",
+        required=False,
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 ...'})
+    )
+    sujet = forms.ChoiceField(
+        label="Sujet",
+        choices=[
+            ('', '— Choisir un sujet —'),
+            ('info', "Demande d'information"),
+            ('technique', 'Problème technique'),
+            ('facturation', 'Facturation / abonnement'),
+            ('partenariat', 'Partenariat / collaboration'),
+            ('autre', 'Autre'),
+        ],
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    message = forms.CharField(
+        label="Message",
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Votre message…'})
+    )
+
+    def clean_email(self):
+        return self.cleaned_data['email'].strip().lower()
+
+
 class MaintenanceForm(forms.Form):
     ecole_id   = forms.IntegerField(required=False, widget=forms.HiddenInput())
     module     = forms.CharField(required=False, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'bulletins, notes, ... (laisser vide = tous)'}))
@@ -257,9 +294,11 @@ class PlatformSettingsForm(forms.ModelForm):
         model = PlatformSettings
         fields = [
             'site_name', 'site_slogan', 'site_devise', 'site_logo',
-            'adresse', 'email_contact', 'telephone', 'site_web', 'couleur_principale',
+            'adresse', 'contact_adresse', 'email_contact', 'telephone', 'contact_whatsapp', 'site_web', 'couleur_principale',
             # Images de fond login
             'login_bg_1', 'login_bg_2', 'login_bg_3',
+            # Fonds public
+            'public_bg_image', 'public_bg_image_rejoindre', 'public_bg_image_inscription', 'public_page_bg_color',
             # À propos
             'about_titre', 'about_description', 'about_mission', 'about_vision', 'about_valeurs',
             # SMTP
@@ -273,16 +312,22 @@ class PlatformSettingsForm(forms.ModelForm):
             'site_name':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'EducNet'}),
             'site_slogan': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'School Governance Network'}),
             'site_devise': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Votre devise ou citation…'}),
-            'site_logo':   forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'site_logo':   forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*,.svg'}),
             'adresse':     forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Adresse postale…'}),
+            'contact_adresse': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Adresse à afficher sur la page contact…'}),
             'email_contact': forms.EmailInput(attrs={'class': 'form-control'}),
             'telephone':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}),
+            'contact_whatsapp': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 ...'}),
             'site_web':    forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://…'}),
             'couleur_principale': forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
             # Login BG
             'login_bg_1':  forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
             'login_bg_2':  forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
             'login_bg_3':  forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'public_bg_image': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'public_bg_image_rejoindre': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'public_bg_image_inscription': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'public_page_bg_color': forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
             # À propos
             'about_titre':       forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'À propos de nous'}),
             'about_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Présentation générale de la plateforme…'}),
@@ -322,13 +367,19 @@ class PlatformSettingsForm(forms.ModelForm):
             'site_devise':       'Devise',
             'site_logo':         'Logo de la plateforme',
             'adresse':           'Adresse postale',
+            'contact_adresse':   'Adresse de contact',
             'email_contact':     'E-mail de contact',
             'telephone':         'Téléphone',
+            'contact_whatsapp':  'WhatsApp',
             'site_web':          'Site web',
             'couleur_principale':'Couleur principale',
             'login_bg_1':        'Image de fond 1',
             'login_bg_2':        'Image de fond 2',
             'login_bg_3':        'Image de fond 3',
+            'public_bg_image':   'Image publique par défaut',
+            'public_bg_image_rejoindre': 'Image page Rejoindre',
+            'public_bg_image_inscription': 'Image page Inscription',
+            'public_page_bg_color':'Couleur de fond publique',
             'about_titre':       'Titre de la page',
             'about_description': 'Description générale',
             'about_mission':     'Notre mission',

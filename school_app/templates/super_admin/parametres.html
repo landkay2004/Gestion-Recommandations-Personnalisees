@@ -126,7 +126,6 @@
               <strong>Recommandé : JPEG 1920×1080 px, &lt; 500 Ko.</strong>
             </p>
             <div class="row g-3">
-              {% for bg_field, bg_obj in form.login_bg_1,obj.login_bg_1|zip_with:form.login_bg_2,obj.login_bg_2|zip_with:form.login_bg_3,obj.login_bg_3 %}{% endfor %}
               <div class="col-md-4">
                 <label class="form-label form-label-sm fw-semibold">
                   <i class="bi bi-1-circle me-1 text-primary"></i>{{ form.login_bg_1.label }}
@@ -165,7 +164,71 @@
         </div>
       </div>
 
-      <!-- ── 2c. Page « À propos » ───────────────────────────────── -->
+      <!-- ── 2c. Fonds des pages publiques ───────────────────────────── -->
+      <div class="card mb-2 section-card">
+        <div class="card-header d-flex align-items-center justify-content-between section-toggle py-2"
+             data-bs-toggle="collapse" data-bs-target="#sec-public-bg" aria-expanded="true" role="button">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-image-fill text-primary" style="font-size:.9rem;"></i>
+            <span class="fw-semibold small">Fonds des pages publiques</span>
+            {% if obj.public_bg_image %}
+              <span class="badge bg-success-subtle text-success border ms-1" style="font-size:.62rem;"><i class="bi bi-check me-1"></i>Image configurée</span>
+            {% else %}
+              <span class="badge bg-light text-muted border ms-1" style="font-size:.62rem;">Couleur unie par défaut</span>
+            {% endif %}
+          </div>
+          <i class="bi bi-chevron-down chevron-icon"></i>
+        </div>
+        <div class="collapse show" id="sec-public-bg">
+          <div class="card-body pt-3 pb-3">
+            <p class="small text-muted mb-3">
+              Définissez un fond pour les pages publiques telles que Rejoindre et Inscription.
+              Si aucune image n'est chargée, la couleur unie configurée est utilisée.
+            </p>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label form-label-sm fw-semibold">{{ form.public_bg_image.label }}</label>
+                {% if obj.public_bg_image %}
+                <div class="mb-2">
+                  <img src="{{ obj.public_bg_image.url }}" class="rounded" style="max-height:120px;object-fit:cover;width:100%;border:1px solid var(--color-border);">
+                </div>
+                {% endif %}
+                {{ form.public_bg_image }}
+                <div class="form-text mt-1">Image par défaut utilisée quand aucune image de page spécifique n'est définie.</div>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label form-label-sm fw-semibold">{{ form.public_bg_image_rejoindre.label }}</label>
+                {% if obj.public_bg_image_rejoindre %}
+                <div class="mb-2">
+                  <img src="{{ obj.public_bg_image_rejoindre.url }}" class="rounded" style="max-height:120px;object-fit:cover;width:100%;border:1px solid var(--color-border);">
+                </div>
+                {% endif %}
+                {{ form.public_bg_image_rejoindre }}
+                <div class="form-text mt-1">Remplace l'image de fond par défaut sur la page Rejoindre.</div>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label form-label-sm fw-semibold">{{ form.public_bg_image_inscription.label }}</label>
+                {% if obj.public_bg_image_inscription %}
+                <div class="mb-2">
+                  <img src="{{ obj.public_bg_image_inscription.url }}" class="rounded" style="max-height:120px;object-fit:cover;width:100%;border:1px solid var(--color-border);">
+                </div>
+                {% endif %}
+                {{ form.public_bg_image_inscription }}
+                <div class="form-text mt-1">Remplace l'image de fond par défaut sur la page Inscription.</div>
+              </div>
+            </div>
+            <div class="row g-3 mt-3">
+              <div class="col-md-6">
+                <label class="form-label form-label-sm fw-semibold">{{ form.public_page_bg_color.label }}</label>
+                {{ form.public_page_bg_color }}
+                <div class="form-text mt-1">Couleur unie de secours pour les pages publiques si aucune image de fond n'est configurée.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 2d. Page « À propos » ───────────────────────────────── -->
       <div class="card mb-2 section-card">
         <div class="card-header d-flex align-items-center justify-content-between section-toggle py-2"
              data-bs-toggle="collapse" data-bs-target="#sec-apropos" aria-expanded="false" role="button">
@@ -365,6 +428,10 @@
                     <input type="email" id="email-test-input" class="form-control form-control-sm"
                            placeholder="votre@email.com" autocomplete="off"
                            value="{{ request.super_admin.email }}">
+                    <div class="form-text small text-muted mt-1">
+                      Ce test utilise les valeurs SMTP actuellement saisies dans le formulaire.
+                      Vous pouvez vérifier la configuration avant d'enregistrer.
+                    </div>
                   </div>
                   <div class="col-md-4 d-grid">
                     <button type="button" id="btn-test-email" class="btn btn-outline-primary btn-sm w-100">
@@ -647,6 +714,13 @@ if (btnTest) {
       const fd = new FormData();
       fd.append('email_test', email);
       fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+      fd.append('smtp_actif', document.getElementById('{{ form.smtp_actif.id_for_label }}')?.checked ? '1' : '0');
+      fd.append('smtp_host', document.getElementById('{{ form.smtp_host.id_for_label }}')?.value || '');
+      fd.append('smtp_port', document.getElementById('{{ form.smtp_port.id_for_label }}')?.value || '');
+      fd.append('smtp_use_tls', document.getElementById('{{ form.smtp_use_tls.id_for_label }}')?.checked ? '1' : '0');
+      fd.append('smtp_user', document.getElementById('{{ form.smtp_user.id_for_label }}')?.value || '');
+      fd.append('smtp_password', document.getElementById('{{ form.smtp_password.id_for_label }}')?.value || '');
+      fd.append('smtp_from_email', document.getElementById('{{ form.smtp_from_email.id_for_label }}')?.value || '');
 
       const resp = await fetch('{% url "super_admin:test_email" %}', {
         method: 'POST',

@@ -13,12 +13,21 @@
     }
     .form-hero-photo {
       position: absolute; inset: 0;
+      {% if platform_settings.public_bg_image_inscription %}
       background-image:
         linear-gradient(160deg, rgba(13,11,46,.93) 0%, rgba(28,24,84,.88) 45%, rgba(36,31,107,.82) 100%),
-        url('{% static "public/img/hero-ecole.jpg" %}');
+        url('{{ platform_settings.public_bg_image_inscription.url }}');
+      {% elif platform_settings.public_bg_image %}
+      background-image:
+        linear-gradient(160deg, rgba(13,11,46,.93) 0%, rgba(28,24,84,.88) 45%, rgba(36,31,107,.82) 100%),
+        url('{{ platform_settings.public_bg_image.url }}');
+      {% endif %}
       background-size: cover;
       background-position: center 35%;
       opacity: .4;
+      {% if not platform_settings.public_bg_image_inscription and not platform_settings.public_bg_image %}
+      background: {{ platform_settings.public_page_bg_color|default:'#0a1326' }};
+      {% endif %}
     }
     .form-hero-strip::before {
       content: ''; position: absolute; inset: 0; z-index: 1;

@@ -37,7 +37,7 @@
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
+      background: {{ platform_settings.public_page_bg_color|default:'#0a1326' }};
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;

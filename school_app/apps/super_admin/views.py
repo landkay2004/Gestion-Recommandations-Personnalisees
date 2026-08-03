@@ -9,7 +9,10 @@ from django.core.paginator import Paginator
 from django.utils.text import slugify
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
+import mimetypes
 import os
+from email import encoders
+from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from django.core.mail import EmailMultiAlternatives
 
@@ -26,6 +29,7 @@ from super_admin.forms import (
     PlanAbonnementForm, CreerEcoleForm, ModifierEcoleForm,
     SupprimerEcoleForm, MaintenanceForm,
     AnnoncePlateformeForm, PlatformSettingsForm,
+    PublicContactForm,
 )
 
 logger     = logging.getLogger('sgn')
@@ -861,20 +865,34 @@ def test_email(request):
         return redirect('super_admin:platform_settings')
 
     settings_obj = PlatformSettings.get_settings()
+
+    # Permet de tester la configuration SMTP à partir des valeurs actuellement saisies
+    # dans le formulaire, avant enregistrement.
+    smtp_actif = request.POST.get('smtp_actif') in ('1', 'true', 'on', 'yes')
+    smtp_host = request.POST.get('smtp_host', '').strip() or settings_obj.smtp_host
+    smtp_port = request.POST.get('smtp_port', '').strip()
+    smtp_port = int(smtp_port) if smtp_port.isdigit() else settings_obj.smtp_port
+    smtp_use_tls = request.POST.get('smtp_use_tls') in ('1', 'true', 'on', 'yes')
+    smtp_user = request.POST.get('smtp_user', '').strip() or settings_obj.smtp_user
+    smtp_password = request.POST.get('smtp_password')
+    if smtp_password is None or smtp_password == '':
+        smtp_password = settings_obj.smtp_password
+    smtp_from_email = request.POST.get('smtp_from_email', '').strip() or settings_obj.smtp_from_email or 'noreply@educnet.local'
+
     try:
         from django.core.mail import get_connection, EmailMessage
         mode = 'console'
-        if settings_obj.smtp_actif and settings_obj.smtp_host:
+        if smtp_actif and smtp_host:
             conn = get_connection(
                 backend='django.core.mail.backends.smtp.EmailBackend',
-                host=settings_obj.smtp_host,
-                port=settings_obj.smtp_port,
-                username=settings_obj.smtp_user,
-                password=settings_obj.smtp_password,
-                use_tls=settings_obj.smtp_use_tls,
+                host=smtp_host,
+                port=smtp_port,
+                username=smtp_user,
+                password=smtp_password,
+                use_tls=smtp_use_tls,
                 fail_silently=False,
             )
-            from_email = settings_obj.smtp_from_email or 'noreply@educnet.local'
+            from_email = smtp_from_email
             mode = 'smtp'
         else:
             conn = None
@@ -1135,7 +1153,18 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
             try:
                 with open(logo_path, 'rb') as f:
                     logo_data = f.read()
-                logo_img = MIMEImage(logo_data)
+                content_type, _ = mimetypes.guess_type(logo_path)
+                if content_type == 'image/svg+xml':
+                    logo_img = MIMEBase('image', 'svg+xml')
+                    logo_img.set_payload(logo_data)
+                    encoders.encode_base64(logo_img)
+                elif content_type and content_type.startswith('image/'):
+                    subtype = content_type.split('/', 1)[1]
+                    logo_img = MIMEImage(logo_data, _subtype=subtype)
+                else:
+                    logo_img = MIMEBase('application', 'octet-stream')
+                    logo_img.set_payload(logo_data)
+                    encoders.encode_base64(logo_img)
                 logo_img.add_header('Content-ID', '<%s>' % logo_cid)
                 logo_img.add_header('Content-Disposition', 'inline', filename=os.path.basename(logo_path))
                 msg.attach(logo_img)
@@ -1503,8 +1532,86 @@ def contact_view(request):
     """Page publique Contact."""
     from super_admin.models import PlatformSettings
     ps = PlatformSettings.get_settings()
+    success = False
+    error = None
+
+    if request.method == 'POST':
+        form = PublicContactForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            destinataire = ps.email_contact or ps.smtp_from_email or django_settings.DEFAULT_FROM_EMAIL
+            from_email = ps.smtp_from_email or django_settings.DEFAULT_FROM_EMAIL
+            sujet_choices = {
+                'info': "Demande d'information sur la plateforme",
+                'technique': 'Problème technique',
+                'facturation': 'Facturation / abonnement',
+                'partenariat': 'Partenariat / collaboration',
+                'autre': 'Autre',
+            }
+            sujet_label = sujet_choices.get(data['sujet'], data['sujet'])
+            sujet = "[%s] Nouveau message de contact : %s" % (
+                ps.site_name or 'EducNet',
+                sujet_label,
+            )
+            corps = (
+                "Nom : %(nom)s\n"
+                "E-mail : %(email)s\n"
+                "Téléphone : %(telephone)s\n"
+                "Sujet : %(sujet)s\n"
+                "\n"
+                "Message :\n%(message)s\n"
+            ) % {
+                'nom': data['nom'],
+                'email': data['email'],
+                'telephone': data.get('telephone', ''),
+                'sujet': sujet_label,
+                'message': data['message'],
+            }
+            try:
+                connection = None
+                if ps.smtp_actif and ps.smtp_host:
+                    connection = django_settings.EMAIL_BACKEND
+                    from django.core.mail import get_connection
+                    conn = get_connection(
+                        backend='django.core.mail.backends.smtp.EmailBackend',
+                        host=ps.smtp_host,
+                        port=ps.smtp_port,
+                        username=ps.smtp_user,
+                        password=ps.smtp_password,
+                        use_tls=ps.smtp_use_tls,
+                        fail_silently=False,
+                    )
+                else:
+                    conn = None
+
+                from django.core.mail import EmailMessage
+                message_obj = EmailMessage(
+                    subject=sujet,
+                    body=corps,
+                    from_email=from_email,
+                    to=[destinataire],
+                    reply_to=[data['email']],
+                    connection=conn,
+                )
+                message_obj.send(fail_silently=False)
+                success = True
+                form = PublicContactForm()
+            except Exception as exc:
+                error = (
+                    "Une erreur est survenue lors de l'envoi du message. "
+                    "Vérifiez la configuration SMTP ou contactez l'administrateur."
+                )
+                logger.exception('CONTACT_FORM_SEND_ERROR: %s', exc)
+        else:
+            error = "Veuillez corriger les erreurs du formulaire." 
+    else:
+        form = PublicContactForm()
+
     return render(request, 'public/contact.html', {
         'platform_settings': ps,
+        'form': form,
+        'success': success,
+        'error': error,
     })
 
 

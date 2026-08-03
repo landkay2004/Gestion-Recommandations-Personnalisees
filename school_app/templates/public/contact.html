@@ -110,22 +110,22 @@
     <div class="contact-info">
       <h2>Coordonnées</h2>
 
-      {% if platform_settings.contact_email %}
+      {% if platform_settings.email_contact %}
       <div class="contact-item">
         <div class="contact-item-icon"><i class="bi bi-envelope-fill"></i></div>
         <div>
           <div class="contact-item-label">Adresse e-mail</div>
-          <div class="contact-item-value"><a href="mailto:{{ platform_settings.contact_email }}">{{ platform_settings.contact_email }}</a></div>
+          <div class="contact-item-value"><a href="mailto:{{ platform_settings.email_contact }}">{{ platform_settings.email_contact }}</a></div>
         </div>
       </div>
       {% endif %}
 
-      {% if platform_settings.contact_telephone %}
+      {% if platform_settings.telephone %}
       <div class="contact-item">
         <div class="contact-item-icon"><i class="bi bi-telephone-fill"></i></div>
         <div>
           <div class="contact-item-label">Téléphone</div>
-          <div class="contact-item-value"><a href="tel:{{ platform_settings.contact_telephone }}">{{ platform_settings.contact_telephone }}</a></div>
+          <div class="contact-item-value"><a href="tel:{{ platform_settings.telephone }}">{{ platform_settings.telephone }}</a></div>
         </div>
       </div>
       {% endif %}
@@ -154,7 +154,7 @@
       </div>
       {% endif %}
 
-      {% if not platform_settings.contact_email and not platform_settings.contact_telephone %}
+      {% if not platform_settings.email_contact and not platform_settings.telephone %}
       <div class="contact-item">
         <div class="contact-item-icon"><i class="bi bi-envelope-fill"></i></div>
         <div>
@@ -192,36 +192,47 @@
     <div class="contact-card">
       <h2>Envoyer un message</h2>
       <p class="card-sub">Remplissez ce formulaire et nous vous répondrons dans les plus brefs délais.</p>
-      <form class="contact-form" onsubmit="handleContactForm(event)">
+      {% if success %}
+      <div class="alert alert-success">Merci, votre message a bien été envoyé. Nous vous répondrons rapidement.</div>
+      {% endif %}
+      {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+      {% endif %}
+      <form class="contact-form" method="post" novalidate>
         {% csrf_token %}
         <div class="mb-3">
           <label class="form-label">Votre nom complet *</label>
-          <input type="text" class="form-control" name="nom" placeholder="Prénom et nom" required>
+          <input type="text" class="form-control" name="nom" value="{{ form.nom.value|default_if_none:'' }}" placeholder="Prénom et nom" required>
+          {% if form.nom.errors %}<div class="text-danger small mt-1">{{ form.nom.errors.0 }}</div>{% endif %}
         </div>
         <div class="row g-3 mb-3">
           <div class="col-sm-6">
             <label class="form-label">E-mail *</label>
-            <input type="email" class="form-control" name="email" placeholder="vous@example.com" required>
+            <input type="email" class="form-control" name="email" value="{{ form.email.value|default_if_none:'' }}" placeholder="vous@example.com" required>
+            {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>{% endif %}
           </div>
           <div class="col-sm-6">
             <label class="form-label">Téléphone</label>
-            <input type="tel" class="form-control" name="telephone" placeholder="+243 …">
+            <input type="tel" class="form-control" name="telephone" value="{{ form.telephone.value|default_if_none:'' }}" placeholder="+243 …">
+            {% if form.telephone.errors %}<div class="text-danger small mt-1">{{ form.telephone.errors.0 }}</div>{% endif %}
           </div>
         </div>
         <div class="mb-3">
           <label class="form-label">Sujet *</label>
           <select class="form-select" name="sujet" required>
             <option value="">— Choisir un sujet —</option>
-            <option>Demande d'information sur la plateforme</option>
-            <option>Problème technique</option>
-            <option>Partenariat / collaboration</option>
-            <option>Facturation et abonnement</option>
-            <option>Autre</option>
+            <option value="info" {% if form.sujet.value == "info" %}selected{% endif %}>Demande d'information sur la plateforme</option>
+            <option value="technique" {% if form.sujet.value == "technique" %}selected{% endif %}>Problème technique</option>
+            <option value="partenariat" {% if form.sujet.value == "partenariat" %}selected{% endif %}>Partenariat / collaboration</option>
+            <option value="facturation" {% if form.sujet.value == "facturation" %}selected{% endif %}>Facturation et abonnement</option>
+            <option value="autre" {% if form.sujet.value == "autre" %}selected{% endif %}>Autre</option>
           </select>
+          {% if form.sujet.errors %}<div class="text-danger small mt-1">{{ form.sujet.errors.0 }}</div>{% endif %}
         </div>
         <div class="mb-4">
           <label class="form-label">Message *</label>
-          <textarea class="form-control" name="message" placeholder="Décrivez votre demande…" required></textarea>
+          <textarea class="form-control" name="message" placeholder="Décrivez votre demande…" required>{{ form.message.value|default_if_none:'' }}</textarea>
+          {% if form.message.errors %}<div class="text-danger small mt-1">{{ form.message.errors.0 }}</div>{% endif %}
         </div>
         <button type="submit" class="contact-submit">
           <i class="bi bi-send-fill me-2"></i>Envoyer le message
@@ -243,23 +254,4 @@
   </div>
 </div>
 {% endif %}
-
-<script>
-function handleContactForm(e) {
-  e.preventDefault();
-  const btn = e.target.querySelector('button[type="submit"]');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Envoi…';
-  setTimeout(() => {
-    btn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Message envoyé !';
-    btn.style.background = 'linear-gradient(135deg,#16a34a,#22c55e)';
-    e.target.reset();
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.style.background = '';
-      btn.innerHTML = '<i class="bi bi-send-fill me-2"></i>Envoyer le message';
-    }, 3000);
-  }, 800);
-}
-</script>
 {% endblock %}

@@ -3,6 +3,7 @@ import secrets
 
 import pyotp
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 
@@ -97,10 +98,21 @@ class PlatformSettings(models.Model):
     site_name    = models.CharField("Nom du site",    max_length=200, default="EducNet")
     site_slogan  = models.CharField("Slogan",         max_length=300, blank=True, default="School Governance Network")
     site_devise  = models.CharField("Devise",         max_length=300, blank=True)
-    site_logo    = models.ImageField("Logo plateforme", upload_to='platform/', null=True, blank=True)
+    site_logo    = models.FileField(
+        "Logo plateforme",
+        upload_to='platform/',
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'])],
+        help_text="PNG, JPG, GIF, SVG ou WEBP recommandé. Le logo s'affiche dans la barre latérale, la page de connexion et les en-têtes d'e-mails.",
+    )
     adresse      = models.TextField("Adresse",        blank=True)
+    contact_adresse = models.TextField("Adresse de contact", blank=True,
+                                       help_text="Adresse physique affichée sur la page Contact.")
     email_contact = models.EmailField("E-mail contact", blank=True)
     telephone    = models.CharField("Téléphone",      max_length=50, blank=True)
+    contact_whatsapp = models.CharField("WhatsApp",   max_length=32, blank=True,
+                                         help_text="Numéro WhatsApp au format international, ex. +243123456789.")
     site_web     = models.URLField("Site web",        blank=True)
     couleur_principale = models.CharField("Couleur principale", max_length=7, default="#4D44B5")
 
@@ -156,6 +168,23 @@ class PlatformSettings(models.Model):
     login_bg_3 = models.ImageField(
         "Image fond login 3", upload_to='platform/login/', null=True, blank=True,
         help_text="Troisième image de fond (optionnel)."
+    )
+
+    public_bg_image = models.ImageField(
+        "Image de fond publique", upload_to='platform/public/', null=True, blank=True,
+        help_text="Image de fond par défaut utilisée quand aucune image spécifique à une page publique n'est configurée."
+    )
+    public_bg_image_rejoindre = models.ImageField(
+        "Image de fond page Rejoindre", upload_to='platform/public/', null=True, blank=True,
+        help_text="Image de fond utilisée sur la page Rejoindre. Remplace l'image publique par défaut si elle est définie."
+    )
+    public_bg_image_inscription = models.ImageField(
+        "Image de fond page Inscription", upload_to='platform/public/', null=True, blank=True,
+        help_text="Image de fond utilisée sur le formulaire d'inscription. Remplace l'image publique par défaut si elle est définie."
+    )
+    public_page_bg_color = models.CharField(
+        "Couleur de fond publique", max_length=7, default="#0d0b2e",
+        help_text="Couleur unie affichée sur les pages publiques lorsque aucune image de fond n'est configurée."
     )
 
     # ── Page À propos ─────────────────────────────────────────────────────────

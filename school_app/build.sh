@@ -12,6 +12,8 @@ pip install -r requirements.txt
 # tenants, onboarding, auth, sessions, etc.).  Les schémas des écoles (tenants)
 # sont migrés automatiquement lors du premier accès ou via la tâche de fond.
 python manage.py migrate_schemas --shared --noinput
+# S'assure que les migrations de l'app super_admin sont appliquées explicitement.
+python manage.py migrate super_admin --noinput
 
 # Collecter les fichiers statiques (whitenoise les sert directement)
 python manage.py collectstatic --noinput
