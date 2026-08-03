@@ -114,6 +114,171 @@ class SchoolInfo(models.Model):
         return settings.MEDIA_URL.rstrip('/') + '/school/icons'
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Configuration de la matriculation automatique des élèves
+# ─────────────────────────────────────────────────────────────────────────────
+
+class MatriculeConfig(models.Model):
+    """
+    Singleton (pk=1) par école : configure le format de matriculation automatique.
+
+    Variables disponibles dans format_matricule :
+        {PREFIXE}   → valeur du champ prefixe (ex. "EL", "IB", "ETD")
+        {ANNEE}     → année scolaire en cours, 4 chiffres (ex. "2025")
+        {ANNEE2}    → 2 derniers chiffres de l'année (ex. "25")
+        {MOIS}      → mois courant, 2 chiffres (ex. "08")
+        {SEQ}       → numéro séquentiel brut (ex. "42")
+        {SEQ3}      → séquentiel sur 3 chiffres (ex. "042")
+        {SEQ4}      → séquentiel sur 4 chiffres (ex. "0042")
+        {SEQ5}      → séquentiel sur 5 chiffres (ex. "00042")
+
+    Exemple : "{PREFIXE}-{ANNEE2}-{SEQ4}" → "EL-25-0042"
+    """
+
+    format_matricule = models.CharField(
+        "Format du matricule",
+        max_length=100,
+        default="{PREFIXE}{ANNEE2}{SEQ4}",
+        help_text=(
+            "Variables : {PREFIXE}, {ANNEE}, {ANNEE2}, {MOIS}, "
+            "{SEQ}, {SEQ3}, {SEQ4}, {SEQ5}. "
+            "Exemple : {PREFIXE}-{ANNEE2}-{SEQ4} → EL-25-0001"
+        ),
+    )
+    prefixe = models.CharField(
+        "Préfixe",
+        max_length=10,
+        default="EL",
+        help_text="Remplace {PREFIXE} dans le format. Ex : EL, IB, ETD",
+    )
+    compteur = models.PositiveIntegerField(
+        "Compteur actuel",
+        default=0,
+        help_text="Incrémenté automatiquement à chaque inscription. Modifiable pour reprendre une numérotation existante.",
+    )
+    reset_annuel = models.BooleanField(
+        "Réinitialiser le compteur chaque année scolaire",
+        default=False,
+        help_text="Si activé, le compteur repart à 0 au début de chaque nouvelle année scolaire.",
+    )
+    annee_reference = models.CharField(
+        "Année de référence du compteur",
+        max_length=4,
+        blank=True,
+        default="",
+        help_text="Année scolaire en cours lors du dernier incrément (gestion du reset annuel).",
+    )
+
+    class Meta:
+        verbose_name = "Configuration de la matriculation"
+
+    def __str__(self):
+        return f"Matricule : {self.format_matricule} (compteur={self.compteur})"
+
+    @classmethod
+    def get_config(cls):
+        """Retourne (ou crée) la configuration singleton pk=1."""
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+    # ── Utilitaires internes ──────────────────────────────────────────────────
+
+    def _get_annee(self) -> str:
+        """Retourne l'année scolaire en cours (4 chiffres)."""
+        try:
+            info = SchoolInfo.get_info()
+            raw = (info.annee_scolaire_actuelle or '').strip()
+            year = raw.split('-')[0].strip()
+            if len(year) == 4 and year.isdigit():
+                return year
+        except Exception:
+            pass
+        from django.utils import timezone
+        return str(timezone.now().year)
+
+    def _variables(self) -> dict:
+        """Construit le dictionnaire des variables de remplacement."""
+        from django.utils import timezone
+        annee = self._get_annee()
+        seq = self.compteur
+        return {
+            'PREFIXE': self.prefixe or 'EL',
+            'ANNEE':   annee,
+            'ANNEE2':  annee[-2:],
+            'MOIS':    timezone.now().strftime('%m'),
+            'SEQ':     str(seq),
+            'SEQ3':    str(seq).zfill(3),
+            'SEQ4':    str(seq).zfill(4),
+            'SEQ5':    str(seq).zfill(5),
+        }
+
+    def apercu(self, numero: int | None = None) -> str:
+        """
+        Retourne un aperçu du format avec le numéro donné (ou compteur+1).
+        N'incrémente PAS le compteur.
+        """
+        annee = self._get_annee()
+        from django.utils import timezone
+        seq = numero if numero is not None else self.compteur + 1
+        variables = {
+            'PREFIXE': self.prefixe or 'EL',
+            'ANNEE':   annee,
+            'ANNEE2':  annee[-2:],
+            'MOIS':    timezone.now().strftime('%m'),
+            'SEQ':     str(seq),
+            'SEQ3':    str(seq).zfill(3),
+            'SEQ4':    str(seq).zfill(4),
+            'SEQ5':    str(seq).zfill(5),
+        }
+        result = self.format_matricule or '{PREFIXE}{ANNEE2}{SEQ4}'
+        for key, val in variables.items():
+            result = result.replace('{' + key + '}', val)
+        return result
+
+    # ── Génération thread-safe ────────────────────────────────────────────────
+
+    def generer_matricule(self) -> str:
+        """
+        Génère le prochain matricule et incrémente le compteur de façon atomique.
+        Utilise SELECT FOR UPDATE pour éviter les doublons en cas d'inscriptions simultanées.
+        """
+        from django.db import transaction
+        from django.utils import timezone
+
+        with transaction.atomic():
+            config = MatriculeConfig.objects.select_for_update().get(pk=self.pk)
+            annee = config._get_annee()
+
+            # Reset annuel si activé et nouvelle année détectée
+            if config.reset_annuel and config.annee_reference != annee:
+                config.compteur = 0
+                config.annee_reference = annee
+
+            config.compteur += 1
+            config.save(update_fields=['compteur', 'annee_reference'])
+
+            annee2 = annee[-2:]
+            seq = config.compteur
+
+            variables = {
+                'PREFIXE': config.prefixe or 'EL',
+                'ANNEE':   annee,
+                'ANNEE2':  annee2,
+                'MOIS':    timezone.now().strftime('%m'),
+                'SEQ':     str(seq),
+                'SEQ3':    str(seq).zfill(3),
+                'SEQ4':    str(seq).zfill(4),
+                'SEQ5':    str(seq).zfill(5),
+            }
+
+            fmt = config.format_matricule or '{PREFIXE}{ANNEE2}{SEQ4}'
+            matricule = fmt
+            for key, val in variables.items():
+                matricule = matricule.replace('{' + key + '}', val)
+
+            return matricule
+
+
 # ── Signal post_save : génère les icônes automatiquement lors de l'upload ─────
 
 from django.db.models.signals import post_save

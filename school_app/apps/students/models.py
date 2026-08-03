@@ -82,5 +82,11 @@ class Student(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.matricule:
-            self.matricule = f"EL{str(uuid.uuid4().int)[:8].upper()}"
+            try:
+                from school_settings.models import MatriculeConfig
+                config = MatriculeConfig.get_config()
+                self.matricule = config.generer_matricule()
+            except Exception:
+                # Repli UUID si la configuration n'est pas accessible
+                self.matricule = f"EL{str(uuid.uuid4().int)[:8].upper()}"
         super().save(*args, **kwargs)

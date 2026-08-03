@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% block title %}Matriculation automatique{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'settings_view' %}">Paramètres</a></li>
+  <li class="breadcrumb-item active">Matriculation</li>
+{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex align-items-center justify-content-between">
+  <h1 class="page-title"><i class="bi bi-123 text-primary me-2"></i>Matriculation automatique des élèves</h1>
+</div>
+
+{% if messages %}
+  {% for msg in messages %}
+    <div class="alert alert-{{ msg.tags|default:'info' }} alert-dismissible fade show" role="alert">
+      {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="row g-4">
+  <!-- ── Formulaire ──────────────────────────────────────────────────────── -->
+  <div class="col-lg-7">
+    <form method="post" id="matricule-form">
+      {% csrf_token %}
+
+      <div class="card mb-4">
+        <div class="card-header fw-semibold">
+          <i class="bi bi-sliders me-2"></i>Format du matricule
+        </div>
+        <div class="card-body">
+
+          <!-- Préfixe -->
+          <div class="mb-4">
+            <label class="form-label fw-medium">{{ form.prefixe.label }}</label>
+            {{ form.prefixe }}
+            <div class="form-text">Exemple : <code>EL</code>, <code>IB</code>, <code>ENF</code>, <code>2025</code></div>
+            {% if form.prefixe.errors %}<div class="text-danger small mt-1">{{ form.prefixe.errors|join:', ' }}</div>{% endif %}
+          </div>
+
+          <!-- Format -->
+          <div class="mb-4">
+            <label class="form-label fw-medium">{{ form.format_matricule.label }}</label>
+            {{ form.format_matricule }}
+            <div class="form-text">
+              Variables disponibles :
+              <code>{PREFIXE}</code> <code>{ANNEE}</code> <code>{ANNEE2}</code>
+              <code>{MOIS}</code> <code>{SEQ3}</code> <code>{SEQ4}</code> <code>{SEQ5}</code>
+            </div>
+            {% if form.format_matricule.errors %}<div class="text-danger small mt-1">{{ form.format_matricule.errors|join:', ' }}</div>{% endif %}
+          </div>
+
+          <!-- Aperçu dynamique -->
+          <div class="mb-4">
+            <label class="form-label fw-medium text-muted">Aperçu du prochain matricule</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="bi bi-eye"></i></span>
+              <div id="apercu-box" class="form-control bg-light fw-bold text-primary font-monospace" style="min-height:38px;">
+                {{ apercu }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Compteur -->
+          <div class="mb-4">
+            <label class="form-label fw-medium">{{ form.compteur.label }}</label>
+            {{ form.compteur }}
+            <div class="form-text">
+              Le <strong>prochain</strong> élève inscrit recevra le numéro <strong>{{ config.compteur|add:1 }}</strong>.
+              Modifiez ce champ pour reprendre une numérotation existante.
+            </div>
+            {% if form.compteur.errors %}<div class="text-danger small mt-1">{{ form.compteur.errors|join:', ' }}</div>{% endif %}
+          </div>
+
+          <!-- Reset annuel -->
+          <div class="mb-2">
+            <div class="form-check form-switch">
+              {{ form.reset_annuel }}
+              <label class="form-check-label" for="{{ form.reset_annuel.id_for_label }}">
+                {{ form.reset_annuel.label }}
+              </label>
+            </div>
+            <div class="form-text">
+              Utile pour des formats comme <code>{PREFIXE}{ANNEE2}{SEQ4}</code> : chaque année scolaire repart de <strong>0001</strong>.
+            </div>
+          </div>
+
+        </div>
+        <div class="card-footer d-flex gap-2">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save me-1"></i>Enregistrer
+          </button>
+          <a href="{% url 'settings_view' %}" class="btn btn-outline-secondary">Retour aux paramètres</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- ── Aide + exemples ────────────────────────────────────────────────── -->
+  <div class="col-lg-5">
+
+    <div class="card mb-4">
+      <div class="card-header fw-semibold"><i class="bi bi-lightbulb me-2 text-warning"></i>Exemples de formats</div>
+      <div class="card-body p-0">
+        <table class="table table-sm table-hover mb-0">
+          <thead class="table-light">
+            <tr><th>Format</th><th>Résultat</th></tr>
+          </thead>
+          <tbody class="font-monospace small">
+            <tr class="example-row" data-fmt="{PREFIXE}{ANNEE2}{SEQ4}" data-pfx="EL">
+              <td><code>{PREFIXE}{ANNEE2}{SEQ4}</code></td>
+              <td class="text-primary fw-semibold">EL250001</td>
+            </tr>
+            <tr class="example-row" data-fmt="{PREFIXE}-{ANNEE2}-{SEQ4}" data-pfx="EL">
+              <td><code>{PREFIXE}-{ANNEE2}-{SEQ4}</code></td>
+              <td class="text-primary fw-semibold">EL-25-0001</td>
+            </tr>
+            <tr class="example-row" data-fmt="{PREFIXE}/{ANNEE}/{SEQ3}" data-pfx="IB">
+              <td><code>{PREFIXE}/{ANNEE}/{SEQ3}</code></td>
+              <td class="text-primary fw-semibold">IB/2025/001</td>
+            </tr>
+            <tr class="example-row" data-fmt="{ANNEE}-{SEQ4}" data-pfx="">
+              <td><code>{ANNEE}-{SEQ4}</code></td>
+              <td class="text-primary fw-semibold">2025-0001</td>
+            </tr>
+            <tr class="example-row" data-fmt="{PREFIXE}{SEQ5}" data-pfx="ETD">
+              <td><code>{PREFIXE}{SEQ5}</code></td>
+              <td class="text-primary fw-semibold">ETD00001</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer text-muted small">Cliquez sur un exemple pour l'appliquer.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header fw-semibold"><i class="bi bi-info-circle me-2 text-info"></i>Variables disponibles</div>
+      <div class="card-body">
+        <dl class="row small mb-0">
+          <dt class="col-5"><code>{PREFIXE}</code></dt>
+          <dd class="col-7">Le préfixe configuré (ex. <strong>EL</strong>)</dd>
+          <dt class="col-5"><code>{ANNEE}</code></dt>
+          <dd class="col-7">Année scolaire en cours, 4 chiffres (ex. <strong>2025</strong>)</dd>
+          <dt class="col-5"><code>{ANNEE2}</code></dt>
+          <dd class="col-7">2 derniers chiffres de l'année (ex. <strong>25</strong>)</dd>
+          <dt class="col-5"><code>{MOIS}</code></dt>
+          <dd class="col-7">Mois d'inscription, 2 chiffres (ex. <strong>08</strong>)</dd>
+          <dt class="col-5"><code>{SEQ3}</code></dt>
+          <dd class="col-7">Numéro séquentiel, 3 chiffres (ex. <strong>042</strong>)</dd>
+          <dt class="col-5"><code>{SEQ4}</code></dt>
+          <dd class="col-7">Numéro séquentiel, 4 chiffres (ex. <strong>0042</strong>)</dd>
+          <dt class="col-5"><code>{SEQ5}</code></dt>
+          <dd class="col-7">Numéro séquentiel, 5 chiffres (ex. <strong>00042</strong>)</dd>
+        </dl>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  const fmtInput  = document.getElementById('{{ form.format_matricule.id_for_label }}');
+  const pfxInput  = document.getElementById('{{ form.prefixe.id_for_label }}');
+  const ctrInput  = document.getElementById('{{ form.compteur.id_for_label }}');
+  const apercuBox = document.getElementById('apercu-box');
+  const apercuUrl = '{% url "matricule_apercu" %}';
+
+  let debounceTimer = null;
+
+  function updateApercu() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      const params = new URLSearchParams({
+        format:   fmtInput.value,
+        prefixe:  pfxInput.value,
+        compteur: ctrInput ? ctrInput.value : '0',
+      });
+      fetch(`${apercuUrl}?${params}`)
+        .then(r => r.json())
+        .then(data => {
+          apercuBox.textContent = data.apercu || '—';
+        })
+        .catch(() => {});
+    }, 300);
+  }
+
+  if (fmtInput) fmtInput.addEventListener('input', updateApercu);
+  if (pfxInput) pfxInput.addEventListener('input', updateApercu);
+  if (ctrInput) ctrInput.addEventListener('input', updateApercu);
+
+  // Appliquer un exemple en cliquant sur une ligne du tableau
+  document.querySelectorAll('.example-row').forEach(row => {
+    row.style.cursor = 'pointer';
+    row.addEventListener('click', () => {
+      if (fmtInput) fmtInput.value = row.dataset.fmt;
+      if (pfxInput && row.dataset.pfx) pfxInput.value = row.dataset.pfx;
+      updateApercu();
+    });
+  });
+})();
+</script>
+{% endblock %}

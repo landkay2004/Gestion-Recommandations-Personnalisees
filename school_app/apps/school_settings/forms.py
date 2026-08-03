@@ -1,5 +1,5 @@
 from django import forms
-from .models import SchoolInfo
+from .models import SchoolInfo, MatriculeConfig
 
 
 class SchoolInfoForm(forms.ModelForm):
@@ -26,4 +26,32 @@ class SchoolInfoForm(forms.ModelForm):
             'portail_pwa_description': forms.TextInput(attrs={'class': 'form-control'}),
             'theme_color':            forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
             'background_color':       forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
+        }
+
+
+class MatriculeConfigForm(forms.ModelForm):
+    class Meta:
+        model = MatriculeConfig
+        fields = ['format_matricule', 'prefixe', 'compteur', 'reset_annuel']
+        widgets = {
+            'format_matricule': forms.TextInput(attrs={
+                'class': 'form-control font-monospace',
+                'placeholder': '{PREFIXE}{ANNEE2}{SEQ4}',
+            }),
+            'prefixe': forms.TextInput(attrs={
+                'class': 'form-control text-uppercase',
+                'maxlength': '10',
+                'placeholder': 'EL',
+            }),
+            'compteur': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+            }),
+            'reset_annuel': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+        labels = {
+            'format_matricule': 'Format du matricule',
+            'prefixe': 'Préfixe ({PREFIXE})',
+            'compteur': 'Compteur courant (prochain = compteur + 1)',
+            'reset_annuel': 'Remettre le compteur à zéro chaque nouvelle année scolaire',
         }
