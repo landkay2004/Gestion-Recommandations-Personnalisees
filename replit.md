@@ -1,45 +1,76 @@
-# [Project name]
+# EducNet — Système de Gestion Scolaire
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Plateforme web multi-tenant de gestion scolaire pour les écoles en RDC (Congo). Gère les élèves, classes, notes, bulletins PDF, planning, comptabilité, portail parents et un super-admin plateforme.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- **Démarrer l'app** : workflow `Start application` (lancé automatiquement)
+  - Exécute `bash school_app/start.sh` : migrations → collectstatic → `runserver 0.0.0.0:8000`
+- **Migrations** : `cd school_app && python manage.py migrate_schemas --noinput`
+- **Seed de test** : `cd school_app && python manage.py seed_test_school`
+- **Shell Django** : `cd school_app && python manage.py shell`
+- Required env: `DATABASE_URL` — fourni automatiquement par Replit (PostgreSQL managé)
 
 ## Stack
 
-- pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- **Backend** : Django 6.x, Python
+- **Base de données** : PostgreSQL (Replit managed) + django-tenants (multi-tenant par schéma)
+- **Frontend** : Bootstrap 5 + templates Django (server-rendered)
+- **PDF/reports** : ReportLab
+- **QR codes** : qrcode + Pillow
+- **Fichiers statiques** : WhiteNoise
+- **Déploiement Vercel** : `@vercel/python` + `build.sh` (migrations + collectstatic auto)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+```
+school_app/          ← Racine du projet Django (manage.py ici)
+  apps/              ← Modules métier (accounts, students, super_admin, …)
+  config/
+    settings.py      ← Configuration principale (DATABASE_URL ou DB_* vars)
+    wsgi.py          ← Point d'entrée WSGI (Vercel)
+  templates/         ← Templates HTML Bootstrap 5
+  static/            ← CSS/JS/images source
+  staticfiles/       ← Générés par collectstatic (ne pas éditer)
+  build.sh           ← Script de build Vercel (pip + migrate_schemas --shared + collectstatic)
+  start.sh           ← Script de démarrage Replit (migrate_schemas + runserver)
+vercel.json          ← Config déploiement Vercel (buildCommand → build.sh)
+```
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- **Multi-tenancy par schéma PostgreSQL** : chaque école a son propre schéma via django-tenants. Le schéma `public` contient les données plateforme (super_admin, tenants). Les migrations doivent être appliquées avec `migrate_schemas --shared` (schéma public) puis `migrate_schemas` (tous les tenants).
+- **Pas de venv sur Replit** : `start.sh` détecte `REPL_ID` et utilise directement l'environnement Python géré par Replit (`.pythonlibs`).
+- **DATABASE_URL auto** : Replit injecte `DATABASE_URL` automatiquement — aucune config manuelle nécessaire. `settings.py` le détecte et active le mode multi-tenant.
+- **Build Vercel + migrations** : `vercel.json` appelle `school_app/build.sh` comme `buildCommand`, qui exécute `migrate_schemas --shared` avant de servir — les nouvelles colonnes sont appliquées à chaque déploiement.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- **Super-admin** : gestion des plans d'abonnement, des écoles, paramètres plateforme, images de fond login
+- **Admin école** : onboarding 5 étapes, élèves, classes, matières, notes, bulletins PDF MEPSP
+- **Portail parents** : accès via QR code ou code d'accès
+- **Comptabilité** : facturation, paiements mobiles
+- **Planning** : emploi du temps
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Garder le stack Django/Bootstrap — pas de migration vers d'autres frameworks
+- Pousser le travail terminé sur GitHub
+
+## Comptes de test (après seed_test_school)
+
+| Rôle | Email | Mot de passe |
+|---|---|---|
+| Super-admin | superadmin@test.local | SuperAdmin@2025! |
+| Admin-école | admin@ecoletest.local | Admin@Ecole2025! |
+| Préfet | prefet@ecoletest.local | Prefet@Ecole2025! |
+| Enseignant | enseignant@ecoletest.local | Enseignant@2025! |
+| Secrétariat | secretariat@ecoletest.local | Secretariat@2025! |
+| Comptable | comptable@ecoletest.local | Comptable@2025! |
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
-
-## Pointers
-
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+- Ne jamais lancer `pnpm dev` à la racine — l'app tourne via le workflow Django, pas pnpm.
+- Les migrations multi-tenant : toujours `migrate_schemas --shared` d'abord (schéma public), puis `migrate_schemas` pour les tenants existants.
+- Sur Vercel, le `build.sh` n'applique que `--shared` (les tenants se migrent à la demande).
+- `staticfiles/` est généré — ne pas versionner son contenu si possible.
