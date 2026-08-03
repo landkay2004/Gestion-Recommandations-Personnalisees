@@ -24,3 +24,5 @@
 2026-08-03 21:59:53,468 [INFO] sgn.security: CONNEXION admin_ecole email=admin@ecoletest.local ecole=ecole_test
 2026-08-03 22:28:59,324 [INFO] sgn.security: DECONNEXION user=admin
 2026-08-03 22:48:58,515 [INFO] sgn.security: CONNEXION admin_ecole email=admin@ecoletest.local ecole=ecole_test
+2026-08-03 23:21:49,479 [INFO] sgn.security: DECONNEXION user=admin
+2026-08-03 23:24:36,498 [INFO] sgn.security: CONNEXION admin_ecole email=admin@ecoletest.local ecole=ecole_test

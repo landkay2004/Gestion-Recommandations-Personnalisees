@@ -115,7 +115,13 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-user-card">
-      <div class="suc-avatar">{{ request.super_admin.get_initiales }}</div>
+      <div class="suc-avatar">
+        {% if request.super_admin.photo_profil %}
+          <img src="{{ request.super_admin.photo_profil.url }}" alt="Avatar" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
+        {% else %}
+          {{ request.super_admin.get_initiales }}
+        {% endif %}
+      </div>
       <div class="overflow-hidden">
         <div class="suc-name">{{ request.super_admin.get_full_name }}</div>
         <div class="suc-role">Super-administrateur</div>
@@ -174,7 +180,13 @@
       <!-- User pill -->
       <div class="topbar-user-wrap">
         <button class="topbar-user-btn" id="user-dropdown-toggle" aria-expanded="false">
-          <div class="tu-avatar">{{ request.super_admin.get_initiales }}</div>
+          <div class="tu-avatar">
+            {% if request.super_admin.photo_profil %}
+              <img src="{{ request.super_admin.photo_profil.url }}" alt="Avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+            {% else %}
+              {{ request.super_admin.get_initiales }}
+            {% endif %}
+          </div>
           <div class="d-flex flex-column align-items-start">
             <span class="tu-name">{{ request.super_admin.get_full_name }}</span>
             <span class="tu-role">Compte plateforme</span>
@@ -188,7 +200,13 @@
         </button>
         <div class="topbar-dropdown" id="user-dropdown">
           <div class="topbar-dropdown-header">
-            <div class="dd-avatar">{{ request.super_admin.get_initiales }}</div>
+            <div class="dd-avatar">
+              {% if request.super_admin.photo_profil %}
+                <img src="{{ request.super_admin.photo_profil.url }}" alt="Avatar" style="width:56px;height:56px;border-radius:50%;object-fit:cover;">
+              {% else %}
+                {{ request.super_admin.get_initiales }}
+              {% endif %}
+            </div>
             <div>
               <div style="font-weight:600;font-size:.85rem;">{{ request.super_admin.get_full_name }}</div>
               <div style="font-size:.72rem;color:var(--color-muted);">{{ request.super_admin.email }}</div>

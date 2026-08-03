@@ -3085,3 +3085,604 @@ LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
 2026-08-03 22:49:35,201 [WARNING] django.request: Not Found: /manifest.json
 2026-08-03 22:49:39,997 [WARNING] django.request: Not Found: /manifest.json
 2026-08-03 22:49:40,039 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:54:55,927 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:54:56,295 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:54:56,935 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:20:09,094 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:20:09,372 [ERROR] django.request: Internal Server Error: /media/school/lerox.jpg
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\middleware.py", line 30, in __call__
+    request.user.is_authenticated
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 251, in inner
+    self._setup()
+    ~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 40, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 20, in get_user
+    request._cached_user = auth.get_user(request)
+                           ~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 328, in get_user
+    user = backend.get_user(user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\backends.py", line 232, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+2026-08-03 23:20:09,503 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:20:17,598 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:20:17,625 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:20:43,588 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:20:49,205 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:20:52,985 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:20:53,011 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:20:59,958 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:21:00,129 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:21:49,601 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:21:49,759 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:22:12,848 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:22:14,681 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:22:14,727 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:22:15,709 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:24:36,809 [ERROR] django.request: Internal Server Error: /media/tenants/ecole_test/profils/1.png
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\middleware.py", line 30, in __call__
+    request.user.is_authenticated
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 251, in inner
+    self._setup()
+    ~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 40, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 20, in get_user
+    request._cached_user = auth.get_user(request)
+                           ~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 328, in get_user
+    user = backend.get_user(user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\backends.py", line 232, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+2026-08-03 23:24:36,825 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:24:36,957 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:33:19,814 [ERROR] django.request: Internal Server Error: /media/tenants/ecole_test/profils/1.png
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\middleware.py", line 30, in __call__
+    request.user.is_authenticated
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 251, in inner
+    self._setup()
+    ~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 40, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 20, in get_user
+    request._cached_user = auth.get_user(request)
+                           ~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 328, in get_user
+    user = backend.get_user(user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\backends.py", line 232, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+2026-08-03 23:33:19,927 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:33:19,998 [ERROR] django.request: Internal Server Error: /media/school/lerox.jpg
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\middleware.py", line 30, in __call__
+    request.user.is_authenticated
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 251, in inner
+    self._setup()
+    ~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 40, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 20, in get_user
+    request._cached_user = auth.get_user(request)
+                           ~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 328, in get_user
+    user = backend.get_user(user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\backends.py", line 232, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+2026-08-03 23:33:22,688 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:33:23,123 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:33:27,211 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:33:27,240 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:33:28,481 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:33:28,545 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:40:02,428 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:44:43,751 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:44:43,904 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:45:09,704 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:45:09,729 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:47:43,941 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:47:43,966 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:49:52,900 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:49:52,949 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:50:04,325 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:50:16,953 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:50:16,982 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:50:18,140 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:50:18,177 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:55:31,035 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:56:12,170 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:56:12,264 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:56:16,444 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:56:18,287 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:56:18,377 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:56:33,382 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:56:33,487 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:36,065 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:37,147 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:37,181 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:37,949 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:38,176 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:38,300 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:38,551 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:38,590 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:44,103 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:44,266 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:48,450 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:57:48,487 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 23:58:11,788 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:00:05,410 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:01:07,838 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:16,057 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:16,131 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:16,987 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:17,031 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:17,932 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:17,967 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:18,184 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:18,222 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:23,469 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:24,382 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:24,417 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:25,285 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:25,328 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:25,679 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:25,936 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:25,968 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:26,953 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:26,993 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:27,947 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:28,527 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:28,548 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:28,749 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:28,790 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:28,972 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:29,007 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:29,278 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:29,313 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:29,668 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:29,713 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:29,920 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:29,995 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:30,354 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:30,399 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:30,759 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:30,810 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:31,891 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:35,082 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:35,132 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:35,699 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:35,778 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:36,076 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:36,299 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:36,338 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:36,772 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:36,801 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:37,120 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:37,156 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:37,360 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:37,398 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:37,613 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:37,651 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:37,960 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:37,988 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:38,301 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:38,332 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:38,512 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:38,542 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:38,722 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:38,751 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:02:48,754 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:03,594 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:03,671 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:20,979 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:21,004 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:22,251 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:22,287 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:22,571 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:22,613 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:27,100 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:27,131 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:28,458 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:28,613 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:52,512 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:52,541 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:56,416 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:56,573 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:57,341 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:57,575 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:58,213 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:04:58,358 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:05:00,297 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:05:00,321 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:05:13,583 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:05:14,465 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:05:14,490 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:05:14,692 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:05:14,719 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:06:13,070 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:06:13,100 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:06:14,282 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:06:14,314 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:06:27,446 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:06:27,466 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:36,520 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:36,549 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:40,253 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:40,308 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:41,060 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:41,110 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:41,384 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:41,411 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:41,843 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:41,869 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:42,387 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:42,626 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:51,173 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:51,288 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:07:52,293 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:08:08,404 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:08:08,425 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:06,316 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:06,351 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:07,254 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:07,282 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:18,504 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:18,532 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:19,319 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:19,347 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:19,540 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:19,568 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:19,724 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:19,747 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:19,901 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:19,933 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:20,118 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:20,149 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:20,456 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:20,640 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:20,673 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:20,839 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:20,875 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,025 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,061 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,230 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,257 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,575 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,605 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,772 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,808 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,958 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:21,991 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:22,159 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:22,304 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:22,912 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:23,040 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:23,552 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:23,629 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:24,008 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:24,086 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:24,642 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:25,065 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:25,289 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:27,085 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:27,706 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:10:27,732 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:12:24,593 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:14:03,334 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:14:03,412 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:15:54,272 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:15:54,454 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:18:41,500 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:18:41,708 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:20:45,653 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:20:45,747 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:20:48,240 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:20:48,332 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:20:49,783 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:20:49,847 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:20:51,915 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:20:51,951 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:22:02,205 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:22:02,371 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:29:29,454 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:29:31,521 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:29:31,553 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:29:31,766 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:29:31,803 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 00:30:53,152 [ERROR] django.request: Internal Server Error: /super-admin/communications/
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 135, in render
+    compiled_parent = self.get_parent(context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 132, in get_parent
+    return self.find_template(parent, context)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader_tags.py", line 110, in find_template
+    template, origin = context.template.engine.find_template(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template_name,
+        ^^^^^^^^^^^^^^
+        skip=history,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\engine.py", line 163, in find_template
+    raise TemplateDoesNotExist(name, tried=tried)
+django.template.exceptions.TemplateDoesNotExist: super_admin/base.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 45, in wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 248, in communication_list
+    return render(request, 'super_admin/communication_list.html', {
+        'annonces': annonces,
+    })
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 109, in render
+    reraise(exc, self.backend)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 130, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: super_admin/base.html
