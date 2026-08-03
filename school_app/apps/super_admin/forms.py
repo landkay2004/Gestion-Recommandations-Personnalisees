@@ -294,7 +294,8 @@ class PlatformSettingsForm(forms.ModelForm):
         model = PlatformSettings
         fields = [
             'site_name', 'site_slogan', 'site_devise', 'site_logo',
-            'adresse', 'contact_adresse', 'email_contact', 'telephone', 'contact_whatsapp', 'site_web', 'couleur_principale',
+            'adresse', 'contact_adresse', 'email_contact', 'telephone', 'contact_whatsapp',
+            'site_web', 'facebook_url', 'twitter_url', 'linkedin_url', 'couleur_principale',
             # Images de fond login
             'login_bg_1', 'login_bg_2', 'login_bg_3',
             # Fonds public
@@ -319,6 +320,9 @@ class PlatformSettingsForm(forms.ModelForm):
             'telephone':   forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 …'}),
             'contact_whatsapp': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+243 ...'}),
             'site_web':    forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://…'}),
+            'facebook_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://facebook.com/…'}),
+            'twitter_url':  forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://x.com/…'}),
+            'linkedin_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://linkedin.com/in/…'}),
             'couleur_principale': forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
             # Login BG
             'login_bg_1':  forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
@@ -372,6 +376,9 @@ class PlatformSettingsForm(forms.ModelForm):
             'telephone':         'Téléphone',
             'contact_whatsapp':  'WhatsApp',
             'site_web':          'Site web',
+            'facebook_url':      'Lien Facebook',
+            'twitter_url':       'Lien Twitter / X',
+            'linkedin_url':      'Lien LinkedIn',
             'couleur_principale':'Couleur principale',
             'login_bg_1':        'Image de fond 1',
             'login_bg_2':        'Image de fond 2',

@@ -3,6 +3,11 @@
 {% block auth_content %}
 
 <style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+  }
   /* ── Fond plein écran : slideshow photo + dégradé sombre ────────── */
   .login-fullbg {
     position: fixed; inset: 0; z-index: 0;
@@ -43,9 +48,10 @@
   /* ── Contenu centré (logo + carte + tagline) ─────────────────────── */
   .login-center-wrap {
     position: relative; z-index: 2;
-    min-height: 100vh;
+    height: 100vh;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     padding: 40px 20px 80px;
+    box-sizing: border-box;
   }
 
   .login-center-brand {
@@ -88,6 +94,7 @@
   .login-tagline strong { color: #fff; }
 
   @media (max-width: 480px) {
+    html, body { overflow: auto; }
     .login-glass-card { padding: 28px 22px; border-radius: 16px; }
     .login-center-brand-mark { width: 52px; height: 52px; font-size: 1.35rem; }
     .login-center-brand-name { font-size: 1.3rem; }
@@ -203,9 +210,7 @@
     </div>
   </div>
 
-  <p class="login-tagline">
-    <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong> — Notes, bulletins officiels, élèves, parents et comptabilité, tout depuis un seul espace sécurisé.
-  </p>
+  
 
 </div>
 

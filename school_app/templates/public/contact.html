@@ -84,6 +84,25 @@
 }
 .contact-submit:hover { opacity: .9; transform: translateY(-1px); }
 
+.contact-success {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 18px; margin-bottom: 22px;
+  border-radius: 16px; border: 1px solid rgba(16, 185, 129, .22);
+  background: linear-gradient(180deg, rgba(16,185,129,.12), rgba(16,185,129,.04));
+  color: #14532d; box-shadow: 0 8px 24px rgba(16,185,129,.12);
+  animation: contactSuccessIn .35s ease;
+}
+.contact-success-icon {
+  width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%;
+  background: #10b981; color: #fff; display: grid; place-items: center;
+}
+.contact-success-title { font-size: .95rem; font-weight: 700; margin-bottom: 2px; }
+.contact-success-text { font-size: .84rem; color: #166534; line-height: 1.5; }
+@keyframes contactSuccessIn {
+  from { opacity: 0; transform: translateY(8px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .map-band { background: #f8f5ff; padding: 60px 24px; border-top: 1px solid #e8e3ff; }
 .map-band-inner { max-width: 960px; margin: 0 auto; }
 .map-band h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 14px; }
@@ -172,20 +191,28 @@
       {% endif %}
 
       <!-- Réseaux sociaux -->
+      {% if platform_settings.facebook_url or platform_settings.twitter_url or platform_settings.linkedin_url %}
       <div style="margin-top:28px;">
         <div class="contact-item-label" style="margin-bottom:12px;">Retrouvez-nous sur</div>
         <div class="d-flex gap-2 flex-wrap">
-          <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.78rem;">
+          {% if platform_settings.facebook_url %}
+          <a href="{{ platform_settings.facebook_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.78rem;">
             <i class="bi bi-facebook me-1"></i>Facebook
           </a>
-          <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.78rem;">
+          {% endif %}
+          {% if platform_settings.twitter_url %}
+          <a href="{{ platform_settings.twitter_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.78rem;">
             <i class="bi bi-twitter-x me-1"></i>Twitter / X
           </a>
-          <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.78rem;">
+          {% endif %}
+          {% if platform_settings.linkedin_url %}
+          <a href="{{ platform_settings.linkedin_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.78rem;">
             <i class="bi bi-linkedin me-1"></i>LinkedIn
           </a>
+          {% endif %}
         </div>
       </div>
+      {% endif %}
     </div>
 
     <!-- Formulaire de contact rapide -->
@@ -193,7 +220,13 @@
       <h2>Envoyer un message</h2>
       <p class="card-sub">Remplissez ce formulaire et nous vous répondrons dans les plus brefs délais.</p>
       {% if success %}
-      <div class="alert alert-success">Merci, votre message a bien été envoyé. Nous vous répondrons rapidement.</div>
+      <div class="contact-success" role="status" aria-live="polite">
+        <div class="contact-success-icon"><i class="bi bi-check-lg"></i></div>
+        <div>
+          <div class="contact-success-title">Message envoyé avec succès</div>
+          <div class="contact-success-text">Merci, votre message a bien été envoyé. Nous vous répondrons rapidement.</div>
+        </div>
+      </div>
       {% endif %}
       {% if error %}
       <div class="alert alert-danger">{{ error }}</div>

@@ -1,8 +1,10 @@
+from urllib.parse import urlencode
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.urls import reverse
 from .models import Teacher
 from .forms import TeacherForm
 from accounts.views import prefet_required, prefet_or_secretariat_required
@@ -10,10 +12,27 @@ from accounts.views import prefet_required, prefet_or_secretariat_required
 PER_PAGE = 15
 
 
+def _redirect_to_exact_page(request, ordered_qs, exact_qs, page_size, url_name):
+    q = request.GET.get('q', '').strip()
+    if not q or request.GET.get('page'):
+        return None
+    if exact_qs.count() != 1:
+        return None
+
+    exact_obj = exact_qs.first()
+    ordered_ids = list(ordered_qs.values_list('pk', flat=True))
+    if exact_obj is None or exact_obj.pk not in ordered_ids:
+        return None
+
+    target_page = (ordered_ids.index(exact_obj.pk) // page_size) + 1
+    params = {'q': q, 'page': target_page}
+    return redirect(f"{reverse(url_name)}?{urlencode(params)}")
+
+
 @login_required
 @prefet_or_secretariat_required
 def teacher_list(request):
-    q = request.GET.get('q', '')
+    q = request.GET.get('q', '').strip()
     teachers = Teacher.objects.select_related('user')
     if q:
         teachers = teachers.filter(
@@ -22,7 +41,24 @@ def teacher_list(request):
             Q(user__last_name__icontains=q) |
             Q(user__email__icontains=q)
         )
-    paginator = Paginator(teachers, PER_PAGE)
+
+    ordered_teachers = teachers.order_by('user__last_name', 'user__first_name', 'postnom', 'user__email', 'pk')
+    redirect_response = _redirect_to_exact_page(
+        request,
+        ordered_teachers,
+        Teacher.objects.select_related('user').filter(
+            Q(user__first_name__iexact=q) |
+            Q(postnom__iexact=q) |
+            Q(user__last_name__iexact=q) |
+            Q(user__email__iexact=q)
+        ),
+        PER_PAGE,
+        'teacher_list',
+    )
+    if redirect_response is not None:
+        return redirect_response
+
+    paginator = Paginator(ordered_teachers, PER_PAGE)
     page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'teachers/teacher_list.html', {
         'teachers': page_obj,

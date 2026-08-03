@@ -1375,6 +1375,102 @@ a:hover { color: var(--color-primary-hover); }
 .sa-announcement p { font-size: .78rem; color: var(--color-muted); margin: 0 0 4px; line-height: 1.45; }
 .sa-announcement small { font-size: .68rem; color: var(--color-muted); display: flex; align-items: center; gap: 4px; }
 
+/* Dashboard charts */
+.dashboard-chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  height: 100%;
+}
+.dashboard-chart-head {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dashboard-chart-head h3 {
+  margin: 0;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+.dashboard-chart-body {
+  padding: 18px;
+}
+.dashboard-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  align-items: end;
+  height: 180px;
+}
+.dashboard-chart-bar {
+  border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(180deg, #818cf8 0%, #4d44b5 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+  position: relative;
+}
+.dashboard-chart-bar::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: .62rem;
+  color: var(--color-muted);
+}
+.dashboard-metric-label {
+  font-size: .72rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.dashboard-metric-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.donut-ring {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--bg-card) 0 54%, transparent 55%),
+    conic-gradient(#4d44b5 0 48%, #f6c453 48% 76%, #4ade80 76% 100%);
+  position: relative;
+  margin: auto;
+}
+.donut-ring::after {
+  content: attr(data-center);
+  position: absolute;
+  inset: 42px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--color-text);
+  background: var(--bg-card);
+  border-radius: 50%;
+}
+.dashboard-line-chart {
+  width: 100%;
+  height: 210px;
+  display: block;
+}
+.dashboard-grid-scale {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+  font-size: .68rem;
+  color: var(--color-muted);
+  text-align: center;
+}
+
 /* SA platform badge in sidebar */
 .sa-platform-badge {
   display: inline-flex; align-items: center; gap: 5px;

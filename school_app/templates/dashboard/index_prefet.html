@@ -95,6 +95,41 @@
   </div>
 </div>
 
+<div class="row g-4 mb-4">
+  <div class="col-lg-6">
+    <section class="dashboard-chart-card">
+      <div class="dashboard-chart-head">
+        <h3><i class="bi bi-circle-fill me-2" style="color:#4d44b5"></i>Répartition élèves</h3>
+        <span class="badge rounded-pill bg-light text-dark">{{ nb_eleves }} total</span>
+      </div>
+      <div class="dashboard-chart-body">
+        <div class="dashboard-chart-grid" style="height: 170px;">
+          <div class="dashboard-chart-bar" style="height: 68%" data-label="L1"></div>
+          <div class="dashboard-chart-bar" style="height: 76%" data-label="L2"></div>
+          <div class="dashboard-chart-bar" style="height: 58%" data-label="L3"></div>
+          <div class="dashboard-chart-bar" style="height: 84%" data-label="L4"></div>
+          <div class="dashboard-chart-bar" style="height: 72%" data-label="L5"></div>
+          <div class="dashboard-chart-bar" style="height: 63%" data-label="L6"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="col-lg-6">
+    <section class="dashboard-chart-card">
+      <div class="dashboard-chart-head">
+        <h3><i class="bi bi-graph-up me-2" style="color:#f6c453"></i>Progression des notes</h3>
+        <span class="badge rounded-pill bg-light text-dark">{{ taux_saisie }}%</span>
+      </div>
+      <div class="dashboard-chart-body">
+        <svg class="dashboard-line-chart" viewBox="0 0 700 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <path d="M0 160 C50 145, 90 118, 130 126 S210 154, 250 118 S330 74, 370 90 S450 132, 490 98 S570 58, 610 70 S655 78, 700 56" stroke="#4d44b5" stroke-width="4" stroke-linecap="round"/>
+          <path d="M0 172 C50 164, 90 142, 130 150 S210 164, 250 146 S330 110, 370 118 S450 146, 490 126 S570 86, 610 90 S655 100, 700 88" stroke="#f6c453" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </section>
+  </div>
+</div>
+
 <div class="row g-4">
 
   <!-- Derniers élèves -->

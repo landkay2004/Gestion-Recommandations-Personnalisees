@@ -114,6 +114,9 @@ class PlatformSettings(models.Model):
     contact_whatsapp = models.CharField("WhatsApp",   max_length=32, blank=True,
                                          help_text="Numéro WhatsApp au format international, ex. +243123456789.")
     site_web     = models.URLField("Site web",        blank=True)
+    facebook_url = models.URLField("Lien Facebook", blank=True, default='')
+    twitter_url  = models.URLField("Lien Twitter / X", blank=True, default='')
+    linkedin_url = models.URLField("Lien LinkedIn", blank=True, default='')
     couleur_principale = models.CharField("Couleur principale", max_length=7, default="#4D44B5")
 
     # ── Email / SMTP ──────────────────────────────────────────────────────────

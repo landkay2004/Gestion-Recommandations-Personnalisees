@@ -304,6 +304,18 @@
                 <label class="form-label form-label-sm">{{ form.site_web.label }}</label>
                 {{ form.site_web }}
               </div>
+              <div class="col-md-4">
+                <label class="form-label form-label-sm">{{ form.facebook_url.label }}</label>
+                {{ form.facebook_url }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label form-label-sm">{{ form.twitter_url.label }}</label>
+                {{ form.twitter_url }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label form-label-sm">{{ form.linkedin_url.label }}</label>
+                {{ form.linkedin_url }}
+              </div>
             </div>
           </div>
         </div>
@@ -313,7 +325,7 @@
       <div class="card mb-3 section-card {% if obj.smtp_actif and obj.smtp_host %}border-success border-opacity-50{% else %}border-warning border-opacity-50{% endif %}">
         <div class="card-header d-flex align-items-center justify-content-between section-toggle py-2
                     {% if obj.smtp_actif and obj.smtp_host %}bg-success-subtle{% else %}bg-warning-subtle{% endif %}"
-             data-bs-toggle="collapse" data-bs-target="#sec-smtp" aria-expanded="false" role="button">
+             data-bs-toggle="collapse" data-bs-target="#sec-smtp" aria-expanded="true" role="button">
           <div class="d-flex align-items-center gap-2">
             <i class="bi bi-envelope-fill {% if obj.smtp_actif and obj.smtp_host %}text-success{% else %}text-warning{% endif %}" style="font-size:.9rem;"></i>
             <span class="fw-semibold small">Configuration e-mail (SMTP)</span>
@@ -325,7 +337,7 @@
           </div>
           <i class="bi bi-chevron-down chevron-icon"></i>
         </div>
-        <div class="collapse" id="sec-smtp">
+        <div class="collapse show" id="sec-smtp">
           <div class="card-body pt-2 pb-3">
             <div class="alert alert-info d-flex gap-2 py-2 small mb-3" role="alert">
               <i class="bi bi-info-circle-fill flex-shrink-0 mt-1"></i>
@@ -383,7 +395,10 @@
                   <div class="form-text text-warning">
                     <i class="bi bi-exclamation-triangle me-1"></i>Ce champ est vide car le mot de passe SMTP n'est pas stocké publiquement. Laissez vide pour conserver l'ancien mot de passe si vous ne voulez pas le changer.
                   </div>
-                  <div class="form-text">Pour Gmail : utilisez un <strong>mot de passe d'application</strong> (pas votre MDP principal).</div>
+                  <div class="form-text">
+                    <strong>Pour Gmail / Outlook :</strong> saisissez ici le <strong>mot de passe d'application</strong> du fournisseur,
+                    pas le mot de passe principal du compte.
+                  </div>
                   {% endif %}
                 </div>
                 <div class="col-md-8">
@@ -596,6 +611,9 @@
           {% if obj.email_contact %}<li class="d-flex gap-2 mb-1 text-muted"><i class="bi bi-envelope-fill text-primary mt-1"></i>{{ obj.email_contact }}</li>{% endif %}
           {% if obj.telephone %}<li class="d-flex gap-2 mb-1 text-muted"><i class="bi bi-telephone-fill text-primary"></i>{{ obj.telephone }}</li>{% endif %}
           {% if obj.site_web %}<li class="d-flex gap-2 text-muted"><i class="bi bi-globe2 text-primary"></i><a href="{{ obj.site_web }}" target="_blank">{{ obj.site_web }}</a></li>{% endif %}
+          {% if obj.facebook_url %}<li class="d-flex gap-2 text-muted"><i class="bi bi-facebook text-primary"></i><a href="{{ obj.facebook_url }}" target="_blank">Facebook</a></li>{% endif %}
+          {% if obj.twitter_url %}<li class="d-flex gap-2 text-muted"><i class="bi bi-twitter-x text-primary"></i><a href="{{ obj.twitter_url }}" target="_blank">Twitter / X</a></li>{% endif %}
+          {% if obj.linkedin_url %}<li class="d-flex gap-2 text-muted"><i class="bi bi-linkedin text-primary"></i><a href="{{ obj.linkedin_url }}" target="_blank">LinkedIn</a></li>{% endif %}
         </ul>
       </div>
     </div>

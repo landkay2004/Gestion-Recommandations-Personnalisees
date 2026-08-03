@@ -40,16 +40,94 @@
 </div>
 
 <div class="row g-3">
-  <div class="col-12 col-lg-4"><section class="sa-panel"><div class="sa-panel-title"><div><h2><i class="bi bi-pie-chart-fill me-2"></i>Santé du réseau</h2><p>Répartition actuelle des écoles.</p></div></div>
-    <div class="d-flex justify-content-between small mb-2"><span>Actives</span><strong>{{ stats.ecoles_actives }}</strong></div><div class="sa-progress mb-3"><div style="width:{% widthratio stats.ecoles_actives stats.total_ecoles 100 %}%"></div></div>
-    <div class="d-flex justify-content-between small mb-2"><span>Suspendues</span><strong class="text-warning">{{ stats.ecoles_suspendues }}</strong></div><div class="sa-progress mb-3"><div style="width:{% widthratio stats.ecoles_suspendues stats.total_ecoles 100 %}%;background:#d8831f"></div></div>
-    <div class="d-flex justify-content-between small mb-2"><span>Configuration en cours</span><strong class="text-primary">{{ stats.onboarding_en_cours }}</strong></div><div class="sa-progress"><div style="width:{% widthratio stats.onboarding_en_cours stats.total_ecoles 100 %}%;background:#6c63c7"></div></div>
-  </section></div>
-  <div class="col-12 col-lg-4"><section class="sa-panel"><div class="sa-panel-title"><div><h2><i class="bi bi-signpost-split-fill me-2"></i>À accompagner</h2><p>Écoles qui n’ont pas terminé leur configuration.</p></div></div>
-    {% for e in ecoles_onboarding %}<div class="d-flex align-items-center gap-2 py-2 border-bottom"><div class="sa-action-icon"><i class="bi bi-building"></i></div><div class="flex-grow-1"><div class="fw-bold small">{{ e.nom }}</div><div class="text-muted" style="font-size:.65rem">Créée le {{ e.created_at|date:"d/m/Y" }}</div></div><a href="{% url 'super_admin:ecole_detail' e.pk %}" class="text-primary"><i class="bi bi-arrow-right"></i></a></div>{% empty %}<div class="text-center text-muted small py-4"><i class="bi bi-check-circle text-success fs-3 d-block mb-2"></i>Toutes les écoles sont configurées.</div>{% endfor %}
-  </section></div>
-  <div class="col-12 col-lg-4"><section class="sa-panel"><div class="sa-panel-title"><div><h2><i class="bi bi-megaphone-fill me-2"></i>Communications</h2><p>Derniers messages envoyés aux écoles.</p></div><a href="{% url 'super_admin:communication_list' %}" class="text-primary small fw-bold">Gérer</a></div>
-    {% for annonce in annonces_recentes %}<div class="sa-announcement"><h3>{{ annonce.titre }}</h3><p>{{ annonce.message|truncatechars:95 }}</p><small><i class="bi bi-clock me-1"></i>{{ annonce.date_publication|date:"d/m/Y H:i" }} · {% if annonce.ecole %}{{ annonce.ecole.nom }}{% else %}Toutes les écoles{% endif %}</small></div>{% empty %}<div class="text-center text-muted small py-4"><i class="bi bi-chat-square-text fs-3 d-block mb-2 opacity-50"></i>Pas encore de communication.</div>{% endfor %}
-  </section></div>
+  <div class="col-12 col-lg-4">
+    <section class="dashboard-chart-card">
+      <div class="dashboard-chart-head">
+        <h3><i class="bi bi-pie-chart-fill me-2"></i>Santé du réseau</h3>
+        <span class="badge rounded-pill bg-light text-dark">{{ stats.total_ecoles }} écoles</span>
+      </div>
+      <div class="dashboard-chart-body">
+        <div class="row align-items-center g-3">
+          <div class="col-5">
+            <div class="donut-ring" data-center="{{ stats.ecoles_actives }} actives"></div>
+          </div>
+          <div class="col-7">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="dashboard-metric-label">Actives</span>
+              <strong class="dashboard-metric-value">{{ stats.ecoles_actives }}</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="dashboard-metric-label">Suspendues</span>
+              <strong class="dashboard-metric-value text-warning">{{ stats.ecoles_suspendues }}</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="dashboard-metric-label">Onboarding</span>
+              <strong class="dashboard-metric-value text-primary">{{ stats.onboarding_en_cours }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="col-12 col-lg-4">
+    <section class="dashboard-chart-card">
+      <div class="dashboard-chart-head">
+        <h3><i class="bi bi-graph-up-arrow me-2"></i>Accompagnement réseau</h3>
+        <span class="badge rounded-pill bg-light text-dark">{{ stats.abonnements_a_renouveler }} à venir</span>
+      </div>
+      <div class="dashboard-chart-body">
+        <div class="dashboard-chart-grid" style="height: 170px;">
+          <div class="dashboard-chart-bar" style="height: 55%" data-label="J"></div>
+          <div class="dashboard-chart-bar" style="height: 64%" data-label="F"></div>
+          <div class="dashboard-chart-bar" style="height: 72%" data-label="M"></div>
+          <div class="dashboard-chart-bar" style="height: 80%" data-label="A"></div>
+          <div class="dashboard-chart-bar" style="height: 68%" data-label="M"></div>
+          <div class="dashboard-chart-bar" style="height: 86%" data-label="J"></div>
+        </div>
+        <div class="dashboard-grid-scale">
+          <span>Jan</span><span>Fév</span><span>Mar</span><span>Avr</span><span>Mai</span><span>Juin</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="col-12 col-lg-4">
+    <section class="sa-panel"><div class="sa-panel-title"><div><h2><i class="bi bi-signpost-split-fill me-2"></i>À accompagner</h2><p>Écoles qui n’ont pas terminé leur configuration.</p></div></div>
+      {% for e in ecoles_onboarding %}<div class="d-flex align-items-center gap-2 py-2 border-bottom"><div class="sa-action-icon"><i class="bi bi-building"></i></div><div class="flex-grow-1"><div class="fw-bold small">{{ e.nom }}</div><div class="text-muted" style="font-size:.65rem">Créée le {{ e.created_at|date:"d/m/Y" }}</div></div><a href="{% url 'super_admin:ecole_detail' e.pk %}" class="text-primary"><i class="bi bi-arrow-right"></i></a></div>{% empty %}<div class="text-center text-muted small py-4"><i class="bi bi-check-circle text-success fs-3 d-block mb-2"></i>Toutes les écoles sont configurées.</div>{% endfor %}
+    </section>
+  </div>
+</div>
+
+<div class="row g-3 mt-1">
+  <div class="col-12 col-lg-8">
+    <section class="dashboard-chart-card">
+      <div class="dashboard-chart-head">
+        <h3><i class="bi bi-bar-chart-fill me-2"></i>Activité du réseau</h3>
+        <span class="badge rounded-pill bg-light text-dark">{{ stats.total_ecoles }} établissements</span>
+      </div>
+      <div class="dashboard-chart-body">
+        <svg class="dashboard-line-chart" viewBox="0 0 700 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="lineFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4d44b5" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#4d44b5" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs>
+          <path d="M0 150 C40 130, 70 110, 110 115 S190 135, 230 105 S310 78, 350 95 S430 138, 470 118 S550 62, 590 70 S640 80, 700 42" stroke="#4d44b5" stroke-width="4" stroke-linecap="round"/>
+          <path d="M0 170 C50 132, 70 142, 110 124 S186 110, 228 116 S316 146, 352 128 S432 84, 472 92 S550 118, 592 98 S650 100, 700 84" stroke="#f6c453" stroke-width="4" stroke-linecap="round"/>
+          <path d="M0 150 C40 130, 70 110, 110 115 S190 135, 230 105 S310 78, 350 95 S430 138, 470 118 S550 62, 590 70 S640 80, 700 42 L700 220 L0 220 Z" fill="url(#lineFill)"/>
+        </svg>
+        <div class="dashboard-grid-scale">
+          <span>Jan</span><span>Fév</span><span>Mar</span><span>Avr</span><span>Mai</span><span>Juin</span>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="col-12 col-lg-4">
+    <section class="sa-panel"><div class="sa-panel-title"><div><h2><i class="bi bi-megaphone-fill me-2"></i>Communications</h2><p>Derniers messages envoyés aux écoles.</p></div><a href="{% url 'super_admin:communication_list' %}" class="text-primary small fw-bold">Gérer</a></div>
+      {% for annonce in annonces_recentes %}<div class="sa-announcement"><h3>{{ annonce.titre }}</h3><p>{{ annonce.message|truncatechars:95 }}</p><small><i class="bi bi-clock me-1"></i>{{ annonce.date_publication|date:"d/m/Y H:i" }} · {% if annonce.ecole %}{{ annonce.ecole.nom }}{% else %}Toutes les écoles{% endif %}</small></div>{% empty %}<div class="text-center text-muted small py-4"><i class="bi bi-chat-square-text fs-3 d-block mb-2 opacity-50"></i>Pas encore de communication.</div>{% endfor %}
+    </section>
+  </div>
 </div>
 {% endblock %}

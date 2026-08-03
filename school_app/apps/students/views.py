@@ -1,9 +1,11 @@
+from urllib.parse import urlencode
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.http import JsonResponse
+from django.urls import reverse
 from .models import Student, Tuteur
 from .forms import StudentForm, TuteurForm
 from accounts.views import prefet_required, prefet_or_secretariat_required
@@ -11,12 +13,31 @@ from accounts.views import prefet_required, prefet_or_secretariat_required
 PER_PAGE = 20
 
 
+def _redirect_to_exact_page(request, ordered_qs, exact_qs, page_size, url_name, extra_params=None):
+    q = request.GET.get('q', '').strip()
+    if not q or request.GET.get('page'):
+        return None
+    if exact_qs.count() != 1:
+        return None
+
+    exact_obj = exact_qs.first()
+    ordered_ids = list(ordered_qs.values_list('pk', flat=True))
+    if exact_obj is None or exact_obj.pk not in ordered_ids:
+        return None
+
+    target_page = (ordered_ids.index(exact_obj.pk) // page_size) + 1
+    params = {'q': q, 'page': target_page}
+    if extra_params:
+        params.update(extra_params)
+    return redirect(f"{reverse(url_name)}?{urlencode(params)}")
+
+
 # ── Élèves ────────────────────────────────────────────────────────────────────
 
 @login_required
 @prefet_or_secretariat_required
 def student_list(request):
-    q = request.GET.get('q', '')
+    q = request.GET.get('q', '').strip()
     classe_id = request.GET.get('classe', '')
     students = Student.objects.select_related('classe', 'classe__section', 'tuteur')
     if q:
@@ -26,10 +47,26 @@ def student_list(request):
         )
     if classe_id:
         students = students.filter(classe_id=classe_id)
+
+    ordered_students = students.order_by('nom', 'postnom', 'prenom', 'matricule', 'pk')
+    redirect_response = _redirect_to_exact_page(
+        request,
+        ordered_students,
+        Student.objects.filter(
+            Q(nom__iexact=q) | Q(postnom__iexact=q) |
+            Q(prenom__iexact=q) | Q(matricule__iexact=q)
+        ),
+        PER_PAGE,
+        'student_list',
+        {'classe': classe_id} if classe_id else None,
+    )
+    if redirect_response is not None:
+        return redirect_response
+
     from classes.models import Classe, AnneeScolaire
     annee = AnneeScolaire.objects.filter(active=True).first()
     classes = Classe.objects.filter(annee_scolaire=annee).select_related('section') if annee else []
-    paginator = Paginator(students, PER_PAGE)
+    paginator = Paginator(ordered_students, PER_PAGE)
     page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'students/student_list.html', {
         'students': page_obj,
@@ -115,14 +152,29 @@ def student_detail(request, pk):
 @login_required
 @prefet_or_secretariat_required
 def tuteur_list(request):
-    q = request.GET.get('q', '')
+    q = request.GET.get('q', '').strip()
     tuteurs = Tuteur.objects.annotate(nb_enfants=Count('enfants'))
     if q:
         tuteurs = tuteurs.filter(
             Q(nom__icontains=q) | Q(postnom__icontains=q) |
             Q(prenom__icontains=q) | Q(telephone__icontains=q)
         )
-    paginator = Paginator(tuteurs, PER_PAGE)
+
+    ordered_tuteurs = tuteurs.order_by('nom', 'postnom', 'prenom', 'telephone', 'pk')
+    redirect_response = _redirect_to_exact_page(
+        request,
+        ordered_tuteurs,
+        Tuteur.objects.filter(
+            Q(nom__iexact=q) | Q(postnom__iexact=q) |
+            Q(prenom__iexact=q) | Q(telephone__iexact=q)
+        ),
+        PER_PAGE,
+        'tuteur_list',
+    )
+    if redirect_response is not None:
+        return redirect_response
+
+    paginator = Paginator(ordered_tuteurs, PER_PAGE)
     page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'students/tuteur_list.html', {
         'tuteurs': page_obj,

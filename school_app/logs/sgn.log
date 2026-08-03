@@ -2746,3 +2746,342 @@ Traceback (most recent call last):
   File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\smtplib.py", line 890, in sendmail
     raise SMTPSenderRefused(code, resp, from_addr)
 smtplib.SMTPSenderRefused: (530, b'5.7.0 Authentication Required. For more information, go to\n5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 5b1f17b1804b1-49807ba6abesm197542405e9.2 - gsmtp', 'support@educnet.cd')
+2026-08-03 21:39:06,822 [ERROR] sgn: CONTACT_FORM_SEND_ERROR: (530, b'5.7.0 Authentication Required. For more information, go to\n5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 5b1f17b1804b1-49949fec7cdsm21499025e9.13 - gsmtp', 'support@educnet.cd')
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1596, in contact_view
+    message_obj.send(fail_silently=False)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 156, in send_messages
+    sent = self._send(message)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 172, in _send
+    self.connection.sendmail(from_email, recipients, message.as_bytes())
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\smtplib.py", line 890, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.0 Authentication Required. For more information, go to\n5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 5b1f17b1804b1-49949fec7cdsm21499025e9.13 - gsmtp', 'support@educnet.cd')
+2026-08-03 21:42:36,899 [ERROR] sgn: CONTACT_FORM_SEND_ERROR: (530, b'5.7.0 Authentication Required. For more information, go to\n5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 5b1f17b1804b1-4994a100e14sm23430695e9.14 - gsmtp', 'support@educnet.cd')
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1596, in contact_view
+    message_obj.send(fail_silently=False)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 156, in send_messages
+    sent = self._send(message)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 172, in _send
+    self.connection.sendmail(from_email, recipients, message.as_bytes())
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\smtplib.py", line 890, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.0 Authentication Required. For more information, go to\n5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 5b1f17b1804b1-4994a100e14sm23430695e9.14 - gsmtp', 'support@educnet.cd')
+2026-08-03 21:47:37,461 [ERROR] sgn: CONTACT_FORM_SEND_ERROR: (530, b'5.7.0 Authentication Required. For more information, go to\n5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 5b1f17b1804b1-49807b6093fsm154762705e9.1 - gsmtp', 'support@educnet.cd')
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1596, in contact_view
+    message_obj.send(fail_silently=False)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 156, in send_messages
+    sent = self._send(message)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 172, in _send
+    self.connection.sendmail(from_email, recipients, message.as_bytes())
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\smtplib.py", line 890, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.0 Authentication Required. For more information, go to\n5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 5b1f17b1804b1-49807b6093fsm154762705e9.1 - gsmtp', 'support@educnet.cd')
+2026-08-03 21:59:54,713 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:04,124 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:04,288 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:18,489 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:18,669 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:21,316 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:21,472 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:29,259 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:35,395 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:37,831 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:41,970 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:42,132 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:43,913 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:44,103 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:46,983 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:49,931 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:50,009 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:54,668 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:00:54,855 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:01:31,514 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:01:31,819 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:01:52,596 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:01:52,675 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:01:56,240 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:01:56,419 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:07,539 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:07,740 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:10,356 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:10,593 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:13,241 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:13,307 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:15,232 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:15,557 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:24,083 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:24,236 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:29,233 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:29,389 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:30,841 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:30,872 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:56,142 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:02:56,199 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:09,528 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:09,714 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:35,645 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:35,862 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:50,738 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:50,919 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:54,176 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:54,366 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:58,887 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:03:59,070 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:04:03,474 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:04:03,527 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:04:07,291 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:04:07,459 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:04:32,939 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:04:33,124 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:04:58,856 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:04:59,061 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:08:54,854 [ERROR] sgn: CONTACT_FORM_SEND_ERROR: (530, b'5.7.0 Authentication Required. For more information, go to\n5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 5b1f17b1804b1-49807b8d04fsm361993885e9.3 - gsmtp', 'support@educnet.cd')
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\super_admin\views.py", line 1596, in contact_view
+    message_obj.send(fail_silently=False)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 156, in send_messages
+    sent = self._send(message)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 172, in _send
+    self.connection.sendmail(from_email, recipients, message.as_bytes())
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\AppData\Local\Programs\Python\Python313\Lib\smtplib.py", line 890, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.0 Authentication Required. For more information, go to\n5.7.0  https://support.google.com/accounts/troubleshooter/2402620. 5b1f17b1804b1-49807b8d04fsm361993885e9.3 - gsmtp', 'support@educnet.cd')
+2026-08-03 22:17:48,284 [ERROR] django.request: Internal Server Error: /media/school/lerox.jpg
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\middleware.py", line 30, in __call__
+    request.user.is_authenticated
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 251, in inner
+    self._setup()
+    ~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 40, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 20, in get_user
+    request._cached_user = auth.get_user(request)
+                           ~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 328, in get_user
+    user = backend.get_user(user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\backends.py", line 232, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+2026-08-03 22:17:48,537 [ERROR] django.request: Internal Server Error: /media/school/lerox.jpg
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\school_app\apps\accounts\middleware.py", line 30, in __call__
+    request.user.is_authenticated
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 251, in inner
+    self._setup()
+    ~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\utils\functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 40, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\middleware.py", line 20, in get_user
+    request._cached_user = auth.get_user(request)
+                           ~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 328, in get_user
+    user = backend.get_user(user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\contrib\auth\backends.py", line 232, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: ERREUR:  la relation « accounts_customuser » n'existe pas
+LINE 1: ...."photo_profil", "accounts_customuser"."bio" FROM "accounts_...
+                                                             ^
+
+2026-08-03 22:17:48,629 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:17:50,643 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:17:50,799 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:17:59,998 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:18:00,925 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:20:40,259 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:21:28,632 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:21:35,762 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:21:35,800 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:21:36,840 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:21:59,580 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:21:59,787 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:22:09,641 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:22:09,768 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:22:14,220 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:22:21,155 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:22:21,328 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:22:26,207 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:22:26,393 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:23:59,584 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:23:59,852 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:24:15,566 [WARNING] django.request: Not Found: /portail/manifest.json
+2026-08-03 22:24:15,603 [WARNING] django.request: Not Found: /sw.js
+2026-08-03 22:24:15,987 [WARNING] django.request: Not Found: /portail/manifest.json
+2026-08-03 22:24:49,350 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:24:49,450 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:24:50,063 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:24:50,267 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:25:01,689 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:28:45,707 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:28:59,458 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:28:59,980 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:30:27,714 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:30:29,241 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:33:26,635 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:34:51,791 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:34:51,838 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:35:08,988 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:38:06,146 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:38:06,245 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:38:07,277 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:38:07,340 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:38:08,159 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:38:08,288 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:38:08,545 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:38:58,806 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:46:23,519 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:46:24,480 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:46:24,563 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:46:25,292 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:46:47,493 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:46:47,598 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:46:48,464 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:46:48,551 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:47:03,650 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:47:05,276 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:47:06,216 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:47:06,887 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:48:11,190 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:48:11,530 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:48:12,046 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:48:58,885 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:48:59,075 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:49:35,201 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:49:39,997 [WARNING] django.request: Not Found: /manifest.json
+2026-08-03 22:49:40,039 [WARNING] django.request: Not Found: /manifest.json

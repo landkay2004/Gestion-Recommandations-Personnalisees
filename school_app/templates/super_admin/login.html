@@ -12,80 +12,199 @@
   <link href="/static/css/style.css" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; display: flex; }
-    /* Override form-control inside super_admin login (no CSS vars here) */
-    .login-field-wrap .form-control {
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      overflow: hidden;
+      background: #0b1120;
+    }
+    body {
+      min-height: 100vh;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    .login-fullbg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, rgba(10,16,40,.82) 0%, rgba(10,16,40,.72) 45%, rgba(10,16,40,.88) 100%),
+        {% if platform_settings.login_bg_1 %}
+        url('{{ platform_settings.login_bg_1.url }}') center/cover no-repeat;
+        {% else %}
+        linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #1e3a5f 60%, #0c1b33 100%);
+        {% endif %}
+    }
+    .login-fullbg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(99,102,241,.18) 0%, transparent 48%),
+        radial-gradient(circle at 80% 80%, rgba(59,130,246,.16) 0%, transparent 45%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .login-center-wrap {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .login-center-brand {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .login-center-brand-mark {
+      width: 66px;
+      height: 66px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: #4d44b5;
+      box-shadow: 0 10px 30px rgba(77,68,181,.45);
+      overflow: hidden;
+    }
+    .login-center-brand-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 10px;
+      background: #fff;
+    }
+    .login-center-brand-name {
+      color: #fff;
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -.04em;
+    }
+    .login-glass-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 20px;
+      padding: 32px 28px;
+      box-shadow: 0 26px 70px rgba(5,3,30,.5);
+    }
+    .login-form-heading {
+      font-size: 1.85rem;
+      font-weight: 800;
+      text-align: center;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    .login-form-sub {
+      font-size: .88rem;
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+    .login-field-wrap {
+      position: relative;
+    }
+    .login-field-wrap .form-control,
+    .login-field-wrap input.form-control {
       background: #f8fafc !important;
       border: 1.5px solid #e2e8f0 !important;
-      font-size: .875rem; height: 46px;
-      border-radius: 10px; padding-right: 2.8rem;
+      font-size: .875rem;
+      height: 46px;
+      border-radius: 10px;
+      padding-right: 2.8rem;
     }
-    .login-field-wrap .form-control:focus {
+    .login-field-wrap .form-control:focus,
+    .login-field-wrap input.form-control:focus {
       border-color: #4d44b5 !important;
       background: #fff !important;
       box-shadow: 0 0 0 3px rgba(77,68,181,.12) !important;
+    }
+    .login-field-icon {
+      position: absolute;
+      right: .85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+    .login-field-eye {
+      position: absolute;
+      right: .75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      padding: 4px;
+      color: #94a3b8;
+      cursor: pointer;
+      z-index: 5;
+      line-height: 1;
+    }
+    .login-field-eye:hover { color: #4d44b5; }
+    .login-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: .82rem 1.4rem;
+      background: linear-gradient(90deg, #4d44b5 0%, #6366f1 100%);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-size: .925rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(77,68,181,.32);
+      margin-top: 22px;
+    }
+    .login-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(77,68,181,.38);
+    }
+    .login-bottom-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: .78rem;
+      color: #64748b;
+    }
+    .login-bottom-link a {
+      color: #4d44b5;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    @media (max-width: 800px) {
+      html, body { overflow: auto; }
+      .login-center-wrap { padding: 28px 16px; }
+      .login-glass-card { padding: 28px 22px; }
+      .login-form-heading { font-size: 1.45rem; }
     }
   </style>
 </head>
 <body>
 
-<div class="login-split">
+<div class="login-fullbg"></div>
 
-  <!-- ── Panneau gauche : visuel ── -->
-  <div class="login-brand">
-    <div class="login-brand-inner">
-      <div class="login-brand-kicker">
-        <i class="bi bi-shield-lock-fill"></i>Administration plateforme
+<div class="login-center-wrap">
+  <div>
+    <div class="login-center-brand">
+      <div class="login-center-brand-mark">
+        {% if platform_settings.site_logo %}
+          <img src="{{ platform_settings.site_logo.url }}" alt="Logo">
+        {% else %}
+          <i class="bi bi-stars" style="color:#fff;font-size:1.45rem;"></i>
+        {% endif %}
       </div>
-      <h1 class="login-brand-title">
-        Pilotez le réseau<br>
-        scolaire depuis<br>
-        <span class="accent">une console unifiée.</span>
-      </h1>
-      <p class="login-brand-sub">
-        Supervision des établissements, plans d'abonnement,
-        demandes d'inscription et maintenance du système — tout en un.
-      </p>
-
-      <!-- Console feature pills -->
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;">
-        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
-          <i class="bi bi-buildings-fill" style="color:#60a5fa;"></i> Toutes les écoles
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
-          <i class="bi bi-stars" style="color:#fbbf24;"></i> Plans &amp; abonnements
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
-          <i class="bi bi-building-add" style="color:#4ade80;"></i> Demandes d'inscription
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);font-size:.68rem;color:rgba(255,255,255,.8);font-weight:600;">
-          <i class="bi bi-shield-fill-check" style="color:#a78bfa;"></i> Accès sécurisé 2FA
-        </span>
-      </div>
-
-      <div class="login-brand-footer" style="margin-top:28px;">
-        Powered by <strong>{{ platform_settings.site_name|default:"EducNet" }}</strong>
-      </div>
+      <div class="login-center-brand-name">{{ platform_settings.site_name|default:"EducNet" }}</div>
     </div>
-  </div>
 
-  <!-- ── Panneau droit : formulaire ── -->
-  <div class="login-form-side">
-    <div class="login-form-card">
-
-      <!-- Marque -->
-      <div class="login-form-logo">
-        <div class="login-form-logo-mark">
-          {% if platform_settings.site_logo %}
-            <img src="{{ platform_settings.site_logo.url }}" alt="Logo">
-          {% else %}
-            <i class="bi bi-stars"></i>
-          {% endif %}
-        </div>
-        <div class="login-form-logo-name">{{ platform_settings.site_name|default:"EducNet" }}</div>
-        <div class="login-form-logo-sub">Console plateforme</div>
-      </div>
-
+    <div class="login-glass-card">
       <div class="login-form-heading">Connexion administrateur</div>
       <div class="login-form-sub">Accès réservé aux super-administrateurs</div>
 
@@ -126,7 +245,6 @@
       <div class="login-bottom-link mt-4">
         <a href="/login/"><i class="bi bi-arrow-left me-1"></i>Retour vers l'espace établissement</a>
       </div>
-
     </div>
   </div>
 </div>
