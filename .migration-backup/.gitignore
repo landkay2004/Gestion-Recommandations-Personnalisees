@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+school_app/media/
+school_app/staticfiles/
+
+# Environnements virtuels
+.venv/
+venv/
+env/
+.pythonlibs/
+
+# Replit (ne pas versionner)
+.replit
+.replitignore
+.npmrc
+pnpm-lock.yaml
+pnpm-workspace.yaml
+uv.lock
+artifacts/
+lib/
+scripts/
+.agents/
+.local/
+node_modules/
+
+# Système
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Variables d'environnement
+.env
+.env.*
+school_app/db.sqlite3
+school_app/db.sqlite3

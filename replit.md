@@ -1,92 +1,45 @@
-# EducNet — Système de Gestion Scolaire
+# [Project name]
 
-Multi-tenant school management platform for schools in the DRC (Congo).
+_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+
+## Run & Operate
+
+- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm run typecheck` — full typecheck across all packages
+- `pnpm run build` — typecheck + build all packages
+- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
+- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
+- Required env: `DATABASE_URL` — Postgres connection string
 
 ## Stack
 
-- **Backend**: Django 6.x
-- **Database**: PostgreSQL (required — multi-tenancy via django-tenants)
-- **Frontend**: Bootstrap 5 + Django templates
-- **PDF/reports**: ReportLab
-- **QR codes**: qrcode + Pillow
-- **Static files**: WhiteNoise
+- pnpm workspaces, Node.js 24, TypeScript 5.9
+- API: Express 5
+- DB: PostgreSQL + Drizzle ORM
+- Validation: Zod (`zod/v4`), `drizzle-zod`
+- API codegen: Orval (from OpenAPI spec)
+- Build: esbuild (CJS bundle)
 
-## Project layout
+## Where things live
 
-```
-school_app/          ← Django project root
-  apps/
-    accounts/        ← Users, roles, profiles
-    abonnement/      ← School-level fees & student payments
-    bulletin/        ← Report cards (PDF MEPSP)
-    carte_eleve/     ← Student ID cards
-    classes/         ← Classes & sections
-    comptable/       ← School accounting & invoices
-    dashboard/       ← Role-based dashboards
-    grades/          ← Grades & marks
-    notifications/   ← In-app notification system
-    onboarding/      ← School setup wizard (5 steps)
-    planning/        ← Timetable/schedule
-    portail/         ← Parent portal (QR / access code)
-    reports/         ← Export & reports
-    school_settings/ ← Per-school configuration
-    students/        ← Student management
-    subjects/        ← Subjects/courses
-    super_admin/     ← Platform super-admin (plans, schools, payments)
-    teachers/        ← Teacher management
-    tenants/         ← Multi-tenant models (Ecole, PlanAbonnement, etc.)
-  config/
-    settings.py      ← Main settings
-  templates/         ← All HTML templates
-  static/            ← CSS/JS/images
-  manage.py
-```
+_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
 
-## Running locally
+## Architecture decisions
 
-Requires a PostgreSQL database (SQLite works but multi-tenancy is limited).
+_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
 
-```bash
-cd school_app
-pip install -r requirements.txt
-# Set DATABASE_URL env var, then:
-python manage.py migrate_schemas --shared
-python manage.py migrate_schemas
-python manage.py seed_test_school   # optional test data
-python manage.py runserver
-```
+## Product
 
-## Environment variables
-
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string (required) |
-| `SECRET_KEY` / `SESSION_SECRET` | Django secret key |
-| `DEBUG` | `True` in dev |
-| `ALLOWED_HOSTS` | `*` in dev |
-| `EMAIL_HOST*` | SMTP config (optional) |
-
-## Test accounts (after seeding)
-
-| Role | Email | Password |
-|---|---|---|
-| Super-admin | superadmin@test.local | SuperAdmin@2025! |
-| School admin | admin@ecoletest.local | Admin@Ecole2025! |
-| Préfet | prefet@ecoletest.local | Prefet@Ecole2025! |
-| Teacher | enseignant@ecoletest.local | Enseignant@2025! |
-| Secretary | secretariat@ecoletest.local | Secretariat@2025! |
-| Accountant | comptable@ecoletest.local | Comptable@2025! |
-
-## Key known issues (to be fixed)
-
-1. Profile/account images don't save or display (likely missing `enctype` or media serving issue)
-2. Student card photos appear blurry (no image optimisation)
-3. Notification module exists but is non-functional (silent `except: pass` swallows errors)
-4. Mobile payment UI is in the accountant view but should be in super-admin subscription flow
-5. Onboarding templates need a modern interactive redesign
-6. Subscription plan cards need a professional redesign
+_Describe the high-level user-facing capabilities of this app once they exist._
 
 ## User preferences
 
-- Keep the existing Django/Bootstrap stack — no migrations to other frameworks
-- Push finished work to GitHub
+_Populate as you build — explicit user instructions worth remembering across sessions._
+
+## Gotchas
+
+_Populate as you build — sharp edges, "always run X before Y" rules._
+
+## Pointers
+
+- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
