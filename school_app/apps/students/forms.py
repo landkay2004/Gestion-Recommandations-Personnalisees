@@ -51,3 +51,25 @@ class StudentForm(forms.ModelForm):
         self.fields['tuteur'].required = False
         # Force le format ISO pour le champ date (obligatoire avec type="date")
         self.fields['date_naissance'].input_formats = ['%Y-%m-%d']
+        # Le matricule est auto-généré si vide — rendre le champ optionnel
+        self.fields['matricule'].required = False
+        self.fields['matricule'].widget.attrs.update({
+            'placeholder': 'Laissez vide pour générer automatiquement',
+        })
+
+    def clean_matricule(self):
+        """Génère un matricule si le champ est laissé vide."""
+        value = self.cleaned_data.get('matricule', '').strip()
+        if not value:
+            # Instance existante : conserver le matricule actuel
+            if self.instance and self.instance.pk and self.instance.matricule:
+                return self.instance.matricule
+            # Nouvel élève : générer via MatriculeConfig
+            try:
+                from school_settings.models import MatriculeConfig
+                config = MatriculeConfig.get_config()
+                value = config.generer_matricule()
+            except Exception:
+                import uuid
+                value = f"EL{str(uuid.uuid4().int)[:8].upper()}"
+        return value

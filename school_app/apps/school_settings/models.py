@@ -81,8 +81,16 @@ class SchoolInfo(models.Model):
             return False
 
         try:
-            self.logo.seek(0)
-            img = PILImage.open(self.logo).convert('RGBA')
+            # Supporte le stockage local (seek) et les stockages distants
+            # (Cloudinary) où seek() n'est pas disponible → téléchargement via URL.
+            try:
+                self.logo.seek(0)
+                img_bytes = io.BytesIO(self.logo.read())
+            except (AttributeError, TypeError, Exception):
+                import urllib.request
+                with urllib.request.urlopen(self.logo.url) as resp:
+                    img_bytes = io.BytesIO(resp.read())
+            img = PILImage.open(img_bytes).convert('RGBA')
         except Exception:
             return False
 

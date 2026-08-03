@@ -9,6 +9,9 @@ urlpatterns = [
     path('<int:pk>/modifier/', views.student_update, name='student_update'),
     path('<int:pk>/supprimer/', views.student_delete, name='student_delete'),
 
+    # ── Matricule auto ────────────────────────────────────────────────────────
+    path('next-matricule/', views.next_matricule_json, name='next_matricule_json'),
+
     # ── Tuteurs ───────────────────────────────────────────────────────────────
     path('tuteurs/', views.tuteur_list, name='tuteur_list'),
     path('tuteurs/nouveau/', views.tuteur_create, name='tuteur_create'),

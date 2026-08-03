@@ -207,6 +207,19 @@ def tuteur_delete(request, pk):
 
 @login_required
 @prefet_or_secretariat_required
+def next_matricule_json(request):
+    """Endpoint AJAX — retourne un aperçu du prochain matricule généré."""
+    try:
+        from school_settings.models import MatriculeConfig
+        config = MatriculeConfig.get_config()
+        apercu = config.apercu()
+        return JsonResponse({'matricule': apercu, 'ok': True})
+    except Exception as exc:
+        return JsonResponse({'matricule': '', 'ok': False, 'error': str(exc)})
+
+
+@login_required
+@prefet_or_secretariat_required
 def tuteur_search_json(request):
     """Endpoint AJAX — retourne les tuteurs correspondant à la recherche."""
     q = request.GET.get('q', '').strip()

@@ -245,24 +245,35 @@ USE_TZ        = True
 STATIC_URL  = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-if os.environ.get('VERCEL'):
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 # ── Stockage des médias : local (dev) ou Cloudinary (prod/Vercel) ────────────
 # Définir CLOUDINARY_URL dans les variables d'environnement Vercel/Replit pour
 # activer le stockage cloud.  Format : cloudinary://api_key:api_secret@cloud_name
+# NB : Django 6.0 a supprimé DEFAULT_FILE_STORAGE et STATICFILES_STORAGE —
+#      utiliser le dictionnaire STORAGES à la place.
 _CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL', '').strip()
 
 if _CLOUDINARY_URL:
     # Production : Cloudinary garantit la persistance des médias sur Vercel
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    STORAGES = {
+        'default': {
+            'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
     CLOUDINARY_STORAGE = {'CLOUDINARY_URL': _CLOUDINARY_URL}
-    MEDIA_URL = '/media/cloudinary/'
+    MEDIA_URL = '/media/'  # Cloudinary retourne des URLs absolues directement
 else:
     # Développement local : stockage filesystem standard
-    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
     MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
