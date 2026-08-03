@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django.shortcuts import render, redirect
@@ -92,6 +93,21 @@ def dashboard(request):
         mc_total = MatiereClasse.objects.count()
         taux_saisie = round(mc_avec_notes / mc_total * 100) if mc_total > 0 else 0
 
+        dernieres_classes_qs = classes_annee.annotate(
+            nb_eleves=Count('eleves')
+        )[:8]
+
+        # Données graphiques
+        classes_list = list(dernieres_classes_qs)
+        chart_classes = json.dumps({
+            'labels': [c.nom for c in classes_list],
+            'data':   [c.nb_eleves for c in classes_list],
+        })
+        chart_notes = json.dumps({
+            'labels': ['Notes saisies', 'Restant'],
+            'data':   [mc_avec_notes, max(mc_total - mc_avec_notes, 0)],
+        })
+
         context = {
             'role': 'prefet',
             'nb_eleves': Student.objects.count(),
@@ -104,11 +120,11 @@ def dashboard(request):
             'mc_avec_notes': mc_avec_notes,
             'mc_total': mc_total,
             'annee_active': annee_active,
-            'dernieres_classes': classes_annee.annotate(
-                nb_eleves=__import__('django.db.models', fromlist=['Count']).Count('eleves')
-            )[:6],
+            'dernieres_classes': classes_list,
             'derniers_eleves': Student.objects.select_related('classe', 'classe__section').order_by('-date_inscription')[:6],
             'enseignants_sans_matiere': Teacher.objects.filter(matieres_enseignees__isnull=True)[:5],
+            'chart_classes': chart_classes,
+            'chart_notes': chart_notes,
         }
         return render(request, 'dashboard/index_prefet.html', context)
 

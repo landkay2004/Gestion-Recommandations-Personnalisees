@@ -1,3 +1,4 @@
+import json
 import logging
 from functools import wraps
 from datetime import timedelta
@@ -187,12 +188,54 @@ def dashboard(request):
         is_deleted=False, onboarding_complete=False
     ).order_by('-created_at')[:5]
 
+    # ── Données graphiques ────────────────────────────────────────────────
+    mois_fr = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc']
+    monthly_labels = []
+    monthly_created = []
+    monthly_active = []
+    for i in range(5, -1, -1):
+        year = today.year
+        month = today.month - i
+        while month <= 0:
+            month += 12
+            year -= 1
+        monthly_labels.append(mois_fr[month - 1])
+        monthly_created.append(
+            Ecole.objects.filter(created_at__year=year, created_at__month=month, is_deleted=False).count()
+        )
+        monthly_active.append(
+            Ecole.objects.filter(statut='active', created_at__year__lte=year,
+                                  created_at__month__lte=month if year == today.year else 12,
+                                  is_deleted=False).count()
+        )
+
+    chart_data = json.dumps({
+        'donut': {
+            'labels': ['Actives', 'Suspendues', 'Onboarding'],
+            'data': [
+                stats['ecoles_actives'],
+                stats['ecoles_suspendues'],
+                stats['onboarding_en_cours'],
+            ],
+        },
+        'monthly': {
+            'labels': monthly_labels,
+            'created': monthly_created,
+        },
+        'activity': {
+            'labels': monthly_labels,
+            'total': monthly_active,
+            'created': monthly_created,
+        },
+    })
+
     return render(request, 'super_admin/dashboard.html', {
         'stats': stats,
         'ecoles_recentes': ecoles_recentes,
         'maintenances': maintenances,
         'annonces_recentes': annonces_recentes,
         'ecoles_onboarding': ecoles_onboarding,
+        'chart_data': chart_data,
     })
 
 

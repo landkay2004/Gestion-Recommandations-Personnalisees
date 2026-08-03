@@ -96,35 +96,49 @@
 </div>
 
 <div class="row g-4 mb-4">
-  <div class="col-lg-6">
+  <!-- Bar : Élèves par classe -->
+  <div class="col-lg-7">
     <section class="dashboard-chart-card">
       <div class="dashboard-chart-head">
-        <h3><i class="bi bi-circle-fill me-2" style="color:#4d44b5"></i>Répartition élèves</h3>
+        <h3><i class="bi bi-bar-chart-fill me-2" style="color:#4d44b5"></i>Élèves par classe</h3>
         <span class="badge rounded-pill bg-light text-dark">{{ nb_eleves }} total</span>
       </div>
-      <div class="dashboard-chart-body">
-        <div class="dashboard-chart-grid" style="height: 170px;">
-          <div class="dashboard-chart-bar" style="height: 68%" data-label="L1"></div>
-          <div class="dashboard-chart-bar" style="height: 76%" data-label="L2"></div>
-          <div class="dashboard-chart-bar" style="height: 58%" data-label="L3"></div>
-          <div class="dashboard-chart-bar" style="height: 84%" data-label="L4"></div>
-          <div class="dashboard-chart-bar" style="height: 72%" data-label="L5"></div>
-          <div class="dashboard-chart-bar" style="height: 63%" data-label="L6"></div>
-        </div>
+      <div class="dashboard-chart-body" style="position:relative;height:200px">
+        <canvas id="repartitionElevesChart"></canvas>
       </div>
     </section>
   </div>
-  <div class="col-lg-6">
+
+  <!-- Donut : Avancement saisie notes -->
+  <div class="col-lg-5">
     <section class="dashboard-chart-card">
       <div class="dashboard-chart-head">
-        <h3><i class="bi bi-graph-up me-2" style="color:#f6c453"></i>Progression des notes</h3>
+        <h3><i class="bi bi-check2-circle me-2" style="color:#22c55e"></i>Saisie des notes</h3>
         <span class="badge rounded-pill bg-light text-dark">{{ taux_saisie }}%</span>
       </div>
-      <div class="dashboard-chart-body">
-        <svg class="dashboard-line-chart" viewBox="0 0 700 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M0 160 C50 145, 90 118, 130 126 S210 154, 250 118 S330 74, 370 90 S450 132, 490 98 S570 58, 610 70 S655 78, 700 56" stroke="#4d44b5" stroke-width="4" stroke-linecap="round"/>
-          <path d="M0 172 C50 164, 90 142, 130 150 S210 164, 250 146 S330 110, 370 118 S450 146, 490 126 S570 86, 610 90 S655 100, 700 88" stroke="#f6c453" stroke-width="4" stroke-linecap="round"/>
-        </svg>
+      <div class="dashboard-chart-body d-flex align-items-center justify-content-center gap-4 flex-wrap" style="min-height:200px">
+        <div style="position:relative;width:160px;height:160px">
+          <canvas id="notesDonutChart"></canvas>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+            <span style="font-size:1.6rem;font-weight:800;color:#0f172a;line-height:1">{{ taux_saisie }}%</span>
+            <span style="font-size:.7rem;color:#64748b">complété</span>
+          </div>
+        </div>
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="chart-dot" style="background:#22c55e"></span>
+            <span style="font-size:.82rem">Saisies : <strong>{{ mc_avec_notes }}</strong></span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="chart-dot" style="background:#e2e8f0"></span>
+            <span style="font-size:.82rem">Restant : <strong>{{ mc_total }}</strong></span>
+          </div>
+          {% if mc_total > 0 %}
+          <div class="mt-3">
+            <div class="text-muted" style="font-size:.7rem">{{ mc_total }} matières-classes</div>
+          </div>
+          {% endif %}
+        </div>
       </div>
     </section>
   </div>
@@ -263,7 +277,77 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>.chart-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}</style>
 <script>
+(function() {
+  Chart.defaults.font.family = "'Inter','Arial',sans-serif";
+  Chart.defaults.font.size   = 11;
+  Chart.defaults.color       = '#64748b';
+
+  // ── Bar : Élèves par classe ──────────────────────────────────────
+  const rawClasses = {{ chart_classes|safe }};
+  const ctxBar = document.getElementById('repartitionElevesChart');
+  if (ctxBar && rawClasses.labels.length > 0) {
+    new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: rawClasses.labels,
+        datasets: [{
+          label: 'Élèves',
+          data: rawClasses.data,
+          backgroundColor: [
+            'rgba(77,68,181,0.8)','rgba(34,197,94,0.8)','rgba(246,196,83,0.8)',
+            'rgba(59,130,246,0.8)','rgba(239,68,68,0.8)','rgba(168,85,247,0.8)',
+            'rgba(20,184,166,0.8)','rgba(249,115,22,0.8)'
+          ],
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, border: { display: false }, ticks: { maxRotation: 30, minRotation: 0 } },
+          y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#f1f5f9' }, border: { display: false } }
+        }
+      }
+    });
+  } else if (ctxBar) {
+    const ctx2d = ctxBar.getContext('2d');
+    ctx2d.fillStyle = '#94a3b8';
+    ctx2d.font = '13px Inter,Arial,sans-serif';
+    ctx2d.textAlign = 'center';
+    ctx2d.fillText('Aucune classe pour cette année', ctxBar.width/2, ctxBar.height/2);
+  }
+
+  // ── Donut : Avancement saisie notes ─────────────────────────────
+  const rawNotes = {{ chart_notes|safe }};
+  const ctxDonut = document.getElementById('notesDonutChart');
+  if (ctxDonut) {
+    const total = rawNotes.data.reduce((a,b)=>a+b,0);
+    new Chart(ctxDonut, {
+      type: 'doughnut',
+      data: {
+        labels: rawNotes.labels,
+        datasets: [{
+          data: total > 0 ? rawNotes.data : [0, 1],
+          backgroundColor: ['#22c55e','#e2e8f0'],
+          borderWidth: 0,
+          hoverOffset: 4,
+        }]
+      },
+      options: {
+        cutout: '78%',
+        plugins: { legend: { display: false }, tooltip: { enabled: total > 0 } },
+        animation: { animateRotate: true, duration: 900 }
+      }
+    });
+  }
+})();
+
 // ── Horloge dashboard préfet ──
 (function() {
   const JOURS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
