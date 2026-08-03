@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "bash school_app/build.sh",
   "builds": [
     {
       "src": "school_app/config/wsgi.py",
