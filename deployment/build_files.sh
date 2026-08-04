@@ -31,8 +31,11 @@ fi
 echo ""
 
 # ── [2/2] Collecte des fichiers statiques ────────────────────────────────────
+# On neutralise CLOUDINARY_URL pendant le build : les fichiers statiques sont
+# servis par WhiteNoise (pas Cloudinary), et django-cloudinary-storage 0.3.0
+# crashe sur collectstatic en Django 6.0 (utilise le vieux STATICFILES_STORAGE).
 echo "==> [2/2] Collecte des fichiers statiques"
-python manage.py collectstatic --noinput --clear
+CLOUDINARY_URL="" python manage.py collectstatic --noinput --clear
 echo "    ✓ Fichiers statiques collectés"
 
 echo ""
