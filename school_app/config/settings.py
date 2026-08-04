@@ -174,6 +174,7 @@ if _db_url:
                 if values
             })
         _db_options.setdefault('sslmode', os.environ.get('DB_SSLMODE', 'prefer'))
+        _db_options.setdefault('options', '-c search_path=public')
         DATABASES = {
             'default': {
                 'ENGINE':   _engine,
@@ -200,7 +201,10 @@ if _pg_host and not _db_url:
             'HOST':     _pg_host,
             'PORT':     os.environ.get('DB_PORT',     '5432'),
             'CONN_MAX_AGE': 600,
-            'OPTIONS':  {'sslmode': os.environ.get('DB_SSLMODE', 'prefer')},
+            'OPTIONS':  {
+                'sslmode': os.environ.get('DB_SSLMODE', 'prefer'),
+                'options': '-c search_path=public',
+            },
         }
     }
 
