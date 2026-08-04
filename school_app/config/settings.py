@@ -318,6 +318,11 @@ else:
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Compatibilité avec les packages qui lisent encore settings.STATICFILES_STORAGE
+# (ex : django-cloudinary-storage 0.3.0 dans sa commande collectstatic).
+# Django 6 a remplacé ce paramètre par STORAGES['staticfiles'], mais certains
+# packages tiers l'utilisent encore directement.
+STATICFILES_STORAGE = STORAGES['staticfiles']['BACKEND']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

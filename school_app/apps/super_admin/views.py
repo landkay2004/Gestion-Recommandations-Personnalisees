@@ -873,6 +873,42 @@ def platform_settings(request):
         # (PasswordInput ne re-affiche jamais la valeur — un champ vide = "ne pas changer")
         if not form.cleaned_data.get('smtp_password'):
             obj.smtp_password = settings_obj.smtp_password
+
+        # ── Gestion explicite des champs image/fichier ─────────────────────
+        # django-cloudinary-storage 0.3.0 n'est pas pleinement compatible avec
+        # Django 6 via le chemin form.save(commit=False) pour les FileField /
+        # ImageField. On adopte le même pattern que pour les photos de profil :
+        # assignation directe depuis request.FILES puis save().
+        _image_fields = [
+            'site_logo',
+            'login_bg_1', 'login_bg_2', 'login_bg_3',
+            'public_bg_image', 'public_bg_image_rejoindre', 'public_bg_image_inscription',
+        ]
+        for _field in _image_fields:
+            _uploaded = request.FILES.get(_field)
+            _clear_key = '%s-clear' % _field
+            _clear = request.POST.get(_clear_key) in ('on', '1', 'true')
+            if _uploaded:
+                # Supprimer l'ancien fichier du stockage distant avant de le remplacer
+                _old = getattr(settings_obj, _field)
+                if _old:
+                    try:
+                        _old.delete(save=False)
+                    except Exception:
+                        pass
+                setattr(obj, _field, _uploaded)
+            elif _clear:
+                _old = getattr(settings_obj, _field)
+                if _old:
+                    try:
+                        _old.delete(save=False)
+                    except Exception:
+                        pass
+                setattr(obj, _field, None)
+            else:
+                # Aucun changement : conserver la valeur existante
+                setattr(obj, _field, getattr(settings_obj, _field))
+
         obj.save()
         messages.success(request, "Paramètres de la plateforme enregistrés avec succès.")
         return redirect('super_admin:platform_settings')
