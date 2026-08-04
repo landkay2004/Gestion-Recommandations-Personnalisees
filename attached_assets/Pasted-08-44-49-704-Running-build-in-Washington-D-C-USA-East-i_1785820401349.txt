@@ -1,0 +1,55 @@
+08:44:49.704 Running build in Washington, D.C., USA (East) – iad1
+08:44:49.705 Build machine configuration: 2 cores, 8 GB
+08:44:49.748 Cloning github.com/landrynet/Gestion-Recommandations-Personnalisees (Branch: main, Commit: 3085478)
+08:44:49.749 Skipping build cache, deployment was triggered without cache.
+08:44:51.219 Cloning completed: 1.471s
+08:44:51.660 Running "vercel build"
+08:44:51.679 Vercel CLI 58.1.0
+08:44:52.086 No Python version specified in .python-version, pyproject.toml, or Pipfile.lock. Using python version: 3.12
+08:44:52.126 Using uv 0.10.11
+08:44:52.127 Creating virtual environment at "/vercel/path0/.vercel/python/.venv"...
+08:44:52.515 Installing required dependencies from school_app/requirements.txt...
+08:44:54.599 Running "bash deployment/build_files.sh"
+08:44:54.605 
+08:44:54.605 ╔══════════════════════════════════════════╗
+08:44:54.606 ║       EducNet — Build Vercel             ║
+08:44:54.606 ╚══════════════════════════════════════════╝
+08:44:54.606 
+08:44:54.606 ==> [1/2] Application des migrations (schéma public)
+08:44:58.284 === Starting migration
+08:44:58.285 Operations to perform:
+08:44:58.285   Apply all migrations: abonnement, accounts, auth, bulletin, carte_eleve, classes, contenttypes, grades, notifications, planning, portail, school_settings, sessions, students, subjects, super_admin, teachers, tenants
+08:44:58.285 Running migrations:
+08:44:58.285   No migrations to apply.
+08:44:58.285   Your models in app(s): 'school_settings' have changes that are not yet reflected in a migration, and so won't be applied.
+08:44:58.285   Run 'manage.py makemigrations' to make new migrations, and then re-run 'manage.py migrate' to apply them.
+08:44:58.410     ✓ Migrations appliquées
+08:44:58.410 
+08:44:58.410 ==> [2/2] Collecte des fichiers statiques
+08:44:58.678 Traceback (most recent call last):
+08:44:58.679   File "/vercel/path0/school_app/manage.py", line 21, in <module>
+08:44:58.679     main()
+08:44:58.679   File "/vercel/path0/school_app/manage.py", line 17, in main
+08:44:58.679     execute_from_command_line(sys.argv)
+08:44:58.679   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/core/management/__init__.py", line 443, in execute_from_command_line
+08:44:58.679     utility.execute()
+08:44:58.679   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/core/management/__init__.py", line 437, in execute
+08:44:58.680     self.fetch_command(subcommand).run_from_argv(self.argv)
+08:44:58.680   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/core/management/base.py", line 420, in run_from_argv
+08:44:58.680     self.execute(*args, **cmd_options)
+08:44:58.680   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/core/management/base.py", line 464, in execute
+08:44:58.681     output = self.handle(*args, **options)
+08:44:58.681              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+08:44:58.681   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/contrib/staticfiles/management/commands/collectstatic.py", line 214, in handle
+08:44:58.681     collected = self.collect()
+08:44:58.681                 ^^^^^^^^^^^^^^
+08:44:58.681   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/contrib/staticfiles/management/commands/collectstatic.py", line 137, in collect
+08:44:58.681     handler(path, prefixed_path, storage)
+08:44:58.681   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/cloudinary_storage/management/commands/collectstatic.py", line 27, in copy_file
+08:44:58.681     if (settings.STATICFILES_STORAGE == 'cloudinary_storage.storage.StaticCloudinaryStorage' or
+08:44:58.681         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+08:44:58.681   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/conf/__init__.py", line 77, in __getattr__
+08:44:58.682     val = getattr(_wrapped, name)
+08:44:58.682           ^^^^^^^^^^^^^^^^^^^^^^^
+08:44:58.682 AttributeError: 'Settings' object has no attribute 'STATICFILES_STORAGE'. Did you mean: '_STATICFILES_STORAGE'?
+08:44:58.745 Error: Command "bash deployment/build_files.sh" exited with 1
