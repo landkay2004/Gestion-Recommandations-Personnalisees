@@ -31,7 +31,10 @@ def initialiser_dossiers_media_ecole(sender, instance, created, **kwargs):
     schema = instance.schema_name
 
     # Cloudinary gère les dossiers dynamiquement
-    storage_backend = getattr(settings, 'DEFAULT_FILE_STORAGE', '')
+    # Django 6.0 : STORAGES dict remplace DEFAULT_FILE_STORAGE
+    _storages = getattr(settings, 'STORAGES', {})
+    storage_backend = _storages.get('default', {}).get('BACKEND', '') \
+        or getattr(settings, 'DEFAULT_FILE_STORAGE', '')
     if 'cloudinary' in storage_backend.lower():
         logger.info(
             '[tenants] École "%s" (schema=%s) créée — Cloudinary actif, '

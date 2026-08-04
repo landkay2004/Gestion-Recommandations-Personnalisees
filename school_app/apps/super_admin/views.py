@@ -1142,8 +1142,13 @@ def _envoyer_credentials(ecole, admin, temp_pwd, request, regeneration=False):
     try:
         if ps and ps.site_logo:
             logo_url = request.build_absolute_uri(ps.site_logo.url)
-            logo_path = ps.site_logo.path
-            logo_inline = bool(logo_path)
+            # .path n'existe pas pour les fichiers Cloudinary (stockage distant)
+            try:
+                logo_path = ps.site_logo.path
+                logo_inline = bool(logo_path)
+            except (NotImplementedError, AttributeError):
+                logo_path = None
+                logo_inline = False
     except Exception:
         pass
 

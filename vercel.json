@@ -5,7 +5,14 @@
       "src": "school_app/config/wsgi.py",
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "15mb"
+        "maxLambdaSize": "15mb",
+        "includeFiles": [
+          "school_app/templates/**",
+          "school_app/static/**",
+          "school_app/staticfiles/**",
+          "school_app/apps/**/templates/**",
+          "school_app/apps/**/static/**"
+        ]
       }
     }
   ],
