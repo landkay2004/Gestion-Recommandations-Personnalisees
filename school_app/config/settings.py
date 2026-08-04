@@ -268,7 +268,10 @@ _R2_ENDPOINT    = os.environ.get('R2_ENDPOINT_URL', '').strip()
 _R2_PUBLIC_URL  = os.environ.get('R2_PUBLIC_URL', '').strip().rstrip('/')
 
 _STATICFILES_STORAGE = {
-    'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    # On Replit : utiliser le stockage simple (sans compression whitenoise)
+    # pour éviter les conflits avec django-cloudinary-storage lors du collectstatic.
+    # Whitenoise middleware sert quand même les fichiers statiques.
+    'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
 }
 
 if _CLOUDINARY_URL:

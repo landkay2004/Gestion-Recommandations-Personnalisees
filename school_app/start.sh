@@ -58,6 +58,8 @@ else
 fi
 
 echo "[4/5] Collecte des fichiers statiques"
+# Vider STATIC_ROOT avant la collecte pour éviter les conflits de fichiers hachés (whitenoise)
+rm -rf "$APP_DIR/staticfiles"
 "$PYTHON_BIN" manage.py collectstatic --noinput
 
 echo "[5/5] Démarrage du serveur sur le port $PORT"
