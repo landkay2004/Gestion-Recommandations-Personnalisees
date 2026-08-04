@@ -246,33 +246,43 @@ STATIC_URL  = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 # ── Stockage des médias ───────────────────────────────────────────────────────
-# Priorité : Cloudflare R2  →  Cloudinary  →  filesystem local (dev)
+# Priorité : Cloudinary  →  Cloudflare R2 (optionnel)  →  filesystem local (dev)
 #
-# Cloudflare R2 (production recommandée) :
-#   R2_ACCESS_KEY_ID      → clé d'accès R2
-#   R2_SECRET_ACCESS_KEY  → clé secrète R2
-#   R2_BUCKET_NAME        → nom du bucket
-#   R2_ENDPOINT_URL       → https://<account_id>.r2.cloudflarestorage.com
-#   R2_PUBLIC_URL         → URL publique du bucket  (ex. https://media.educnet.app)
+# Cloudinary (production recommandée) — 1 seule variable :
+#   CLOUDINARY_URL  →  cloudinary://api_key:api_secret@cloud_name
+#   Obtenir depuis : cloudinary.com → Dashboard → "API Environment variable"
 #
-# Cloudinary (alternative) :
-#   CLOUDINARY_URL        → cloudinary://api_key:api_secret@cloud_name
+# Cloudflare R2 (alternative S3-compatible) :
+#   R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME,
+#   R2_ENDPOINT_URL, R2_PUBLIC_URL
 #
 # NB : Django 6.0 utilise le dictionnaire STORAGES (plus DEFAULT_FILE_STORAGE).
 
-_R2_KEY_ID     = os.environ.get('R2_ACCESS_KEY_ID', '').strip()
-_R2_SECRET     = os.environ.get('R2_SECRET_ACCESS_KEY', '').strip()
-_R2_BUCKET     = os.environ.get('R2_BUCKET_NAME', '').strip()
-_R2_ENDPOINT   = os.environ.get('R2_ENDPOINT_URL', '').strip()
-_R2_PUBLIC_URL = os.environ.get('R2_PUBLIC_URL', '').strip().rstrip('/')
 _CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL', '').strip()
+_R2_KEY_ID      = os.environ.get('R2_ACCESS_KEY_ID', '').strip()
+_R2_SECRET      = os.environ.get('R2_SECRET_ACCESS_KEY', '').strip()
+_R2_BUCKET      = os.environ.get('R2_BUCKET_NAME', '').strip()
+_R2_ENDPOINT    = os.environ.get('R2_ENDPOINT_URL', '').strip()
+_R2_PUBLIC_URL  = os.environ.get('R2_PUBLIC_URL', '').strip().rstrip('/')
 
 _STATICFILES_STORAGE = {
     'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
 }
 
-if _R2_KEY_ID and _R2_BUCKET:
-    # ── Cloudflare R2 (S3-compatible) ────────────────────────────────────────
+if _CLOUDINARY_URL:
+    # ── Cloudinary (production recommandée) ──────────────────────────────────
+    # Stockage intelligent : transformations à la volée, CDN global intégré.
+    STORAGES = {
+        'default': {
+            'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+        },
+        'staticfiles': _STATICFILES_STORAGE,
+    }
+    CLOUDINARY_STORAGE = {'CLOUDINARY_URL': _CLOUDINARY_URL}
+    MEDIA_URL = '/media/'  # Cloudinary retourne des URLs absolues directement
+
+elif _R2_KEY_ID and _R2_BUCKET:
+    # ── Cloudflare R2 (S3-compatible) — alternative ───────────────────────────
     STORAGES = {
         'default': {
             'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
@@ -291,17 +301,6 @@ if _R2_KEY_ID and _R2_BUCKET:
         'staticfiles': _STATICFILES_STORAGE,
     }
     MEDIA_URL = (_R2_PUBLIC_URL + '/') if _R2_PUBLIC_URL else (f'{_R2_ENDPOINT}/{_R2_BUCKET}/')
-
-elif _CLOUDINARY_URL:
-    # ── Cloudinary (rétrocompatibilité) ──────────────────────────────────────
-    STORAGES = {
-        'default': {
-            'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
-        },
-        'staticfiles': _STATICFILES_STORAGE,
-    }
-    CLOUDINARY_STORAGE = {'CLOUDINARY_URL': _CLOUDINARY_URL}
-    MEDIA_URL = '/media/'
 
 else:
     # ── Développement local ───────────────────────────────────────────────────
