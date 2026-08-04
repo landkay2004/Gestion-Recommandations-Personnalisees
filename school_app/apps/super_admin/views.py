@@ -896,7 +896,13 @@ def platform_settings(request):
                         _old.delete(save=False)
                     except Exception:
                         pass
-                setattr(obj, _field, _uploaded)
+                # Utiliser FieldFile.save() pour déclencher l'upload vers Cloudinary.
+                # setattr avec un InMemoryUploadedFile brut n'est pas reconnu par
+                # FileField.pre_save() de Django 6 — il faut passer par l'API FieldFile.
+                try:
+                    getattr(obj, _field).save(_uploaded.name, _uploaded, save=False)
+                except Exception as _upload_err:
+                    logger.error('platform_settings: échec upload %s → %s', _field, _upload_err)
             elif _clear:
                 _old = getattr(settings_obj, _field)
                 if _old:
@@ -1557,14 +1563,27 @@ def demande_inscription_traiter(request, pk):
 
 # ── Formulaire public (sans authentification) ─────────────────────────────────
 
-def _build_public_inscription_form():
+def _build_public_inscription_form(plans_qs=None):
     from django import forms as dj_forms
-    from tenants.models import PlanAbonnement
     from tenants.models import PlanAbonnement, DemandeInscription
+
+    # Récupérer le queryset des plans publics actifs.
+    # On tente une évaluation eagre ici pour détecter une panne DB AVANT le
+    # rendu du template (qui évaluerait le queryset paresseusement et crasherait
+    # en plein rendu, produisant une 500 sans contexte clair).
+    if plans_qs is None:
+        try:
+            plans_qs = PlanAbonnement.objects.filter(
+                is_actif=True, est_public=True
+            ).order_by('ordre_affichage', 'prix_mensuel')
+            list(plans_qs)  # force l'évaluation maintenant pour détecter toute panne DB
+        except Exception as _e:
+            logger.warning('_build_public_inscription_form: DB indisponible, plans masqués: %s', _e)
+            plans_qs = PlanAbonnement.objects.none()  # .none() ne touche jamais la DB
 
     class DemandeInscriptionForm(dj_forms.ModelForm):
         plan_souhaite = dj_forms.ModelChoiceField(
-            queryset=PlanAbonnement.objects.filter(is_actif=True, est_public=True).order_by('ordre_affichage', 'prix_mensuel'),
+            queryset=plans_qs,
             required=False,
             empty_label="— Pas encore décidé —",
             label="Plan souhaité",
