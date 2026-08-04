@@ -1,0 +1,23 @@
+name: educnet
+services:
+  - name: web
+    docker:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - port: 8000
+        protocol: HTTP
+    env:
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        value: "change-me"
+      - key: DJANGO_SITE_URL
+        value: "https://your-app.koyeb.app"
+      - key: DATABASE_URL
+        value: "postgresql://user:password@ep-xxx.region.aws.neon.tech/neondb?sslmode=require"
+      - key: CLOUDINARY_URL
+        value: "cloudinary://api_key:api_secret@cloud_name"
+    routes:
+      - path: /
+        port: 8000
