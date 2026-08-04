@@ -98,8 +98,9 @@ if _USE_TENANTS:
         'abonnement',
         'comptable',
     ]
-    # cloudinary est nécessaire pour que django-storages puisse l'utiliser
+    # Cloudinary est nécessaire pour l'envoi des médias distants
     SHARED_APPS.insert(-1, 'cloudinary')
+    SHARED_APPS.insert(-1, 'cloudinary_storage')
 
     INSTALLED_APPS = list(SHARED_APPS) + TENANT_APPS
     DATABASE_ROUTERS    = ['django_tenants.routers.TenantSyncRouter']
@@ -271,14 +272,14 @@ _STATICFILES_STORAGE = {
 }
 
 if _CLOUDINARY_URL:
-    # ── Cloudinary via django-storages (production recommandée) ──────────────
-    # storages.backends.cloudinary.CloudinaryStorage lit CLOUDINARY_URL
-    # automatiquement via le SDK cloudinary (pas besoin de django-cloudinary-storage).
+    # ── Cloudinary via django-cloudinary-storage (production recommandée) ────
+    # cloudinary_storage.storage.MediaCloudinaryStorage lit CLOUDINARY_URL
+    # automatiquement via le SDK cloudinary.
     import cloudinary
     cloudinary.config(cloudinary_url=_CLOUDINARY_URL)
     STORAGES = {
         'default': {
-            'BACKEND': 'storages.backends.cloudinary.CloudinaryStorage',
+            'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
         },
         'staticfiles': _STATICFILES_STORAGE,
     }
