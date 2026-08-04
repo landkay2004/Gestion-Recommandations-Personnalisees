@@ -1,5 +1,6 @@
 import json
 import logging
+from datetime import timedelta
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -68,6 +69,23 @@ def dashboard(request):
     if user.is_secretariat():
         # ─── Dashboard Secrétariat ──────────────────────────────────────
         classes_annee = Classe.objects.filter(annee_scolaire=annee_active).select_related('section') if annee_active else Classe.objects.none()
+        classes_with_data = list(classes_annee.annotate(nb_eleves=Count('eleves'))[:8])
+
+        # Graphique 1 : élèves par classe (barres)
+        chart_classes = json.dumps({
+            'labels': [c.nom for c in classes_with_data],
+            'data':   [c.nb_eleves for c in classes_with_data],
+        })
+
+        # Graphique 2 : inscriptions sur les 7 derniers jours (ligne)
+        today = timezone.now().date()
+        labels_7j, data_7j = [], []
+        for i in range(6, -1, -1):
+            day = today - timedelta(days=i)
+            labels_7j.append(day.strftime('%d/%m'))
+            data_7j.append(Student.objects.filter(date_inscription=day).count())
+        chart_inscriptions = json.dumps({'labels': labels_7j, 'data': data_7j})
+
         context = {
             'role': 'secretariat',
             'nb_eleves': Student.objects.count(),
@@ -76,9 +94,9 @@ def dashboard(request):
             'nb_matieres': Matiere.objects.count(),
             'annee_active': annee_active,
             'derniers_eleves': Student.objects.select_related('classe', 'classe__section').order_by('-date_inscription')[:6],
-            'dernieres_classes': classes_annee.annotate(
-                nb_eleves=Count('eleves')
-            )[:6],
+            'dernieres_classes': classes_with_data[:6],
+            'chart_classes': chart_classes,
+            'chart_inscriptions': chart_inscriptions,
         }
         return render(request, 'dashboard/index_secretariat.html', context)
 
@@ -180,6 +198,19 @@ def dashboard(request):
                     'nb_eleves': aff.nb_eleves_count,
                 })
 
+            # Graphique avancement par affectation (barres horizontales)
+            chart_avancement = json.dumps({
+                'labels': [f"{item['affectation'].matiere.nom} — {item['affectation'].classe.nom}" for item in avancement],
+                'data':   [item['pct'] for item in avancement],
+            })
+
+            # Graphique élèves par classe (doughnut)
+            classes_data = list(mes_classes.annotate(nb_el=Count('eleves')))
+            chart_classes_enseignant = json.dumps({
+                'labels': [c.nom for c in classes_data],
+                'data':   [c.nb_el for c in classes_data],
+            })
+
         except Exception:
             teacher = None
             mes_affectations = MatiereClasse.objects.none()
@@ -187,6 +218,8 @@ def dashboard(request):
             nb_mes_eleves = 0
             mes_notes_recentes = []
             avancement = []
+            chart_avancement = json.dumps({'labels': [], 'data': []})
+            chart_classes_enseignant = json.dumps({'labels': [], 'data': []})
 
         context = {
             'role': 'enseignant',
@@ -199,5 +232,7 @@ def dashboard(request):
             'avancement': avancement,
             'mes_notes_recentes': mes_notes_recentes,
             'annee_active': annee_active,
+            'chart_avancement': chart_avancement,
+            'chart_classes_enseignant': chart_classes_enseignant,
         }
         return render(request, 'dashboard/index_enseignant.html', context)

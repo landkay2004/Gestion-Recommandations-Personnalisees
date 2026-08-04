@@ -2,107 +2,293 @@
 {% block title %}Caisse — Tableau de bord{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-3">
-
-  <div class="mb-4">
-    <h4 class="fw-bold mb-0"><i class="bi bi-calculator me-2 text-primary"></i>Tableau de bord — Caisse</h4>
+<div class="page-header">
+  <div>
+    <h4 class="page-title"><i class="bi bi-calculator me-2 text-primary"></i>Tableau de bord — Caisse</h4>
     <p class="text-muted small mb-0">Vue d'ensemble des encaissements</p>
   </div>
-
-  <!-- Stats -->
-  <div class="row g-3 mb-4">
-    <div class="col-sm-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body d-flex align-items-center gap-3">
-          <div class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center" style="width:48px;height:48px">
-            <i class="bi bi-receipt fs-4 text-primary"></i>
-          </div>
-          <div>
-            <div class="fs-4 fw-bold">{{ total_paiements }}</div>
-            <div class="text-muted small">Paiements enregistrés</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body d-flex align-items-center gap-3">
-          <div class="rounded-circle bg-success-subtle d-flex align-items-center justify-content-center" style="width:48px;height:48px">
-            <i class="bi bi-calendar-check fs-4 text-success"></i>
-          </div>
-          <div>
-            <div class="fs-4 fw-bold">{{ paiements_du_jour }}</div>
-            <div class="text-muted small">Paiements aujourd'hui</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body d-flex align-items-center gap-3">
-          <div class="rounded-circle bg-warning-subtle d-flex align-items-center justify-content-center" style="width:48px;height:48px">
-            <i class="bi bi-cash fs-4 text-warning"></i>
-          </div>
-          <div>
-            <div class="fs-4 fw-bold">{{ montant_du_jour|floatformat:2 }} USD</div>
-            <div class="text-muted small">Montant encaissé aujourd'hui</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Actions rapides -->
-  <div class="mb-4">
+  <div class="d-flex gap-2">
     <a href="{% url 'comptable:recherche_eleve' %}" class="btn btn-primary">
-      <i class="bi bi-person-plus me-2"></i>Enregistrer un paiement
+      <i class="bi bi-person-plus me-1"></i>Enregistrer un paiement
     </a>
-    <a href="{% url 'comptable:historique_paiements' %}" class="btn btn-outline-secondary ms-2">
-      <i class="bi bi-clock-history me-1"></i>Historique complet
+    <a href="{% url 'comptable:historique_paiements' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-clock-history me-1"></i>Historique
     </a>
   </div>
-
-  <!-- Derniers paiements -->
-  <div class="card shadow-sm">
-    <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
-      <span class="fw-medium"><i class="bi bi-clock-history me-1"></i>Derniers paiements</span>
-      <a href="{% url 'comptable:historique_paiements' %}" class="btn btn-sm btn-outline-primary">Tout voir</a>
-    </div>
-    <div class="card-body p-0">
-      {% if derniers %}
-      <table class="table table-hover mb-0 align-middle">
-        <thead class="table-light">
-          <tr>
-            <th>Élève</th><th>Frais</th><th>Montant</th><th>Mode</th><th>Date</th><th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for p in derniers %}
-          <tr>
-            <td class="fw-medium">{{ p.eleve.nom_complet }}</td>
-            <td>{{ p.type_frais.nom }}</td>
-            <td class="fw-bold text-success">{{ p.montant_paye }} USD</td>
-            <td><span class="badge bg-secondary-subtle text-secondary">{{ p.get_mode_paiement_display }}</span></td>
-            <td class="text-muted small">{{ p.date_paiement|date:"d/m/Y H:i" }}</td>
-            <td>
-              {% if p.facture %}
-              <a href="{% url 'comptable:facture_detail' p.facture.pk %}" class="btn btn-sm btn-outline-primary">
-                <i class="bi bi-receipt"></i>
-              </a>
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <div class="text-center py-4 text-muted">
-        <i class="bi bi-inbox fs-2"></i>
-        <p class="mt-2 mb-0">Aucun paiement enregistré.</p>
-      </div>
-      {% endif %}
-    </div>
-  </div>
-
 </div>
+
+<!-- KPI cards -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-xl-3">
+    <div class="stat-card">
+      <div class="stat-icon blue"><i class="bi bi-receipt-cutoff"></i></div>
+      <div>
+        <div class="stat-value">{{ total_paiements }}</div>
+        <div class="stat-label">Paiements enregistrés</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="stat-card">
+      <div class="stat-icon green"><i class="bi bi-calendar-check-fill"></i></div>
+      <div>
+        <div class="stat-value">{{ paiements_du_jour }}</div>
+        <div class="stat-label">Paiements aujourd'hui</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="stat-card">
+      <div class="stat-icon orange"><i class="bi bi-cash-coin"></i></div>
+      <div>
+        <div class="stat-value" style="font-size:1.1rem">{{ montant_du_jour|floatformat:0 }} $</div>
+        <div class="stat-label">Encaissé aujourd'hui</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="stat-card">
+      <div class="stat-icon purple"><i class="bi bi-wallet2"></i></div>
+      <div>
+        <div class="stat-value" style="font-size:1.1rem">{{ montant_total|floatformat:0 }} $</div>
+        <div class="stat-label">Total encaissé</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Graphiques -->
+<div class="row g-4 mb-4">
+  <!-- Ligne/Barres : tendance 7 jours -->
+  <div class="col-lg-7">
+    <section class="dashboard-chart-card h-100">
+      <div class="dashboard-chart-head">
+        <h3><i class="bi bi-bar-chart-fill me-2" style="color:#4d44b5"></i>Paiements — 7 derniers jours</h3>
+        <div class="d-flex gap-3 align-items-center">
+          <span style="font-size:.72rem;color:#64748b"><span class="chart-dot" style="background:#4d44b5"></span>Nombre</span>
+          <span style="font-size:.72rem;color:#64748b"><span class="chart-dot" style="background:#22c55e"></span>Montant (USD)</span>
+        </div>
+      </div>
+      <div class="dashboard-chart-body" style="position:relative;height:220px">
+        <canvas id="tendance7jChart"></canvas>
+      </div>
+    </section>
+  </div>
+
+  <!-- Doughnut : modes de paiement -->
+  <div class="col-lg-5">
+    <section class="dashboard-chart-card h-100">
+      <div class="dashboard-chart-head">
+        <h3><i class="bi bi-pie-chart-fill me-2" style="color:#22c55e"></i>Modes de paiement</h3>
+        <span class="badge rounded-pill bg-light text-dark">{{ total_paiements }} total</span>
+      </div>
+      <div class="dashboard-chart-body d-flex align-items-center justify-content-center gap-4 flex-wrap" style="min-height:200px">
+        <div style="position:relative;width:150px;height:150px">
+          <canvas id="modesDoughnutChart"></canvas>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+            <span style="font-size:1.4rem;font-weight:800;color:#0f172a;line-height:1">{{ total_paiements }}</span>
+            <span style="font-size:.65rem;color:#64748b">paiements</span>
+          </div>
+        </div>
+        <div id="modes-legend" style="font-size:.82rem"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Top frais -->
+<div class="row g-4 mb-4">
+  <div class="col-12">
+    <section class="dashboard-chart-card">
+      <div class="dashboard-chart-head">
+        <h3><i class="bi bi-list-ol me-2" style="color:#f59e0b"></i>Types de frais les plus fréquents</h3>
+      </div>
+      <div class="dashboard-chart-body" style="position:relative;height:160px">
+        <canvas id="fraisBarChart"></canvas>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Derniers paiements -->
+<div class="card shadow-sm">
+  <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+    <span class="fw-medium"><i class="bi bi-clock-history me-1"></i>Derniers paiements</span>
+    <a href="{% url 'comptable:historique_paiements' %}" class="btn btn-sm btn-outline-primary">Tout voir</a>
+  </div>
+  <div class="card-body p-0">
+    {% if derniers %}
+    <table class="table table-hover mb-0 align-middle small">
+      <thead class="table-light">
+        <tr>
+          <th>Élève</th><th>Frais</th><th>Montant</th><th>Mode</th><th>Date</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in derniers %}
+        <tr>
+          <td class="fw-medium">{{ p.eleve.nom_complet }}</td>
+          <td>{{ p.type_frais.nom }}</td>
+          <td class="fw-bold text-success">{{ p.montant_paye }} USD</td>
+          <td><span class="badge bg-secondary-subtle text-secondary">{{ p.get_mode_paiement_display }}</span></td>
+          <td class="text-muted small">{{ p.date_paiement|date:"d/m/Y H:i" }}</td>
+          <td>
+            {% if p.facture %}
+            <a href="{% url 'comptable:facture_detail' p.facture.pk %}" class="btn btn-sm btn-outline-primary">
+              <i class="bi bi-receipt"></i>
+            </a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-inbox fs-2 d-block mb-2 opacity-50"></i>
+      <p class="mb-0">Aucun paiement enregistré.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>.chart-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}</style>
+<script>
+(function () {
+  Chart.defaults.font.family = "'Inter','Arial',sans-serif";
+  Chart.defaults.font.size   = 11;
+  Chart.defaults.color       = '#64748b';
+
+  const raw7j    = {{ chart_7jours|safe }};
+  const rawModes = {{ chart_modes|safe }};
+  const rawFrais = {{ chart_frais|safe }};
+
+  // ── 1. Barres + Ligne : tendance 7 jours ─────────────────────────
+  const ctx7j = document.getElementById('tendance7jChart');
+  if (ctx7j) {
+    new Chart(ctx7j, {
+      type: 'bar',
+      data: {
+        labels: raw7j.labels,
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Nombre',
+            data: raw7j.nb,
+            backgroundColor: 'rgba(77,68,181,0.75)',
+            borderRadius: 6,
+            borderSkipped: false,
+            yAxisID: 'yNb',
+          },
+          {
+            type: 'line',
+            label: 'Montant (USD)',
+            data: raw7j.montants,
+            borderColor: '#22c55e',
+            backgroundColor: 'rgba(34,197,94,0.1)',
+            borderWidth: 2.5,
+            pointRadius: 4,
+            pointBackgroundColor: '#16a34a',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            fill: true,
+            tension: 0.4,
+            yAxisID: 'yMt',
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { display: false } },
+        scales: {
+          yNb: {
+            type: 'linear', position: 'left', beginAtZero: true,
+            ticks: { precision: 0 }, grid: { color: '#f1f5f9' }, border: { display: false }
+          },
+          yMt: {
+            type: 'linear', position: 'right', beginAtZero: true,
+            ticks: { callback: v => v + ' $' }, grid: { display: false }, border: { display: false }
+          },
+          x: { grid: { display: false }, border: { display: false } }
+        }
+      }
+    });
+  }
+
+  // ── 2. Doughnut : modes de paiement ──────────────────────────────
+  const ctxModes = document.getElementById('modesDoughnutChart');
+  const PALETTE = ['#4d44b5','#22c55e','#f59e0b','#3b82f6','#ef4444'];
+  if (ctxModes) {
+    const total = rawModes.data.reduce((a, b) => a + b, 0);
+    new Chart(ctxModes, {
+      type: 'doughnut',
+      data: {
+        labels: rawModes.labels,
+        datasets: [{
+          data: total > 0 ? rawModes.data : [1],
+          backgroundColor: total > 0 ? PALETTE : ['#e2e8f0'],
+          borderWidth: 0,
+          hoverOffset: 6,
+        }]
+      },
+      options: {
+        cutout: '72%',
+        plugins: { legend: { display: false }, tooltip: { enabled: total > 0 } },
+        animation: { animateRotate: true, duration: 800 }
+      }
+    });
+    // Légende manuelle
+    const legend = document.getElementById('modes-legend');
+    if (legend && total > 0) {
+      legend.innerHTML = rawModes.labels.map((l, i) =>
+        `<div class="d-flex align-items-center gap-2 mb-2">
+           <span class="chart-dot" style="background:${PALETTE[i]}"></span>
+           <span>${l} : <strong>${rawModes.data[i]}</strong></span>
+         </div>`
+      ).join('');
+    } else if (legend) {
+      legend.innerHTML = '<span class="text-muted small">Aucun paiement</span>';
+    }
+  }
+
+  // ── 3. Barres horizontales : types de frais ───────────────────────
+  const ctxFrais = document.getElementById('fraisBarChart');
+  if (ctxFrais && rawFrais.labels.length > 0) {
+    new Chart(ctxFrais, {
+      type: 'bar',
+      data: {
+        labels: rawFrais.labels,
+        datasets: [{
+          label: 'Paiements',
+          data: rawFrais.data,
+          backgroundColor: PALETTE,
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.parsed.x} paiement${c.parsed.x > 1 ? 's' : ''}` } } },
+        scales: {
+          x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#f1f5f9' }, border: { display: false } },
+          y: { grid: { display: false }, border: { display: false } }
+        }
+      }
+    });
+  } else if (ctxFrais) {
+    const c2d = ctxFrais.getContext('2d');
+    c2d.fillStyle = '#94a3b8'; c2d.font = '13px Inter,Arial,sans-serif';
+    c2d.textAlign = 'center';
+    c2d.fillText('Aucun frais enregistré', ctxFrais.width / 2, ctxFrais.height / 2);
+  }
+})();
+</script>
 {% endblock %}

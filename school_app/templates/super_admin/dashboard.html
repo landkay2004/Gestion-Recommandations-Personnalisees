@@ -3,67 +3,96 @@
 {% block page_title %}<i class="bi bi-grid-1x2-fill me-2"></i>Tableau de bord{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-4">
-  <div><h1 class="h4 fw-bold mb-1">Bonjour, {{ request.super_admin.prenom|default:request.super_admin.get_full_name }}.</h1><p class="text-muted small mb-0">Voici l’état du réseau scolaire aujourd’hui.</p></div>
-  <a href="{% url 'super_admin:ecole_creer' %}" class="btn btn-sa-primary"><i class="bi bi-plus-lg me-2"></i>Ajouter une école</a>
+  <div>
+    <h1 class="h4 fw-bold mb-1">Bonjour, {{ request.super_admin.prenom|default:request.super_admin.get_full_name }}.</h1>
+    <p class="text-muted small mb-0">Voici l'état du réseau scolaire aujourd'hui.</p>
+  </div>
+  <a href="{% url 'super_admin:ecole_creer' %}" class="btn btn-sa-primary">
+    <i class="bi bi-plus-lg me-2"></i>Ajouter une école
+  </a>
 </div>
 
+<!-- KPI -->
 <div class="row g-3 mb-4">
-  <div class="col-6 col-xl-3"><div class="kpi-card"><div class="d-flex justify-content-between"><div><div class="kpi-label">Écoles du réseau</div><div class="kpi-val">{{ stats.total_ecoles }}</div></div><div class="kpi-icon"><i class="bi bi-buildings-fill"></i></div></div><div class="kpi-meta"><strong>{{ stats.ecoles_actives }}</strong> actives actuellement</div></div></div>
-  <div class="col-6 col-xl-3"><div class="kpi-card"><div class="d-flex justify-content-between"><div><div class="kpi-label">Onboarding en cours</div><div class="kpi-val">{{ stats.onboarding_en_cours }}</div></div><div class="kpi-icon" style="background:#fff4dc;color:#d8831f"><i class="bi bi-signpost-2-fill"></i></div></div><div class="kpi-meta">Écoles à accompagner</div></div></div>
-  <div class="col-6 col-xl-3"><div class="kpi-card"><div class="d-flex justify-content-between"><div><div class="kpi-label">Renouvellements à venir</div><div class="kpi-val">{{ stats.abonnements_a_renouveler }}</div></div><div class="kpi-icon" style="background:#e8f4ff;color:#2474b9"><i class="bi bi-calendar2-check-fill"></i></div></div><div class="kpi-meta">Dans les 30 prochains jours</div></div></div>
-  <div class="col-6 col-xl-3"><div class="kpi-card"><div class="d-flex justify-content-between"><div><div class="kpi-label">Incidents actifs</div><div class="kpi-val">{{ stats.maintenance_active }}</div></div><div class="kpi-icon" style="background:#ffe8eb;color:#b52d42"><i class="bi bi-tools"></i></div></div><div class="kpi-meta">Maintenances en cours</div></div></div>
+  <div class="col-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="d-flex justify-content-between">
+        <div><div class="kpi-label">Écoles du réseau</div><div class="kpi-val">{{ stats.total_ecoles }}</div></div>
+        <div class="kpi-icon"><i class="bi bi-buildings-fill"></i></div>
+      </div>
+      <div class="kpi-meta"><strong>{{ stats.ecoles_actives }}</strong> actives actuellement</div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="d-flex justify-content-between">
+        <div><div class="kpi-label">Onboarding en cours</div><div class="kpi-val">{{ stats.onboarding_en_cours }}</div></div>
+        <div class="kpi-icon" style="background:#fff4dc;color:#d8831f"><i class="bi bi-signpost-2-fill"></i></div>
+      </div>
+      <div class="kpi-meta">Écoles à accompagner</div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="d-flex justify-content-between">
+        <div><div class="kpi-label">Renouvellements à venir</div><div class="kpi-val">{{ stats.abonnements_a_renouveler }}</div></div>
+        <div class="kpi-icon" style="background:#e8f4ff;color:#2474b9"><i class="bi bi-calendar2-check-fill"></i></div>
+      </div>
+      <div class="kpi-meta">Dans les 30 prochains jours</div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="d-flex justify-content-between">
+        <div><div class="kpi-label">Incidents actifs</div><div class="kpi-val">{{ stats.maintenance_active }}</div></div>
+        <div class="kpi-icon" style="background:#ffe8eb;color:#b52d42"><i class="bi bi-tools"></i></div>
+      </div>
+      <div class="kpi-meta">Maintenances en cours</div>
+    </div>
+  </div>
 </div>
 
 {% if not request.super_admin.totp_enabled %}
-<div class="alert alert-warning d-flex align-items-center gap-3 mb-4"><i class="bi bi-shield-exclamation fs-4"></i><div><strong>Renforcez la sécurité de votre compte.</strong><div class="small">La double authentification protège les accès à toutes les écoles du réseau.</div></div><a href="{% url 'super_admin:setup_2fa' %}" class="btn btn-sm btn-warning ms-auto">Activer la 2FA</a></div>
+<div class="alert alert-warning d-flex align-items-center gap-3 mb-4">
+  <i class="bi bi-shield-exclamation fs-4"></i>
+  <div>
+    <strong>Renforcez la sécurité de votre compte.</strong>
+    <div class="small">La double authentification protège les accès à toutes les écoles du réseau.</div>
+  </div>
+  <a href="{% url 'super_admin:setup_2fa' %}" class="btn btn-sm btn-warning ms-auto">Activer la 2FA</a>
+</div>
 {% endif %}
 
+<!-- Ligne 1 : Graphiques principaux -->
 <div class="row g-3 mb-3">
-  <div class="col-12 col-xl-8">
-    <section class="sa-panel">
-      <div class="sa-panel-title"><div><h2><i class="bi bi-buildings me-2"></i>Écoles récemment ajoutées</h2><p>Suivez les derniers établissements intégrés au réseau.</p></div><a href="{% url 'super_admin:ecole_list' %}" class="btn btn-sm btn-outline-primary">Voir tout</a></div>
-      <div class="table-responsive"><table class="table sa-table"><thead><tr><th>Établissement</th><th>Plan</th><th>Statut</th><th>Ajoutée le</th><th></th></tr></thead><tbody>
-        {% for e in ecoles_recentes %}<tr><td><div class="sa-school-name">{{ e.nom }}</div><div class="sa-school-meta">{{ e.contact_email }}</div></td><td>{% if e.plan %}<span class="badge rounded-pill bg-light text-dark">{{ e.plan.nom }}</span>{% else %}—{% endif %}</td><td><span class="sa-status badge-statut-{{ e.statut }}">{{ e.get_statut_display }}</span></td><td class="text-muted">{{ e.created_at|date:"d/m/Y" }}</td><td><a href="{% url 'super_admin:ecole_detail' e.pk %}" class="btn btn-sm btn-light"><i class="bi bi-arrow-up-right"></i></a></td></tr>
-        {% empty %}<tr><td colspan="5" class="text-center text-muted py-4">Aucune école enregistrée.</td></tr>{% endfor %}
-      </tbody></table></div>
-    </section>
-  </div>
-  <div class="col-12 col-xl-4">
-    <section class="sa-panel">
-      <div class="sa-panel-title"><div><h2><i class="bi bi-lightning-charge-fill me-2"></i>Actions rapides</h2><p>Les raccourcis de la plateforme.</p></div></div>
-      <a class="sa-action" href="{% url 'super_admin:ecole_creer' %}"><span class="sa-action-icon"><i class="bi bi-building-add"></i></span><span>Créer une école</span><i class="bi bi-chevron-right ms-auto text-muted"></i></a>
-      <a class="sa-action" href="{% url 'super_admin:communication_creer' %}"><span class="sa-action-icon"><i class="bi bi-megaphone"></i></span><span>Publier une annonce</span><i class="bi bi-chevron-right ms-auto text-muted"></i></a>
-      <a class="sa-action" href="{% url 'super_admin:maintenance_creer' %}"><span class="sa-action-icon"><i class="bi bi-tools"></i></span><span>Planifier une maintenance</span><i class="bi bi-chevron-right ms-auto text-muted"></i></a>
-      <a class="sa-action" href="{% url 'super_admin:plan_list' %}"><span class="sa-action-icon"><i class="bi bi-stars"></i></span><span>Gérer les abonnements</span><i class="bi bi-chevron-right ms-auto text-muted"></i></a>
-    </section>
-  </div>
-</div>
-
-<div class="row g-3">
   <!-- Donut : Santé du réseau -->
   <div class="col-12 col-lg-4">
-    <section class="dashboard-chart-card">
+    <section class="dashboard-chart-card h-100">
       <div class="dashboard-chart-head">
         <h3><i class="bi bi-pie-chart-fill me-2"></i>Santé du réseau</h3>
         <span class="badge rounded-pill bg-light text-dark">{{ stats.total_ecoles }} écoles</span>
       </div>
       <div class="dashboard-chart-body">
         <div class="row align-items-center g-2">
-          <div class="col-5 d-flex align-items-center justify-content-center" style="min-height:150px">
-            <canvas id="networkHealthChart" style="max-width:150px;max-height:150px"></canvas>
+          <div class="col-5 d-flex align-items-center justify-content-center" style="min-height:170px">
+            <canvas id="networkHealthChart" style="max-width:160px;max-height:160px"></canvas>
           </div>
           <div class="col-7">
-            <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="d-flex justify-content-between align-items-center mb-3">
               <span class="dashboard-metric-label"><span class="chart-dot" style="background:#22c55e"></span>Actives</span>
               <strong class="dashboard-metric-value">{{ stats.ecoles_actives }}</strong>
             </div>
-            <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="d-flex justify-content-between align-items-center mb-3">
               <span class="dashboard-metric-label"><span class="chart-dot" style="background:#f59e0b"></span>Suspendues</span>
               <strong class="dashboard-metric-value">{{ stats.ecoles_suspendues }}</strong>
             </div>
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center mb-3">
               <span class="dashboard-metric-label"><span class="chart-dot" style="background:#4d44b5"></span>Onboarding</span>
               <strong class="dashboard-metric-value">{{ stats.onboarding_en_cours }}</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="dashboard-metric-label"><span class="chart-dot" style="background:#94a3b8"></span>Corbeille</span>
+              <strong class="dashboard-metric-value">{{ stats.ecoles_corbeille }}</strong>
             </div>
           </div>
         </div>
@@ -73,26 +102,47 @@
 
   <!-- Bar : Nouvelles écoles par mois -->
   <div class="col-12 col-lg-4">
-    <section class="dashboard-chart-card">
+    <section class="dashboard-chart-card h-100">
       <div class="dashboard-chart-head">
         <h3><i class="bi bi-bar-chart-fill me-2"></i>Nouvelles écoles / mois</h3>
         <span class="badge rounded-pill bg-light text-dark">6 derniers mois</span>
       </div>
-      <div class="dashboard-chart-body" style="position:relative;height:190px">
+      <div class="dashboard-chart-body" style="position:relative;height:210px">
         <canvas id="monthlySchoolsChart"></canvas>
       </div>
     </section>
   </div>
 
-  <!-- Liste onboarding -->
+  <!-- Onboarding à accompagner -->
   <div class="col-12 col-lg-4">
-    <section class="sa-panel"><div class="sa-panel-title"><div><h2><i class="bi bi-signpost-split-fill me-2"></i>À accompagner</h2><p>Écoles qui n'ont pas terminé leur configuration.</p></div></div>
-      {% for e in ecoles_onboarding %}<div class="d-flex align-items-center gap-2 py-2 border-bottom"><div class="sa-action-icon"><i class="bi bi-building"></i></div><div class="flex-grow-1"><div class="fw-bold small">{{ e.nom }}</div><div class="text-muted" style="font-size:.65rem">Créée le {{ e.created_at|date:"d/m/Y" }}</div></div><a href="{% url 'super_admin:ecole_detail' e.pk %}" class="text-primary"><i class="bi bi-arrow-right"></i></a></div>{% empty %}<div class="text-center text-muted small py-4"><i class="bi bi-check-circle text-success fs-3 d-block mb-2"></i>Toutes les écoles sont configurées.</div>{% endfor %}
+    <section class="sa-panel h-100">
+      <div class="sa-panel-title">
+        <div>
+          <h2><i class="bi bi-signpost-split-fill me-2"></i>À accompagner</h2>
+          <p>Écoles qui n'ont pas terminé leur configuration.</p>
+        </div>
+      </div>
+      {% for e in ecoles_onboarding %}
+      <div class="d-flex align-items-center gap-2 py-2 border-bottom">
+        <div class="sa-action-icon"><i class="bi bi-building"></i></div>
+        <div class="flex-grow-1">
+          <div class="fw-bold small">{{ e.nom }}</div>
+          <div class="text-muted" style="font-size:.65rem">Créée le {{ e.created_at|date:"d/m/Y" }}</div>
+        </div>
+        <a href="{% url 'super_admin:ecole_detail' e.pk %}" class="text-primary"><i class="bi bi-arrow-right"></i></a>
+      </div>
+      {% empty %}
+      <div class="text-center text-muted small py-4">
+        <i class="bi bi-check-circle text-success fs-3 d-block mb-2"></i>
+        Toutes les écoles sont configurées.
+      </div>
+      {% endfor %}
     </section>
   </div>
 </div>
 
-<div class="row g-3 mt-1">
+<!-- Ligne 2 : Activité + Tableau + Actions -->
+<div class="row g-3 mb-3">
   <!-- Line : Activité du réseau -->
   <div class="col-12 col-lg-8">
     <section class="dashboard-chart-card">
@@ -103,15 +153,99 @@
           <span style="font-size:.72rem;color:#64748b"><span class="chart-dot" style="background:#f6c453"></span>Inscriptions</span>
         </div>
       </div>
-      <div class="dashboard-chart-body" style="position:relative;height:220px">
+      <div class="dashboard-chart-body" style="position:relative;height:230px">
         <canvas id="activityChart"></canvas>
       </div>
     </section>
   </div>
-  <!-- Communications -->
+
+  <!-- Actions rapides -->
   <div class="col-12 col-lg-4">
-    <section class="sa-panel"><div class="sa-panel-title"><div><h2><i class="bi bi-megaphone-fill me-2"></i>Communications</h2><p>Derniers messages envoyés aux écoles.</p></div><a href="{% url 'super_admin:communication_list' %}" class="text-primary small fw-bold">Gérer</a></div>
-      {% for annonce in annonces_recentes %}<div class="sa-announcement"><h3>{{ annonce.titre }}</h3><p>{{ annonce.message|truncatechars:95 }}</p><small><i class="bi bi-clock me-1"></i>{{ annonce.date_publication|date:"d/m/Y H:i" }} · {% if annonce.ecole %}{{ annonce.ecole.nom }}{% else %}Toutes les écoles{% endif %}</small></div>{% empty %}<div class="text-center text-muted small py-4"><i class="bi bi-chat-square-text fs-3 d-block mb-2 opacity-50"></i>Pas encore de communication.</div>{% endfor %}
+    <section class="sa-panel">
+      <div class="sa-panel-title">
+        <div><h2><i class="bi bi-lightning-charge-fill me-2"></i>Actions rapides</h2><p>Les raccourcis de la plateforme.</p></div>
+      </div>
+      <a class="sa-action" href="{% url 'super_admin:ecole_creer' %}">
+        <span class="sa-action-icon"><i class="bi bi-building-add"></i></span>
+        <span>Créer une école</span>
+        <i class="bi bi-chevron-right ms-auto text-muted"></i>
+      </a>
+      <a class="sa-action" href="{% url 'super_admin:communication_creer' %}">
+        <span class="sa-action-icon"><i class="bi bi-megaphone"></i></span>
+        <span>Publier une annonce</span>
+        <i class="bi bi-chevron-right ms-auto text-muted"></i>
+      </a>
+      <a class="sa-action" href="{% url 'super_admin:maintenance_creer' %}">
+        <span class="sa-action-icon"><i class="bi bi-tools"></i></span>
+        <span>Planifier une maintenance</span>
+        <i class="bi bi-chevron-right ms-auto text-muted"></i>
+      </a>
+      <a class="sa-action" href="{% url 'super_admin:plan_list' %}">
+        <span class="sa-action-icon"><i class="bi bi-stars"></i></span>
+        <span>Gérer les abonnements</span>
+        <i class="bi bi-chevron-right ms-auto text-muted"></i>
+      </a>
+    </section>
+  </div>
+</div>
+
+<!-- Ligne 3 : Tableau écoles récentes + Communications -->
+<div class="row g-3">
+  <div class="col-12 col-xl-8">
+    <section class="sa-panel">
+      <div class="sa-panel-title">
+        <div>
+          <h2><i class="bi bi-buildings me-2"></i>Écoles récemment ajoutées</h2>
+          <p>Suivez les derniers établissements intégrés au réseau.</p>
+        </div>
+        <a href="{% url 'super_admin:ecole_list' %}" class="btn btn-sm btn-outline-primary">Voir tout</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table sa-table">
+          <thead>
+            <tr><th>Établissement</th><th>Plan</th><th>Statut</th><th>Ajoutée le</th><th></th></tr>
+          </thead>
+          <tbody>
+            {% for e in ecoles_recentes %}
+            <tr>
+              <td>
+                <div class="sa-school-name">{{ e.nom }}</div>
+                <div class="sa-school-meta">{{ e.contact_email }}</div>
+              </td>
+              <td>{% if e.plan %}<span class="badge rounded-pill bg-light text-dark">{{ e.plan.nom }}</span>{% else %}—{% endif %}</td>
+              <td><span class="sa-status badge-statut-{{ e.statut }}">{{ e.get_statut_display }}</span></td>
+              <td class="text-muted">{{ e.created_at|date:"d/m/Y" }}</td>
+              <td><a href="{% url 'super_admin:ecole_detail' e.pk %}" class="btn btn-sm btn-light"><i class="bi bi-arrow-up-right"></i></a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted py-4">Aucune école enregistrée.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <div class="col-12 col-xl-4">
+    <section class="sa-panel">
+      <div class="sa-panel-title">
+        <div><h2><i class="bi bi-megaphone-fill me-2"></i>Communications</h2><p>Derniers messages envoyés aux écoles.</p></div>
+        <a href="{% url 'super_admin:communication_list' %}" class="text-primary small fw-bold">Gérer</a>
+      </div>
+      {% for annonce in annonces_recentes %}
+      <div class="sa-announcement">
+        <h3>{{ annonce.titre }}</h3>
+        <p>{{ annonce.message|truncatechars:95 }}</p>
+        <small>
+          <i class="bi bi-clock me-1"></i>{{ annonce.date_publication|date:"d/m/Y H:i" }} ·
+          {% if annonce.ecole %}{{ annonce.ecole.nom }}{% else %}Toutes les écoles{% endif %}
+        </small>
+      </div>
+      {% empty %}
+      <div class="text-center text-muted small py-4">
+        <i class="bi bi-chat-square-text fs-3 d-block mb-2 opacity-50"></i>
+        Pas encore de communication.
+      </div>
+      {% endfor %}
     </section>
   </div>
 </div>
@@ -119,48 +253,44 @@
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<style>
-  .chart-dot { display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px; }
-</style>
+<style>.chart-dot { display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px; }</style>
 <script>
-(function() {
+(function () {
   const raw = {{ chart_data|safe }};
   Chart.defaults.font.family = "'Inter', 'Arial', sans-serif";
   Chart.defaults.font.size   = 11;
   Chart.defaults.color       = '#64748b';
 
-  // ── 1. Donut — Santé du réseau ─────────────────────────────────────
+  // ── 1. Donut — Santé du réseau ──────────────────────────────────────
   const ctxDonut = document.getElementById('networkHealthChart');
   if (ctxDonut) {
-    const vals = raw.donut.data;
-    const total = vals.reduce((a,b)=>a+b,0);
+    const vals  = raw.donut.data;
+    const total = vals.reduce((a, b) => a + b, 0);
     new Chart(ctxDonut, {
       type: 'doughnut',
       data: {
         labels: raw.donut.labels,
         datasets: [{
           data: total > 0 ? vals : [1, 0, 0],
-          backgroundColor: ['#22c55e','#f59e0b','#4d44b5'],
+          backgroundColor: ['#22c55e', '#f59e0b', '#4d44b5', '#94a3b8'],
           borderWidth: 0,
-          hoverOffset: 6,
+          hoverOffset: 8,
         }]
       },
       options: {
-        cutout: '72%',
+        cutout: '74%',
         plugins: {
           legend: { display: false },
           tooltip: {
-            callbacks: {
-              label: ctx => ` ${ctx.label} : ${total > 0 ? vals[ctx.dataIndex] : 0}`
-            }
+            callbacks: { label: ctx => ` ${ctx.label} : ${total > 0 ? vals[ctx.dataIndex] : 0}` }
           }
         },
-        animation: { animateRotate: true, duration: 800 }
+        animation: { animateRotate: true, duration: 900 }
       }
     });
   }
 
-  // ── 2. Bar — Nouvelles écoles / mois ──────────────────────────────
+  // ── 2. Bar — Nouvelles écoles / mois ───────────────────────────────
   const ctxBar = document.getElementById('monthlySchoolsChart');
   if (ctxBar) {
     new Chart(ctxBar, {
@@ -170,15 +300,18 @@
         datasets: [{
           label: 'Nouvelles écoles',
           data: raw.monthly.created,
-          backgroundColor: 'rgba(77,68,181,0.75)',
-          borderRadius: 6,
+          backgroundColor: 'rgba(77,68,181,0.78)',
+          borderRadius: 7,
           borderSkipped: false,
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: c => ` ${c.parsed.y} école${c.parsed.y > 1 ? 's' : ''}` } }
+        },
         scales: {
           x: { grid: { display: false }, border: { display: false } },
           y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#f1f5f9' }, border: { display: false } }
@@ -187,7 +320,7 @@
     });
   }
 
-  // ── 3. Line — Activité réseau ──────────────────────────────────────
+  // ── 3. Line — Activité réseau ───────────────────────────────────────
   const ctxLine = document.getElementById('activityChart');
   if (ctxLine) {
     new Chart(ctxLine, {
@@ -203,6 +336,8 @@
             borderWidth: 2.5,
             pointRadius: 4,
             pointBackgroundColor: '#4d44b5',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
             fill: true,
             tension: 0.4,
           },
@@ -210,10 +345,12 @@
             label: 'Inscriptions',
             data: raw.activity.created,
             borderColor: '#f6c453',
-            backgroundColor: 'rgba(246,196,83,0.08)',
+            backgroundColor: 'rgba(246,196,83,0.10)',
             borderWidth: 2.5,
             pointRadius: 4,
             pointBackgroundColor: '#f6c453',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
             fill: false,
             tension: 0.4,
           }

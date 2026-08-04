@@ -3,7 +3,9 @@ Vues du module comptable :
   - Gestion des comptes comptable (admin_ecole)
   - Espace caisse : recherche élève, encaissement, historique, factures PDF
 """
+import json
 import logging
+from datetime import timedelta
 from decimal import Decimal
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -106,25 +108,66 @@ def comptable_reset_password(request, pk):
 @login_required
 @comptable_required
 def comptable_dashboard(request):
-    from accounts.models import CustomUser
+    today = timezone.now().date()
 
     total_paiements   = Paiement.objects.count()
-    paiements_du_jour = Paiement.objects.filter(
-        date_paiement__date=timezone.now().date()
-    ).count()
+    paiements_du_jour = Paiement.objects.filter(date_paiement__date=today).count()
     montant_du_jour   = Paiement.objects.filter(
-        date_paiement__date=timezone.now().date()
+        date_paiement__date=today
     ).aggregate(s=Sum('montant_paye'))['s'] or Decimal('0')
+
+    # Montant total encaissé (toutes dates)
+    montant_total = Paiement.objects.aggregate(s=Sum('montant_paye'))['s'] or Decimal('0')
 
     derniers = Paiement.objects.select_related(
         'eleve', 'type_frais', 'facture'
     ).order_by('-date_paiement')[:10]
 
+    # ── Graphique 1 : tendance 7 derniers jours ──────────────────────
+    labels_7j, data_nb_7j, data_montant_7j = [], [], []
+    for i in range(6, -1, -1):
+        day = today - timedelta(days=i)
+        nb = Paiement.objects.filter(date_paiement__date=day).count()
+        mt = Paiement.objects.filter(date_paiement__date=day).aggregate(
+            s=Sum('montant_paye'))['s'] or Decimal('0')
+        labels_7j.append(day.strftime('%d/%m'))
+        data_nb_7j.append(nb)
+        data_montant_7j.append(float(mt))
+    chart_7jours = json.dumps({
+        'labels':   labels_7j,
+        'nb':       data_nb_7j,
+        'montants': data_montant_7j,
+    })
+
+    # ── Graphique 2 : répartition par mode de paiement ───────────────
+    modes_labels, modes_data = [], []
+    for code, label in Paiement.MODE_CHOICES:
+        cnt = Paiement.objects.filter(mode_paiement=code).count()
+        modes_labels.append(label)
+        modes_data.append(cnt)
+    chart_modes = json.dumps({'labels': modes_labels, 'data': modes_data})
+
+    # ── Graphique 3 : top types de frais ─────────────────────────────
+    from django.db.models import Count as DbCount
+    top_frais_qs = (
+        Paiement.objects.values('type_frais__nom')
+        .annotate(cnt=DbCount('id'))
+        .order_by('-cnt')[:6]
+    )
+    chart_frais = json.dumps({
+        'labels': [r['type_frais__nom'] or 'N/A' for r in top_frais_qs],
+        'data':   [r['cnt'] for r in top_frais_qs],
+    })
+
     return render(request, 'comptable/dashboard.html', {
         'total_paiements':   total_paiements,
         'paiements_du_jour': paiements_du_jour,
         'montant_du_jour':   montant_du_jour,
+        'montant_total':     montant_total,
         'derniers':          derniers,
+        'chart_7jours':      chart_7jours,
+        'chart_modes':       chart_modes,
+        'chart_frais':       chart_frais,
     })
 
 
