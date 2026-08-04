@@ -97,9 +97,6 @@ if _USE_TENANTS:
         'abonnement',
         'comptable',
     ]
-    # Cloudinary est nécessaire pour l'envoi des médias distants
-    SHARED_APPS.insert(-1, 'cloudinary')
-    SHARED_APPS.insert(-1, 'cloudinary_storage')
 
     INSTALLED_APPS = list(SHARED_APPS) + TENANT_APPS
     DATABASE_ROUTERS    = ['django_tenants.routers.TenantSyncRouter']

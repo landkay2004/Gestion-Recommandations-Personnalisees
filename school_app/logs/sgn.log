@@ -3686,3 +3686,778 @@ Traceback (most recent call last):
   File "C:\Users\LAND\Desktop\APPS\EducNet\.venv\Lib\site-packages\django\template\backends\django.py", line 130, in reraise
     raise new from exc
 django.template.exceptions.TemplateDoesNotExist: super_admin/base.html
+2026-08-04 16:14:44,628 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 16:14:46,244 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 16:14:52,314 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 16:14:52,880 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 16:26:07,530 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 16:26:18,858 [WARNING] sgn: rejoindre_educnet: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:18,860 [WARNING] sgn: rejoindre_educnet: PlanAbonnement unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:22,157 [WARNING] sgn: rejoindre_educnet: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:22,159 [WARNING] sgn: rejoindre_educnet: PlanAbonnement unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:24,090 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 16:26:25,184 [WARNING] sgn: rejoindre_educnet: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:25,185 [WARNING] sgn: rejoindre_educnet: PlanAbonnement unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:27,200 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 16:26:36,848 [WARNING] sgn: about_view: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:38,043 [WARNING] sgn: contact_view: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:42,636 [WARNING] sgn: about_view: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:43,900 [WARNING] sgn: rejoindre_educnet_form: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:43,981 [ERROR] django.request: Internal Server Error: /rejoindre/formulaire/
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/views.py", line 1726, in rejoindre_educnet_form
+    return render(request, 'public/rejoindre_form.html', {
+        'form': form,
+    ...<3 lines>...
+        'platform_settings': platform_settings,
+    })
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/defaulttags.py", line 333, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1156, in render
+    return render_value_in_context(output, context)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1133, in render_value_in_context
+    value = str(value)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/utils.py", line 79, in __str__
+    return self.as_widget()
+           ~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/boundfield.py", line 108, in as_widget
+    return widget.render(
+           ~~~~~~~~~~~~~^
+        name=self.html_initial_name if only_initial else self.html_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        renderer=self.form.renderer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/widgets.py", line 330, in render
+    context = self.get_context(name, value, attrs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/widgets.py", line 833, in get_context
+    context = super().get_context(name, value, attrs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/widgets.py", line 784, in get_context
+    context["widget"]["optgroups"] = self.optgroups(
+                                     ~~~~~~~~~~~~~~^
+        name, context["widget"]["value"], attrs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/widgets.py", line 724, in optgroups
+    for index, (option_value, option_label) in enumerate(self.choices):
+                                               ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/models.py", line 1448, in __iter__
+    for obj in queryset:
+               ^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 508, in _iterator
+    yield from iterable
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
+    cursor = self.connection.chunked_cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 463, in chunked_cursor
+    return self._cursor(
+           ~~~~~~~~~~~~^
+        name="_django_curs_%d_%s_%d"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        )
+        ^
+    )
+    ^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django_tenants/postgresql_backend/base.py", line 142, in _cursor
+    cursor = super()._cursor(name=name)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+    self.ensure_connection()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:44,291 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 16:26:51,165 [WARNING] sgn: rejoindre_educnet_form: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:51,220 [ERROR] django.request: Internal Server Error: /rejoindre/formulaire/
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/views.py", line 1726, in rejoindre_educnet_form
+    return render(request, 'public/rejoindre_form.html', {
+        'form': form,
+    ...<3 lines>...
+        'platform_settings': platform_settings,
+    })
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/defaulttags.py", line 333, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1156, in render
+    return render_value_in_context(output, context)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/template/base.py", line 1133, in render_value_in_context
+    value = str(value)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/utils.py", line 79, in __str__
+    return self.as_widget()
+           ~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/boundfield.py", line 108, in as_widget
+    return widget.render(
+           ~~~~~~~~~~~~~^
+        name=self.html_initial_name if only_initial else self.html_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        renderer=self.form.renderer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/widgets.py", line 330, in render
+    context = self.get_context(name, value, attrs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/widgets.py", line 833, in get_context
+    context = super().get_context(name, value, attrs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/widgets.py", line 784, in get_context
+    context["widget"]["optgroups"] = self.optgroups(
+                                     ~~~~~~~~~~~~~~^
+        name, context["widget"]["value"], attrs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/widgets.py", line 724, in optgroups
+    for index, (option_value, option_label) in enumerate(self.choices):
+                                               ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/forms/models.py", line 1448, in __iter__
+    for obj in queryset:
+               ^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 508, in _iterator
+    yield from iterable
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
+    cursor = self.connection.chunked_cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 463, in chunked_cursor
+    return self._cursor(
+           ~~~~~~~~~~~~^
+        name="_django_curs_%d_%s_%d"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        )
+        ^
+    )
+    ^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django_tenants/postgresql_backend/base.py", line 142, in _cursor
+    cursor = super()._cursor(name=name)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+    self.ensure_connection()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:26:52,089 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 16:42:25,878 [WARNING] sgn: rejoindre_educnet_form: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:42:25,880 [WARNING] sgn: _build_public_inscription_form: DB indisponible, plans masqués: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:42:33,688 [WARNING] sgn: rejoindre_educnet_form: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:42:33,690 [WARNING] sgn: _build_public_inscription_form: DB indisponible, plans masqués: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:42:41,508 [WARNING] sgn: rejoindre_educnet: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:42:41,509 [WARNING] sgn: rejoindre_educnet: PlanAbonnement unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:42:45,377 [WARNING] sgn: rejoindre_educnet_form: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:42:45,379 [WARNING] sgn: _build_public_inscription_form: DB indisponible, plans masqués: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:42:48,523 [WARNING] sgn: about_view: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:42:59,498 [WARNING] sgn: contact_view: PlatformSettings unavailable: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:43:06,329 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 16:43:45,370 [ERROR] django.request: Internal Server Error: /super-admin/login/
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/views.py", line 123, in login_view
+    'platform_settings': PlatformSettings.get_settings(),
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/models.py", line 209, in get_settings
+    obj, _ = cls.objects.get_or_create(pk=1)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 987, in get_or_create
+    return self.get(**kwargs), False
+           ~~~~~~~~^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 635, in get
+    num = len(clone)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/sql/compiler.py", line 1622, in execute_sql
+    cursor = self.connection.cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 320, in cursor
+    return self._cursor()
+           ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django_tenants/postgresql_backend/base.py", line 144, in _cursor
+    cursor = super()._cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+    self.ensure_connection()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:43:49,698 [ERROR] django.request: Internal Server Error: /super-admin/login/
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/views.py", line 123, in login_view
+    'platform_settings': PlatformSettings.get_settings(),
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/models.py", line 209, in get_settings
+    obj, _ = cls.objects.get_or_create(pk=1)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 987, in get_or_create
+    return self.get(**kwargs), False
+           ~~~~~~~~^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 635, in get
+    num = len(clone)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/sql/compiler.py", line 1622, in execute_sql
+    cursor = self.connection.cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 320, in cursor
+    return self._cursor()
+           ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django_tenants/postgresql_backend/base.py", line 144, in _cursor
+    cursor = super()._cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+    self.ensure_connection()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:43:50,202 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 16:43:57,245 [ERROR] django.request: Internal Server Error: /super-admin/login/
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/views.py", line 123, in login_view
+    'platform_settings': PlatformSettings.get_settings(),
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/models.py", line 209, in get_settings
+    obj, _ = cls.objects.get_or_create(pk=1)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 987, in get_or_create
+    return self.get(**kwargs), False
+           ~~~~~~~~^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 635, in get
+    num = len(clone)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/sql/compiler.py", line 1622, in execute_sql
+    cursor = self.connection.cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 320, in cursor
+    return self._cursor()
+           ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django_tenants/postgresql_backend/base.py", line 144, in _cursor
+    cursor = super()._cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+    self.ensure_connection()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 16:44:04,828 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 16:44:28,671 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 16:58:03,643 [WARNING] django.request: Not Found: /.well-known/security.txt
+2026-08-04 17:30:04,799 [WARNING] django.request: Not Found: /.env
+2026-08-04 18:29:45,476 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 18:31:11,516 [WARNING] django.request: Not Found: /robots.txt
+2026-08-04 18:34:34,450 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 18:35:22,575 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 18:35:22,724 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 18:35:37,064 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 18:35:37,554 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 18:35:37,671 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 18:35:38,752 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 18:35:38,752 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:02:51,559 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:03:43,519 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:04:21,683 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:04:27,482 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:04:32,757 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:04:36,743 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:04:37,152 [WARNING] django.request: Not Found: /favicon.ico
+2026-08-04 19:15:15,710 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:15:36,134 [ERROR] django.request: Internal Server Error: /super-admin/login/
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/views.py", line 123, in login_view
+    'platform_settings': PlatformSettings.get_settings(),
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/apps/super_admin/models.py", line 209, in get_settings
+    obj, _ = cls.objects.get_or_create(pk=1)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 987, in get_or_create
+    return self.get(**kwargs), False
+           ~~~~~~~~^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 635, in get
+    num = len(clone)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/models/sql/compiler.py", line 1622, in execute_sql
+    cursor = self.connection.cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 320, in cursor
+    return self._cursor()
+           ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django_tenants/postgresql_backend/base.py", line 144, in _cursor
+    cursor = super()._cursor()
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+    self.ensure_connection()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/django/db/backends/postgresql/base.py", line 333, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+  File "/home/ubuntu/Gestion-Recommandations-Personnalisees/school_app/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-08-04 19:23:16,025 [INFO] sgn.tenants: [tenants] Dossiers médias créés pour l'école "École Primaire Saint-Gabriel" (schema=ecole_test) : tenants/ecole_test/students, tenants/ecole_test/profils, tenants/ecole_test/school, tenants/ecole_test/cartes, tenants/ecole_test/portail, tenants/ecole_test/documents

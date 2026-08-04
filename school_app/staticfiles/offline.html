@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hors ligne — SGN</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #fff;
+      padding: 2rem;
+    }
+    .card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+    }
+    .icon {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .6; transform: scale(.96); }
+    }
+    h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: .75rem; }
+    p  { font-size: .95rem; color: rgba(255,255,255,.7); line-height: 1.6; margin-bottom: 2rem; }
+    .btn {
+      display: inline-block;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: .85rem 2.5rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: filter .2s;
+    }
+    .btn:hover { filter: brightness(1.15); }
+    .logo {
+      width: 56px; height: 56px;
+      background: rgba(255,255,255,.12);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 2rem;
+      font-size: 1.8rem;
+    }
+    .tip {
+      margin-top: 2rem;
+      font-size: .78rem;
+      color: rgba(255,255,255,.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🎓</div>
+    <span class="icon">📡</span>
+    <h1>Connexion indisponible</h1>
+    <p>
+      Votre appareil n'est pas connecté à Internet.<br>
+      Vérifiez votre connexion Wi-Fi ou données mobiles, puis réessayez.
+    </p>
+    <button class="btn" onclick="window.location.reload()">
+      🔄&nbsp; Réessayer
+    </button>
+    <p class="tip">
+      SGN — Système de Gestion des Notes<br>
+      Les données sont protégées et ne sont jamais stockées hors ligne.
+    </p>
+  </div>
+</body>
+</html>

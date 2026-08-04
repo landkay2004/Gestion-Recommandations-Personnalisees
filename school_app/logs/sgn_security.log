@@ -26,3 +26,6 @@
 2026-08-03 22:48:58,515 [INFO] sgn.security: CONNEXION admin_ecole email=admin@ecoletest.local ecole=ecole_test
 2026-08-03 23:21:49,479 [INFO] sgn.security: DECONNEXION user=admin
 2026-08-03 23:24:36,498 [INFO] sgn.security: CONNEXION admin_ecole email=admin@ecoletest.local ecole=ecole_test
+2026-08-04 16:44:27,923 [WARNING] sgn.security: ECHEC_CONNEXION identifier=secretariat@ecoletest.local ip=62.113.200.75
+2026-08-04 17:30:05,090 [WARNING] django.security.csrf: Forbidden (Referer checking failed - no Referer.): /
+2026-08-04 19:25:04,171 [INFO] sgn.security: CONNEXION super_admin email=superadmin@test.local ip=62.113.200.75
