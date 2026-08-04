@@ -133,11 +133,11 @@ def comptable_dashboard(request):
         labels_7j.append(day.strftime('%d/%m'))
         data_nb_7j.append(nb)
         data_montant_7j.append(float(mt))
-    chart_7jours = json.dumps({
+    chart_7jours = {
         'labels':   labels_7j,
         'nb':       data_nb_7j,
         'montants': data_montant_7j,
-    })
+    }
 
     # ── Graphique 2 : répartition par mode de paiement ───────────────
     modes_labels, modes_data = [], []
@@ -145,7 +145,7 @@ def comptable_dashboard(request):
         cnt = Paiement.objects.filter(mode_paiement=code).count()
         modes_labels.append(label)
         modes_data.append(cnt)
-    chart_modes = json.dumps({'labels': modes_labels, 'data': modes_data})
+    chart_modes = {'labels': modes_labels, 'data': modes_data}
 
     # ── Graphique 3 : top types de frais ─────────────────────────────
     from django.db.models import Count as DbCount
@@ -154,10 +154,10 @@ def comptable_dashboard(request):
         .annotate(cnt=DbCount('id'))
         .order_by('-cnt')[:6]
     )
-    chart_frais = json.dumps({
+    chart_frais = {
         'labels': [r['type_frais__nom'] or 'N/A' for r in top_frais_qs],
         'data':   [r['cnt'] for r in top_frais_qs],
-    })
+    }
 
     return render(request, 'comptable/dashboard.html', {
         'total_paiements':   total_paiements,

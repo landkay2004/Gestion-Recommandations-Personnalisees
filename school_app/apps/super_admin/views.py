@@ -209,7 +209,7 @@ def dashboard(request):
                                   is_deleted=False).count()
         )
 
-    chart_data = json.dumps({
+    chart_data = {
         'donut': {
             'labels': ['Actives', 'Suspendues', 'Onboarding', 'Corbeille'],
             'data': [
@@ -228,7 +228,7 @@ def dashboard(request):
             'total': monthly_active,
             'created': monthly_created,
         },
-    })
+    }
 
     return render(request, 'super_admin/dashboard.html', {
         'stats': stats,

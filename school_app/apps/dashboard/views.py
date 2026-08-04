@@ -72,10 +72,10 @@ def dashboard(request):
         classes_with_data = list(classes_annee.annotate(nb_eleves=Count('eleves'))[:8])
 
         # Graphique 1 : élèves par classe (barres)
-        chart_classes = json.dumps({
+        chart_classes = {
             'labels': [c.nom for c in classes_with_data],
             'data':   [c.nb_eleves for c in classes_with_data],
-        })
+        }
 
         # Graphique 2 : inscriptions sur les 7 derniers jours (ligne)
         today = timezone.now().date()
@@ -84,7 +84,7 @@ def dashboard(request):
             day = today - timedelta(days=i)
             labels_7j.append(day.strftime('%d/%m'))
             data_7j.append(Student.objects.filter(date_inscription=day).count())
-        chart_inscriptions = json.dumps({'labels': labels_7j, 'data': data_7j})
+        chart_inscriptions = {'labels': labels_7j, 'data': data_7j}
 
         context = {
             'role': 'secretariat',
@@ -118,18 +118,18 @@ def dashboard(request):
 
         # Données graphiques
         classes_list = list(dernieres_classes_qs)
-        chart_classes = json.dumps({
+        chart_classes = {
             'labels': [c.nom for c in classes_list],
             'data':   [c.nb_eleves for c in classes_list],
-        })
-        chart_matieres = json.dumps({
+        }
+        chart_matieres = {
             'labels': [c.nom for c in classes_list],
             'data':   [c.nb_matieres for c in classes_list],
-        })
-        chart_notes = json.dumps({
+        }
+        chart_notes = {
             'labels': ['Notes saisies', 'Restant'],
             'data':   [mc_avec_notes, max(mc_total - mc_avec_notes, 0)],
-        })
+        }
 
         context = {
             'role': 'prefet',
@@ -199,17 +199,17 @@ def dashboard(request):
                 })
 
             # Graphique avancement par affectation (barres horizontales)
-            chart_avancement = json.dumps({
+            chart_avancement = {
                 'labels': [f"{item['affectation'].matiere.nom} — {item['affectation'].classe.nom}" for item in avancement],
                 'data':   [item['pct'] for item in avancement],
-            })
+            }
 
             # Graphique élèves par classe (doughnut)
             classes_data = list(mes_classes.annotate(nb_el=Count('eleves')))
-            chart_classes_enseignant = json.dumps({
+            chart_classes_enseignant = {
                 'labels': [c.nom for c in classes_data],
                 'data':   [c.nb_el for c in classes_data],
-            })
+            }
 
         except Exception:
             teacher = None
@@ -218,8 +218,8 @@ def dashboard(request):
             nb_mes_eleves = 0
             mes_notes_recentes = []
             avancement = []
-            chart_avancement = json.dumps({'labels': [], 'data': []})
-            chart_classes_enseignant = json.dumps({'labels': [], 'data': []})
+            chart_avancement = {'labels': [], 'data': []}
+            chart_classes_enseignant = {'labels': [], 'data': []}
 
         context = {
             'role': 'enseignant',

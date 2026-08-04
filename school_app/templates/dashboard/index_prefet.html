@@ -303,10 +303,10 @@
 </div>
 {% endblock %}
 
+{% block extra_js %}
 {{ chart_classes|json_script:"chart-classes-data" }}
 {{ chart_matieres|json_script:"chart-matieres-data" }}
 {{ chart_notes|json_script:"chart-notes-data" }}
-{% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>.chart-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}</style>
 <script>

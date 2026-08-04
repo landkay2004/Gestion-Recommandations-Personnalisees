@@ -251,8 +251,8 @@
 </div>
 {% endblock %}
 
-{{ chart_data|json_script:"chart-data-sa" }}
 {% block extra_js %}
+{{ chart_data|json_script:"chart-data-sa" }}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>.chart-dot { display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px; }</style>
 <script>

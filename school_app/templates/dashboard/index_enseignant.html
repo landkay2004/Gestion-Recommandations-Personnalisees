@@ -236,9 +236,9 @@
 {% endif %}
 {% endblock %}
 
+{% block extra_js %}
 {{ chart_avancement|json_script:"chart-avancement-data" }}
 {{ chart_classes_enseignant|json_script:"chart-classes-ens-data" }}
-{% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
 // ── Horloge dashboard ──

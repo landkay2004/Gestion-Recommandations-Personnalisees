@@ -154,10 +154,10 @@
 
 {% endblock %}
 
+{% block extra_js %}
 {{ chart_7jours|json_script:"chart-7jours-data" }}
 {{ chart_modes|json_script:"chart-modes-data" }}
 {{ chart_frais|json_script:"chart-frais-data" }}
-{% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>.chart-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}</style>
 <script>
