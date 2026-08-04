@@ -2,171 +2,263 @@
 {% block title %}Mon tableau de bord{% endblock %}
 {% block breadcrumb %}<li class="breadcrumb-item active">Mon tableau de bord</li>{% endblock %}
 
+{% block extra_css %}
+<style>
+/* ── Teacher Dashboard styles ── */
+.kpi-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 28px; }
+@media(max-width:600px){ .kpi-grid-3{ grid-template-columns:1fr 1fr; gap:12px; } }
+
+.kpi-card {
+  background: var(--bg-card); border-radius: 16px;
+  padding: 22px 20px 18px; border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+}
+.kpi-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; border-radius: 16px 16px 0 0;
+}
+.kpi-card.teal::before   { background: linear-gradient(90deg,#0D9488,#14b8a6); }
+.kpi-card.orange::before { background: linear-gradient(90deg,#EA580C,#f97316); }
+.kpi-card.blue::before   { background: linear-gradient(90deg,#4D44B5,#6860CC); }
+
+.kpi-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.kpi-icon { width: 48px; height: 48px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+.kpi-icon.teal   { background: linear-gradient(135deg,#F0FDFA,#ccfbf1); color: #0D9488; }
+.kpi-icon.orange { background: linear-gradient(135deg,#FFF7ED,#ffedd5); color: #EA580C; }
+.kpi-icon.blue   { background: linear-gradient(135deg,#EEF0FF,#dde0ff); color: #4D44B5; }
+[data-theme="dark"] .kpi-icon.teal   { background: rgba(13,148,136,.2); }
+[data-theme="dark"] .kpi-icon.orange { background: rgba(234,88,12,.18); }
+[data-theme="dark"] .kpi-icon.blue   { background: rgba(77,68,181,.2); }
+.kpi-value { font-size: 2.1rem; font-weight: 800; line-height: 1; color: var(--color-dark); font-variant-numeric: tabular-nums; }
+.kpi-label { font-size: .77rem; color: var(--color-muted); font-weight: 500; margin-top: 4px; }
+
+/* ── Chart cards ── */
+.chart-card {
+  background: var(--bg-card); border-radius: 16px;
+  border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);
+  overflow: hidden; height: 100%; display: flex; flex-direction: column;
+}
+.chart-card-header {
+  padding: 18px 22px 14px; border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+}
+.chart-card-title {
+  font-size: .9rem; font-weight: 700; color: var(--color-dark);
+  display: flex; align-items: center; gap: 8px; margin: 0;
+}
+.ct-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .9rem; }
+.chart-card-body { padding: 20px; flex: 1; }
+
+/* ── Progress bars ── */
+.progress-item { margin-bottom: 20px; }
+.progress-item:last-child { margin-bottom: 0; }
+.progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.progress-title { font-size: .86rem; font-weight: 600; color: var(--color-text); }
+.progress-stats { font-size: .75rem; color: var(--color-muted); }
+.progress-track { height: 9px; border-radius: 99px; background: var(--color-border); overflow: hidden; margin-bottom: 4px; }
+.progress-fill { height: 100%; border-radius: 99px; width: 0; transition: width 1.1s cubic-bezier(.4,0,.2,1); }
+.progress-fill.done    { background: linear-gradient(90deg,#16A34A,#22c55e); }
+.progress-fill.good    { background: linear-gradient(90deg,#4D44B5,#6860CC); }
+.progress-fill.partial { background: linear-gradient(90deg,#D97706,#f59e0b); }
+.progress-footer { display: flex; justify-content: space-between; align-items: center; }
+.progress-students { font-size: .7rem; color: var(--color-muted); }
+.progress-pct { font-size: .78rem; font-weight: 700; }
+
+/* ── Clock ── */
+.clock-card { background: linear-gradient(135deg,#4D44B5 0%,#6860CC 100%); border-radius: 16px; padding: 24px 20px; text-align: center; color: #fff; box-shadow: 0 8px 24px rgba(77,68,181,.3); }
+.clock-time { font-size: 2.4rem; font-weight: 800; letter-spacing: .03em; font-variant-numeric: tabular-nums; line-height: 1; }
+.clock-seconds { font-size: 1.1rem; font-weight: 400; opacity: .6; vertical-align: super; }
+.clock-date { font-size: .82rem; opacity: .8; margin-top: 6px; text-transform: capitalize; }
+
+/* ── Table ── */
+.dash-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.dash-table th { background: var(--bg-table-head); padding: 10px 16px; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--color-muted); border-bottom: 2px solid var(--color-border); }
+.dash-table td { padding: 11px 16px; border-bottom: 1px solid var(--color-border); vertical-align: middle; color: var(--color-text); }
+.dash-table tr:last-child td { border-bottom: none; }
+.dash-table tbody tr:hover { background: var(--bg-table-hover); }
+
+/* ── Donut legend ── */
+.dl-item { display: flex; align-items: center; gap: 8px; font-size: .83rem; margin-bottom: 8px; }
+.dl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dl-val { font-weight: 700; margin-left: auto; }
+
+/* ── Calendar ── */
+.mini-calendar { width: 100%; user-select: none; }
+.cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.cal-nav-btn { background: none; border: 1px solid var(--color-border); border-radius: 7px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--color-muted); transition: all .15s; }
+.cal-nav-btn:hover { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+.cal-month-label { font-weight: 700; font-size: .875rem; color: var(--color-text); }
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; text-align: center; }
+.cal-day-name { font-size: .6rem; font-weight: 700; text-transform: uppercase; color: var(--color-muted); padding: 4px 0; }
+.cal-day { font-size: .8rem; color: var(--color-text); padding: 5px 2px; border-radius: 7px; cursor: default; transition: background .12s; }
+.cal-day.other-month { color: var(--color-border); }
+.cal-day.today { background: linear-gradient(135deg,#4D44B5,#6860CC); color: #fff; font-weight: 700; border-radius: 50%; }
+.cal-day:hover:not(.today):not(.other-month) { background: var(--color-primary-soft); }
+
+.chart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 180px; color: var(--color-muted); }
+.chart-empty i { font-size: 2.5rem; opacity: .3; margin-bottom: 10px; }
+.chart-empty span { font-size: .82rem; }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="page-header">
   <div>
-    <h1 class="page-title">
-      <i class="bi bi-person-badge-fill text-success me-2"></i>
-      Bonjour, {{ request.user.get_full_name|default:request.user.username }}
-    </h1>
+    <h1 class="page-title"><i class="bi bi-person-badge-fill text-success me-2"></i>Bonjour, {{ request.user.get_full_name|default:request.user.username }}</h1>
     <p class="text-muted small mb-0">Bienvenue dans votre espace enseignant</p>
   </div>
   {% if annee_active %}
-  <span class="badge bg-success fs-6 px-3 py-2">
-    <i class="bi bi-calendar3 me-1"></i>{{ annee_active }}
-  </span>
+  <span class="badge bg-success fs-6 px-3 py-2"><i class="bi bi-calendar3 me-1"></i>{{ annee_active }}</span>
   {% endif %}
 </div>
 
-<!-- Mes statistiques -->
-<div class="row g-3 mb-4">
-  <div class="col-6 col-md-4">
-    <div class="stat-card">
-      <div class="stat-icon teal"><i class="bi bi-building-fill"></i></div>
+<!-- KPI Cards -->
+<div class="kpi-grid-3">
+  <div class="kpi-card teal">
+    <div class="kpi-top">
       <div>
-        <div class="stat-value">{{ nb_mes_classes }}</div>
-        <div class="stat-label">Mes classes</div>
+        <div class="kpi-value" data-count="{{ nb_mes_classes }}">{{ nb_mes_classes }}</div>
+        <div class="kpi-label">Mes classes</div>
       </div>
+      <div class="kpi-icon teal"><i class="bi bi-building-fill"></i></div>
     </div>
   </div>
-  <div class="col-6 col-md-4">
-    <div class="stat-card">
-      <div class="stat-icon orange"><i class="bi bi-book-fill"></i></div>
+  <div class="kpi-card orange">
+    <div class="kpi-top">
       <div>
-        <div class="stat-value">{{ nb_mes_matieres }}</div>
-        <div class="stat-label">Mes matières</div>
+        <div class="kpi-value" data-count="{{ nb_mes_matieres }}">{{ nb_mes_matieres }}</div>
+        <div class="kpi-label">Mes matières</div>
       </div>
+      <div class="kpi-icon orange"><i class="bi bi-book-fill"></i></div>
     </div>
   </div>
-  <div class="col-6 col-md-4">
-    <div class="stat-card">
-      <div class="stat-icon blue"><i class="bi bi-people-fill"></i></div>
+  <div class="kpi-card blue">
+    <div class="kpi-top">
       <div>
-        <div class="stat-value">{{ nb_mes_eleves }}</div>
-        <div class="stat-label">Mes élèves</div>
+        <div class="kpi-value" data-count="{{ nb_mes_eleves }}">{{ nb_mes_eleves }}</div>
+        <div class="kpi-label">Mes élèves</div>
       </div>
+      <div class="kpi-icon blue"><i class="bi bi-people-fill"></i></div>
     </div>
   </div>
 </div>
 
 {% if not teacher %}
-<div class="alert alert-warning d-flex gap-2">
-  <i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0"></i>
+<div class="alert alert-warning d-flex gap-3 mb-4">
+  <i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0 mt-1"></i>
   <div>Votre profil enseignant n'est pas encore configuré. Contactez le Préfet des études.</div>
 </div>
 {% else %}
 
-<!-- Graphiques -->
+<!-- Charts -->
 <div class="row g-4 mb-4">
-  <!-- Barres horizontales : avancement saisie par matière -->
+  <!-- Horizontal bar: progress per subject -->
   <div class="col-lg-7">
-    <section class="dashboard-chart-card h-100">
-      <div class="dashboard-chart-head">
-        <h3><i class="bi bi-bar-chart-steps me-2" style="color:#4d44b5"></i>Avancement saisie par matière</h3>
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <h3 class="chart-card-title">
+          <span class="ct-icon" style="background:linear-gradient(135deg,#EEF0FF,#dde0ff);color:#4D44B5">
+            <i class="bi bi-bar-chart-steps"></i>
+          </span>Avancement saisie par matière
+        </h3>
         <a href="{% url 'saisie_notes' %}" class="btn btn-sm btn-primary"><i class="bi bi-pencil me-1"></i>Saisir</a>
       </div>
-      <div class="dashboard-chart-body" style="position:relative;min-height:200px;max-height:260px">
-        <canvas id="avancementBarChart"></canvas>
+      <div class="chart-card-body">
+        <div style="position:relative;min-height:200px;max-height:280px">
+          <canvas id="avancementBarChart"></canvas>
+        </div>
       </div>
-    </section>
+    </div>
   </div>
 
-  <!-- Doughnut : élèves par classe -->
+  <!-- Donut: students per class -->
   <div class="col-lg-5">
-    <section class="dashboard-chart-card h-100">
-      <div class="dashboard-chart-head">
-        <h3><i class="bi bi-people-fill me-2" style="color:#22c55e"></i>Mes élèves par classe</h3>
-        <span class="badge rounded-pill bg-light text-dark">{{ nb_mes_eleves }} total</span>
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <h3 class="chart-card-title">
+          <span class="ct-icon" style="background:linear-gradient(135deg,#F0FDF4,#dcfce7);color:#16A34A">
+            <i class="bi bi-people-fill"></i>
+          </span>Mes élèves par classe
+        </h3>
+        <span class="badge rounded-pill" style="background:var(--color-primary-soft);color:var(--color-primary);font-weight:600">{{ nb_mes_eleves }} total</span>
       </div>
-      <div class="dashboard-chart-body d-flex align-items-center justify-content-center" style="min-height:200px">
+      <div class="chart-card-body d-flex align-items-center justify-content-center flex-wrap gap-4" style="min-height:200px">
         <div style="position:relative;width:170px;height:170px">
           <canvas id="classesDoughnutChart"></canvas>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
-            <span style="font-size:1.6rem;font-weight:800;color:#0f172a;line-height:1">{{ nb_mes_eleves }}</span>
-            <span style="font-size:.7rem;color:#64748b">élèves</span>
+            <span style="font-size:1.7rem;font-weight:800;color:var(--color-dark);line-height:1">{{ nb_mes_eleves }}</span>
+            <span style="font-size:.68rem;color:var(--color-muted)">élèves</span>
           </div>
         </div>
+        <div id="donut-legend"></div>
       </div>
-    </section>
+    </div>
   </div>
 </div>
 
 <div class="row g-4">
-  <!-- Avancement saisie (progress bars) -->
+  <!-- Progress detail -->
   <div class="col-lg-7">
     <div class="card h-100">
-      <div class="card-header d-flex justify-content-between align-items-center">
+      <div class="card-header">
         <span><i class="bi bi-pencil-square text-primary me-2"></i>Détail de ma saisie</span>
       </div>
       <div class="card-body">
         {% for item in avancement %}
-        <div class="mb-4">
-          <div class="d-flex justify-content-between align-items-center mb-1">
-            <span class="small fw-semibold">{{ item.affectation.matiere }} — {{ item.affectation.classe }}</span>
-            <span class="small text-muted">{{ item.notes_saisies }} / {{ item.attendues }}</span>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="progress-title">{{ item.affectation.matiere }} — {{ item.affectation.classe }}</span>
+            <span class="progress-stats">{{ item.notes_saisies }} / {{ item.attendues }}</span>
           </div>
-          <div class="progress mb-1" style="height:8px;border-radius:6px">
-            <div class="progress-bar
-              {% if item.pct == 100 %}bg-success
-              {% elif item.pct > 50 %}bg-primary
-              {% else %}bg-warning{% endif %}"
-              style="width:{{ item.pct }}%;border-radius:6px">
-            </div>
+          <div class="progress-track">
+            <div class="progress-fill {% if item.pct == 100 %}done{% elif item.pct > 50 %}good{% else %}partial{% endif %}"
+                 data-width="{{ item.pct }}"></div>
           </div>
-          <div class="d-flex justify-content-between">
-            <span class="text-muted" style="font-size:0.7rem">
-              <i class="bi bi-people me-1"></i>{{ item.nb_eleves }} élève{{ item.nb_eleves|pluralize }}
-            </span>
-            <span class="fw-semibold" style="font-size:0.75rem;color:{% if item.pct == 100 %}var(--color-success){% elif item.pct > 50 %}var(--color-primary){% else %}var(--color-warning){% endif %}">
-              {{ item.pct }}%
-            </span>
+          <div class="progress-footer">
+            <span class="progress-students"><i class="bi bi-people me-1"></i>{{ item.nb_eleves }} élève{{ item.nb_eleves|pluralize }}</span>
+            <span class="progress-pct" style="color:{% if item.pct == 100 %}#16A34A{% elif item.pct > 50 %}#4D44B5{% else %}#D97706{% endif %}">{{ item.pct }}%</span>
           </div>
         </div>
         {% empty %}
-        <div class="text-center text-muted py-4">
-          <i class="bi bi-exclamation-circle fs-2 d-block mb-2 opacity-50"></i>
-          Aucune matière affectée. Contactez le Préfet.
+        <div class="chart-empty">
+          <i class="bi bi-exclamation-circle"></i>
+          <span>Aucune matière affectée. Contactez le Préfet.</span>
         </div>
         {% endfor %}
       </div>
     </div>
   </div>
 
-  <!-- Colonne droite : Horloge + Calendrier + Matières -->
+  <!-- Right column: clock + calendar + subjects -->
   <div class="col-lg-5">
-    <!-- Widget Horloge + Date -->
-    <div class="card mb-3">
-      <div class="card-body py-3 px-4">
-        <div class="clock-widget">
-          <div class="cw-time" id="dash-time">--:--:--</div>
-          <div class="cw-date" id="dash-date"></div>
-        </div>
-      </div>
+    <!-- Clock -->
+    <div class="clock-card mb-3">
+      <div class="clock-time" id="dash-time">--:--:--</div>
+      <div class="clock-date" id="dash-date"></div>
     </div>
 
-    <!-- Mini Calendrier -->
+    <!-- Mini Calendar -->
     <div class="card mb-3">
-      <div class="card-header">
-        <i class="bi bi-calendar3 text-primary me-2"></i>Calendrier
-      </div>
+      <div class="card-header"><i class="bi bi-calendar3 text-primary me-2"></i>Calendrier</div>
       <div class="card-body px-3 py-3">
         <div class="mini-calendar" id="mini-cal"></div>
       </div>
     </div>
 
-    <!-- Mes matières rapides -->
+    <!-- My subjects -->
     <div class="card">
       <div class="card-header"><i class="bi bi-book-fill text-warning me-2"></i>Mes matières</div>
       <div class="card-body p-0">
-        <table class="table table-hover mb-0 small">
+        <table class="dash-table">
           <thead><tr><th>Matière</th><th>Classe</th><th class="text-center">Max</th></tr></thead>
           <tbody>
             {% for aff in mes_affectations %}
             <tr>
-              <td class="fw-medium">{{ aff.matiere.nom }}</td>
+              <td style="font-weight:600">{{ aff.matiere.nom }}</td>
               <td>{{ aff.classe }}</td>
               <td class="text-center">
-                <span class="badge bg-secondary">{{ aff.matiere.maxima }}</span>
+                <span class="badge" style="background:rgba(124,58,237,.1);color:#7C3AED;font-weight:600">{{ aff.matiere.maxima }}</span>
               </td>
             </tr>
             {% empty %}
@@ -179,24 +271,23 @@
   </div>
 </div>
 
-<!-- Mes classes -->
+<!-- My classes -->
 <div class="card mt-4">
-  <div class="card-header d-flex justify-content-between align-items-center">
+  <div class="card-header">
     <span><i class="bi bi-building-fill text-success me-2"></i>Mes classes</span>
-    <span class="badge bg-light text-dark border">{{ nb_mes_classes }} classe{{ nb_mes_classes|pluralize }}</span>
+    <span class="badge" style="background:var(--color-primary-soft);color:var(--color-primary);font-weight:600">{{ nb_mes_classes }} classe{{ nb_mes_classes|pluralize }}</span>
   </div>
   <div class="card-body p-0">
-    <table class="table table-hover mb-0 small">
+    <table class="dash-table">
       <thead><tr><th>Classe</th><th>Section</th><th class="text-center">Élèves</th><th></th></tr></thead>
       <tbody>
         {% for c in mes_classes %}
         <tr>
-          <td class="fw-medium">{{ c.nom }}</td>
-          <td>{{ c.section }}</td>
+          <td style="font-weight:600">{{ c.nom }}</td>
+          <td style="color:var(--color-muted)">{{ c.section }}</td>
           <td class="text-center"><span class="badge bg-primary rounded-pill">{{ c.eleves.count }}</span></td>
           <td>
-            <a href="{% url 'saisie_notes' %}?classe={{ c.pk }}" class="btn btn-xs btn-outline-primary"
-               style="font-size:0.72rem;padding:2px 8px;border-radius:5px">
+            <a href="{% url 'saisie_notes' %}?classe={{ c.pk }}" class="btn btn-xs btn-outline-primary">
               <i class="bi bi-pencil me-1"></i>Saisir
             </a>
           </td>
@@ -213,18 +304,16 @@
 <div class="card mt-4">
   <div class="card-header"><i class="bi bi-clock-history text-muted me-2"></i>Dernières notes saisies</div>
   <div class="card-body p-0">
-    <table class="table table-hover mb-0 small">
-      <thead>
-        <tr><th>Élève</th><th>Matière</th><th>Classe</th><th>Période</th><th class="text-center">Note</th></tr>
-      </thead>
+    <table class="dash-table">
+      <thead><tr><th>Élève</th><th>Matière</th><th>Classe</th><th>Période</th><th class="text-center">Note</th></tr></thead>
       <tbody>
         {% for n in mes_notes_recentes %}
         <tr>
-          <td class="fw-medium">{{ n.eleve.nom_complet }}</td>
+          <td style="font-weight:600">{{ n.eleve.nom_complet }}</td>
           <td>{{ n.matiere_classe.matiere }}</td>
           <td>{{ n.matiere_classe.classe }}</td>
-          <td><span class="badge bg-light text-dark border">{{ n.periode }}</span></td>
-          <td class="text-center fw-bold text-primary">{{ n.valeur }}</td>
+          <td><span class="badge" style="background:var(--bg-table-head);color:var(--color-text);font-weight:500;border:1px solid var(--color-border)">{{ n.periode }}</span></td>
+          <td class="text-center"><span style="font-weight:800;font-size:.95rem;color:var(--color-primary)">{{ n.valeur }}</span></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -241,68 +330,57 @@
 {{ chart_classes_enseignant|json_script:"chart-classes-ens-data" }}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
-// ── Horloge dashboard ──
+/* ── Clock ── */
 (function () {
   const JOURS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-  const MOIS  = ['janvier','février','mars','avril','mai','juin',
-                 'juillet','août','septembre','octobre','novembre','décembre'];
-  const elT = document.getElementById('dash-time');
-  const elD = document.getElementById('dash-date');
+  const MOIS  = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const elT = document.getElementById('dash-time'), elD = document.getElementById('dash-date');
   if (!elT) return;
   function tick() {
-    const now = new Date();
-    const hh  = String(now.getHours()).padStart(2,'0');
-    const mm  = String(now.getMinutes()).padStart(2,'0');
-    const ss  = String(now.getSeconds()).padStart(2,'0');
-    elT.innerHTML = `${hh}:${mm}<span class="cw-seconds">:${ss}</span>`;
-    if (elD) elD.textContent = `${JOURS[now.getDay()]} ${now.getDate()} ${MOIS[now.getMonth()]} ${now.getFullYear()}`;
+    const n = new Date();
+    const hh = String(n.getHours()).padStart(2,'0'), mm = String(n.getMinutes()).padStart(2,'0'), ss = String(n.getSeconds()).padStart(2,'0');
+    elT.innerHTML = `${hh}:${mm}<span class="clock-seconds">:${ss}</span>`;
+    if (elD) elD.textContent = `${JOURS[n.getDay()]} ${n.getDate()} ${MOIS[n.getMonth()]} ${n.getFullYear()}`;
   }
   tick(); setInterval(tick, 1000);
 })();
 
-// ── Mini-calendrier ──
+/* ── Mini calendar ── */
 (function () {
   const JOURS = ['Lu','Ma','Me','Je','Ve','Sa','Di'];
-  const MOIS  = ['Janvier','Février','Mars','Avril','Mai','Juin',
-                 'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-  let viewYear = new Date().getFullYear();
-  let viewMonth = new Date().getMonth();
+  const MOIS  = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  let vY = new Date().getFullYear(), vM = new Date().getMonth();
   function render() {
-    const today = new Date();
-    const firstDay = new Date(viewYear, viewMonth, 1);
-    let startDow = (firstDay.getDay() + 6) % 7;
-    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-    const daysInPrev  = new Date(viewYear, viewMonth, 0).getDate();
-    let html = `<div class="cal-nav"><button class="cal-nav-btn" id="cal-prev"><i class="bi bi-chevron-left"></i></button><span class="cal-month-label">${MOIS[viewMonth]} ${viewYear}</span><button class="cal-nav-btn" id="cal-next"><i class="bi bi-chevron-right"></i></button></div><div class="cal-grid">${JOURS.map(j=>`<div class="cal-day-name">${j}</div>`).join('')}`;
-    for (let i = startDow - 1; i >= 0; i--) html += `<div class="cal-day other-month">${daysInPrev - i}</div>`;
-    for (let d = 1; d <= daysInMonth; d++) {
-      const isToday = (d === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear());
-      html += `<div class="cal-day ${isToday ? 'today' : ''}">${d}</div>`;
+    const today = new Date(), fd = new Date(vY, vM, 1);
+    const sd = (fd.getDay() + 6) % 7, dim = new Date(vY, vM + 1, 0).getDate(), dip = new Date(vY, vM, 0).getDate();
+    let h = `<div class="cal-nav"><button class="cal-nav-btn" id="cal-prev"><i class="bi bi-chevron-left"></i></button><span class="cal-month-label">${MOIS[vM]} ${vY}</span><button class="cal-nav-btn" id="cal-next"><i class="bi bi-chevron-right"></i></button></div><div class="cal-grid">${JOURS.map(j=>`<div class="cal-day-name">${j}</div>`).join('')}`;
+    for (let i = sd - 1; i >= 0; i--) h += `<div class="cal-day other-month">${dip - i}</div>`;
+    for (let d = 1; d <= dim; d++) {
+      const isT = d === today.getDate() && vM === today.getMonth() && vY === today.getFullYear();
+      h += `<div class="cal-day${isT ? ' today' : ''}">${d}</div>`;
     }
-    const rem = (startDow + daysInMonth) % 7;
-    for (let d = 1; d <= (rem === 0 ? 0 : 7 - rem); d++) html += `<div class="cal-day other-month">${d}</div>`;
-    html += '</div>';
+    const rem = (sd + dim) % 7;
+    for (let d = 1; d <= (rem === 0 ? 0 : 7 - rem); d++) h += `<div class="cal-day other-month">${d}</div>`;
+    h += '</div>';
     const cal = document.getElementById('mini-cal');
-    if (cal) {
-      cal.innerHTML = html;
-      document.getElementById('cal-prev').addEventListener('click', () => { viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } render(); });
-      document.getElementById('cal-next').addEventListener('click', () => { viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } render(); });
-    }
+    if (!cal) return;
+    cal.innerHTML = h;
+    document.getElementById('cal-prev').onclick = () => { vM--; if (vM < 0){ vM=11; vY--; } render(); };
+    document.getElementById('cal-next').onclick = () => { vM++; if (vM > 11){ vM=0; vY++; } render(); };
   }
   render();
 })();
 
-// ── Graphiques ──
+/* ── Charts ── */
 (function () {
-  Chart.defaults.font.family = "'Inter','Arial',sans-serif";
-  Chart.defaults.font.size   = 11;
-  Chart.defaults.color       = '#64748b';
+  Chart.defaults.font.family = "'Inter','Segoe UI',system-ui,sans-serif";
+  Chart.defaults.font.size   = 11.5;
+  Chart.defaults.color       = '#6B7280';
+  const isDark  = () => document.documentElement.getAttribute('data-theme') === 'dark';
+  const gridCol = () => isDark() ? 'rgba(255,255,255,.06)' : '#F3F4F9';
+  const PALETTE = ['#4D44B5','#22c55e','#f59e0b','#3b82f6','#ef4444','#a855f7','#14b8a6','#f97316'];
 
-  const PALETTE = [
-    '#4d44b5','#22c55e','#f59e0b','#3b82f6','#ef4444','#a855f7','#14b8a6','#f97316',
-  ];
-
-  // Barres horizontales : avancement par matière
+  /* Horizontal bar: progress per subject */
   const rawAv = JSON.parse(document.getElementById('chart-avancement-data').textContent);
   const ctxAv = document.getElementById('avancementBarChart');
   if (ctxAv && rawAv.labels.length > 0) {
@@ -314,67 +392,87 @@
           label: 'Avancement (%)',
           data: rawAv.data,
           backgroundColor: rawAv.data.map(v =>
-            v === 100 ? 'rgba(34,197,94,0.8)' :
-            v > 50    ? 'rgba(77,68,181,0.8)' :
-                        'rgba(245,158,11,0.8)'
+            v === 100 ? 'rgba(22,163,74,0.85)' :
+            v > 50    ? 'rgba(77,68,181,0.85)' :
+                        'rgba(217,119,6,0.85)'
           ),
-          borderRadius: 6,
-          borderSkipped: false,
+          borderRadius: 6, borderSkipped: false, borderWidth: 0,
         }]
       },
       options: {
         indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
+        animation: { duration: 900, easing: 'easeOutQuart' },
         plugins: {
           legend: { display: false },
-          tooltip: { callbacks: { label: c => ` ${c.parsed.x}% complété` } }
+          tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 8, callbacks: { label: c => `  ${c.parsed.x}% complété` } }
         },
         scales: {
-          x: {
-            beginAtZero: true,
-            max: 100,
-            ticks: { callback: v => v + '%' },
-            grid: { color: '#f1f5f9' },
-            border: { display: false }
-          },
+          x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: gridCol() }, border: { display: false } },
           y: { grid: { display: false }, border: { display: false } }
         }
       }
     });
   } else if (ctxAv) {
-    const c2d = ctxAv.getContext('2d');
-    c2d.fillStyle = '#94a3b8'; c2d.font = '13px Inter,Arial,sans-serif';
-    c2d.textAlign = 'center';
-    c2d.fillText('Aucune affectation', ctxAv.width / 2, ctxAv.height / 2);
+    ctxAv.closest('[style]').innerHTML = '<div class="chart-empty"><i class="bi bi-bar-chart-steps"></i><span>Aucune affectation</span></div>';
   }
 
-  // Doughnut : élèves par classe
+  /* Donut: students per class */
   const rawCl = JSON.parse(document.getElementById('chart-classes-ens-data').textContent);
   const ctxCl = document.getElementById('classesDoughnutChart');
   if (ctxCl) {
-    const total = rawCl.data.reduce((a, b) => a + b, 0);
+    const tot = rawCl.data.reduce((a, b) => a + b, 0);
+    const colors = PALETTE.slice(0, rawCl.labels.length);
     new Chart(ctxCl, {
       type: 'doughnut',
       data: {
         labels: rawCl.labels,
         datasets: [{
-          data: total > 0 ? rawCl.data : [1],
-          backgroundColor: total > 0 ? PALETTE : ['#e2e8f0'],
-          borderWidth: 0,
-          hoverOffset: 6,
+          data: tot > 0 ? rawCl.data : [1],
+          backgroundColor: tot > 0 ? colors : [isDark() ? '#2A2D45' : '#E5E7EB'],
+          borderWidth: 0, hoverOffset: 6,
         }]
       },
       options: {
-        cutout: '72%',
+        cutout: '74%',
         plugins: {
           legend: { display: false },
-          tooltip: { callbacks: { label: c => ` ${c.label} : ${c.parsed} élève${c.parsed > 1 ? 's' : ''}` } }
+          tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 8, callbacks: { label: c => `  ${c.label}: ${c.parsed} élève${c.parsed !== 1 ? 's' : ''}` } }
         },
-        animation: { animateRotate: true, duration: 800 }
+        animation: { animateRotate: true, duration: 900 }
       }
     });
+    /* Build legend */
+    if (tot > 0) {
+      const legend = document.getElementById('donut-legend');
+      if (legend) {
+        legend.innerHTML = rawCl.labels.map((lbl, i) =>
+          `<div class="dl-item"><span class="dl-dot" style="background:${colors[i] || '#ccc'}"></span><span>${lbl}</span><span class="dl-val">${rawCl.data[i]}</span></div>`
+        ).join('');
+      }
+    }
   }
+
+  /* ── Count-up animation ── */
+  document.querySelectorAll('.kpi-value[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count, 10) || 0;
+    if (!target) return;
+    let start = 0;
+    const step = ts => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / 900, 1);
+      el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target);
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+
+  /* ── Animate progress bars ── */
+  setTimeout(() => {
+    document.querySelectorAll('.progress-fill[data-width]').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 120);
 })();
 </script>
 {% endblock %}
