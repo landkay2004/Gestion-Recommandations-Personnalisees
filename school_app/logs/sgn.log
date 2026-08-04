@@ -4461,3 +4461,15 @@ django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1
 	Is the server running on that host and accepting TCP/IP connections?
 
 2026-08-04 19:23:16,025 [INFO] sgn.tenants: [tenants] Dossiers médias créés pour l'école "École Primaire Saint-Gabriel" (schema=ecole_test) : tenants/ecole_test/students, tenants/ecole_test/profils, tenants/ecole_test/school, tenants/ecole_test/cartes, tenants/ecole_test/portail, tenants/ecole_test/documents
+2026-08-04 19:29:44,893 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:29:48,173 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:30:53,099 [WARNING] django.request: Not Found: /media/hero-ecole.jpg
+2026-08-04 19:32:48,814 [WARNING] django.request: Not Found: /media/hero-ecole.jpg
+2026-08-04 19:32:55,534 [WARNING] django.request: Not Found: /manifest.json
+2026-08-04 19:39:33,421 [WARNING] django.request: Not Found: /.env
+2026-08-04 19:42:45,004 [WARNING] django.request: Not Found: /owa/auth/x.js
+2026-08-04 19:51:36,468 [WARNING] django.request: Not Found: /media/ChatGPT Image 1 ao\xfbt 2026, 19_48_28.png
+2026-08-04 20:11:44,597 [WARNING] django.request: Not Found: /media/ChatGPT Image 1 ao\xfbt 2026, 19_48_28.png
+2026-08-04 20:15:06,279 [WARNING] django.request: Not Found: /media/ChatGPT Image 1 ao\xfbt 2026, 19_48_28.png
+2026-08-04 20:21:52,974 [WARNING] django.request: Not Found: /media/ChatGPT Image 1 ao\xfbt 2026, 19_48_28.png
+2026-08-04 20:22:11,588 [WARNING] django.request: Not Found: /media/images (3).jpg

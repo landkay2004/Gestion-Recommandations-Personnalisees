@@ -248,7 +248,11 @@ STATIC_URL  = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 # ── Stockage des médias ───────────────────────────────────────────────────────
+# Priorité : Cloudinary  →  Cloudflare R2 (optionnel)  →  filesystem local (dev)
 #
+# Cloudinary (production recommandée) — 1 seule variable :
+#   CLOUDINARY_URL  →  cloudinary://api_key:api_secret@cloud_name
+#   Obtenir depuis : cloudinary.com → Dashboard → "API Environment variable"
 #
 # Cloudflare R2 (alternative S3-compatible) :
 #   R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME,
@@ -256,6 +260,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 #
 # NB : Django 6.0 utilise le dictionnaire STORAGES (plus DEFAULT_FILE_STORAGE).
 
+_CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL', '').strip()
 _R2_KEY_ID      = os.environ.get('R2_ACCESS_KEY_ID', '').strip()
 _R2_SECRET      = os.environ.get('R2_SECRET_ACCESS_KEY', '').strip()
 _R2_BUCKET      = os.environ.get('R2_BUCKET_NAME', '').strip()
@@ -264,12 +269,26 @@ _R2_PUBLIC_URL  = os.environ.get('R2_PUBLIC_URL', '').strip().rstrip('/')
 
 _STATICFILES_STORAGE = {
     # On Replit : utiliser le stockage simple (sans compression whitenoise)
+    # pour éviter les conflits avec django-cloudinary-storage lors du collectstatic.
     # Whitenoise middleware sert quand même les fichiers statiques.
     'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
 }
 
+if _CLOUDINARY_URL:
+    # ── Cloudinary via django-cloudinary-storage (production recommandée) ────
+    # cloudinary_storage.storage.MediaCloudinaryStorage lit CLOUDINARY_URL
+    # automatiquement via le SDK cloudinary.
+    import cloudinary
+    cloudinary.config(cloudinary_url=_CLOUDINARY_URL)
+    STORAGES = {
+        'default': {
+            'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+        },
+        'staticfiles': _STATICFILES_STORAGE,
+    }
+    MEDIA_URL = '/media/'  # Cloudinary retourne des URLs absolues directement
 
-if _R2_KEY_ID and _R2_BUCKET:
+elif _R2_KEY_ID and _R2_BUCKET:
     # ── Cloudflare R2 (S3-compatible) — alternative ───────────────────────────
     STORAGES = {
         'default': {
@@ -303,6 +322,7 @@ else:
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Compatibilité avec les packages qui lisent encore settings.STATICFILES_STORAGE
+# (ex : django-cloudinary-storage 0.3.0 dans sa commande collectstatic).
 # Django 6 a remplacé ce paramètre par STORAGES['staticfiles'], mais certains
 # packages tiers l'utilisent encore directement.
 STATICFILES_STORAGE = STORAGES['staticfiles']['BACKEND']
