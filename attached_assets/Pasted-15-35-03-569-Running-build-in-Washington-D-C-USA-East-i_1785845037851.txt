@@ -1,0 +1,183 @@
+15:35:03.569 Running build in Washington, D.C., USA (East) – iad1
+15:35:03.569 Build machine configuration: 2 cores, 8 GB
+15:35:03.614 Cloning github.com/landrynet/Gestion-Recommandations-Personnalisees (Branch: main, Commit: c4bdc01)
+15:35:03.615 Skipping build cache, deployment was triggered without cache.
+15:35:04.713 Cloning completed: 1.099s
+15:35:05.166 Running "vercel build"
+15:35:05.214 Vercel CLI 58.1.0
+15:35:05.707 No Python version specified in .python-version, pyproject.toml, or Pipfile.lock. Using python version: 3.12
+15:35:05.744 Using uv 0.10.11
+15:35:05.745 Creating virtual environment at "/vercel/path0/.vercel/python/.venv"...
+15:35:06.194 Running "install" command: `cd school_app && pip install -r requirements.txt`...
+15:35:07.477 Collecting asgiref==3.12.1 (from -r requirements.txt (line 1))
+15:35:07.501   Downloading asgiref-3.12.1-py3-none-any.whl.metadata (9.4 kB)
+15:35:07.671 Collecting boto3==1.43.63 (from -r requirements.txt (line 2))
+15:35:07.675   Downloading boto3-1.43.63-py3-none-any.whl.metadata (6.6 kB)
+15:35:07.824 Collecting botocore==1.43.63 (from -r requirements.txt (line 3))
+15:35:07.829   Downloading botocore-1.43.63-py3-none-any.whl.metadata (5.6 kB)
+15:35:07.902 Collecting charset-normalizer==3.4.9 (from -r requirements.txt (line 4))
+15:35:07.907   Downloading charset_normalizer-3.4.9-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (41 kB)
+15:35:07.921 Collecting cloudinary==1.41.0 (from -r requirements.txt (line 5))
+15:35:07.927   Downloading cloudinary-1.41.0.tar.gz (177 kB)
+15:35:07.960   Installing build dependencies: started
+15:35:08.624   Installing build dependencies: finished with status 'done'
+15:35:08.625   Getting requirements to build wheel: started
+15:35:09.181   Getting requirements to build wheel: finished with status 'done'
+15:35:09.182   Preparing metadata (pyproject.toml): started
+15:35:09.354   Preparing metadata (pyproject.toml): finished with status 'done'
+15:35:09.365 Collecting colorama==0.4.6 (from -r requirements.txt (line 6))
+15:35:09.370   Downloading colorama-0.4.6-py2.py3-none-any.whl.metadata (17 kB)
+15:35:09.379 Collecting dj-database-url==3.1.2 (from -r requirements.txt (line 7))
+15:35:09.386   Downloading dj_database_url-3.1.2-py3-none-any.whl.metadata (13 kB)
+15:35:09.421 Collecting Django==6.0.7 (from -r requirements.txt (line 8))
+15:35:09.425   Downloading django-6.0.7-py3-none-any.whl.metadata (3.9 kB)
+15:35:09.436 Collecting django-cloudinary-storage==0.3.0 (from -r requirements.txt (line 9))
+15:35:09.442   Downloading django_cloudinary_storage-0.3.0-py3-none-any.whl.metadata (17 kB)
+15:35:09.453 Collecting django-storages==1.14.6 (from -r requirements.txt (line 10))
+15:35:09.458   Downloading django_storages-1.14.6-py3-none-any.whl.metadata (4.7 kB)
+15:35:09.533 Collecting django-tenants==3.10.2 (from -r requirements.txt (line 11))
+15:35:09.538   Downloading django_tenants-3.10.2-py3-none-any.whl.metadata (11 kB)
+15:35:09.547 Collecting et_xmlfile==2.0.0 (from -r requirements.txt (line 12))
+15:35:09.553   Downloading et_xmlfile-2.0.0-py3-none-any.whl.metadata (2.7 kB)
+15:35:09.566 Collecting gunicorn==26.0.0 (from -r requirements.txt (line 13))
+15:35:09.570   Downloading gunicorn-26.0.0-py3-none-any.whl.metadata (5.4 kB)
+15:35:09.592 Collecting openpyxl==3.1.5 (from -r requirements.txt (line 14))
+15:35:09.597   Downloading openpyxl-3.1.5-py2.py3-none-any.whl.metadata (2.5 kB)
+15:35:09.750 Collecting pillow==12.3.0 (from -r requirements.txt (line 15))
+15:35:09.754   Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+15:35:09.798 Collecting psycopg2-binary==2.9.12 (from -r requirements.txt (line 16))
+15:35:09.802   Downloading psycopg2_binary-2.9.12-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+15:35:09.814 Collecting PyOTP==2.10.0 (from -r requirements.txt (line 17))
+15:35:09.818   Downloading pyotp-2.10.0-py3-none-any.whl.metadata (10 kB)
+15:35:09.830 Collecting python-dotenv==1.2.2 (from -r requirements.txt (line 18))
+15:35:09.838   Downloading python_dotenv-1.2.2-py3-none-any.whl.metadata (27 kB)
+15:35:09.850 Collecting qrcode==8.2 (from -r requirements.txt (line 19))
+15:35:09.855   Downloading qrcode-8.2-py3-none-any.whl.metadata (17 kB)
+15:35:09.926 Collecting reportlab==5.0.0 (from -r requirements.txt (line 20))
+15:35:09.930   Downloading reportlab-5.0.0-py3-none-any.whl.metadata (1.6 kB)
+15:35:09.945 Collecting s3transfer==0.19.2 (from -r requirements.txt (line 21))
+15:35:09.947   Downloading s3transfer-0.19.2-py3-none-any.whl.metadata (1.7 kB)
+15:35:09.957 Collecting sqlparse==0.5.5 (from -r requirements.txt (line 22))
+15:35:09.963   Downloading sqlparse-0.5.5-py3-none-any.whl.metadata (4.7 kB)
+15:35:09.974 Collecting tzdata==2026.3 (from -r requirements.txt (line 23))
+15:35:09.979   Downloading tzdata-2026.3-py2.py3-none-any.whl.metadata (1.4 kB)
+15:35:09.992 Collecting whitenoise==6.12.0 (from -r requirements.txt (line 24))
+15:35:09.998   Downloading whitenoise-6.12.0-py3-none-any.whl.metadata (3.7 kB)
+15:35:10.017 Collecting jmespath<2.0.0,>=0.7.1 (from boto3==1.43.63->-r requirements.txt (line 2))
+15:35:10.021   Downloading jmespath-1.1.0-py3-none-any.whl.metadata (7.6 kB)
+15:35:10.034 Collecting python-dateutil<3.0.0,>=2.1 (from botocore==1.43.63->-r requirements.txt (line 3))
+15:35:10.040   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+15:35:10.057 Collecting urllib3!=2.2.0,<3,>=1.25.4 (from botocore==1.43.63->-r requirements.txt (line 3))
+15:35:10.061   Downloading urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+15:35:10.083 Collecting six (from cloudinary==1.41.0->-r requirements.txt (line 5))
+15:35:10.088   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+15:35:10.103 Collecting certifi (from cloudinary==1.41.0->-r requirements.txt (line 5))
+15:35:10.108   Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+15:35:10.130 Collecting requests>=2.10.0 (from django-cloudinary-storage==0.3.0->-r requirements.txt (line 9))
+15:35:10.135   Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+15:35:10.155 Collecting packaging (from gunicorn==26.0.0->-r requirements.txt (line 13))
+15:35:10.160   Downloading packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+15:35:10.178 Collecting idna<4,>=2.5 (from requests>=2.10.0->django-cloudinary-storage==0.3.0->-r requirements.txt (line 9))
+15:35:10.183   Downloading idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+15:35:10.195 Downloading asgiref-3.12.1-py3-none-any.whl (25 kB)
+15:35:10.202 Downloading boto3-1.43.63-py3-none-any.whl (140 kB)
+15:35:10.208 Downloading botocore-1.43.63-py3-none-any.whl (15.5 MB)
+15:35:10.272    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.5/15.5 MB 256.9 MB/s  0:00:00
+15:35:10.276 Downloading s3transfer-0.19.2-py3-none-any.whl (90 kB)
+15:35:10.286 Downloading charset_normalizer-3.4.9-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (224 kB)
+15:35:10.293 Downloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+15:35:10.300 Downloading dj_database_url-3.1.2-py3-none-any.whl (9.0 kB)
+15:35:10.307 Downloading django-6.0.7-py3-none-any.whl (8.4 MB)
+15:35:10.331    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.4/8.4 MB 366.3 MB/s  0:00:00
+15:35:10.337 Downloading django_cloudinary_storage-0.3.0-py3-none-any.whl (18 kB)
+15:35:10.343 Downloading django_storages-1.14.6-py3-none-any.whl (33 kB)
+15:35:10.351 Downloading django_tenants-3.10.2-py3-none-any.whl (216 kB)
+15:35:10.357 Downloading et_xmlfile-2.0.0-py3-none-any.whl (18 kB)
+15:35:10.363 Downloading gunicorn-26.0.0-py3-none-any.whl (212 kB)
+15:35:10.369 Downloading openpyxl-3.1.5-py2.py3-none-any.whl (250 kB)
+15:35:10.377 Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+15:35:10.400    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 320.3 MB/s  0:00:00
+15:35:10.405 Downloading psycopg2_binary-2.9.12-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.3 MB)
+15:35:10.420    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 330.4 MB/s  0:00:00
+15:35:10.425 Downloading pyotp-2.10.0-py3-none-any.whl (13 kB)
+15:35:10.430 Downloading python_dotenv-1.2.2-py3-none-any.whl (22 kB)
+15:35:10.436 Downloading qrcode-8.2-py3-none-any.whl (45 kB)
+15:35:10.442 Downloading reportlab-5.0.0-py3-none-any.whl (2.0 MB)
+15:35:10.450    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 300.6 MB/s  0:00:00
+15:35:10.454 Downloading sqlparse-0.5.5-py3-none-any.whl (46 kB)
+15:35:10.464 Downloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)
+15:35:10.470 Downloading whitenoise-6.12.0-py3-none-any.whl (20 kB)
+15:35:10.476 Downloading jmespath-1.1.0-py3-none-any.whl (20 kB)
+15:35:10.482 Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+15:35:10.487 Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
+15:35:10.494 Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+15:35:10.500 Downloading idna-3.18-py3-none-any.whl (65 kB)
+15:35:10.506 Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+15:35:10.512 Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+15:35:10.517 Downloading packaging-26.2-py3-none-any.whl (100 kB)
+15:35:10.641 Building wheels for collected packages: cloudinary
+15:35:10.642   Building wheel for cloudinary (pyproject.toml): started
+15:35:10.873   Building wheel for cloudinary (pyproject.toml): finished with status 'done'
+15:35:10.874   Created wheel for cloudinary: filename=cloudinary-1.41.0-py3-none-any.whl size=139770 sha256=581022e8fe9df033d2d5a8b3d716e04504bbf5106ee298266b1eae2bc7c92097
+15:35:10.875   Stored in directory: /vercel/.cache/pip/wheels/ac/d9/25/87b1c096e325bb22d62186c64bba19a866c668cff5d3a80699
+15:35:10.877 Successfully built cloudinary
+15:35:10.955 Installing collected packages: whitenoise, urllib3, tzdata, sqlparse, six, qrcode, python-dotenv, PyOTP, psycopg2-binary, pillow, packaging, jmespath, idna, et_xmlfile, colorama, charset-normalizer, certifi, asgiref, requests, reportlab, python-dateutil, openpyxl, gunicorn, Django, cloudinary, django-tenants, django-storages, django-cloudinary-storage, dj-database-url, botocore, s3transfer, boto3
+15:35:15.195 
+15:35:15.198 Successfully installed Django-6.0.7 PyOTP-2.10.0 asgiref-3.12.1 boto3-1.43.63 botocore-1.43.63 certifi-2026.7.22 charset-normalizer-3.4.9 cloudinary-1.41.0 colorama-0.4.6 dj-database-url-3.1.2 django-cloudinary-storage-0.3.0 django-storages-1.14.6 django-tenants-3.10.2 et_xmlfile-2.0.0 gunicorn-26.0.0 idna-3.18 jmespath-1.1.0 openpyxl-3.1.5 packaging-26.2 pillow-12.3.0 psycopg2-binary-2.9.12 python-dateutil-2.9.0.post0 python-dotenv-1.2.2 qrcode-8.2 reportlab-5.0.0 requests-2.34.2 s3transfer-0.19.2 six-1.17.0 sqlparse-0.5.5 tzdata-2026.3 urllib3-2.7.0 whitenoise-6.12.0
+15:35:15.454 Running "cd school_app && python manage.py migrate_schemas --shared --noinput && CLOUDINARY_URL="" python manage.py collectstatic --noinput --clear"
+15:35:18.393 === Starting migration
+15:35:18.393 Operations to perform:
+15:35:18.393   Apply all migrations: abonnement, accounts, auth, bulletin, carte_eleve, classes, contenttypes, grades, notifications, planning, portail, school_settings, sessions, students, subjects, super_admin, teachers, tenants
+15:35:18.393 Running migrations:
+15:35:18.394   No migrations to apply.
+15:35:18.833 
+15:35:18.833 43 static files deleted, 17 static files copied to '/vercel/path0/school_app/staticfiles', 25 post-processed.
+15:35:19.040 Django 6.0.7 detected
+15:35:19.043 Running collectstatic...
+15:35:19.476 Error: Command failed: /vercel/path0/.vercel/python/.venv/bin/python manage.py collectstatic --noinput
+15:35:19.476 Traceback (most recent call last):
+15:35:19.476   File "/vercel/path0/school_app/manage.py", line 21, in <module>
+15:35:19.476     main()
+15:35:19.476   File "/vercel/path0/school_app/manage.py", line 17, in main
+15:35:19.477     execute_from_command_line(sys.argv)
+15:35:19.477   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/core/management/__init__.py", line 443, in execute_from_command_line
+15:35:19.477     utility.execute()
+15:35:19.477   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/core/management/__init__.py", line 437, in execute
+15:35:19.477     self.fetch_command(subcommand).run_from_argv(self.argv)
+15:35:19.478   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/core/management/base.py", line 420, in run_from_argv
+15:35:19.478     self.execute(*args, **cmd_options)
+15:35:19.478   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/core/management/base.py", line 464, in execute
+15:35:19.478     output = self.handle(*args, **options)
+15:35:19.478              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+15:35:19.478   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/contrib/staticfiles/management/commands/collectstatic.py", line 214, in handle
+15:35:19.478     collected = self.collect()
+15:35:19.478                 ^^^^^^^^^^^^^^
+15:35:19.478   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/django/contrib/staticfiles/management/commands/collectstatic.py", line 151, in collect
+15:35:19.478     for original_path, processed_path, processed in processor:
+15:35:19.479                                                     ^^^^^^^^^
+15:35:19.479   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/whitenoise/storage.py", line 84, in post_process
+15:35:19.479     for name, hashed_name, processed in files:
+15:35:19.479                                         ^^^^^
+15:35:19.479   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/whitenoise/storage.py", line 112, in post_process_with_compression
+15:35:19.479     for name, compressed_name in self.compress_files(files_to_compress):
+15:35:19.479                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+15:35:19.479   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/whitenoise/storage.py", line 162, in compress_files
+15:35:19.479     yield from future.result()
+15:35:19.479                ^^^^^^^^^^^^^^^
+15:35:19.479   File "/uv/python/versions/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+15:35:19.479     return self.__get_result()
+15:35:19.479            ^^^^^^^^^^^^^^^^^^^
+15:35:19.479   File "/uv/python/versions/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+15:35:19.479     raise self._exception
+15:35:19.479   File "/uv/python/versions/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+15:35:19.480     result = self.fn(*self.args, **self.kwargs)
+15:35:19.480              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+15:35:19.480   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/whitenoise/storage.py", line 150, in _compress_path
+15:35:19.480     for compressed_path in self.compressor.compress(full_path):
+15:35:19.480                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+15:35:19.480   File "/vercel/path0/.vercel/python/.venv/lib/python3.12/site-packages/whitenoise/compress.py", line 83, in compress
+15:35:19.480     with open(path, "rb") as f:
+15:35:19.480          ^^^^^^^^^^^^^^^^
+15:35:19.480 FileNotFoundError: [Errno 2] No such file or directory: '/vercel/path0/.vercel/output/static/static/cloudinary/js/load-image.all.min.js'
+15:35:19.480 
+15:35:19.480 

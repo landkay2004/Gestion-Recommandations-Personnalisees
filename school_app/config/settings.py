@@ -98,10 +98,12 @@ if _USE_TENANTS:
         'abonnement',
         'comptable',
     ]
-    # Cloudinary Storage (activé seulement si CLOUDINARY_URL est défini)
-    if os.environ.get('CLOUDINARY_URL'):
-        SHARED_APPS.insert(-1, 'cloudinary_storage')
-        SHARED_APPS.insert(-1, 'cloudinary')
+    # cloudinary et cloudinary_storage sont toujours inclus dans INSTALLED_APPS
+    # afin que leurs fichiers statiques soient collectés de manière cohérente
+    # quel que soit l'environnement (build Vercel, dev local, production).
+    # Le backend de stockage média est conditionné à CLOUDINARY_URL plus bas.
+    SHARED_APPS.insert(-1, 'cloudinary_storage')
+    SHARED_APPS.insert(-1, 'cloudinary')
 
     INSTALLED_APPS = list(SHARED_APPS) + TENANT_APPS
     DATABASE_ROUTERS    = ['django_tenants.routers.TenantSyncRouter']
