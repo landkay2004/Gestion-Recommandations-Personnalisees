@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd school_app && python -m pip install --upgrade pip && python -m pip install -r requirements.txt && python manage.py migrate_schemas --shared --noinput && python manage.py seed_test_school && CLOUDINARY_URL=\"\" python manage.py collectstatic --noinput --clear",
+  "buildCommand": "bash deployment/build_files.sh",
   "functions": {
     "deployment/vercel_wsgi.py": {
       "maxDuration": 60,

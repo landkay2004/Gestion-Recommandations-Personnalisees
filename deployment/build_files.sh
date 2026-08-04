@@ -23,6 +23,10 @@ if [ -n "${DATABASE_URL:-}" ] || [ -n "${DB_HOST:-}" ]; then
     echo "==> [1/2] Application des migrations (schéma public)"
     python manage.py migrate_schemas --shared --noinput
     echo "    ✓ Migrations appliquées"
+
+    echo "==> [2/2] Chargement des données de test"
+    python manage.py seed_test_school
+    echo "    ✓ Données de test chargées"
 else
     echo "==> [1/2] Migrations ignorées (DATABASE_URL / DB_HOST absent pendant le build)"
     echo "    ℹ Les migrations s'appliqueront au démarrage du worker (wsgi.py)"
@@ -30,11 +34,11 @@ fi
 
 echo ""
 
-# ── [2/2] Collecte des fichiers statiques ────────────────────────────────────
+# ── [3/3] Collecte des fichiers statiques ────────────────────────────────────
 # On neutralise CLOUDINARY_URL pendant le build : les fichiers statiques sont
 # servis par WhiteNoise (pas Cloudinary), et django-cloudinary-storage 0.3.0
 # crashe sur collectstatic en Django 6.0 (utilise le vieux STATICFILES_STORAGE).
-echo "==> [2/2] Collecte des fichiers statiques"
+echo "==> [3/3] Collecte des fichiers statiques"
 CLOUDINARY_URL="" python manage.py collectstatic --noinput --clear
 echo "    ✓ Fichiers statiques collectés"
 
