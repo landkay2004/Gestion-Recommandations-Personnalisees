@@ -48,8 +48,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.replit.app',
     'https://*.pythonanywhere.com',
     'https://*.vercel.app',
-    'https://*.koyeb.app',
-    'https://*.koyeb.com',
+    'https://*.onrender.com',
     'http://localhost:8000',
     'http://localhost:8008',
 ]
