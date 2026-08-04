@@ -1,9 +1,23 @@
 {
-    "version":  2,
-    "routes":  [
-                   {
-                       "src":  "/(.*)",
-                       "dest":  "school_app/config/wsgi.py"
-                   }
-               ]
+  "version": 2,
+  "buildCommand": "bash deployment/build_files.sh",
+  "builds": [
+    {
+      "src": "deployment/vercel_wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/school_app/staticfiles/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "deployment/vercel_wsgi.py"
+    }
+  ]
 }

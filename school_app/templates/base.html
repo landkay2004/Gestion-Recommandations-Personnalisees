@@ -159,7 +159,7 @@
   <div class="sidebar-footer">
     <!-- User card -->
     <div class="sidebar-user-card">
-      <div class="suc-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
+      <div class="suc-avatar" data-sexe="{{ user.sexe }}" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
         {% if user.photo_profil %}
           <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
         {% else %}
@@ -245,7 +245,7 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-user-card">
-      <div class="suc-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
+      <div class="suc-avatar" data-sexe="{{ user.sexe }}" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
         {% if user.photo_profil %}
           <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
         {% else %}
@@ -306,7 +306,7 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-user-card">
-      <div class="suc-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
+      <div class="suc-avatar" data-sexe="{{ user.sexe }}" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
         {% if user.photo_profil %}
           <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
         {% else %}
@@ -378,7 +378,7 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-user-card">
-      <div class="suc-avatar" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
+      <div class="suc-avatar" data-sexe="{{ user.sexe }}" style="{% if not user.photo_profil %}background:{% if user.sexe == 'F' %}linear-gradient(135deg,#c2185b,#e91e8c){% else %}linear-gradient(135deg,#3b5bdb,#4c6ef5){% endif %};{% endif %}">
         {% if user.photo_profil %}
           <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
         {% else %}
@@ -975,5 +975,28 @@ document.querySelectorAll('.alert').forEach(a => setTimeout(() => {
 </script>
 {% block modals %}{% endblock %}
 {% block extra_js %}{% endblock %}
+<script>
+/* ── Fallback photo de profil ─────────────────────────────────────────────
+   Si le fichier image est manquant (stockage local, 404, etc.) on revient
+   gracieusement sur les initiales.                                        */
+(function(){
+  document.querySelectorAll('.suc-avatar img').forEach(function(img){
+    img.addEventListener('error', function(){
+      var av = this.closest('.suc-avatar');
+      if (!av) return;
+      this.style.display = 'none';
+      var isFemale = av.dataset.sexe === 'F';
+      av.style.background = isFemale
+        ? 'linear-gradient(135deg,#c2185b,#e91e8c)'
+        : 'linear-gradient(135deg,#3b5bdb,#4c6ef5)';
+      var initials = (this.alt || '').trim().split(/\s+/).slice(0,2)
+            .map(function(n){ return n.charAt(0).toUpperCase(); }).join('');
+      var span = document.createElement('span');
+      span.textContent = initials || '?';
+      av.appendChild(span);
+    });
+  });
+})();
+</script>
 </body>
 </html>

@@ -245,34 +245,71 @@ USE_TZ        = True
 STATIC_URL  = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-# ── Stockage des médias : local (dev) ou Cloudinary (prod/Vercel) ────────────
-# Définir CLOUDINARY_URL dans les variables d'environnement Vercel/Replit pour
-# activer le stockage cloud.  Format : cloudinary://api_key:api_secret@cloud_name
-# NB : Django 6.0 a supprimé DEFAULT_FILE_STORAGE et STATICFILES_STORAGE —
-#      utiliser le dictionnaire STORAGES à la place.
+# ── Stockage des médias ───────────────────────────────────────────────────────
+# Priorité : Cloudflare R2  →  Cloudinary  →  filesystem local (dev)
+#
+# Cloudflare R2 (production recommandée) :
+#   R2_ACCESS_KEY_ID      → clé d'accès R2
+#   R2_SECRET_ACCESS_KEY  → clé secrète R2
+#   R2_BUCKET_NAME        → nom du bucket
+#   R2_ENDPOINT_URL       → https://<account_id>.r2.cloudflarestorage.com
+#   R2_PUBLIC_URL         → URL publique du bucket  (ex. https://media.educnet.app)
+#
+# Cloudinary (alternative) :
+#   CLOUDINARY_URL        → cloudinary://api_key:api_secret@cloud_name
+#
+# NB : Django 6.0 utilise le dictionnaire STORAGES (plus DEFAULT_FILE_STORAGE).
+
+_R2_KEY_ID     = os.environ.get('R2_ACCESS_KEY_ID', '').strip()
+_R2_SECRET     = os.environ.get('R2_SECRET_ACCESS_KEY', '').strip()
+_R2_BUCKET     = os.environ.get('R2_BUCKET_NAME', '').strip()
+_R2_ENDPOINT   = os.environ.get('R2_ENDPOINT_URL', '').strip()
+_R2_PUBLIC_URL = os.environ.get('R2_PUBLIC_URL', '').strip().rstrip('/')
 _CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL', '').strip()
 
-if _CLOUDINARY_URL:
-    # Production : Cloudinary garantit la persistance des médias sur Vercel
+_STATICFILES_STORAGE = {
+    'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+}
+
+if _R2_KEY_ID and _R2_BUCKET:
+    # ── Cloudflare R2 (S3-compatible) ────────────────────────────────────────
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+            'OPTIONS': {
+                'access_key': _R2_KEY_ID,
+                'secret_key': _R2_SECRET,
+                'bucket_name': _R2_BUCKET,
+                'endpoint_url': _R2_ENDPOINT,
+                'custom_domain': _R2_PUBLIC_URL.replace('https://', '').replace('http://', '') if _R2_PUBLIC_URL else None,
+                'default_acl': None,
+                'querystring_auth': False,
+                'signature_version': 's3v4',
+                'file_overwrite': False,
+            },
+        },
+        'staticfiles': _STATICFILES_STORAGE,
+    }
+    MEDIA_URL = (_R2_PUBLIC_URL + '/') if _R2_PUBLIC_URL else (f'{_R2_ENDPOINT}/{_R2_BUCKET}/')
+
+elif _CLOUDINARY_URL:
+    # ── Cloudinary (rétrocompatibilité) ──────────────────────────────────────
     STORAGES = {
         'default': {
             'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
         },
-        'staticfiles': {
-            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-        },
+        'staticfiles': _STATICFILES_STORAGE,
     }
     CLOUDINARY_STORAGE = {'CLOUDINARY_URL': _CLOUDINARY_URL}
-    MEDIA_URL = '/media/'  # Cloudinary retourne des URLs absolues directement
+    MEDIA_URL = '/media/'
+
 else:
-    # Développement local : stockage filesystem standard
+    # ── Développement local ───────────────────────────────────────────────────
     STORAGES = {
         'default': {
             'BACKEND': 'django.core.files.storage.FileSystemStorage',
         },
-        'staticfiles': {
-            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-        },
+        'staticfiles': _STATICFILES_STORAGE,
     }
     MEDIA_URL = '/media/'
 
