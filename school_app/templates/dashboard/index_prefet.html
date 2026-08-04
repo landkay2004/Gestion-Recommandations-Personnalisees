@@ -303,6 +303,9 @@
 </div>
 {% endblock %}
 
+{{ chart_classes|json_script:"chart-classes-data" }}
+{{ chart_matieres|json_script:"chart-matieres-data" }}
+{{ chart_notes|json_script:"chart-notes-data" }}
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>.chart-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}</style>
@@ -319,7 +322,7 @@
   ];
 
   // ── 1. Bar : Élèves par classe ──────────────────────────────────────
-  const rawClasses = {{ chart_classes|safe }};
+  const rawClasses = JSON.parse(document.getElementById('chart-classes-data').textContent);
   const ctxBar = document.getElementById('repartitionElevesChart');
   if (ctxBar && rawClasses.labels.length > 0) {
     new Chart(ctxBar, {
@@ -355,7 +358,7 @@
   }
 
   // ── 2. Line : Matières par classe ───────────────────────────────────
-  const rawMatieres = {{ chart_matieres|safe }};
+  const rawMatieres = JSON.parse(document.getElementById('chart-matieres-data').textContent);
   const ctxClassesMini = document.getElementById('classesMiniChart');
   if (ctxClassesMini && rawMatieres.labels.length > 0) {
     new Chart(ctxClassesMini, {
@@ -392,7 +395,7 @@
   }
 
   // ── 3. Donut : Avancement saisie notes ──────────────────────────────
-  const rawNotes = {{ chart_notes|safe }};
+  const rawNotes = JSON.parse(document.getElementById('chart-notes-data').textContent);
   const ctxDonut = document.getElementById('notesDonutChart');
   if (ctxDonut) {
     const total = rawNotes.data.reduce((a, b) => a + b, 0);

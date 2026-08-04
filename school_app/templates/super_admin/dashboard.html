@@ -251,12 +251,13 @@
 </div>
 {% endblock %}
 
+{{ chart_data|json_script:"chart-data-sa" }}
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>.chart-dot { display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px; }</style>
 <script>
 (function () {
-  const raw = {{ chart_data|safe }};
+  const raw = JSON.parse(document.getElementById('chart-data-sa').textContent);
   Chart.defaults.font.family = "'Inter', 'Arial', sans-serif";
   Chart.defaults.font.size   = 11;
   Chart.defaults.color       = '#64748b';

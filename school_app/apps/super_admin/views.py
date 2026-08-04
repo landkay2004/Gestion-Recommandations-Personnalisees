@@ -211,11 +211,12 @@ def dashboard(request):
 
     chart_data = json.dumps({
         'donut': {
-            'labels': ['Actives', 'Suspendues', 'Onboarding'],
+            'labels': ['Actives', 'Suspendues', 'Onboarding', 'Corbeille'],
             'data': [
                 stats['ecoles_actives'],
                 stats['ecoles_suspendues'],
                 stats['onboarding_en_cours'],
+                stats['ecoles_corbeille'],
             ],
         },
         'monthly': {

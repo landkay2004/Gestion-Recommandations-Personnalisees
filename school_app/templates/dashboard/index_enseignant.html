@@ -236,6 +236,8 @@
 {% endif %}
 {% endblock %}
 
+{{ chart_avancement|json_script:"chart-avancement-data" }}
+{{ chart_classes_enseignant|json_script:"chart-classes-ens-data" }}
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
@@ -301,7 +303,7 @@
   ];
 
   // Barres horizontales : avancement par matière
-  const rawAv = {{ chart_avancement|safe }};
+  const rawAv = JSON.parse(document.getElementById('chart-avancement-data').textContent);
   const ctxAv = document.getElementById('avancementBarChart');
   if (ctxAv && rawAv.labels.length > 0) {
     new Chart(ctxAv, {
@@ -348,7 +350,7 @@
   }
 
   // Doughnut : élèves par classe
-  const rawCl = {{ chart_classes_enseignant|safe }};
+  const rawCl = JSON.parse(document.getElementById('chart-classes-ens-data').textContent);
   const ctxCl = document.getElementById('classesDoughnutChart');
   if (ctxCl) {
     const total = rawCl.data.reduce((a, b) => a + b, 0);

@@ -154,6 +154,9 @@
 
 {% endblock %}
 
+{{ chart_7jours|json_script:"chart-7jours-data" }}
+{{ chart_modes|json_script:"chart-modes-data" }}
+{{ chart_frais|json_script:"chart-frais-data" }}
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>.chart-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}</style>
@@ -163,9 +166,9 @@
   Chart.defaults.font.size   = 11;
   Chart.defaults.color       = '#64748b';
 
-  const raw7j    = {{ chart_7jours|safe }};
-  const rawModes = {{ chart_modes|safe }};
-  const rawFrais = {{ chart_frais|safe }};
+  const raw7j    = JSON.parse(document.getElementById('chart-7jours-data').textContent);
+  const rawModes = JSON.parse(document.getElementById('chart-modes-data').textContent);
+  const rawFrais = JSON.parse(document.getElementById('chart-frais-data').textContent);
 
   // ── 1. Barres + Ligne : tendance 7 jours ─────────────────────────
   const ctx7j = document.getElementById('tendance7jChart');
