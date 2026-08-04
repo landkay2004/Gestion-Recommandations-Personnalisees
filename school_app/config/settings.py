@@ -34,6 +34,7 @@ else:
     ALLOWED_HOSTS = [
         'localhost', '127.0.0.1',
         '.replit.dev', '.replit.app', '.pythonanywhere.com', '.vercel.app',
+        '.koyeb.app', '.koyeb.com',
     ]
     if _site_url:
         from urllib.parse import urlparse as _up
@@ -47,6 +48,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.replit.app',
     'https://*.pythonanywhere.com',
     'https://*.vercel.app',
+    'https://*.koyeb.app',
+    'https://*.koyeb.com',
     'http://localhost:8000',
     'http://localhost:8008',
 ]
