@@ -1551,8 +1551,20 @@ def rejoindre_educnet(request):
     from tenants.models import PlanAbonnement
     from super_admin.models import PlatformSettings
 
-    platform_settings = PlatformSettings.get_settings()
-    plans_publics = list(PlanAbonnement.objects.filter(is_actif=True, est_public=True).order_by('ordre_affichage', 'prix_mensuel'))
+    try:
+        platform_settings = PlatformSettings.get_settings()
+    except Exception as _e:
+        logger.warning('rejoindre_educnet: PlatformSettings unavailable: %s', _e)
+        platform_settings = None
+
+    try:
+        plans_publics = list(
+            PlanAbonnement.objects.filter(is_actif=True, est_public=True)
+            .order_by('ordre_affichage', 'prix_mensuel')
+        )
+    except Exception as _e:
+        logger.warning('rejoindre_educnet: PlanAbonnement unavailable: %s', _e)
+        plans_publics = []
 
     return render(request, 'public/rejoindre.html', {
         'plans': plans_publics,
@@ -1563,8 +1575,12 @@ def rejoindre_educnet(request):
 def about_view(request):
     """Page publique À propos."""
     from super_admin.models import PlatformSettings
-    ps = PlatformSettings.get_settings()
-    valeurs = [v.strip() for v in (ps.about_valeurs or '').splitlines() if v.strip()]
+    try:
+        ps = PlatformSettings.get_settings()
+    except Exception as _e:
+        logger.warning('about_view: PlatformSettings unavailable: %s', _e)
+        ps = None
+    valeurs = [v.strip() for v in ((ps.about_valeurs if ps else '') or '').splitlines() if v.strip()]
     return render(request, 'public/apropos.html', {
         'platform_settings': ps,
         'valeurs': valeurs,
@@ -1574,7 +1590,11 @@ def about_view(request):
 def contact_view(request):
     """Page publique Contact."""
     from super_admin.models import PlatformSettings
-    ps = PlatformSettings.get_settings()
+    try:
+        ps = PlatformSettings.get_settings()
+    except Exception as _e:
+        logger.warning('contact_view: PlatformSettings unavailable: %s', _e)
+        ps = None
     success = False
     error = None
 
@@ -1663,7 +1683,11 @@ def rejoindre_educnet_form(request):
     from super_admin.models import PlatformSettings
     from tenants.models import DemandeInscription
 
-    platform_settings = PlatformSettings.get_settings()
+    try:
+        platform_settings = PlatformSettings.get_settings()
+    except Exception as _e:
+        logger.warning('rejoindre_educnet_form: PlatformSettings unavailable: %s', _e)
+        platform_settings = None
     DemandeInscriptionForm = _build_public_inscription_form()
 
     success = False
