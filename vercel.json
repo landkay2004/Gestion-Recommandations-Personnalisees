@@ -1,18 +1,13 @@
 {
   "version": 2,
   "buildCommand": "bash deployment/build_files.sh",
-  "builds": [
-    {
-      "src": "deployment/vercel_wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb",
-        "includeFiles": [
-          "school_app/**"
-        ]
-      }
+  "functions": {
+    "deployment/vercel_wsgi.py": {
+      "maxDuration": 60,
+      "memory": 1024,
+      "includeFiles": "school_app/**"
     }
-  ],
+  },
   "routes": [
     {
       "src": "/static/(.*)",
