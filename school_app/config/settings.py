@@ -314,6 +314,14 @@ else:
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# ── Compatibilité django-cloudinary-storage 0.3.0 avec Django 6.0 ────────────
+# Django 6.0 a supprimé l'attribut STATICFILES_STORAGE (remplacé par STORAGES).
+# django-cloudinary-storage 0.3.0 le lit encore dans sa commande collectstatic
+# → AttributeError. On le redéfinit comme alias vers STORAGES['staticfiles']
+# pour corriger le bug sans modifier le package tiers.
+# Django 6.0 ignore complètement cet attribut (il lit STORAGES uniquement).
+STATICFILES_STORAGE = STORAGES['staticfiles']['BACKEND']
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ─────────────────────────────────────────────────────────────────────────────
