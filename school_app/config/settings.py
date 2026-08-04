@@ -98,13 +98,8 @@ if _USE_TENANTS:
         'abonnement',
         'comptable',
     ]
-    # Cloudinary Storage (activé seulement si CLOUDINARY_URL est défini)
-    # IMPORTANT : django-cloudinary-storage 0.3.0 remplace la commande
-    # collectstatic de Django par sa propre version. L'inclure sans
-    # CLOUDINARY_URL provoque des erreurs lors du collectstatic.
-    if os.environ.get('CLOUDINARY_URL'):
-        SHARED_APPS.insert(-1, 'cloudinary_storage')
-        SHARED_APPS.insert(-1, 'cloudinary')
+    # cloudinary est nécessaire pour que django-storages puisse l'utiliser
+    SHARED_APPS.insert(-1, 'cloudinary')
 
     INSTALLED_APPS = list(SHARED_APPS) + TENANT_APPS
     DATABASE_ROUTERS    = ['django_tenants.routers.TenantSyncRouter']
@@ -276,15 +271,17 @@ _STATICFILES_STORAGE = {
 }
 
 if _CLOUDINARY_URL:
-    # ── Cloudinary (production recommandée) ──────────────────────────────────
-    # Stockage intelligent : transformations à la volée, CDN global intégré.
+    # ── Cloudinary via django-storages (production recommandée) ──────────────
+    # storages.backends.cloudinary.CloudinaryStorage lit CLOUDINARY_URL
+    # automatiquement via le SDK cloudinary (pas besoin de django-cloudinary-storage).
+    import cloudinary
+    cloudinary.config(cloudinary_url=_CLOUDINARY_URL)
     STORAGES = {
         'default': {
-            'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+            'BACKEND': 'storages.backends.cloudinary.CloudinaryStorage',
         },
         'staticfiles': _STATICFILES_STORAGE,
     }
-    CLOUDINARY_STORAGE = {'CLOUDINARY_URL': _CLOUDINARY_URL}
     MEDIA_URL = '/media/'  # Cloudinary retourne des URLs absolues directement
 
 elif _R2_KEY_ID and _R2_BUCKET:
@@ -320,13 +317,6 @@ else:
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# ── Compatibilité django-cloudinary-storage 0.3.0 avec Django 6.0 ────────────
-# Django 6.0 a supprimé l'attribut STATICFILES_STORAGE (remplacé par STORAGES).
-# django-cloudinary-storage 0.3.0 le lit encore dans sa commande collectstatic
-# → AttributeError. On le redéfinit comme alias vers STORAGES['staticfiles']
-# pour corriger le bug sans modifier le package tiers.
-# Django 6.0 ignore complètement cet attribut (il lit STORAGES uniquement).
-STATICFILES_STORAGE = STORAGES['staticfiles']['BACKEND']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
