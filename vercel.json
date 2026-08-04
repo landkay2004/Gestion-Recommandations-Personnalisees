@@ -6,7 +6,10 @@
       "src": "deployment/vercel_wsgi.py",
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "50mb"
+        "maxLambdaSize": "50mb",
+        "includeFiles": [
+          "school_app/**"
+        ]
       }
     }
   ],
